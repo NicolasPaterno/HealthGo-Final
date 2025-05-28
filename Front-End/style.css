@@ -1,0 +1,171 @@
+@import url("https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap");
+
+* {
+  font-family: "Montserrat";
+}
+
+body {
+  font-family: "Arial", sans-serif;
+  margin: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background-color: rgb(161, 183, 255);
+  background-image: url("https://barahotel.com.br/wp-content/uploads/2022/10/DSC_4645-HDR-2.webp");
+  background-size: cover;
+  background-position: center;
+  backdrop-filter: blur(10px);
+  position: relative;
+}
+
+.login-container {
+  background-color: rgba(255, 255, 255, 0.8);
+  padding: 40px;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  max-width: 400px;
+  z-index: 1;
+}
+
+.header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+#home {
+  width: 20%;
+  padding: 10px;
+  background-color: #f24447;
+  border: none;
+  border-radius: 10px;
+  color: white;
+  font-size: 19px;
+  transition: background-color 0.3s ease;
+  margin-right: auto;
+  text-align: center;
+  text-decoration: none;
+  font-weight: 700;
+}
+
+#home:hover {
+  background-color: #f05e61;
+}
+
+#logo {
+  width: 300px;
+  margin-bottom: 40px;
+  margin-top: 40px;
+}
+
+.input-group {
+  margin-bottom: 20px;
+}
+
+input[type="email"],
+input[type="password"] {
+  width: 100%;
+  padding: 10px;
+  border-radius: 10px;
+  border: 1px solid #8ec3ee;
+  box-sizing: border-box;
+  font-size: 19px;
+}
+
+input[type="email"] {
+  margin-top: 15px;
+}
+
+input[type="submit"] {
+  width: 100%;
+  padding: 10px;
+  background-color: #1371aa;
+  border: none;
+  border-radius: 10px;
+  color: white;
+  font-size: 19px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  margin-top: 30px;
+}
+
+input[type="submit"]:hover {
+  background-color: #5886c2;
+}
+
+.register-link {
+  text-align: center;
+  margin-top: 15px;
+  font-size: 17px;
+}
+
+.register-link a {
+  color: #1371aa;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+.register-link a:hover {
+  text-decoration: underline;
+}
+
+/*----------------------------------------------------*/
+
+.menu-container {
+  background-color: rgba(255, 255, 255, 0.9);
+  padding: 40px;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  width: 95%;
+  height: 90%;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.menu-options {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  gap: 15px;
+  margin-top: 30px;
+}
+
+.menu-button {
+  padding: 12px;
+  background-color: #1371aa;
+  color: white;
+  text-align: center;
+  text-decoration: none;
+  font-size: 18px;
+  font-weight: bold;
+  border-radius: 10px;
+  transition: background-color 0.3s ease;
+}
+
+.menu-button:hover {
+  background-color: #5886c2;
+}
+
+.menu__nav__link{
+  width: 100%;
+  padding: 8px;
+  border-radius: 8px;
+  background-color: rgba(0, 0, 0, 0.3);
+  color: white;
+  text-align: center;
+}
+
+.menu__nav__link:hover{
+  background-color: rgba(0, 0, 0, 0.5);
+}
+
+ .menu__nav__contatos__item{
+  display: flex;
+  align-items: center;
+  justify-content: start;
+  margin: 8px;
+ }
