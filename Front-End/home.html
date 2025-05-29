@@ -106,6 +106,8 @@
         
         .page-content {
             display: none;
+            position: relative;
+            z-index: -10;
         }
         
         .page-content.active {
@@ -287,6 +289,7 @@
             transform: translateY(-10px) scale(0.95);
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             pointer-events: none;
+            z-index: 9999 !important;
         }
 
         .user-dropdown:hover .dropdown-menu,
@@ -295,6 +298,7 @@
             visibility: visible;
             transform: translateY(0) scale(1);
             pointer-events: auto;
+            z-index: 9999 !important;
         }
 
         .user-dropdown .user-name {
@@ -320,6 +324,7 @@
             transition: all 0.2s ease;
             border-radius: 6px;
             margin: 2px 8px;
+            z-index: 9999 !important;
         }
 
         .dropdown-menu a:hover {
@@ -450,12 +455,11 @@
         <div class="user-avatar bg-health-blue text-white w-10 h-10 rounded-full flex items-center justify-center">
             
         </div>
-        <div class="user-dropdown">
+        <div class="user-dropdown relative z-99">
             <button class="user-name flex items-center gap-2 text-gray-800 font-semibold hover:text-health-blue transition-colors">
-                
                 <i class="fas fa-chevron-down text-xs"></i>
             </button>
-            <div class="dropdown-menu absolute right-0 top-full mt-2 w-48 bg-white rounded-xl shadow-lg border border-gray-200 py-2 z-50">
+            <div class="dropdown-menu absolute right-0 top-full mt-2 w-48 bg-white rounded-xl shadow-lg border border-gray-200 py-2 z-[1000]">
                 <a href="#" class="block px-4 py-2 text-gray-700 hover:bg-health-blue-light hover:text-health-blue" onclick="event.preventDefault();">
                     <i class="fas fa-user-circle mr-2"></i> Meu Perfil
                 </a>
@@ -474,7 +478,7 @@
             </header>
 
             <!-- Dashboard Page -->
-            <div class="page-content active" id="dashboard-page">
+            <div class="page-content active z-1" id="dashboard-page">
                 <!-- Calendar -->
                 <div class="calendar-container bg-white rounded-2xl p-6 shadow-xl mb-8 border border-gray-200">
                     <div class="calendar-header flex justify-between items-center mb-8 pb-5 border-b-2 border-border-light">
@@ -746,24 +750,24 @@ userSection.innerHTML = `
         <div class="user-avatar bg-health-blue text-white w-10 h-10 rounded-full flex items-center justify-center">
             ${userData.name.charAt(0).toUpperCase()}
         </div>
-        <div class="user-dropdown">
-            <button class="user-name flex items-center gap-2 text-gray-800 font-semibold hover:text-health-blue transition-colors">
-                ${userData.name}
-                <i class="fas fa-chevron-down text-xs"></i>
-            </button>
-            <div class="dropdown-menu absolute right-0 top-full mt-2 w-48 bg-white rounded-xl shadow-lg border border-gray-200 py-2 z-50">
-                <a href="#" class="block px-4 py-2 text-gray-700 hover:bg-health-blue-light hover:text-health-blue" onclick="event.preventDefault();">
-                    <i class="fas fa-user-circle mr-2"></i> Meu Perfil
-                </a>
-                <a href="#" class="block px-4 py-2 text-gray-700 hover:bg-health-blue-light hover:text-health-blue" onclick="event.preventDefault();">
-                    <i class="fas fa-cog mr-2"></i> Configurações
-                </a>
-                <div class="border-t border-gray-200 my-1"></div>
-                <a href="#" class="block px-4 py-2 text-gray-700 hover:bg-health-blue-light hover:text-health-blue" onclick="event.preventDefault(); window.location.href='login.html';">
-                    <i class="fas fa-sign-out-alt mr-2"></i> Sair
-                </a>
-            </div>
-        </div>
+        <div class="user-dropdown relative">
+    <button class="user-name flex items-center gap-2 text-gray-800 font-semibold hover:text-health-blue transition-colors">
+        ${userData.name}
+        <i class="fas fa-chevron-down text-xs"></i>
+    </button>
+    <div class="dropdown-menu absolute right-0 top-full mt-2 w-48 bg-white rounded-xl shadow-lg border border-gray-200 py-2 z-[1000]">
+        <a href="#" class="block px-4 py-2 text-gray-700 hover:bg-health-blue-light hover:text-health-blue" onclick="event.preventDefault();">
+            <i class="fas fa-user-circle mr-2"></i> Meu Perfil
+        </a>
+        <a href="#" class="block px-4 py-2 text-gray-700 hover:bg-health-blue-light hover:text-health-blue" onclick="event.preventDefault();">
+            <i class="fas fa-cog mr-2"></i> Configurações
+        </a>
+        <div class="border-t border-gray-200 my-1"></div>
+        <a href="#" class="block px-4 py-2 text-gray-700 hover:bg-health-blue-light hover:text-health-blue" onclick="event.preventDefault(); window.location.href='login.html';">
+            <i class="fas fa-sign-out-alt mr-2"></i> Sair
+        </a>
+    </div>
+</div>
     </div>
 `;
         
