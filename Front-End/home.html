@@ -106,8 +106,6 @@
         
         .page-content {
             display: none;
-            position: relative;
-            z-index: -10;
         }
         
         .page-content.active {
@@ -139,6 +137,8 @@
         
         .category-card {
             animation: fadeInUp 0.8s ease forwards;
+            position: relative;
+            z-index: -10;
         }
         
         .service-item {
@@ -289,7 +289,6 @@
             transform: translateY(-10px) scale(0.95);
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             pointer-events: none;
-            z-index: 9999 !important;
         }
 
         .user-dropdown:hover .dropdown-menu,
@@ -298,7 +297,6 @@
             visibility: visible;
             transform: translateY(0) scale(1);
             pointer-events: auto;
-            z-index: 9999 !important;
         }
 
         .user-dropdown .user-name {
@@ -324,7 +322,6 @@
             transition: all 0.2s ease;
             border-radius: 6px;
             margin: 2px 8px;
-            z-index: 9999 !important;
         }
 
         .dropdown-menu a:hover {
@@ -342,6 +339,76 @@
             right: 0;
             height: 8px;
             background: transparent;
+        }
+
+        .appointments-list {
+            max-height: 60px;
+            overflow-y: auto;
+            scrollbar-width: thin;
+        }
+
+        .appointment-item {
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            font-size: 0.7rem;
+            position: relative;
+            padding-right: 20px; /* Space for delete button */
+        }
+
+        .appointment-item:hover .delete-appointment-btn {
+            opacity: 1;
+        }
+
+        .delete-appointment-btn {
+            position: absolute;
+            right: 4px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 50%;
+            width: 16px;
+            height: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .delete-appointment-btn:hover {
+            background: rgba(0, 0, 0, 0.4);
+        }
+
+        .calendar-day {
+            min-height: 100px;
+            padding: 8px;
+        }
+
+        .calendar-day.has-appointment {
+            background: #f8f9fa;
+            border-left: none;
+        }
+
+        .calendar-day:hover {
+            transform: scale(1.02);
+            z-index: 1;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+
+        .past-date {
+            background-color: #f5f5f5;
+            cursor: not-allowed;
+            opacity: 0.7;
+        }
+
+        .past-date:hover {
+            transform: none !important;
+            box-shadow: none !important;
+        }
+
+        .past-date .appointments-list {
+            opacity: 0.5;
         }
     </style>
 </head>
@@ -455,11 +522,12 @@
         <div class="user-avatar bg-health-blue text-white w-10 h-10 rounded-full flex items-center justify-center">
             
         </div>
-        <div class="user-dropdown relative z-99">
+        <div class="user-dropdown">
             <button class="user-name flex items-center gap-2 text-gray-800 font-semibold hover:text-health-blue transition-colors">
+                
                 <i class="fas fa-chevron-down text-xs"></i>
             </button>
-            <div class="dropdown-menu absolute right-0 top-full mt-2 w-48 bg-white rounded-xl shadow-lg border border-gray-200 py-2 z-[1000]">
+            <div class="dropdown-menu absolute right-0 top-full mt-2 w-48 bg-white rounded-xl shadow-lg border border-gray-200 py-2 z-50">
                 <a href="#" class="block px-4 py-2 text-gray-700 hover:bg-health-blue-light hover:text-health-blue" onclick="event.preventDefault();">
                     <i class="fas fa-user-circle mr-2"></i> Meu Perfil
                 </a>
@@ -478,7 +546,7 @@
             </header>
 
             <!-- Dashboard Page -->
-            <div class="page-content active z-1" id="dashboard-page">
+            <div class="page-content active" id="dashboard-page">
                 <!-- Calendar -->
                 <div class="calendar-container bg-white rounded-2xl p-6 shadow-xl mb-8 border border-gray-200">
                     <div class="calendar-header flex justify-between items-center mb-8 pb-5 border-b-2 border-border-light">
@@ -673,6 +741,44 @@
         </div>
     </div>
 
+    <!-- Appointment Modal -->
+    <div id="appointmentModal" class="modal">
+        <div class="modal-content">
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="text-xl font-semibold text-gray-800">Novo Compromisso</h3>
+                <button onclick="closeAppointmentModal()" class="text-gray-500 hover:text-gray-700">
+                    <i class="fas fa-times text-xl"></i>
+                </button>
+            </div>
+            <form id="appointmentForm" onsubmit="handleAppointmentSubmit(event)">
+                <div class="mb-4">
+                    <label class="block text-gray-700 text-sm font-bold mb-2">Data</label>
+                    <input type="date" id="appointmentDate" class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:border-health-blue" required>
+                </div>
+                <div class="mb-4">
+                    <label class="block text-gray-700 text-sm font-bold mb-2">Horário</label>
+                    <input type="time" id="appointmentTime" class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:border-health-blue" required>
+                </div>
+                <div class="mb-4">
+                    <label class="block text-gray-700 text-sm font-bold mb-2">Título</label>
+                    <input type="text" id="appointmentTitle" class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:border-health-blue" placeholder="Ex: Consulta Cardiologista" required>
+                </div>
+                <div class="mb-6">
+                    <label class="block text-gray-700 text-sm font-bold mb-2">Tipo</label>
+                    <select id="appointmentType" class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:border-health-blue" required>
+                        <option value="consulta">Consulta</option>
+                        <option value="exame">Exame</option>
+                        <option value="terapia">Terapia</option>
+                        <option value="outro">Outro</option>
+                    </select>
+                </div>
+                <button type="submit" class="w-full bg-gradient-to-r from-health-blue to-blue-700 text-white py-3 px-6 rounded-lg font-medium transition-all duration-300 ease-in-out hover:-translate-y-0.5 hover:shadow-lg">
+                    Salvar Compromisso
+                </button>
+            </form>
+        </div>
+    </div>
+
     <script>
         // Global variables
         let currentDate = new Date();
@@ -750,24 +856,24 @@ userSection.innerHTML = `
         <div class="user-avatar bg-health-blue text-white w-10 h-10 rounded-full flex items-center justify-center">
             ${userData.name.charAt(0).toUpperCase()}
         </div>
-        <div class="user-dropdown relative">
-    <button class="user-name flex items-center gap-2 text-gray-800 font-semibold hover:text-health-blue transition-colors">
-        ${userData.name}
-        <i class="fas fa-chevron-down text-xs"></i>
-    </button>
-    <div class="dropdown-menu absolute right-0 top-full mt-2 w-48 bg-white rounded-xl shadow-lg border border-gray-200 py-2 z-[1000]">
-        <a href="#" class="block px-4 py-2 text-gray-700 hover:bg-health-blue-light hover:text-health-blue" onclick="event.preventDefault();">
-            <i class="fas fa-user-circle mr-2"></i> Meu Perfil
-        </a>
-        <a href="#" class="block px-4 py-2 text-gray-700 hover:bg-health-blue-light hover:text-health-blue" onclick="event.preventDefault();">
-            <i class="fas fa-cog mr-2"></i> Configurações
-        </a>
-        <div class="border-t border-gray-200 my-1"></div>
-        <a href="#" class="block px-4 py-2 text-gray-700 hover:bg-health-blue-light hover:text-health-blue" onclick="event.preventDefault(); window.location.href='login.html';">
-            <i class="fas fa-sign-out-alt mr-2"></i> Sair
-        </a>
-    </div>
-</div>
+        <div class="user-dropdown">
+            <button class="user-name flex items-center gap-2 text-gray-800 font-semibold hover:text-health-blue transition-colors">
+                ${userData.name}
+                <i class="fas fa-chevron-down text-xs"></i>
+            </button>
+            <div class="dropdown-menu absolute right-0 top-full mt-2 w-48 bg-white rounded-xl shadow-lg border border-gray-200 py-2 z-50">
+                <a href="#" class="block px-4 py-2 text-gray-700 hover:bg-health-blue-light hover:text-health-blue" onclick="event.preventDefault();">
+                    <i class="fas fa-user-circle mr-2"></i> Meu Perfil
+                </a>
+                <a href="#" class="block px-4 py-2 text-gray-700 hover:bg-health-blue-light hover:text-health-blue" onclick="event.preventDefault();">
+                    <i class="fas fa-cog mr-2"></i> Configurações
+                </a>
+                <div class="border-t border-gray-200 my-1"></div>
+                <a href="#" class="block px-4 py-2 text-gray-700 hover:bg-health-blue-light hover:text-health-blue" onclick="event.preventDefault(); window.location.href='login.html';">
+                    <i class="fas fa-sign-out-alt mr-2"></i> Sair
+                </a>
+            </div>
+        </div>
     </div>
 `;
         
@@ -908,6 +1014,7 @@ document.addEventListener('DOMContentLoaded', function() {
             
             if (!grid || !title) return;
 
+            const now = new Date();
             const year = currentDate.getFullYear();
             const month = currentDate.getMonth();
             
@@ -944,31 +1051,186 @@ document.addEventListener('DOMContentLoaded', function() {
             // Add days of month
             for (let day = 1; day <= daysInMonth; day++) {
                 const dayElement = document.createElement('div');
+                const currentDayDate = new Date(year, month, day);
                 const dateString = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
                 
-                dayElement.className = 'calendar-day';
+                // Check if this date is before the current datetime
+                const isPastDate = currentDayDate < now && currentDayDate.toDateString() !== now.toDateString();
+                const isToday = currentDayDate.toDateString() === now.toDateString();
                 
-                // Check if today
-                const today = new Date();
-                if (year === today.getFullYear() && month === today.getMonth() && day === today.getDate()) {
+                dayElement.className = `calendar-day ${isPastDate  ? 'past-date' : 'cursor-pointer hover:bg-health-blue-light'} transition-all duration-300`;
+                
+                if (isToday) {
                     dayElement.classList.add('today');
                 }
 
-                // Check for appointments
-                if (appointments[dateString]) {
-                    dayElement.classList.add('has-appointment');
-                    const appointmentCount = document.createElement('div');
-                    appointmentCount.className = 'appointment-count';
-                    appointmentCount.textContent = appointments[dateString].length;
-                    dayElement.appendChild(appointmentCount);
+                // Add click handler for adding appointments
+                if (!isPastDate) {
+                    dayElement.onclick = () => showAppointmentModal(dateString);
                 }
 
                 const dayNumber = document.createElement('div');
-                dayNumber.className = 'day-number';
+                dayNumber.className = `day-number ${isPastDate ? 'text-gray-400' : ''}`;
                 dayNumber.textContent = day;
                 dayElement.appendChild(dayNumber);
 
+                // Check for appointments and add them to the day
+                if (appointments[dateString]) {
+                    const appointmentsList = document.createElement('div');
+                    appointmentsList.className = 'appointments-list mt-2';
+                    
+                    appointments[dateString].forEach(appointment => {
+                        const appointmentDateTime = new Date(dateString + 'T' + appointment.time);
+                        const isPastAppointment = appointmentDateTime < now;
+
+                        const appointmentElement = document.createElement('div');
+                        appointmentElement.className = `appointment-item text-xs p-1 mb-1 rounded text-white ${getAppointmentTypeClass(appointment.type)} flex justify-between items-center ${isPastAppointment ? 'opacity-50' : ''}`;
+                        
+                        const appointmentText = document.createElement('span');
+                        appointmentText.textContent = `${appointment.time} - ${appointment.title}`;
+                        appointmentElement.appendChild(appointmentText);
+
+                        // Only show delete button for future appointments
+                        if (!isPastAppointment) {
+                            const deleteBtn = document.createElement('button');
+                            deleteBtn.className = 'delete-appointment-btn ml-2 opacity-0 group-hover:opacity-100 transition-opacity';
+                            deleteBtn.innerHTML = '<i class="fas fa-times"></i>';
+                            deleteBtn.onclick = (e) => {
+                                e.stopPropagation();
+                                if (confirm('Tem certeza que deseja excluir este compromisso?')) {
+                                    deleteAppointment(dateString, appointment.id);
+                                }
+                            };
+                            appointmentElement.appendChild(deleteBtn);
+                        }
+
+                        appointmentsList.appendChild(appointmentElement);
+                    });
+
+                    dayElement.appendChild(appointmentsList);
+                    dayElement.classList.add('has-appointment');
+                }
+
                 grid.appendChild(dayElement);
+            }
+        }
+
+        function getAppointmentTypeClass(type) {
+            const typeClasses = {
+                'consulta': 'bg-health-blue',
+                'exame': 'bg-accent-red',
+                'terapia': 'bg-accent-green',
+                'outro': 'bg-gray-500'
+            };
+            return typeClasses[type] || typeClasses.outro;
+        }
+
+        function showAppointmentModal(dateString) {
+            const modal = document.getElementById('appointmentModal');
+            const dateInput = document.getElementById('appointmentDate');
+            const timeInput = document.getElementById('appointmentTime');
+            
+            const now = new Date();
+            const selectedDate = new Date(dateString);
+            const isToday = selectedDate.toDateString() === now.toDateString();
+            
+            // Set minimum date to today
+            dateInput.min = now.toISOString().split('T')[0];
+            dateInput.value = dateString;
+
+            if (isToday) {
+                // For today, set current time as minimum
+                const currentHours = String(now.getHours()).padStart(2, '0');
+                const currentMinutes = String(now.getMinutes()).padStart(2, '0');
+                timeInput.min = `${currentHours}:${currentMinutes}`;
+                
+                // Set default time to current time
+                timeInput.value = `${currentHours}:${currentMinutes}`;
+            } else {
+                timeInput.min = '';
+                timeInput.value = '09:00';
+            }
+
+            modal.classList.add('show');
+        }
+
+        function closeAppointmentModal() {
+            const modal = document.getElementById('appointmentModal');
+            modal.classList.remove('show');
+        }
+
+        function handleAppointmentSubmit(event) {
+            event.preventDefault();
+            
+            const date = document.getElementById('appointmentDate').value;
+            const time = document.getElementById('appointmentTime').value;
+            const title = document.getElementById('appointmentTitle').value;
+            const type = document.getElementById('appointmentType').value;
+
+            const now = new Date();
+            const appointmentDateTime = new Date(date + 'T' + time);
+
+            // Compare with current time
+            if (appointmentDateTime < now) {
+                alert('Por favor, selecione um horário futuro para o compromisso.');
+                return;
+            }
+
+            // Initialize the date's appointments array if it doesn't exist
+            if (!appointments[date]) {
+                appointments[date] = [];
+            }
+
+            // Add the new appointment with a unique ID
+            const newAppointment = {
+                id: Date.now().toString(),
+                time,
+                title,
+                type
+            };
+
+            appointments[date].push(newAppointment);
+
+            // Sort appointments by time
+            appointments[date].sort((a, b) => a.time.localeCompare(b.time));
+
+            // Save appointments to localStorage
+            localStorage.setItem('healthgo_appointments', JSON.stringify(appointments));
+
+            // Update the calendar and upcoming appointments
+            updateCalendar('calendarGrid', 'calendarTitle');
+            updateCalendar('calendarGrid2', 'calendarTitle2');
+            updateUpcomingAppointments();
+
+            // Close the modal
+            closeAppointmentModal();
+
+            // Show success message
+            alert('Compromisso adicionado com sucesso!');
+        }
+
+        function deleteAppointment(dateString, appointmentId) {
+            if (appointments[dateString]) {
+                // Find and remove the appointment
+                appointments[dateString] = appointments[dateString].filter(
+                    appointment => appointment.id !== appointmentId
+                );
+
+                // If no appointments left for this date, remove the date entry
+                if (appointments[dateString].length === 0) {
+                    delete appointments[dateString];
+                }
+
+                // Save to localStorage
+                localStorage.setItem('healthgo_appointments', JSON.stringify(appointments));
+
+                // Update the calendar and upcoming appointments
+                updateCalendar('calendarGrid', 'calendarTitle');
+                updateCalendar('calendarGrid2', 'calendarTitle2');
+                updateUpcomingAppointments();
+
+                // Show success message
+                alert('Compromisso excluído com sucesso!');
             }
         }
 
@@ -992,18 +1254,23 @@ document.addEventListener('DOMContentLoaded', function() {
             const upcoming = [];
 
             Object.keys(appointments).forEach(dateString => {
-                const appointmentDate = new Date(dateString);
-                if (appointmentDate >= today) {
-                    appointments[dateString].forEach(appointment => {
+                appointments[dateString].forEach(appointment => {
+                    const appointmentDateTime = new Date(dateString + 'T' + appointment.time);
+                    if (appointmentDateTime >= today) {
                         upcoming.push({
+                            id: appointment.id,
                             date: dateString,
                             ...appointment
                         });
-                    });
-                }
+                    }
+                });
             });
 
-            upcoming.sort((a, b) => new Date(a.date) - new Date(b.date));
+            upcoming.sort((a, b) => {
+                const dateA = new Date(a.date + 'T' + a.time);
+                const dateB = new Date(b.date + 'T' + b.time);
+                return dateA - dateB;
+            });
 
             if (upcoming.length === 0) {
                 container.innerHTML = '<p class="text-gray-600">Nenhum compromisso agendado.</p>';
@@ -1011,12 +1278,18 @@ document.addEventListener('DOMContentLoaded', function() {
             }
 
             container.innerHTML = upcoming.slice(0, 5).map(appointment => `
-                <div class="flex items-center justify-between p-3 bg-gray-50 rounded-lg mb-2">
+                <div class="flex items-center justify-between p-3 bg-gray-50 rounded-lg mb-2 group">
                     <div>
-                        <div class="font-semibold text-gray-800">${appointment.title}</div>
+                        <div class="font-semibold text-gray-800 text-2xl">${appointment.title}</div>
                         <div class="text-sm text-gray-600">${new Date(appointment.date).toLocaleDateString('pt-BR')} às ${appointment.time}</div>
                     </div>
-                    <div class="text-xs bg-health-blue text-white px-2 py-1 rounded">${appointment.type}</div>
+                    <div class="flex items-center gap-2">
+                        <div class="text-xs ${getAppointmentTypeClass(appointment.type)} px-2 py-1 rounded">${appointment.type}</div>
+                        <button onclick="if(confirm('Tem certeza que deseja excluir este compromisso?')) deleteAppointment('${appointment.date}', '${appointment.id}')" 
+                                class="text-red-500 opacity-0 group-hover:opacity-100 transition-opacity">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </div>
                 </div>
             `).join('');
         }
@@ -1267,6 +1540,27 @@ document.addEventListener('DOMContentLoaded', function() {
         // Initialize on page load
         window.addEventListener('load', function() {
             updatePurchasedServicesDetails();
+        });
+
+        // Add event listener to update time input min value when date changes
+        document.getElementById('appointmentDate').addEventListener('change', function(e) {
+            const timeInput = document.getElementById('appointmentTime');
+            const now = new Date();
+            const selectedDate = new Date(e.target.value);
+            const isToday = selectedDate.toDateString() === now.toDateString();
+            
+            if (isToday) {
+                const currentHours = String(now.getHours()).padStart(2, '0');
+                const currentMinutes = String(now.getMinutes()).padStart(2, '0');
+                timeInput.min = `${currentHours}:${currentMinutes}`;
+                
+                // If selected time is before current time, update to current time
+                if (timeInput.value < timeInput.min) {
+                    timeInput.value = timeInput.min;
+                }
+            } else {
+                timeInput.min = '';
+            }
         });
     </script>
 </body>
