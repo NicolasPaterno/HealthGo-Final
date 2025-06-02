@@ -138,15 +138,30 @@
         .category-card {
             animation: fadeInUp 0.8s ease forwards;
             position: relative;
-            z-index: 10;
+            z-index: 1; /* FIXED: Changed from -10 to 1 */
         }
         
         .service-item {
             animation: slideInRight 0.6s ease forwards;
+            position: relative; /* ADDED: Ensure proper stacking context */
+            z-index: 2; /* ADDED: Higher z-index for service items */
         }
         
         .service-item.hidden {
             display: none;
+        }
+        
+        /* FIXED: Ensure buttons are clickable */
+        .service-actions {
+            position: relative;
+            z-index: 10;
+        }
+        
+        .purchase-btn, .ver-mais-btn {
+            position: relative;
+            z-index: 11;
+            cursor: pointer;
+            pointer-events: auto;
         }
         
         .loading {
@@ -281,6 +296,7 @@
         /* Smooth Profile Dropdown Styles */
         .user-dropdown {
             position: relative;
+            z-index: 100; /* ADDED: Higher z-index for dropdown container */
         }
 
         .user-dropdown .dropdown-menu {
@@ -289,6 +305,8 @@
             transform: translateY(-10px) scale(0.95);
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             pointer-events: none;
+            z-index: 1000; /* INCREASED: Much higher z-index to appear above cards */
+            position: absolute; /* ENSURE: Proper positioning */
         }
 
         .user-dropdown:hover .dropdown-menu,
@@ -410,6 +428,11 @@
         .past-date .appointments-list {
             opacity: 0.5;
         }
+
+        .header {
+            position: relative;
+            z-index: 100; /* ADDED: Ensure header has high z-index */
+        }
     </style>
 </head>
 <body class="bg-health-gray font-sans min-h-screen">
@@ -504,8 +527,8 @@
 
         <!-- Main Content -->
         <main class="main-content flex-1 ml-80 p-6 transition-all duration-400 ease-in-out" id="mainContent">
-            <header class="header bg-white p-6 rounded-2xl shadow-xl mb-8 flex justify-between items-center border border-gray-200 backdrop-blur-md z-10000">
-                <div class="user-greeting flex items-center z-100">
+            <header class="header bg-white p-6 rounded-2xl shadow-xl mb-8 flex justify-between items-center border border-gray-200 backdrop-blur-md">
+                <div class="user-greeting flex items-center">
                     <i class="fas fa-user-circle text-health-blue text-4xl mr-5"></i>
                     <div class="greeting-text">
                         <h2 class="text-2xl font-semibold text-gray-800 mb-1" id="userGreeting">Olá, Visitante!</h2>
@@ -518,31 +541,31 @@
                         <span class="notification-badge absolute -top-1 -right-1 bg-accent-red text-white text-xs w-5 h-5 rounded-full flex items-center justify-center">3</span>
                     </button>
                     <div id="user-section">
-    <div class="user-profile flex items-center gap-3">
-        <div class="user-avatar bg-health-blue text-white w-10 h-10 rounded-full flex items-center justify-center">
-            
-        </div>
-        <div class="user-dropdown z-100 flex">
-            <button class="user-name flex items-center gap-2 text-gray-800 font-semibold hover:text-health-blue transition-colors">
-                
-                <i class="fas fa-chevron-down text-xs"></i>
-            </button>
-            <div class="dropdown-menu absolute right-0 top-full mt-2 w-48 bg-white rounded-xl shadow-lg border border-gray-200 py-2 z-50">
-                <a href="#" class="block px-4 py-2 text-gray-700 hover:bg-health-blue-light hover:text-health-blue" onclick="event.preventDefault();">
-                    <i class="fas fa-user-circle mr-2"></i> Meu Perfil
-                </a>
-                <a href="#" class="block px-4 py-2 text-gray-700 hover:bg-health-blue-light hover:text-health-blue" onclick="event.preventDefault();">
-                    <i class="fas fa-cog mr-2"></i> Configurações
-                </a>
-                <div class="border-t border-gray-200 my-1"></div>
-                <a href="#" class="block px-4 py-2 text-gray-700 hover:bg-health-blue-light hover:text-health-blue" onclick="event.preventDefault(); window.location.href='login.html';">
-                    <i class="fas fa-sign-out-alt mr-2"></i> Sair
-                </a>
-            </div>
-        </div>
-    </div>
-</div>
-</div>
+                        <div class="user-profile flex items-center gap-3">
+                            <div class="user-avatar bg-health-blue text-white w-10 h-10 rounded-full flex items-center justify-center">
+                                
+                            </div>
+                            <div class="user-dropdown">
+                                <button class="user-name flex items-center gap-2 text-gray-800 font-semibold hover:text-health-blue transition-colors">
+                                    
+                                    <i class="fas fa-chevron-down text-xs"></i>
+                                </button>
+                                <div class="dropdown-menu absolute right-0 top-full mt-2 w-48 bg-white rounded-xl shadow-lg border border-gray-200 py-2" style="z-index: 1000;">
+                                    <a href="#" class="block px-4 py-2 text-gray-700 hover:bg-health-blue-light hover:text-health-blue" onclick="event.preventDefault();">
+                                        <i class="fas fa-user-circle mr-2"></i> Meu Perfil
+                                    </a>
+                                    <a href="#" class="block px-4 py-2 text-gray-700 hover:bg-health-blue-light hover:text-health-blue" onclick="event.preventDefault();">
+                                        <i class="fas fa-cog mr-2"></i> Configurações
+                                    </a>
+                                    <div class="border-t border-gray-200 my-1"></div>
+                                    <a href="#" class="block px-4 py-2 text-gray-700 hover:bg-health-blue-light hover:text-health-blue" onclick="event.preventDefault(); window.location.href='login.html';">
+                                        <i class="fas fa-sign-out-alt mr-2"></i> Sair
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </header>
 
             <!-- Dashboard Page -->
@@ -603,7 +626,7 @@
                             <i class="fas fa-user-nurse text-white text-3xl p-4 rounded-xl mr-5 shadow-md"></i>
                             <h3 class="text-2xl font-semibold text-gray-800">Cuidadores Especializados</h3>
                         </div>
-                        <button class="ver-mais-btn bg-gradient-to-r from-health-blue to-blue-700 text-white py-2 px-4 rounded-lg font-medium transition-all duration-300 ease-in-out hover:-translate-y-0.5 hover:shadow-lg" onclick="toggleVerMais('cuidadores')">Ver mais</button>
+                        <button type="button" class="ver-mais-btn bg-gradient-to-r from-health-blue to-blue-700 text-white py-2 px-4 rounded-lg font-medium transition-all duration-300 ease-in-out hover:-translate-y-0.5 hover:shadow-lg" onclick="toggleVerMais('cuidadores')">Ver mais</button>
                     </div>
                     <ul class="service-list list-none" id="cuidadores-list">
                         <!-- Services will be populated by JavaScript -->
@@ -619,7 +642,7 @@
                             <i class="fas fa-hotel text-white text-3xl p-4 rounded-xl mr-5 shadow-md"></i>
                             <h3 class="text-2xl font-semibold text-gray-800">Hotéis & Hospedagem Médica</h3>
                         </div>
-                        <button class="ver-mais-btn bg-gradient-to-r from-health-blue to-blue-700 text-white py-2 px-4 rounded-lg font-medium transition-all duration-300 ease-in-out hover:-translate-y-0.5 hover:shadow-lg" onclick="toggleVerMais('hoteis')">Ver mais</button>
+                        <button type="button" class="ver-mais-btn bg-gradient-to-r from-health-blue to-blue-700 text-white py-2 px-4 rounded-lg font-medium transition-all duration-300 ease-in-out hover:-translate-y-0.5 hover:shadow-lg" onclick="toggleVerMais('hoteis')">Ver mais</button>
                     </div>
                     <ul class="service-list list-none" id="hoteis-list">
                         <!-- Services will be populated by JavaScript -->
@@ -635,7 +658,7 @@
                             <i class="fas fa-plane text-white text-3xl p-4 rounded-xl mr-5 shadow-md"></i>
                             <h3 class="text-2xl font-semibold text-gray-800">Passagens Aéreas Médicas</h3>
                         </div>
-                        <button class="ver-mais-btn bg-gradient-to-r from-health-blue to-blue-700 text-white py-2 px-4 rounded-lg font-medium transition-all duration-300 ease-in-out hover:-translate-y-0.5 hover:shadow-lg" onclick="toggleVerMais('passagens')">Ver mais</button>
+                        <button type="button" class="ver-mais-btn bg-gradient-to-r from-health-blue to-blue-700 text-white py-2 px-4 rounded-lg font-medium transition-all duration-300 ease-in-out hover:-translate-y-0.5 hover:shadow-lg" onclick="toggleVerMais('passagens')">Ver mais</button>
                     </div>
                     <ul class="service-list list-none" id="passagens-list">
                         <!-- Services will be populated by JavaScript -->
@@ -651,7 +674,7 @@
                             <i class="fas fa-brain text-white text-3xl p-4 rounded-xl mr-5 shadow-md"></i>
                             <h3 class="text-2xl font-semibold text-gray-800">Psicólogos & Terapeutas</h3>
                         </div>
-                        <button class="ver-mais-btn bg-gradient-to-r from-health-blue to-blue-700 text-white py-2 px-4 rounded-lg font-medium transition-all duration-300 ease-in-out hover:-translate-y-0.5 hover:shadow-lg" onclick="toggleVerMais('psicologos')">Ver mais</button>
+                        <button type="button" class="ver-mais-btn bg-gradient-to-r from-health-blue to-blue-700 text-white py-2 px-4 rounded-lg font-medium transition-all duration-300 ease-in-out hover:-translate-y-0.5 hover:shadow-lg" onclick="toggleVerMais('psicologos')">Ver mais</button>
                     </div>
                     <ul class="service-list list-none" id="psicologos-list">
                         <!-- Services will be populated by JavaScript -->
@@ -780,12 +803,11 @@
     </div>
 
     <script>
-        // Global variables
+        // Global variables and functions
         let currentDate = new Date();
         let selectedServices = JSON.parse(localStorage.getItem('healthgo_selected_services')) || {};
         let currentServiceForPurchase = null;
         let showingMore = {};
-        
         let appointments = {
             '2024-12-28': [
                 { time: '14:30', title: 'Cardiologista', type: 'consulta' },
@@ -838,121 +860,174 @@
             ]
         };
 
-        // Initialize application
-        
+        // Global function declarations
+        function toggleVerMais(category) {
+            console.log('toggleVerMais called with category:', category);
+            showingMore[category] = !showingMore[category];
+            populateServices();
+            
+            const button = document.querySelector(`#${category}-page .ver-mais-btn`);
+            if (button) {
+                button.textContent = showingMore[category] ? 'Ver menos' : 'Ver mais';
+            }
+        }
+
+        function showPurchaseModal(serviceId, category) {
+            console.log('showPurchaseModal called with:', serviceId, category);
+            const service = servicesDatabase[category].find(s => s.id === serviceId);
+            if (!service) return;
+
+            currentServiceForPurchase = { ...service, category };
+            
+            const modal = document.getElementById('purchaseModal');
+            const details = document.getElementById('modalServiceDetails');
+            
+            details.innerHTML = `
+                <div class="service-details">
+                    <h4 class="text-lg font-semibold text-gray-800 mb-2">${service.name}</h4>
+                    <p class="text-gray-600 mb-4">${service.description}</p>
+                    <div class="service-meta grid grid-cols-2 gap-4 mb-4">
+                        <div><strong>Localização:</strong> ${service.city}</div>
+                        <div><strong>Avaliação:</strong> ${service.rating} ⭐</div>
+                        <div><strong>Preço:</strong> R$ ${service.price}</div>
+                        <div><strong>Período:</strong> ${service.period}</div>
+                    </div>
+                    <div class="total-price bg-gray-50 p-4 rounded-lg">
+                        <div class="text-lg font-semibold text-gray-800">Total: R$ ${service.price}</div>
+                        <div class="text-sm text-gray-600">Pagamento via PIX, cartão ou boleto</div>
+                    </div>
+                </div>
+            `;
+            
+            modal.classList.add('show');
+        }
+
+        function removeService(serviceId) {
+            console.log('removeService called with:', serviceId);
+            delete selectedServices[serviceId];
+            localStorage.setItem('healthgo_selected_services', JSON.stringify(selectedServices));
+            
+            populateServices();
+            updateServicesSummary();
+            updateStats();
+            updatePurchasedServicesDetails();
+        }
+
+        // Make functions globally accessible
+        window.toggleVerMais = toggleVerMais;
+        window.showPurchaseModal = showPurchaseModal;
+        window.removeService = removeService;
 
         // Check if user is logged in and update header
-function checkUserLogin() {
-    const userSection = document.getElementById('user-section');
-    const userGreeting = document.getElementById('userGreeting');
-    const userData = JSON.parse(localStorage.getItem('healthgo_user'));
-    
-    if (userData && userData.name) {
-        // User is logged in, show user info
-        
-// Replace the dropdown HTML in the userSection.innerHTML with:
-userSection.innerHTML = `
-    <div class="user-profile flex items-center gap-3">
-        <div class="user-avatar bg-health-blue text-white w-10 h-10 rounded-full flex items-center justify-center">
-            ${userData.name.charAt(0).toUpperCase()}
-        </div>
-        <div class="user-dropdown">
-            <button class="user-name flex items-center gap-2 text-gray-800 font-semibold hover:text-health-blue transition-colors">
-                ${userData.name}
-                <i class="fas fa-chevron-down text-xs"></i>
-            </button>
-            <div class="dropdown-menu absolute right-0 top-full mt-2 w-48 bg-white rounded-xl shadow-lg border border-gray-200 py-2 z-50">
-                <a href="#" class="block px-4 py-2 text-gray-700 hover:bg-health-blue-light hover:text-health-blue" onclick="event.preventDefault();">
-                    <i class="fas fa-user-circle mr-2"></i> Meu Perfil
-                </a>
-                <a href="#" class="block px-4 py-2 text-gray-700 hover:bg-health-blue-light hover:text-health-blue" onclick="event.preventDefault();">
-                    <i class="fas fa-cog mr-2"></i> Configurações
-                </a>
-                <div class="border-t border-gray-200 my-1"></div>
-                <a href="#" class="block px-4 py-2 text-gray-700 hover:bg-health-blue-light hover:text-health-blue" onclick="event.preventDefault(); window.location.href='login.html';">
-                    <i class="fas fa-sign-out-alt mr-2"></i> Sair
-                </a>
-            </div>
-        </div>
-    </div>
-`;
-        
-        // Update greeting
-        if (userGreeting) {
-            userGreeting.textContent = `Olá, ${userData.name}!`;
+        function checkUserLogin() {
+            const userSection = document.getElementById('user-section');
+            const userGreeting = document.getElementById('userGreeting');
+            const userData = JSON.parse(localStorage.getItem('healthgo_user'));
+            
+            if (userData && userData.name) {
+                // User is logged in, show user info
+                userSection.innerHTML = `
+                    <div class="user-profile flex items-center gap-3">
+                        <div class="user-avatar bg-health-blue text-white w-10 h-10 rounded-full flex items-center justify-center">
+                            ${userData.name.charAt(0).toUpperCase()}
+                        </div>
+                        <div class="user-dropdown">
+                            <button class="user-name flex items-center gap-2 text-gray-800 font-semibold hover:text-health-blue transition-colors">
+                                ${userData.name}
+                                <i class="fas fa-chevron-down text-xs"></i>
+                            </button>
+                            <div class="dropdown-menu absolute right-0 top-full mt-2 w-48 bg-white rounded-xl shadow-lg border border-gray-200 py-2 z-50">
+                                <a href="#" class="block px-4 py-2 text-gray-700 hover:bg-health-blue-light hover:text-health-blue" onclick="event.preventDefault();">
+                                    <i class="fas fa-user-circle mr-2"></i> Meu Perfil
+                                </a>
+                                <a href="#" class="block px-4 py-2 text-gray-700 hover:bg-health-blue-light hover:text-health-blue" onclick="event.preventDefault();">
+                                    <i class="fas fa-cog mr-2"></i> Configurações
+                                </a>
+                                <div class="border-t border-gray-200 my-1"></div>
+                                <a href="#" class="block px-4 py-2 text-gray-700 hover:bg-health-blue-light hover:text-health-blue" onclick="event.preventDefault(); window.location.href='login.html';">
+                                    <i class="fas fa-sign-out-alt mr-2"></i> Sair
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                
+                // Update greeting
+                if (userGreeting) {
+                    userGreeting.textContent = `Olá, ${userData.name}!`;
+                }
+            } else {
+                // User is not logged in, show login button
+                userSection.innerHTML = `
+                    <button class="login-btn bg-gradient-to-r from-health-red to-red-700 text-white py-3 px-6 rounded-xl font-semibold transition-all duration-300 ease-in-out shadow-md hover:-translate-y-1 hover:shadow-lg flex items-center gap-2" onclick="showLoginModal()">
+                        <i class="fas fa-sign-in-alt"></i> Entrar
+                    </button>
+                `;
+                
+                // Reset greeting
+                if (userGreeting) {
+                    userGreeting.textContent = 'Olá, Visitante!';
+                }
+            }
         }
-    } else {
-        // User is not logged in, show login button
-        userSection.innerHTML = `
-            <button class="login-btn bg-gradient-to-r from-health-red to-red-700 text-white py-3 px-6 rounded-xl font-semibold transition-all duration-300 ease-in-out shadow-md hover:-translate-y-1 hover:shadow-lg flex items-center gap-2" onclick="('')">
-                <i class="fas fa-sign-in-alt"></i> Entrar
-            </button>
-        `;
-        
-        // Reset greeting
-        if (userGreeting) {
-            userGreeting.textContent = 'Olá, Visitante!';
-        }
-    }
-}
 
-// Enhanced dropdown behavior with smooth transitions
-function initializeDropdownBehavior() {
-    let hoverTimeout;
-    
-    // Wait for DOM to be ready and user section to be populated
-    setTimeout(() => {
-        const userDropdown = document.querySelector('.user-dropdown');
-        const dropdownMenu = document.querySelector('.dropdown-menu');
-        
-        if (userDropdown && dropdownMenu) {
-            // Remove the default group-hover behavior
-            dropdownMenu.classList.remove('hidden', 'group-hover:block');
+        // Enhanced dropdown behavior with smooth transitions
+        function initializeDropdownBehavior() {
+            let hoverTimeout;
             
-            // Add smooth hover behavior
-            userDropdown.addEventListener('mouseenter', function() {
-                clearTimeout(hoverTimeout);
-                dropdownMenu.style.opacity = '1';
-                dropdownMenu.style.visibility = 'visible';
-                dropdownMenu.style.transform = 'translateY(0) scale(1)';
-                dropdownMenu.style.pointerEvents = 'auto';
-            });
-            
-            userDropdown.addEventListener('mouseleave', function() {
-                hoverTimeout = setTimeout(function() {
-                    dropdownMenu.style.opacity = '0';
-                    dropdownMenu.style.visibility = 'hidden';
-                    dropdownMenu.style.transform = 'translateY(-10px) scale(0.95)';
-                    dropdownMenu.style.pointerEvents = 'none';
-                }, 200); // 200ms delay before hiding
-            });
-            
-            // Keep menu open when hovering over it
-            dropdownMenu.addEventListener('mouseenter', function() {
-                clearTimeout(hoverTimeout);
-            });
-            
-            dropdownMenu.addEventListener('mouseleave', function() {
-                hoverTimeout = setTimeout(function() {
-                    dropdownMenu.style.opacity = '0';
-                    dropdownMenu.style.visibility = 'hidden';
-                    dropdownMenu.style.transform = 'translateY(-10px) scale(0.95)';
-                    dropdownMenu.style.pointerEvents = 'none';
-                }, 150);
-            });
+            // Wait for DOM to be ready and user section to be populated
+            setTimeout(() => {
+                const userDropdown = document.querySelector('.user-dropdown');
+                const dropdownMenu = document.querySelector('.dropdown-menu');
+                
+                if (userDropdown && dropdownMenu) {
+                    // Remove the default group-hover behavior
+                    dropdownMenu.classList.remove('hidden', 'group-hover:block');
+                    
+                    // Add smooth hover behavior
+                    userDropdown.addEventListener('mouseenter', function() {
+                        clearTimeout(hoverTimeout);
+                        dropdownMenu.style.opacity = '1';
+                        dropdownMenu.style.visibility = 'visible';
+                        dropdownMenu.style.transform = 'translateY(0) scale(1)';
+                        dropdownMenu.style.pointerEvents = 'auto';
+                    });
+                    
+                    userDropdown.addEventListener('mouseleave', function() {
+                        hoverTimeout = setTimeout(function() {
+                            dropdownMenu.style.opacity = '0';
+                            dropdownMenu.style.visibility = 'hidden';
+                            dropdownMenu.style.transform = 'translateY(-10px) scale(0.95)';
+                            dropdownMenu.style.pointerEvents = 'none';
+                        }, 200); // 200ms delay before hiding
+                    });
+                    
+                    // Keep menu open when hovering over it
+                    dropdownMenu.addEventListener('mouseenter', function() {
+                        clearTimeout(hoverTimeout);
+                    });
+                    
+                    dropdownMenu.addEventListener('mouseleave', function() {
+                        hoverTimeout = setTimeout(function() {
+                            dropdownMenu.style.opacity = '0';
+                            dropdownMenu.style.visibility = 'hidden';
+                            dropdownMenu.style.transform = 'translateY(-10px) scale(0.95)';
+                            dropdownMenu.style.pointerEvents = 'none';
+                        }, 150);
+                    });
+                }
+            }, 100);
         }
-    }, 100);
-}
 
-// Call the function when page loads
-document.addEventListener('DOMContentLoaded', function() {
-    initializeCalendar();
-    populateServices();
-    updateServicesSummary();
-    updateStats();
-    checkUserLogin();
-    initializeDropdownBehavior(); // Add this line
-});
+        // Call the function when page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeCalendar();
+            populateServices();
+            updateServicesSummary();
+            updateStats();
+            checkUserLogin();
+            initializeDropdownBehavior();
+        });
 
         // Navigation functions
         function showPage(pageId) {
@@ -1336,46 +1411,7 @@ document.addEventListener('DOMContentLoaded', function() {
             });
         }
 
-        function toggleVerMais(category) {
-            showingMore[category] = !showingMore[category];
-            populateServices();
-            
-            const button = document.querySelector(`#${category}-page .ver-mais-btn`);
-            if (button) {
-                button.textContent = showingMore[category] ? 'Ver menos' : 'Ver mais';
-            }
-        }
-
         // Purchase functions
-        function showPurchaseModal(serviceId, category) {
-            const service = servicesDatabase[category].find(s => s.id === serviceId);
-            if (!service) return;
-
-            currentServiceForPurchase = { ...service, category };
-            
-            const modal = document.getElementById('purchaseModal');
-            const details = document.getElementById('modalServiceDetails');
-            
-            details.innerHTML = `
-                <div class="service-details">
-                    <h4 class="text-lg font-semibold text-gray-800 mb-2">${service.name}</h4>
-                    <p class="text-gray-600 mb-4">${service.description}</p>
-                    <div class="service-meta grid grid-cols-2 gap-4 mb-4">
-                        <div><strong>Localização:</strong> ${service.city}</div>
-                        <div><strong>Avaliação:</strong> ${service.rating} ⭐</div>
-                        <div><strong>Preço:</strong> R$ ${service.price}</div>
-                        <div><strong>Período:</strong> ${service.period}</div>
-                    </div>
-                    <div class="total-price bg-gray-50 p-4 rounded-lg">
-                        <div class="text-lg font-semibold text-gray-800">Total: R$ ${service.price}</div>
-                        <div class="text-sm text-gray-600">Pagamento via PIX, cartão ou boleto</div>
-                    </div>
-                </div>
-            `;
-            
-            modal.classList.add('show');
-        }
-
         function closePurchaseModal() {
             const modal = document.getElementById('purchaseModal');
             modal.classList.remove('show');
@@ -1402,16 +1438,6 @@ document.addEventListener('DOMContentLoaded', function() {
             
             // Show success message
             alert('Serviço comprado com sucesso!');
-        }
-
-        function removeService(serviceId) {
-            delete selectedServices[serviceId];
-            localStorage.setItem('healthgo_selected_services', JSON.stringify(selectedServices));
-            
-            populateServices();
-            updateServicesSummary();
-            updateStats();
-            updatePurchasedServicesDetails();
         }
 
         // Update functions
