@@ -7,6 +7,8 @@ import SettingsPage from "./app/settings/SettingsPage"
 import { ThemeProvider } from "./components/theme-provider"
 import "./index.css"
 import TicketsPage from "./app/tickets/TicketsApp"
+import PsychologistPage from "./app/psychologist/PsychologistPage"
+import CaregiversPage from "./app/dashboard/caregivers/CaregiversPage"
 
 function App() {
   return (
@@ -21,6 +23,8 @@ function App() {
           <Route path="settings" element={<SettingsPage />} />
           <Route path="places" element={<HotelsPage />} />
           <Route path="tickets" element={<TicketsPage />}/>
+          <Route path="psychologist" element={<PsychologistPage />}/>
+          <Route path="caregivers" element={<CaregiversPage />}/>
           {/* Adicione outras rotas filhas aqui, como "tickets", "psychologist", etc. */}
         </Route>
 

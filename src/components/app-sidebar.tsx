@@ -67,7 +67,7 @@ const data = {
     },
     {
       title: "cuidadores",
-      url: "/dashboard/careTaker",
+      url: "/dashboard/caregivers",
       icon: IconUsers,
     },
   ],
