@@ -189,3 +189,21 @@
     letter-spacing: var(--tracking-normal);
   }
 }
+
+.day-with-reminder {
+  position: relative;
+  border-bottom: 3px solid hsl(var(--primary) / 0.5);
+  border-radius: var(--radius);
+}
+
+.day-with-reminder::after {
+  content: '';
+  position: absolute;
+  bottom: 6px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background-color: hsl(var(--primary));
+}
