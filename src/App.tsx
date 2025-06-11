@@ -18,7 +18,7 @@ function App() {
           {/* Rotas filhas que serão renderizadas dentro do Outlet do DashboardPage */}
           <Route index element={<DashboardContent />} />
           <Route path="settings" element={<SettingsPage />} />
-          <Route path="hotels" element={<HotelsPage />} />
+          <Route path="places" element={<HotelsPage />} />
           {/* Adicione outras rotas filhas aqui, como "tickets", "psychologist", etc. */}
         </Route>
 
