@@ -6,6 +6,7 @@ import LoginPage from "./app/login/LoginPage"
 import SettingsPage from "./app/settings/SettingsPage"
 import { ThemeProvider } from "./components/theme-provider"
 import "./index.css"
+import TicketsPage from "./app/tickets/TicketsApp"
 
 function App() {
   return (
@@ -19,6 +20,7 @@ function App() {
           <Route index element={<DashboardContent />} />
           <Route path="settings" element={<SettingsPage />} />
           <Route path="places" element={<HotelsPage />} />
+          <Route path="tickets" element={<TicketsPage />}/>
           {/* Adicione outras rotas filhas aqui, como "tickets", "psychologist", etc. */}
         </Route>
 
