@@ -9,6 +9,7 @@ import "./index.css"
 import TicketsPage from "./app/tickets/TicketsApp"
 import PsychologistPage from "./app/psychologist/PsychologistPage"
 import CaregiversPage from "./app/dashboard/caregivers/CaregiversPage"
+import CalendarPage from "./app/calendar/CalendarPage"
 
 function App() {
   return (
@@ -18,17 +19,18 @@ function App() {
 
         {/* Rota pai que define o layout do Dashboard */}
         <Route path="/dashboard" element={<DashboardPage />}>
-          {/* Rotas filhas que serão renderizadas dentro do Outlet do DashboardPage */}
+          {/* Rotas filhas in outlet*/}
           <Route index element={<DashboardContent />} />
           <Route path="settings" element={<SettingsPage />} />
           <Route path="places" element={<HotelsPage />} />
-          <Route path="tickets" element={<TicketsPage />}/>
-          <Route path="psychologist" element={<PsychologistPage />}/>
-          <Route path="caregivers" element={<CaregiversPage />}/>
+          <Route path="tickets" element={<TicketsPage />} />
+          <Route path="psychologist" element={<PsychologistPage />} />
+          <Route path="caregivers" element={<CaregiversPage />} />
+          <Route path="calendar" element={<CalendarPage />} />
           {/* Adicione outras rotas filhas aqui, como "tickets", "psychologist", etc. */}
         </Route>
 
-        {/* Redirecionamento da raiz para o dashboard */}
+        {/*root para o dashboard */}
         <Route path="/" element={<Navigate to="/dashboard" />} />
       </Routes>
     </ThemeProvider>

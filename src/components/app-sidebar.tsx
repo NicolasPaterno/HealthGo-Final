@@ -1,6 +1,7 @@
 import * as React from "react"
 import {
   IconBuilding,
+  IconCalendarTime,
   IconCamera,
   IconChartBar,
   IconDashboard,
@@ -69,6 +70,11 @@ const data = {
       title: "cuidadores",
       url: "/dashboard/caregivers",
       icon: IconUsers,
+    },
+    {
+      title: "calendario",
+      url: "/dashboard/calendar",
+      icon: IconCalendarTime,
     },
   ],
   navClouds: [
