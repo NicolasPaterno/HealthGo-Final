@@ -5,6 +5,7 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Checkbox } from "@/components/ui/checkbox"
 import { ModeToggle } from "./mode-toggle"
+import { Link } from "react-router-dom"
 
 export function LoginForm({
   className,
@@ -43,9 +44,11 @@ export function LoginForm({
                 </div>
                 <Input id="password" type="password" required />
               </div>
+                <Link to={"/dashboard"}>
               <Button type="submit" className="w-full">
                 Login
               </Button>
+                </Link>
               <div className="col-span-2 m-1">
                 <Checkbox className=""/>
                 <span className="font-semibold"> manter-me contecatdo</span>
