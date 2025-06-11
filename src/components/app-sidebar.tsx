@@ -37,8 +37,6 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar"
-import { Link } from "react-router-dom"
-import DashboardPage from "@/app/dashboard/DashboardPage"
 
 const data = {
   user: {
@@ -54,22 +52,22 @@ const data = {
     },
     {
       title: "Hoteis",
-      url: "/places",
+      url: "/dashboard/places",
       icon: IconBuilding,
     },
     {
       title: "Passagens",
-      url: "/tickets",
+      url: "/dashboard/tickets",
       icon: IconPlane,
     },
     {
       title: "Psicologos",
-      url: "/Psychologist",
+      url: "/dashboard/Psychologist",
       icon: IconUserHeart,
     },
     {
       title: "cuidadores",
-      url: "/careTaker",
+      url: "/dashboard/careTaker",
       icon: IconUsers,
     },
   ],
@@ -82,41 +80,41 @@ const data = {
       items: [
         {
           title: "Active Proposals",
-          url: "#",
+          url: "/dashboard",
         },
         {
           title: "Archived",
-          url: "#",
+          url: "/dashboard",
         },
       ],
     },
     {
       title: "Proposal",
       icon: IconFileDescription,
-      url: "#",
+      url: "/dashboard",
       items: [
         {
           title: "Active Proposals",
-          url: "#",
+          url: "/dashboard",
         },
         {
           title: "Archived",
-          url: "#",
+          url: "/dashboard",
         },
       ],
     },
     {
       title: "Prompts",
       icon: IconFileAi,
-      url: "#",
+      url: "/dashboard",
       items: [
         {
           title: "Active Proposals",
-          url: "#",
+          url: "/dashboard",
         },
         {
           title: "Archived",
-          url: "#",
+          url: "/dashboard",
         },
       ],
     },
@@ -124,34 +122,34 @@ const data = {
   navSecondary: [
     {
       title: "Configurações",
-      url: "/settings",
+      url: "/dashboard/settings",
       icon: IconSettings,
     },
     {
       title: "Get Help",
-      url: "#/help",
+      url: "/dashboard/help",
       icon: IconHelp,
     },
     {
       title: "Search",
-      url: "#",
+      url: "/dashboard",
       icon: IconSearch,
     },
   ],
   documents: [
     {
       name: "Data Library",
-      url: "#",
+      url: "/dashboard",
       icon: IconDatabase,
     },
     {
       name: "Reports",
-      url: "#",
+      url: "/dashboard",
       icon: IconReport,
     },
     {
       name: "Word Assistant",
-      url: "#",
+      url: "/dashboard",
       icon: IconFileWord,
     },
   ],
@@ -167,10 +165,10 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
               asChild
               className="data-[slot=sidebar-menu-button]:!p-1.5"
             >
-              <Link to={"/dashboard"}>
+              <a href="#">
                 <IconMapPinHeart className="!size-7" />
                 <span className="text-base font-semibold">HealthGo</span>
-              </Link>
+              </a>
             </SidebarMenuButton>
           </SidebarMenuItem>
         </SidebarMenu>

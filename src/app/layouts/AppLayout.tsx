@@ -1,12 +1,9 @@
 import { AppSidebar } from "@/components/app-sidebar"
 import { SiteHeader } from "@/components/site-header"
-import {
-  SidebarInset,
-  SidebarProvider,
-} from "@/components/ui/sidebar"
+import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar"
 import { Outlet } from "react-router-dom"
 
-export default function DashboardPage() {
+export default function AppLayout() {
   return (
     <SidebarProvider
       style={
@@ -20,10 +17,8 @@ export default function DashboardPage() {
       <SidebarInset>
         <SiteHeader />
         <div className="flex flex-1 flex-col">
-          <div className="@container/main flex flex-1 flex-col gap-2">
-            {/* O conteúdo das rotas aninhadas será renderizado aqui */}
-            <Outlet />
-          </div>
+          {/* Outlet renderiza o componente da rota filha */}
+          <Outlet />
         </div>
       </SidebarInset>
     </SidebarProvider>
