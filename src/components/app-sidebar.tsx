@@ -38,6 +38,7 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar"
+import { Link } from "react-router-dom"
 
 const data = {
   user: {
@@ -53,7 +54,7 @@ const data = {
     },
     {
       title: "Hoteis",
-      url: "/dashboard/places",
+      url: "/dashboard/hotels",
       icon: IconBuilding,
     },
     {
@@ -171,10 +172,11 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
               asChild
               className="data-[slot=sidebar-menu-button]:!p-1.5"
             >
-              <a href="#">
+              <Link to="/dashboard">
                 <IconMapPinHeart className="!size-7" />
                 <span className="text-base font-semibold">HealthGo</span>
-              </a>
+              </Link>
+
             </SidebarMenuButton>
           </SidebarMenuItem>
         </SidebarMenu>
