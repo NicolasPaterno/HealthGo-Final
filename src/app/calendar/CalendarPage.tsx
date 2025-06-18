@@ -16,37 +16,44 @@ import { IconTrash } from "@tabler/icons-react";
 import { useMemo, useState } from "react";
 import { Toaster, toast } from "sonner";
 
+// 1. Interface atualizada
 interface Reminder {
   id: number;
-  date: Date;
-  time: string;
+  dateTime: string; // Enviado como ISO String
   text: string;
 }
 
 export default function CalendarPage() {
   const isMobile = useIsMobile();
   const [date, setDate] = useState<Date | undefined>(new Date());
-  
+
+  // 2. Estado inicial atualizado
   const [reminders, setReminders] = useState<Reminder[]>([
-    { id: 1, date: new Date(new Date().getFullYear(), 5, 11), time: "09:00", text: "Consulta de rotina com Dr. Carlos" },
-    { id: 2, date: new Date(new Date().getFullYear(), 5, 13), time: "10:00", text: "Sessão de fisioterapia" },
-    { id: 3, date: new Date(new Date().getFullYear(), 5, 6), time: "12:00", text: "bom dia" },
+    { id: 1, dateTime: new Date(new Date().getFullYear(), 5, 11, 9, 0).toISOString(), text: "Consulta de rotina com Dr. Carlos" },
+    { id: 2, dateTime: new Date(new Date().getFullYear(), 5, 13, 10, 0).toISOString(), text: "Sessão de fisioterapia" },
+    { id: 3, dateTime: new Date(new Date().getFullYear(), 5, 6, 12, 0).toISOString(), text: "bom dia" },
   ]);
 
   const [newReminderText, setNewReminderText] = useState("");
   const [newReminderTime, setNewReminderTime] = useState("00:00");
 
-  const isPastTime = useMemo(() => {
-    if (!date || !newReminderTime) return false;
-    const now = new Date();
-    const reminderDateTime = new Date(date);
+  const reminderDateTime = useMemo(() => {
+    if (!date || !newReminderTime) return null;
     const [hours, minutes] = newReminderTime.split(':').map(Number);
-    reminderDateTime.setHours(hours, minutes, 0, 0);
-    now.setSeconds(0, 0);
-    return reminderDateTime < now;
+    const combined = new Date(date);
+    combined.setHours(hours, minutes, 0, 0);
+    return combined;
   }, [date, newReminderTime]);
 
-  const handleAddReminder = () => {
+  const isPastTime = useMemo(() => {
+    if (!reminderDateTime) return false;
+    const now = new Date();
+    now.setSeconds(0, 0);
+    return reminderDateTime < now;
+  }, [reminderDateTime]);
+
+  // 3. Lógica de adição atualizada
+  const handleAddReminder = async () => {
     if (isPastTime) {
       toast.error("Não é possível agendar lembretes para uma data ou hora passada.");
       return;
@@ -55,16 +62,38 @@ export default function CalendarPage() {
       toast.error("Preencha o lembrete e o horário.");
       return;
     }
-    if (!date) {
+    if (!date || !reminderDateTime) {
       toast.error("Selecione uma data para o lembrete.");
       return;
     }
-    const newReminder: Reminder = { id: Date.now(), date, time: newReminderTime, text: newReminderText };
-    setReminders(
-      [...reminders, newReminder].sort((a, b) => a.date.getTime() - b.date.getTime())
-    );
-    setNewReminderText("");
-    toast.success("Lembrete adicionado com sucesso!");
+
+    const newReminder: Omit<Reminder, 'id'> & { id?: number } = {
+        text: newReminderText,
+        dateTime: reminderDateTime.toISOString(),
+    };
+
+    try {
+      const response = await fetch('https://nicaozx.app.n8n.cloud/webhook/savecalendar', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(newReminder),
+      });
+
+      if (!response.ok) {
+        throw new Error('A resposta da rede não foi OK');
+      }
+
+      const createdReminder = { ...newReminder, id: Date.now() };
+      setReminders(
+        [...reminders, createdReminder].sort((a, b) => new Date(a.dateTime).getTime() - new Date(b.dateTime).getTime())
+      );
+      setNewReminderText("");
+      toast.success("Lembrete adicionado com sucesso!");
+
+    } catch (error) {
+      console.error('Erro:', error);
+      toast.error("Erro ao adicionar o lembrete. Tente novamente.");
+    }
   };
 
   const handleDeleteReminder = (idToDelete: number) => {
@@ -72,27 +101,32 @@ export default function CalendarPage() {
     toast.info("Lembrete removido.");
   };
 
+  // 4. Filtros e agrupamentos atualizados
   const remindersForSelectedDay = reminders
-    .filter((r) =>
-        date &&
-        r.date.getDate() === date.getDate() &&
-        r.date.getMonth() === date.getMonth() &&
-        r.date.getFullYear() === date.getFullYear()
-    )
-    .sort((a, b) => a.time.localeCompare(b.time));
+    .filter((r) => {
+      if (!date) return false;
+      const reminderDate = new Date(r.dateTime);
+      return (
+        reminderDate.getDate() === date.getDate() &&
+        reminderDate.getMonth() === date.getMonth() &&
+        reminderDate.getFullYear() === date.getFullYear()
+      );
+    })
+    .sort((a, b) => new Date(a.dateTime).getTime() - new Date(b.dateTime).getTime());
 
   const groupedReminders = useMemo(() => {
     return reminders.reduce((acc, reminder) => {
-        const dateString = reminder.date.toLocaleDateString("pt-BR", { dateStyle: "full" });
-        if (!acc[dateString]) acc[dateString] = [];
-        acc[dateString].push(reminder);
-        acc[dateString].sort((a, b) => a.time.localeCompare(b.time));
-        return acc;
-      }, {} as Record<string, Reminder[]>);
+      const reminderDate = new Date(reminder.dateTime);
+      const dateString = reminderDate.toLocaleDateString("pt-BR", { dateStyle: "full" });
+      if (!acc[dateString]) acc[dateString] = [];
+      acc[dateString].push(reminder);
+      acc[dateString].sort((a, b) => new Date(a.dateTime).getTime() - new Date(b.dateTime).getTime());
+      return acc;
+    }, {} as Record<string, Reminder[]>);
   }, [reminders]);
 
   const daysWithReminders = useMemo(() => {
-    return reminders.map((r) => r.date);
+    return reminders.map((r) => new Date(r.dateTime));
   }, [reminders]);
 
   return (
@@ -114,7 +148,7 @@ export default function CalendarPage() {
                 onSelect={setDate}
                 numberOfMonths={isMobile ? 1 : 2}
                 className="rounded-md p-0 w-max"
-                disabled={{ before: new Date(new Date().setDate(new Date().getDate() -1)) }}
+                disabled={{ before: new Date(new Date().setDate(new Date().getDate() - 1)) }}
                 footer={
                   <Button variant="outline" className="w-full mt-2 rounded-3xl" onClick={() => setDate(new Date())}>
                     Hoje
@@ -125,31 +159,34 @@ export default function CalendarPage() {
               />
             </div>
             <div className="md:col-span-1 border-l md:pl-6">
-               <h3 className="text-lg font-semibold mb-2">Lembretes do Dia</h3>
-               <p className="text-sm text-muted-foreground mb-4">
+              <h3 className="text-lg font-semibold mb-2">Lembretes do Dia</h3>
+              <p className="text-sm text-muted-foreground mb-4">
                 {date?.toLocaleDateString("pt-BR", {
                   weekday: "long",
                   day: "numeric",
                   month: "long",
                 }) || "Selecione uma data"}
-               </p>
-               <Separator />
-               <ScrollArea className="h-64 mt-4">
+              </p>
+              <Separator />
+              <ScrollArea className="h-64 mt-4">
                 {remindersForSelectedDay.length > 0 ? (
-                    <div className="space-y-3">
-                      {remindersForSelectedDay.map((reminder) => (
-                         <div key={reminder.id} className="flex items-center gap-2">
-                            <Badge className="h-fit">{reminder.time}</Badge>
-                            <p className="text-sm flex-grow">{reminder.text}</p>
-                         </div>
-                      ))}
-                    </div>
+                  <div className="space-y-3">
+                    {remindersForSelectedDay.map((reminder) => (
+                      <div key={reminder.id} className="flex items-center gap-2">
+                        {/* 5. Exibição na UI atualizada */}
+                        <Badge className="h-fit">
+                          {new Date(reminder.dateTime).toLocaleTimeString("pt-BR", { hour: '2-digit', minute: '2-digit' })}
+                        </Badge>
+                        <p className="text-sm flex-grow">{reminder.text}</p>
+                      </div>
+                    ))}
+                  </div>
                 ) : (
                   <p className="text-sm text-muted-foreground text-center pt-8">
                     Nenhum lembrete para este dia.
                   </p>
                 )}
-               </ScrollArea>
+              </ScrollArea>
             </div>
           </CardContent>
         </Card>
@@ -195,7 +232,10 @@ export default function CalendarPage() {
                             className="flex items-center justify-between group"
                           >
                             <div className="flex items-center gap-2">
-                              <Badge variant="secondary">{reminder.time}</Badge>
+                              {/* 5. Exibição na UI atualizada */}
+                              <Badge variant="secondary">
+                                {new Date(reminder.dateTime).toLocaleTimeString("pt-BR", { hour: '2-digit', minute: '2-digit' })}
+                              </Badge>
                               <p className="text-sm">{reminder.text}</p>
                             </div>
                             <Button
