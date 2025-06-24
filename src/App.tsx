@@ -6,6 +6,7 @@ import "./index.css";
 
 // --- Páginas carregadas sob demanda (Lazy Loading) ---
 const LoginPage = lazy(() => import("./app/login/LoginPage"));
+const RegisterPage = lazy(() => import("./app/register/RegisterPage"));
 const DashboardPage = lazy(() => import("./app/dashboard/DashboardPage"));
 const DashboardContent = lazy(() => import("./app/dashboard/DashboardContent"));
 const SettingsPage = lazy(() => import("./app/settings/SettingsPage"));
@@ -22,6 +23,7 @@ function App() {
       <Suspense fallback={<LoadingSpinner />}>
         <Routes>
           <Route path="/login" element={<LoginPage />} />
+          <Route path="/register" element={<RegisterPage />} />
 
           <Route path="/dashboard" element={<DashboardPage />}>
             <Route index element={<DashboardContent />} />
