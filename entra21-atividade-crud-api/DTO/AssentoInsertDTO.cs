@@ -6,9 +6,10 @@ using System.Threading.Tasks;
 
 namespace MinhaPrimeiraApi.DTO
 {
-    public class EspecialidadeInsertDTO
+    public class AssentoInsertDTO
     {
-        public string Nome { get; set; }
-
+        public string Numero { get; set; }
+        public string Tipo { get; set; }
+        public int Aviao_Id { get; set; }
     }
 }

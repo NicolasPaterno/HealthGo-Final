@@ -8,16 +8,16 @@ using MinhaPrimeiraApi.Entity;
 
 namespace MinhaPrimeiraApi.Contracts.Repository
 {
-    public interface IEspecialidadeRepository
+    public interface IAssentoRepository
     {
-        Task<IEnumerable<EspecialidadeEntity>> GetAll();
+        Task<IEnumerable<AssentoEntity>> GetAll();
 
-        Task<EspecialidadeEntity> GetById(int id);
+        Task<AssentoEntity> GetById(int id);
 
-        Task Insert(EspecialidadeInsertDTO especialidade);
+        Task Insert(AssentoInsertDTO assento);
 
         Task Delete(int id);
 
-        Task Update(EspecialidadeEntity especialidade);
+        Task Update(AssentoEntity assento);
     }
 }

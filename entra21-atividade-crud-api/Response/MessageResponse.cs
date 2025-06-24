@@ -1,7 +1,7 @@
-﻿namespace entra21_atividade_crud_api.Response
+﻿namespace MinhaPrimeiraApi.Response
 {
     public class MessageResponse
     {
-        public string Message { get; set; }
+        public string Message {  get; set; }
     }
 }

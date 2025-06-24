@@ -1,20 +1,16 @@
-﻿using entra21_atividade_crud_api.Response;
-using entra21_atividade_crud_api.DTO;
-using entra21_atividade_crud_api.Entity;
-using entra21_atividade_crud_api.Response.Especialidade;
+﻿using MinhaPrimeiraApi.DTO;
+using MinhaPrimeiraApi.Entity;
+using MinhaPrimeiraApi.Response;
+using MinhaPrimeiraApi.Response.Especialidade;
 
-namespace entra21_atividade_crud_api.Contracts.Service
+namespace MinhaPrimeiraApi.Contracts.Service
 {
     public interface IEspecialidadeService
     {
         Task<MessageResponse> Delete(int id);
-
-        Task<EspecialidadeGetAllResponse> GetAll();
-
-        Task<EspecialidadeEntity> GetById(int id); 
-        
-        Task<MessageResponse> Post(EspecialidadeInsertDTO specialty);
-        
-        Task<MessageResponse> Update(EspecialidadeEntity specialty);
+        Task<MessageResponse> Post(EspecialidadeInsertDTO especialidade);
+        Task<MessageResponse> Update(EspecialidadeEntity especialidade);
+        Task <EspecialidadeGetAllResponse> GetAll();
+        Task<EspecialidadeEntity> GetById(int id);
     }
 }

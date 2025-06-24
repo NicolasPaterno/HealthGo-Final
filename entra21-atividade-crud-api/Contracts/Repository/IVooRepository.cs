@@ -5,19 +5,21 @@ using System.Text;
 using System.Threading.Tasks;
 using MinhaPrimeiraApi.DTO;
 using MinhaPrimeiraApi.Entity;
+using MinhaPrimeiraApi.DTO;
+using MinhaPrimeiraApi.Entity;
 
 namespace MinhaPrimeiraApi.Contracts.Repository
 {
-    public interface IEspecialidadeRepository
+    public interface IVooRepository
     {
-        Task<IEnumerable<EspecialidadeEntity>> GetAll();
+        Task<IEnumerable<VooEntity>> GetAll();
 
-        Task<EspecialidadeEntity> GetById(int id);
+        Task<VooEntity> GetById(int id);
 
-        Task Insert(EspecialidadeInsertDTO especialidade);
+        Task Insert(VooInsertDTO voo);
 
         Task Delete(int id);
 
-        Task Update(EspecialidadeEntity especialidade);
+        Task Update(VooEntity voo);
     }
 }

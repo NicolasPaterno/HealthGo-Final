@@ -1,6 +1,6 @@
-﻿using entra21_atividade_crud_api.Entity;
+﻿using MinhaPrimeiraApi.Entity;
 
-namespace entra21_atividade_crud_api.Response.Especialidade
+namespace MinhaPrimeiraApi.Response.Especialidade
 {
     public class EspecialidadeGetAllResponse
     {

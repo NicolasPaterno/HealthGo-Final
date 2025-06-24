@@ -1,9 +1,16 @@
-﻿using Dapper;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Web;
+using Dapper;
+using MinhaPrimeiraApi.Contracts.Infrastructure;
 using MySql.Data.MySqlClient;
 
-namespace entra21_atividade_crud_api.Infrastructure
+namespace MinhaPrimeiraApi.Infrastructure
 {
-    public class Connection
+    public class Connection : IConnection
     {
         protected string connectionString = "Server=localhost;Database=healthgo;User=root;Password=root;";
 
@@ -14,7 +21,7 @@ namespace entra21_atividade_crud_api.Infrastructure
 
         public async Task<int> Execute(string sql, object obj)
         {
-            using (MySqlConnection con = GetConnection())
+            using(MySqlConnection con = GetConnection())
             {
                 return await con.ExecuteAsync(sql, obj);
             }

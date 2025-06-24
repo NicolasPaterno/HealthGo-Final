@@ -6,9 +6,11 @@ using System.Threading.Tasks;
 
 namespace MinhaPrimeiraApi.Entity
 {
-    public class EspecialidadeEntity
+    public class AssentoEntity
     {
         public int Id { get; set; }
-        public string Nome {  get; set; }
+        public string Numero { get; set; }
+        public string Tipo { get; set; }
+        public int Aviao_Id { get; set; }
     }
 }

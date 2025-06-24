@@ -2,41 +2,39 @@
 using MinhaPrimeiraApi.Contracts.Service;
 using MinhaPrimeiraApi.DTO;
 using MinhaPrimeiraApi.Entity;
-using MinhaPrimeiraApi.Repository;
-using MinhaPrimeiraApi.Response;
 using MinhaPrimeiraApi.Response.Especialidade;
+using MinhaPrimeiraApi.Response;
 using MinhaPrimeiraApi.Services;
 
 namespace MinhaPrimeiraApi.Controllers
 {
-
     [ApiController]
     [Route("[controller]")]
-    public class EspecialidadeController : ControllerBase
+    public class PassagemController : ControllerBase
     {
-        private IEspecialidadeService _service;
+        private IPassagemService _service;
 
-        public EspecialidadeController(IEspecialidadeService especialidadeService)
+        public PassagemController(IPassagemService passagemService)
         {
-            _service = especialidadeService;
+            _service = passagemService;
         }
 
         [HttpGet]
-        public async Task<ActionResult<EspecialidadeGetAllResponse>> Get()
+        public async Task<ActionResult<PassagemGetAllResponse>> Get()
         {
             return Ok(await _service.GetAll());
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<EspecialidadeEntity>> GetById(int id)
+        public async Task<ActionResult<PassagemEntity>> GetById(int id)
         {
             return Ok(await _service.GetById(id));
         }
 
         [HttpPost]
-        public async Task<ActionResult<MessageResponse>> Post(EspecialidadeInsertDTO especialidade)
+        public async Task<ActionResult<MessageResponse>> Post(PassagemInsertDTO passagem)
         {
-            return Ok(await _service.Post(especialidade));
+            return Ok(await _service.Post(passagem));
         }
 
         [HttpDelete("{id}")]
@@ -46,9 +44,10 @@ namespace MinhaPrimeiraApi.Controllers
         }
 
         [HttpPut]
-        public async Task<ActionResult<MessageResponse>> Update(EspecialidadeEntity especialidade)
+        public async Task<ActionResult<MessageResponse>> Update(PassagemEntity passagem)
         {
-            return Ok(await _service.Update(especialidade));
+            return Ok(await _service.Update(passagem));
         }
     }
 }
+

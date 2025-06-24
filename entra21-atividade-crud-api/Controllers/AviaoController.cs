@@ -2,41 +2,39 @@
 using MinhaPrimeiraApi.Contracts.Service;
 using MinhaPrimeiraApi.DTO;
 using MinhaPrimeiraApi.Entity;
-using MinhaPrimeiraApi.Repository;
-using MinhaPrimeiraApi.Response;
 using MinhaPrimeiraApi.Response.Especialidade;
+using MinhaPrimeiraApi.Response;
 using MinhaPrimeiraApi.Services;
 
 namespace MinhaPrimeiraApi.Controllers
 {
-
     [ApiController]
     [Route("[controller]")]
-    public class EspecialidadeController : ControllerBase
+    public class AviaoController : ControllerBase
     {
-        private IEspecialidadeService _service;
+        private IAviaoService _service;
 
-        public EspecialidadeController(IEspecialidadeService especialidadeService)
+        public AviaoController(IAviaoService aviaoService)
         {
-            _service = especialidadeService;
+            _service = aviaoService;
         }
 
         [HttpGet]
-        public async Task<ActionResult<EspecialidadeGetAllResponse>> Get()
+        public async Task<ActionResult<AviaoGetAllResponse>> Get()
         {
             return Ok(await _service.GetAll());
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<EspecialidadeEntity>> GetById(int id)
+        public async Task<ActionResult<AviaoEntity>> GetById(int id)
         {
             return Ok(await _service.GetById(id));
         }
 
         [HttpPost]
-        public async Task<ActionResult<MessageResponse>> Post(EspecialidadeInsertDTO especialidade)
+        public async Task<ActionResult<MessageResponse>> Post(AviaoInsertDTO aviao)
         {
-            return Ok(await _service.Post(especialidade));
+            return Ok(await _service.Post(aviao));
         }
 
         [HttpDelete("{id}")]
@@ -46,9 +44,9 @@ namespace MinhaPrimeiraApi.Controllers
         }
 
         [HttpPut]
-        public async Task<ActionResult<MessageResponse>> Update(EspecialidadeEntity especialidade)
+        public async Task<ActionResult<MessageResponse>> Update(AviaoEntity aviao)
         {
-            return Ok(await _service.Update(especialidade));
+            return Ok(await _service.Update(aviao));
         }
     }
 }

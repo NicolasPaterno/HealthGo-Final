@@ -1,84 +1,84 @@
-﻿using Dapper;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using Dapper;
+using MinhaPrimeiraApi.Contracts.Infrastructure;
+using MinhaPrimeiraApi.Contracts.Repository;
+using MinhaPrimeiraApi.DTO;
+using MinhaPrimeiraApi.Entity;
+using MinhaPrimeiraApi.Infrastructure;
 using MySql.Data.MySqlClient;
-using entra21_atividade_crud_api.Contracts.Repository;
-using entra21_atividade_crud_api.DTO;
-using entra21_atividade_crud_api.Entity;
-using entra21_atividade_crud_api.Infrastructure;
 
-namespace entra21_atividade_crud_api.Repository
+namespace MinhaPrimeiraApi.Repository
 {
-    public class EspecialidadeRepository : IEspecialidadeRepository
+    class EspecialidadeRepository : IEspecialidadeRepository
     {
+        private IConnection _connection;
+
+        public EspecialidadeRepository(IConnection connection)
+        {
+            _connection = connection;
+        }
+
         public async Task<IEnumerable<EspecialidadeEntity>> GetAll()
         {
-            Connection _connection = new Connection();
             using (MySqlConnection con = _connection.GetConnection())
             {
-                string sql = @$"
-                     SELECT ID AS {nameof(EspecialidadeEntity.Id)},
-                            NOME AS {nameof(EspecialidadeEntity.Nome)}
+                string sql = $@"
+                    SELECT ID AS {nameof(EspecialidadeEntity.Id)},
+                           NOME AS {nameof(EspecialidadeEntity.Nome)}
                       FROM ESPECIALIDADE
                 ";
 
-                IEnumerable<EspecialidadeEntity> specialtyList = await con.QueryAsync<EspecialidadeEntity>(sql);
-                return specialtyList;
+                IEnumerable<EspecialidadeEntity> especialidadeList = await con.QueryAsync<EspecialidadeEntity>(sql);
+
+                return especialidadeList;
             }
-        } // Read
-
-        public async Task Insert(EspecialidadeInsertDTO newSpecialty)
-        {
-            Connection _connection = new Connection();
-            string sql = @$"
-                 INSERT INTO ESPECIALIDADE (NOME)
-                    VALUES
-                    (@Nome)
-            ";
-
-            await _connection.Execute(sql, newSpecialty);
         }
 
-
-        public async Task Update(EspecialidadeEntity specialty)
+        public async Task Insert(EspecialidadeInsertDTO especialidade)
         {
-            Connection _connection = new Connection();
-
             string sql = @"
-                UPDATE ESPECIALIDADE
-                    SET 
-                        NOME = @Nome
-                    WHERE ID = @Id
-            ";
-
-            await _connection.Execute(sql, specialty);
-        }
-
-        public async Task<EspecialidadeEntity> GetById(int id) // usado no Update
-        {
-            Connection _connection = new Connection();
-            using (MySqlConnection con = _connection.GetConnection())
-            {
-                string sql = @$"
-                     SELECT ID AS {nameof(EspecialidadeEntity.Id)},
-                            NOME AS {nameof(EspecialidadeEntity.Nome)}
-                      FROM ESPECIALIDADE
-                      WHERE ID = @Id
+                INSERT INTO ESPECIALIDADE (NOME)
+                                VALUE (@Nome)
                 ";
 
-                EspecialidadeEntity specialty = await con.QueryFirstAsync<EspecialidadeEntity>(sql, new { id });
-                return specialty;
-            }
+            await _connection.Execute(sql, especialidade);
         }
 
         public async Task Delete(int id)
         {
-            Connection _connection = new Connection();
-            string sql = @"
-                DELETE FROM ESPECIALIDADE
-                    WHERE ID = @Id
-            ";
+            string sql = "DELETE FROM ESPECIALIDADE WHERE ID = @id";
 
             await _connection.Execute(sql, new { id });
         }
 
+        public async Task<EspecialidadeEntity> GetById(int id)
+        {
+            using (MySqlConnection con = _connection.GetConnection())
+            {
+                string sql = $@"
+                    SELECT ID AS {nameof(EspecialidadeEntity.Id)},
+                           NOME AS {nameof(EspecialidadeEntity.Nome)}
+                      FROM ESPECIALIDADE
+                      Where ID = @id
+                ";
+
+                EspecialidadeEntity especialidade = await con.QueryFirstAsync<EspecialidadeEntity>(sql, new { id });
+                return especialidade;
+            }
+        }
+
+        public async Task Update(EspecialidadeEntity especialidade)
+        {
+            string sql = @"UPDATE ESPECIALIDADE
+                              SET NOME = @Nome
+                              WHERE ID = @Id
+            ";
+
+            await _connection.Execute(sql, especialidade);
+        }
     }
 }
