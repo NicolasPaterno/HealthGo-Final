@@ -5,6 +5,7 @@ using MinhaPrimeiraApi.Repository;
 using MinhaPrimeiraApi.Response.Especialidade;
 using MinhaPrimeiraApi.Response;
 using MinhaPrimeiraApi.Contracts.Repository;
+using APIHealthGo.Response;
 
 namespace MinhaPrimeiraApi.Services
 {

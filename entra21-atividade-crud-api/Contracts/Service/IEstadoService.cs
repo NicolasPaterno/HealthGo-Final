@@ -1,4 +1,5 @@
-﻿using MinhaPrimeiraApi.DTO;
+﻿using APIHealthGo.Response;
+using MinhaPrimeiraApi.DTO;
 using MinhaPrimeiraApi.Entity;
 using MinhaPrimeiraApi.Response;
 using MinhaPrimeiraApi.Response.Estado;

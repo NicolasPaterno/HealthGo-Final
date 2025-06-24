@@ -4,6 +4,7 @@ using MinhaPrimeiraApi.Contracts.Services;
 using MinhaPrimeiraApi.Response;
 using MinhaPrimeiraApi.Response.Aeroporto;
 using MinhaPrimeiraApi.DTO.Aeroporto;
+using APIHealthGo.Response;
 
 namespace MinhaPrimeiraApi.Controllers
 {

@@ -8,7 +8,7 @@ using MyFirstCRUD.entity;
 
 namespace MyFirstCRUD.Contracts.Repository
 {
-    interface IEspecialidadeRepository
+    public interface IEspecialidadeRepository
     {
         Task<IEnumerable<EspecialidadeEntity>> GetAll();
 

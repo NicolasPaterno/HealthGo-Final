@@ -12,5 +12,6 @@ namespace MyFirstCRUD.Contracts.Repository
         Task InsertPessoa(PessoaInsertDTO pessoa);
         Task UpdatePessoa(PessoaEntity pessoa);
         Task DeletePessoa(int id);
+        Task<PessoaEntity> GetPessoaByEmail(string email);
     }
 }

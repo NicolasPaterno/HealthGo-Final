@@ -1,4 +1,5 @@
-﻿using MinhaPrimeiraApi.Contracts.Repository;
+﻿using APIHealthGo.Response;
+using MinhaPrimeiraApi.Contracts.Repository;
 using MinhaPrimeiraApi.Contracts.Service;
 using MinhaPrimeiraApi.DTO;
 using MinhaPrimeiraApi.Entity;

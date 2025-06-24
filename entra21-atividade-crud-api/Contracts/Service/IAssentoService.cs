@@ -2,6 +2,7 @@
 using MinhaPrimeiraApi.Entity;
 using MinhaPrimeiraApi.Response.Especialidade;
 using MinhaPrimeiraApi.Response;
+using APIHealthGo.Response;
 
 namespace MinhaPrimeiraApi.Contracts.Service
 {

@@ -4,6 +4,7 @@ using MinhaPrimeiraApi.Response;
 using MinhaPrimeiraApi.Contracts.Repository;
 using MinhaPrimeiraApi.Response.Aeroporto;
 using MinhaPrimeiraApi.DTO.Aeroporto;
+using APIHealthGo.Response;
 
 namespace MinhaPrimeiraApi.Services
 {

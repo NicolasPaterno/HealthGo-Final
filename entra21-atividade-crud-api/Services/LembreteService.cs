@@ -35,7 +35,7 @@ namespace APIHealthGo.Services
             await _repository.InsertLembrete(lembrete);
             return new MessageResponse
             {
-                message = "Gerente inserido com sucesso!!"
+                Message = "Gerente inserido com sucesso!!"
             };
         }
 
@@ -44,7 +44,7 @@ namespace APIHealthGo.Services
             await _repository.UpdateLembrete(lembrete);
             return new MessageResponse
             {
-                message = "Gerente atualizado com sucesso!!"
+                Message = "Gerente atualizado com sucesso!!"
             };
         }
 
@@ -53,7 +53,7 @@ namespace APIHealthGo.Services
             await _repository.DeleteLembrete(id);
             return new MessageResponse
             {
-                message = "Gerente Removido com sucesso!!"
+                Message = "Gerente Removido com sucesso!!"
             };
         }
     }

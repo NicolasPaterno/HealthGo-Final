@@ -4,10 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Dapper;
+using MinhaPrimeiraApi.Infrastructure;
 using MyFirstCRUD.Contracts.Repository;
 using MyFirstCRUD.DTO;
 using MyFirstCRUD.entity;
-using MyFirstCRUD.infrastructure;
 using MySql.Data.MySqlClient;
 
 namespace MyFirstCRUD.Repository

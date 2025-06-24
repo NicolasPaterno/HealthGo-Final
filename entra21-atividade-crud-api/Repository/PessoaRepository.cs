@@ -4,7 +4,6 @@ using MinhaPrimeiraApi.Contracts.Infrastructure;
 using MyFirstCRUD.Contracts.Repository;
 using MyFirstCRUD.DTO;
 using MyFirstCRUD.Entity;
-using MyFirstCRUD.infrastructure;
 using MySql.Data.MySqlClient;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -75,7 +74,7 @@ namespace MyFirstCRUD.Repository
                     CIDADE_ID = @Cidade_Id
                 WHERE ID = @Id
             ";
-            
+
             await _connection.Execute(sql, pessoa);
         }
 
@@ -83,6 +82,15 @@ namespace MyFirstCRUD.Repository
         {
             string sql = "DELETE FROM PESSOA WHERE ID = @id";
             await _connection.Execute(sql, new { id });
+        }
+
+        public async Task<PessoaEntity> GetPessoaByEmail(string email)
+        {
+            using (MySqlConnection con = _connection.GetConnection())
+            {
+                string sql = "SELECT * FROM PESSOA WHERE EMAIL = @Email";
+                return await con.QueryFirstOrDefaultAsync<PessoaEntity>(sql, new { email });
+            }
         }
     }
 }

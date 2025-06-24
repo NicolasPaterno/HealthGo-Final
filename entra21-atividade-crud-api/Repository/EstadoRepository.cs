@@ -1,5 +1,5 @@
 ﻿using Dapper;
-using MinhaPrimeiraApi.Contracts.Connection;
+using MinhaPrimeiraApi.Contracts.Infrastructure;
 using MinhaPrimeiraApi.Contracts.Repository;
 using MinhaPrimeiraApi.DTO;
 using MinhaPrimeiraApi.Entity;

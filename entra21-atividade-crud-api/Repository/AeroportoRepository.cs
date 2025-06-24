@@ -2,9 +2,8 @@
 using Dapper;
 using MinhaPrimeiraApi.Entity;
 using MySql.Data.MySqlClient;
-using MinhaPrimeiraApi.Contracts.Connection;
-using System.Linq;
 using MinhaPrimeiraApi.DTO.Aeroporto;
+using MinhaPrimeiraApi.Contracts.Infrastructure;
 
 namespace MinhaPrimeiraApi.Repository
 {

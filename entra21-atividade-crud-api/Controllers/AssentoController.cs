@@ -5,6 +5,7 @@ using MinhaPrimeiraApi.Entity;
 using MinhaPrimeiraApi.Response.Especialidade;
 using MinhaPrimeiraApi.Response;
 using MinhaPrimeiraApi.Services;
+using APIHealthGo.Response;
 
 namespace MinhaPrimeiraApi.Controllers
 {

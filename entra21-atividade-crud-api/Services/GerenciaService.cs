@@ -35,7 +35,7 @@ namespace APIHealthGo.Services
             await _repository.InsertGerencia(gerencia);
             return new MessageResponse
             {
-                message = "Gerente inserido com sucesso!!"
+                Message = "Gerente inserido com sucesso!!"
             };
         }
         public async  Task<MessageResponse> Update(GerenciaEntity gerencia)
@@ -43,7 +43,7 @@ namespace APIHealthGo.Services
             await _repository.UpdateGerencia(gerencia);
             return new MessageResponse
             {
-                message = "Gerente atualizado com sucesso!!"
+                Message = "Gerente atualizado com sucesso!!"
             };
         }
         public async Task<MessageResponse> Delete(int id)
@@ -51,7 +51,7 @@ namespace APIHealthGo.Services
             await _repository.DeleteGerencia(id);
             return new MessageResponse
             {
-                message = "Gerente Removido com sucesso!!"
+                Message = "Gerente Removido com sucesso!!"
             };
         }
     }

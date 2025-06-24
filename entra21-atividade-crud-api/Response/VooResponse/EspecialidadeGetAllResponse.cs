@@ -1,4 +1,5 @@
 ﻿using MinhaPrimeiraApi.Entity;
+using MyFirstCRUD.entity;
 
 namespace MinhaPrimeiraApi.Response.Especialidade
 {

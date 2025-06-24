@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using MinhaPrimeiraApi.Contracts.Services;
 using MinhaPrimeiraApi.Response;
 using MinhaPrimeiraApi.Response.Nacao;
+using APIHealthGo.Response;
 
 namespace MinhaPrimeiraApi.Controllers
 {

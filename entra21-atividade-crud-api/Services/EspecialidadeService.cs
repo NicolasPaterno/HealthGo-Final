@@ -1,13 +1,10 @@
-﻿using System.Runtime.CompilerServices;
-using Microsoft.AspNetCore.Mvc;
-using MinhaPrimeiraApi.Contracts.Repository;
+﻿
+using APIHealthGo.Response;
 using MinhaPrimeiraApi.Contracts.Service;
-using MinhaPrimeiraApi.DTO;
-using MinhaPrimeiraApi.Entity;
-using MinhaPrimeiraApi.Repository;
-using MinhaPrimeiraApi.Response;
 using MinhaPrimeiraApi.Response.Especialidade;
-using Mysqlx;
+using MyFirstCRUD.Contracts.Repository;
+using MyFirstCRUD.DTO;
+using MyFirstCRUD.entity;
 
 namespace MinhaPrimeiraApi.Services
 {
@@ -15,9 +12,9 @@ namespace MinhaPrimeiraApi.Services
     {
         private IEspecialidadeRepository _repository;
 
-        public EspecialidadeService(IEspecialidadeRepository repository)
+        public EspecialidadeService(IEspecialidadeRepository especialidade)
         {
-            _repository = repository;
+            _repository = especialidade;
         }
 
         public async Task<MessageResponse> Delete(int id)
