@@ -1,7 +1,7 @@
-﻿namespace MinhaPrimeiraApi.Response
+﻿namespace APIHealthGo.Response
 {
     public class MessageResponse
     {
-        public string Message {  get; set; }
+        public string message { get; set; }
     }
 }

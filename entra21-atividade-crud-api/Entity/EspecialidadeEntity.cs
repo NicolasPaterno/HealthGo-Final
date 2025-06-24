@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MinhaPrimeiraApi.Entity
+namespace MyFirstCRUD.entity
 {
     public class EspecialidadeEntity
     {

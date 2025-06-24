@@ -3,17 +3,17 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using MinhaPrimeiraApi.DTO;
-using MinhaPrimeiraApi.Entity;
+using MyFirstCRUD.DTO;
+using MyFirstCRUD.entity;
 
-namespace MinhaPrimeiraApi.Contracts.Repository
+namespace MyFirstCRUD.Contracts.Repository
 {
-    public interface IEspecialidadeRepository
+    interface IEspecialidadeRepository
     {
         Task<IEnumerable<EspecialidadeEntity>> GetAll();
 
         Task<EspecialidadeEntity> GetById(int id);
-
+        
         Task Insert(EspecialidadeInsertDTO especialidade);
 
         Task Delete(int id);
