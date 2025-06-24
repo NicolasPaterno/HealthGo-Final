@@ -2,8 +2,8 @@
 using Dapper;
 using MinhaPrimeiraApi.Entity;
 using MySql.Data.MySqlClient;
-using MinhaPrimeiraApi.DTO.Aeroporto;
 using MinhaPrimeiraApi.Contracts.Infrastructure;
+using entra21_atividade_crud_api.DTO;
 
 namespace MinhaPrimeiraApi.Repository
 {

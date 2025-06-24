@@ -2,7 +2,6 @@
 using MinhaPrimeiraApi.Entity;
 using Microsoft.AspNetCore.Mvc;
 using MinhaPrimeiraApi.Contracts.Services;
-using MinhaPrimeiraApi.Response;
 using MinhaPrimeiraApi.Response.Estado;
 using APIHealthGo.Response;
 

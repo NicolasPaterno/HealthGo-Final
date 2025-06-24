@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Dapper;
+﻿using Dapper;
 using MinhaPrimeiraApi.Infrastructure;
 using MyFirstCRUD.Contracts.Repository;
 using MyFirstCRUD.DTO;

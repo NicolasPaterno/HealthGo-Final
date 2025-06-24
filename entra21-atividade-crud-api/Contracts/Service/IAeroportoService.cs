@@ -1,7 +1,6 @@
 ﻿using APIHealthGo.Response;
-using MinhaPrimeiraApi.DTO.Aeroporto;
+using entra21_atividade_crud_api.DTO;
 using MinhaPrimeiraApi.Entity;
-using MinhaPrimeiraApi.Response;
 using MinhaPrimeiraApi.Response.Aeroporto;
 
 namespace MinhaPrimeiraApi.Contracts.Services
@@ -10,9 +9,7 @@ namespace MinhaPrimeiraApi.Contracts.Services
     {
         Task<MessageResponse> Delete(int id);
 
-        Task<AeroportoGetAllResponse> Get(int? cidade_Id); // lembre que a lista é um atributo dele //mudado o nome de GetAll pra Get pq vai ser usado pelo filter tbm, pra ficar mais generico, Get vai GetAll e GetByFilter
-
-        //Task<AeroportoGetByFilterResponse> GetByFilter(Aeroporto_Cidade_Id cidade_Id); // mudado pra response pq é mais seguro que passar a entity, e pq eh apenas sáida, e n trasnição como dto
+        Task<AeroportoGetAllResponse> Get(int? cidade_Id);
 
         Task<AeroportoEntity> GetById(int id);
 

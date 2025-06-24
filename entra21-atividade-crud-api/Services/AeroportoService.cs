@@ -3,8 +3,8 @@ using MinhaPrimeiraApi.Contracts.Services;
 using MinhaPrimeiraApi.Response;
 using MinhaPrimeiraApi.Contracts.Repository;
 using MinhaPrimeiraApi.Response.Aeroporto;
-using MinhaPrimeiraApi.DTO.Aeroporto;
 using APIHealthGo.Response;
+using entra21_atividade_crud_api.DTO;
 
 namespace MinhaPrimeiraApi.Services
 {

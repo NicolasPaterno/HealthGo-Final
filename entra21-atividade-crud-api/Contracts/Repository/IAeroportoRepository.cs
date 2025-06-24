@@ -1,4 +1,4 @@
-﻿using MinhaPrimeiraApi.DTO.Aeroporto;
+﻿using entra21_atividade_crud_api.DTO;
 using MinhaPrimeiraApi.Entity;
 
 namespace MinhaPrimeiraApi.Contracts.Repository
@@ -9,16 +9,10 @@ namespace MinhaPrimeiraApi.Contracts.Repository
 
         Task<AeroportoEntity> GetById(int id);
 
-
-        //Task<IEnumerable<AeroportoDTO>> GetByFilter(Aeroporto_Cidade_Id cidade_Id); //começa apenas com Aeroporto, dps transforma em generico em FiltroDTO
-
-
         Task Insert(AeroportoDTO aeroporto);
 
         Task Delete(int id);
 
         Task Update(AeroportoEntity aeroporto);
-
-        
     }
 }

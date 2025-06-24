@@ -3,13 +3,10 @@ using MinhaPrimeiraApi.Contracts.Service;
 using MinhaPrimeiraApi.DTO;
 using MinhaPrimeiraApi.Entity;
 using MinhaPrimeiraApi.Response.Especialidade;
-using MinhaPrimeiraApi.Response;
-using MinhaPrimeiraApi.Services;
 using APIHealthGo.Response;
 
 namespace MinhaPrimeiraApi.Controllers
 {
-
     [ApiController]
     [Route("[controller]")]
     public class AssentoController : ControllerBase
@@ -52,4 +49,3 @@ namespace MinhaPrimeiraApi.Controllers
         }
     }
 }
-

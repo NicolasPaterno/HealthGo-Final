@@ -1,4 +1,4 @@
-﻿using MinhaPrimeiraApi.DTO.Aeroporto;
+﻿using entra21_atividade_crud_api.DTO;
 
 namespace MinhaPrimeiraApi.Response.Aeroporto
 {

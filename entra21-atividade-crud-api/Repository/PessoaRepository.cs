@@ -3,10 +3,7 @@ using Dapper;
 using MinhaPrimeiraApi.Contracts.Infrastructure;
 using MyFirstCRUD.Contracts.Repository;
 using MyFirstCRUD.DTO;
-using MyFirstCRUD.Entity;
 using MySql.Data.MySqlClient;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 
 namespace MyFirstCRUD.Repository
 {

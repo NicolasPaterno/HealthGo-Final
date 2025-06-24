@@ -4,8 +4,8 @@ using MyFirstCRUD.Contracts.Repository;
 
 namespace APIHealthGo.Controllers
 {
-        [ApiController]
-        [Route("[controller]")]
+    [ApiController]
+    [Route("[controller]")]
     public class AuthController : ControllerBase
     {
         private readonly IPessoaRepository _pessoaRepository;

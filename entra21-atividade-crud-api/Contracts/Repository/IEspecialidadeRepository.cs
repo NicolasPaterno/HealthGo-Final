@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using MyFirstCRUD.DTO;
+﻿using MyFirstCRUD.DTO;
 using MyFirstCRUD.entity;
 
 namespace MyFirstCRUD.Contracts.Repository

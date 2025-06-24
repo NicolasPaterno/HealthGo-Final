@@ -1,13 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using MinhaPrimeiraApi.Contracts.Repository;
+﻿using MinhaPrimeiraApi.Contracts.Repository;
 using MinhaPrimeiraApi.DTO;
 using MinhaPrimeiraApi.Entity;
 using Dapper;
-using MinhaPrimeiraApi.Infrastructure;
 using MySql.Data.MySqlClient;
 using MinhaPrimeiraApi.Contracts.Infrastructure;
 

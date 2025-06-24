@@ -1,8 +1,6 @@
 ﻿using APIHealthGo.Contracts.Service;
 using APIHealthGo.Response;
-using APIHealthGo.Services;
 using Microsoft.AspNetCore.Mvc;
-using MyFirstCRUD.Contracts.Repository;
 using MyFirstCRUD.DTO;
 using MyFirstCRUD.Entity;
 

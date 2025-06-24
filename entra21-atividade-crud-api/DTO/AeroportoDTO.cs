@@ -1,4 +1,4 @@
-﻿namespace MinhaPrimeiraApi.DTO.Aeroporto
+﻿namespace entra21_atividade_crud_api.DTO
 {
     public class AeroportoDTO
     {

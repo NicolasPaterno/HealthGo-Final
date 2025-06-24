@@ -1,11 +1,9 @@
 ﻿using APIHealthGo.Contracts.Service;
 using APIHealthGo.Response;
-using APIHealthGo.Services;
 using atividade_bd_csharp.Entity;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MyFirstCRUD.DTO;
-using MyFirstCRUD.Repository;
 
 namespace APIHealthGo.Controllers
 {

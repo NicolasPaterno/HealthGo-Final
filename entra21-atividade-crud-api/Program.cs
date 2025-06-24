@@ -1,4 +1,3 @@
-
 using APIHealthGo.Contracts.Service;
 using APIHealthGo.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -95,19 +94,19 @@ namespace MinhaPrimeiraApi
                     Description = "Insira o token JWT desta maneira: Bearer SEU_TOKEN"
                 });
                 c.AddSecurityRequirement(new OpenApiSecurityRequirement
-    {
-        {
-            new OpenApiSecurityScheme
-            {
-                Reference = new OpenApiReference
                 {
-                    Type = ReferenceType.SecurityScheme,
-                    Id = "Bearer"
-                }
-            },
-            new string[] {}
-        }
-    });
+                    {
+                        new OpenApiSecurityScheme
+                        {
+                            Reference = new OpenApiReference
+                            {
+                                Type = ReferenceType.SecurityScheme,
+                                Id = "Bearer"
+                            }
+                        },
+                        new string[] {}
+                    }
+                });
             });
 
             var app = builder.Build();

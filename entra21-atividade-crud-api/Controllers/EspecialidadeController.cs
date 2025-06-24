@@ -1,18 +1,12 @@
 ﻿using APIHealthGo.Response;
 using Microsoft.AspNetCore.Mvc;
 using MinhaPrimeiraApi.Contracts.Service;
-using MinhaPrimeiraApi.DTO;
-using MinhaPrimeiraApi.Entity;
-using MinhaPrimeiraApi.Repository;
-using MinhaPrimeiraApi.Response;
 using MinhaPrimeiraApi.Response.Especialidade;
-using MinhaPrimeiraApi.Services;
 using MyFirstCRUD.DTO;
 using MyFirstCRUD.entity;
 
 namespace MinhaPrimeiraApi.Controllers
 {
-
     [ApiController]
     [Route("[controller]")]
     public class EspecialidadeController : ControllerBase
