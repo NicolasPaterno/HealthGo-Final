@@ -13,7 +13,7 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { Separator } from "@/components/ui/separator";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { IconTrash } from "@tabler/icons-react";
-import { useMemo, useState } from "react";
+import { useMemo, useState, useEffect } from "react";
 import { Toaster, toast } from "sonner";
 import {
   Select,
@@ -23,28 +23,34 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 
-// 1. Interface atualizada para incluir o tipo
 interface Reminder {
   id: number;
-  dateTime: string; // Enviado como ISO String
+  dateTime: string;
   text: string;
   type: 'consulta' | 'remédio' | 'outros';
 }
+
+const REMINDERS_STORAGE_KEY = 'healthgo-reminders';
 
 export default function CalendarPage() {
   const isMobile = useIsMobile();
   const [date, setDate] = useState<Date | undefined>(new Date());
 
-  // 2. Estado inicial atualizado para incluir o tipo
-  const [reminders, setReminders] = useState<Reminder[]>([
-    { id: 1, dateTime: new Date(new Date().getFullYear(), 6, 26, 9, 0).toISOString(), text: "Consulta de rotina com Dr. Carlos", type: 'consulta' },
-    { id: 2, dateTime: new Date(new Date().getFullYear(), 5, 13, 10, 0).toISOString(), text: "Sessão de fisioterapia", type: 'outros' },
-    { id: 3, dateTime: new Date(new Date().getFullYear(), 5, 6, 12, 0).toISOString(), text: "bom dia", type: 'outros' },
-  ]);
+  // 1. O estado agora é inicializado a partir do localStorage
+  const [reminders, setReminders] = useState<Reminder[]>(() => {
+    if (typeof window === 'undefined') return [];
+    const savedReminders = localStorage.getItem(REMINDERS_STORAGE_KEY);
+    return savedReminders ? JSON.parse(savedReminders) : [];
+  });
 
   const [newReminderText, setNewReminderText] = useState("");
   const [newReminderTime, setNewReminderTime] = useState("00:00");
   const [newReminderType, setNewReminderType] = useState<'consulta' | 'remédio' | 'outros'>('outros');
+
+  // 2. Salva os lembretes no localStorage sempre que eles mudam
+  useEffect(() => {
+    localStorage.setItem(REMINDERS_STORAGE_KEY, JSON.stringify(reminders));
+  }, [reminders]);
 
   const reminderDateTime = useMemo(() => {
     if (!date || !newReminderTime) return null;
@@ -61,7 +67,6 @@ export default function CalendarPage() {
     return reminderDateTime < now;
   }, [reminderDateTime]);
 
-  // 3. Lógica de adição atualizada para incluir o tipo
   const handleAddReminder = async () => {
     if (isPastTime) {
       toast.error("Não é possível agendar lembretes para uma data ou hora passada.");
@@ -93,6 +98,7 @@ export default function CalendarPage() {
         throw new Error('A resposta da rede não foi OK');
       }
 
+      // 3. A lógica de atualização do estado permanece a mesma
       const createdReminder = { ...newReminder, id: Date.now() };
       setReminders(
         [...reminders, createdReminder].sort((a, b) => new Date(a.dateTime).getTime() - new Date(b.dateTime).getTime())
