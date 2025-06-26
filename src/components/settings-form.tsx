@@ -16,6 +16,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Switch } from "@/components/ui/switch"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Textarea } from "@/components/ui/textarea"
+import { useTheme } from "@/components/theme-provider" // Importa o useTheme
 
 const profileFormSchema = z.object({
   name: z.string().min(2, {
@@ -67,6 +68,7 @@ type SecurityFormValues = z.infer<typeof securityFormSchema>
 
 export function SettingsForm() {
   const [activeTab, setActiveTab] = React.useState("profile")
+  const { setTheme } = useTheme() // Usa o hook useTheme
 
   const profileForm = useForm<ProfileFormValues>({
     resolver: zodResolver(profileFormSchema),
@@ -118,6 +120,7 @@ export function SettingsForm() {
   }
 
   function onAppearanceSubmit(data: AppearanceFormValues) {
+    setTheme(data.theme) // Aplica o tema
     toast.success("Appearance updated", {
       description: "Your appearance settings have been updated successfully.",
     })

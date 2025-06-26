@@ -1,9 +1,8 @@
 import { ChartAreaInteractive } from "@/components/chart-area-interactive";
 import { DataTable } from "@/components/data-table";
 import { SectionCards } from "@/components/section-cards";
-import { UpcomingAppointments } from "@/components/upcoming-appointments"; // Import the new component
 import data from "./data.json";
-import { WelcomeBanner } from "@/components/welcomeBanner";
+import { WelcomeBanner } from "@/components/WelcomeBanner";
 import { RemindersCard } from "@/components/RemindersCard";
 
 export default function DashboardContent() {
