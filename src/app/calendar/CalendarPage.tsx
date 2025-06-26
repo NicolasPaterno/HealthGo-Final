@@ -146,7 +146,6 @@ export default function CalendarPage() {
 
   return (
     <>
-      <Toaster richColors position="top-right" />
       <main className="flex flex-1 flex-col gap-6 p-4 md:p-6">
         <Card>
           <CardHeader>

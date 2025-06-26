@@ -32,14 +32,12 @@ const typeBadgeVariant = {
 
 
 export function RemindersCard() {
-  // 2. O estado é carregado do localStorage
   const [reminders, setReminders] = useState<Reminder[]>(() => {
     if (typeof window === 'undefined') return [];
     const savedReminders = localStorage.getItem(REMINDERS_STORAGE_KEY);
     return savedReminders ? JSON.parse(savedReminders) : [];
   });
   
-  // 3. Efeito para manter os dados sincronizados entre abas
   useEffect(() => {
     const handleStorageChange = (event: StorageEvent) => {
       if (event.key === REMINDERS_STORAGE_KEY && event.newValue) {
@@ -55,7 +53,6 @@ export function RemindersCard() {
   const upcomingReminders = reminders
     .filter(r => new Date(r.dateTime) >= new Date())
     .sort((a, b) => new Date(a.dateTime).getTime() - new Date(b.dateTime).getTime())
-    .slice(0, 5);
 
   return (
     <Card className="h-full flex flex-col">

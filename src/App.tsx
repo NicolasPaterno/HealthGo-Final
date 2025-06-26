@@ -39,7 +39,7 @@ function App() {
           <Route path="/" element={<Navigate to="/dashboard" />} />
         </Routes>
       </Suspense>
-            <Toaster richColors position="top-right" /> {/* 2. Adicione o Toaster aqui */}
+      <Toaster richColors position="top-right" />
     </ThemeProvider>
   );
 }
