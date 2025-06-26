@@ -3,6 +3,7 @@ import { RemindersCard } from "@/components/RemindersCard";
 import { SectionCards } from "@/components/section-cards";
 import { QuickActionsCard } from "@/components/QuickActionsCard";
 import { HealthSummaryCard } from "@/components/HealthSummaryCard";
+import { HealthTipsCard } from "@/components/HealthTipsCard";
 
 export default function DashboardContent() {
   return (
@@ -21,7 +22,7 @@ export default function DashboardContent() {
           <RemindersCard />
         </div>
         <div className="flex flex-col gap-4">
-            <SectionCards />
+            <HealthTipsCard/>
         </div>
       </div>
     </div>
