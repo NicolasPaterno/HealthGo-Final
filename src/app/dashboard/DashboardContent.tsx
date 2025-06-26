@@ -14,6 +14,7 @@ export default function DashboardContent() {
             <QuickActionsCard />
         </div>
         <HealthSummaryCard />
+        
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 px-4 lg:px-6">

@@ -81,7 +81,7 @@ export function HealthSummaryCard() {
         <CardTitle>Resumo da Saúde</CardTitle>
         <CardDescription>Suas próximas atividades de saúde.</CardDescription>
       </CardHeader>
-      <CardContent className="space-y-4">
+      <CardContent className="space-y-4 content-around">
         {/* Próxima Consulta */}
         <div className="flex items-center gap-4">
             <IconStethoscope className="h-6 w-6 text-primary" />
