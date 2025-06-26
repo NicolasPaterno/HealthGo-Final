@@ -21,7 +21,6 @@ export default function DashboardPage() {
         <SiteHeader />
         <div className="flex flex-1 flex-col">
           <div className="@container/main flex flex-1 flex-col gap-2">
-            {/* O conteúdo das rotas aninhadas será renderizado aqui */}
             <Outlet />
           </div>
         </div>

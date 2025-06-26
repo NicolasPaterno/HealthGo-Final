@@ -1,7 +1,7 @@
 import { createContext, useContext, useState, type ReactNode, useMemo } from 'react';
 import { toast } from "sonner";
 
-// Interface para um item no carrinho
+// Interfaces
 export interface CartItem {
   id: string;
   name: string;
@@ -10,7 +10,13 @@ export interface CartItem {
   image?: string;
 }
 
-// Interface para o contexto do carrinho
+export interface Order {
+    orderId: string;
+    date: Date;
+    items: CartItem[];
+    total: number;
+}
+
 interface ICartContext {
   cartItems: CartItem[];
   addToCart: (item: Omit<CartItem, 'quantity'>) => void;
@@ -22,12 +28,12 @@ interface ICartContext {
   isCartOpen: boolean;
   openCart: () => void;
   closeCart: () => void;
+  purchaseHistory: Order[]; // Novo
+  completePurchase: () => void; // Novo
 }
 
-// Cria o contexto com um valor padrão
 const CartContext = createContext<ICartContext | undefined>(undefined);
 
-// Hook customizado para usar o contexto do carrinho
 export const useCart = () => {
   const context = useContext(CartContext);
   if (!context) {
@@ -36,18 +42,13 @@ export const useCart = () => {
   return context;
 };
 
-// Componente Provedor do Contexto
 export const CartProvider = ({ children }: { children: ReactNode }) => {
   const [cartItems, setCartItems] = useState<CartItem[]>([]);
   const [isCartOpen, setIsCartOpen] = useState(false);
+  const [purchaseHistory, setPurchaseHistory] = useState<Order[]>([]); // Novo
 
-  const cartCount = useMemo(() => {
-    return cartItems.reduce((total, item) => total + item.quantity, 0);
-  }, [cartItems]);
-
-  const cartTotal = useMemo(() => {
-    return cartItems.reduce((total, item) => total + item.price * item.quantity, 0);
-  }, [cartItems]);
+  const cartCount = useMemo(() => cartItems.reduce((total, item) => total + item.quantity, 0), [cartItems]);
+  const cartTotal = useMemo(() => cartItems.reduce((total, item) => total + item.price * item.quantity, 0), [cartItems]);
 
   const openCart = () => setIsCartOpen(true);
   const closeCart = () => setIsCartOpen(false);
@@ -56,12 +57,10 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
     setCartItems(prevItems => {
       const existingItem = prevItems.find(item => item.id === itemToAdd.id);
       if (existingItem) {
-        // Se o item já existe, apenas aumenta a quantidade
         return prevItems.map(item =>
           item.id === itemToAdd.id ? { ...item, quantity: item.quantity + 1 } : item
         );
       }
-      // Se for um novo item, adiciona ao carrinho
       return [...prevItems, { ...itemToAdd, quantity: 1 }];
     });
     toast.success(`${itemToAdd.name} foi adicionado ao carrinho!`);
@@ -88,6 +87,19 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
     );
   };
 
+  const completePurchase = () => {
+      if (cartItems.length === 0) return;
+      const newOrder: Order = {
+          orderId: `order-${Date.now()}`,
+          date: new Date(),
+          items: [...cartItems],
+          total: cartTotal,
+      };
+      setPurchaseHistory(prevHistory => [newOrder, ...prevHistory]);
+      setCartItems([]);
+      closeCart();
+      toast.success("Compra finalizada com sucesso!");
+  };
 
   const value = {
     cartItems,
@@ -100,11 +112,9 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
     isCartOpen,
     openCart,
     closeCart,
+    purchaseHistory,
+    completePurchase,
   };
 
-  return (
-    <CartContext.Provider value={value}>
-      {children}
-    </CartContext.Provider>
-  );
+  return <CartContext.Provider value={value}>{children}</CartContext.Provider>;
 };

@@ -7,30 +7,46 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card"
+import { useCart } from "@/context/CartContext"
+import { IconShoppingCart } from "@tabler/icons-react"
 
-// Dados de exemplo para os hotéis
+// Dados de exemplo para os hotéis (com IDs e preços numéricos)
 const hotels = [
   {
+    id: "hotel-palace",
     name: "Hotel Palace",
     description: "Um hotel de luxo no coração da cidade com vista panorâmica.",
-    price: "R$ 550,00/noite",
-    image: "https://www.google.com/imgres?q=montanhas%20do%20everest&imgurl=https%3A%2F%2Fstatic.todamateria.com.br%2Fupload%2Fmo%2Fnt%2Fmonte-everest-og.jpg&imgrefurl=https%3A%2F%2Fwww.todamateria.com.br%2Fmonte-everest%2F&docid=JlZIvZMwp9hbAM&tbnid=A_Zg9ULf4efBOM&vet=12ahUKEwjU5cep4OmNAxX6qJUCHdLCOrYQM3oECBgQAA..i&w=1200&h=630&hcb=2&ved=2ahUKEwjU5cep4OmNAxX6qJUCHdLCOrYQM3oECBgQAA",
+    price: 550.00,
+    image: "https://via.placeholder.com/300x200/8B4513/FFFFFF?text=Hotel+Palace",
   },
   {
+    id: "pousada-beira-mar",
     name: "Pousada Beira Mar",
     description: "Aconchegante e com acesso direto à praia. Ideal para famílias.",
-    price: "R$ 320,00/noite",
-    image: "https://www.google.com/url?sa=i&url=https%3A%2F%2Fblog.coris.com.br%2Fmelhores-praias-do-mundo%2F&psig=AOvVaw3CjFyIByGZMva-bwpI1kEF&ust=1749744576137000&source=images&cd=vfe&opi=89978449&ved=2ahUKEwiN1MTQ4OmNAxURSbgEHZq6OFQQjRx6BAgAEBk",
+    price: 320.00,
+    image: "https://via.placeholder.com/300x200/1E90FF/FFFFFF?text=Beira+Mar",
   },
   {
+    id: "resort-montanhas",
     name: "Resort das Montanhas",
     description: "Refúgio tranquilo com spa, piscinas e atividades ao ar livre.",
-    price: "R$ 780,00/noite",
-    image: "https://www.google.com/url?sa=i&url=https%3A%2F%2Fblog.coris.com.br%2Fmelhores-praias-do-mundo%2F&psig=AOvVaw3CjFyIByGZMva-bwpI1kEF&ust=1749744576137000&source=images&cd=vfe&opi=89978449&ved=2ahUKEwiN1MTQ4OmNAxURSbgEHZq6OFQQjRx6BAgAEBk",
+    price: 780.00,
+    image: "https://via.placeholder.com/300x200/228B22/FFFFFF?text=Resort",
   },
 ]
 
 export default function HotelsPage() {
+  const { addToCart } = useCart();
+
+  const handleAddToCart = (hotel: typeof hotels[0]) => {
+    addToCart({
+      id: hotel.id,
+      name: hotel.name,
+      price: hotel.price,
+      image: hotel.image,
+    });
+  };
+
   return (
     <main className="flex-1 p-6">
       <header>
@@ -40,8 +56,8 @@ export default function HotelsPage() {
         </p>
       </header>
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 mt-6">
-        {hotels.map((hotel, index) => (
-          <Card key={index}>
+        {hotels.map((hotel) => (
+          <Card key={hotel.id}>
             <CardHeader>
               <img
                 src={hotel.image}
@@ -52,10 +68,13 @@ export default function HotelsPage() {
               <CardDescription>{hotel.description}</CardDescription>
             </CardHeader>
             <CardContent>
-              <p className="font-semibold">{hotel.price}</p>
+              <p className="font-semibold">R$ {hotel.price.toFixed(2)}/noite</p>
             </CardContent>
             <CardFooter>
-              <Button>Ver detalhes</Button>
+              <Button onClick={() => handleAddToCart(hotel)} className="w-full">
+                 <IconShoppingCart className="mr-2 h-4 w-4" />
+                Adicionar ao Carrinho
+              </Button>
             </CardFooter>
           </Card>
         ))}

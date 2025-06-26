@@ -1,6 +1,5 @@
 import { WelcomeBanner } from "@/components/WelcomeBanner";
 import { RemindersCard } from "@/components/RemindersCard";
-import { SectionCards } from "@/components/section-cards";
 import { QuickActionsCard } from "@/components/QuickActionsCard";
 import { HealthSummaryCard } from "@/components/HealthSummaryCard";
 import { HealthTipsCard } from "@/components/HealthTipsCard";

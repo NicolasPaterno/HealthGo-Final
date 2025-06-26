@@ -8,16 +8,15 @@ import {
   IconStar,
 } from "@tabler/icons-react"
 
-// Dados de exemplo para as passagens
 const tickets = [
   {
-    id: "ticket-sp-rio", // Adicionado ID único
+    id: "ticket-sp-rio", 
     from: "São Paulo",
     to: "Rio de Janeiro",
     description: "Voo direto com assistência médica especializada",
     company: "TAM",
     rating: 4.8,
-    price: 380.00, // Preço como número
+    price: 380.00, 
   },
   {
     id: "ticket-bsb-ssa",
@@ -40,7 +39,7 @@ const tickets = [
 ]
 
 export default function TicketsPage() {
-  const { addToCart } = useCart(); // Use o hook do carrinho
+  const { addToCart } = useCart(); 
 
   const handleAddToCart = (ticket: typeof tickets[0]) => {
     addToCart({

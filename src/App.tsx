@@ -4,7 +4,7 @@ import { LoadingSpinner } from "./components/loading-spinner";
 import { ThemeProvider } from "./components/theme-provider";
 import "./index.css";
 import { Toaster } from "./components/ui/sonner";
-import { CartProvider } from "./context/CartContext"; 
+import { CartProvider } from "./context/CartContext";
 import { CartSidebar } from "./components/cart-sidebar";
 
 const LoginPage = lazy(() => import("./app/login/LoginPage"));
@@ -17,11 +17,12 @@ const TicketsPage = lazy(() => import("./app/tickets/TicketsPage"));
 const PsychologistPage = lazy(() => import("./app/psychologists/PsychologistPage"));
 const CaregiversPage = lazy(() => import("./app/caregivers/CaregiversPage"));
 const CalendarPage = lazy(() => import("./app/calendar/CalendarPage"));
+const PurchaseHistoryPage = lazy(() => import("./app/history/PurchaseHistoryPage"));
 
 function App() {
   return (
     <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
-      <CartProvider> 
+      <CartProvider>
         <Suspense fallback={<LoadingSpinner />}>
           <Routes>
             <Route path="/login" element={<LoginPage />} />
@@ -37,10 +38,15 @@ function App() {
               <Route path="settings" element={<SettingsPage />} />
             </Route>
 
+            <Route path="/purchase" element={<DashboardPage />}>
+              <Route index element={<DashboardContent />} />
+              <Route path="history" element={<PurchaseHistoryPage />} />
+              </Route>
+
             <Route path="/" element={<Navigate to="/dashboard" />} />
           </Routes>
         </Suspense>
-        <CartSidebar /> 
+        <CartSidebar />
         <Toaster richColors position="top-center" />
       </CartProvider>
     </ThemeProvider>
