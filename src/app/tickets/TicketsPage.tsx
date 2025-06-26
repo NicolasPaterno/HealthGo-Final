@@ -1,5 +1,6 @@
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { useCart } from "@/context/CartContext" // Importe o useCart
 import {
   IconMapPin,
   IconPlane,
@@ -10,32 +11,45 @@ import {
 // Dados de exemplo para as passagens
 const tickets = [
   {
+    id: "ticket-sp-rio", // Adicionado ID único
     from: "São Paulo",
     to: "Rio de Janeiro",
     description: "Voo direto com assistência médica especializada",
     company: "TAM",
     rating: 4.8,
-    price: "380,00",
+    price: 380.00, // Preço como número
   },
   {
+    id: "ticket-bsb-ssa",
     from: "Brasília",
     to: "Salvador",
     description: "Voo com escala - Adaptado para cadeirantes",
     company: "GOL",
     rating: 4.6,
-    price: "420,00",
+    price: 420.00,
   },
   {
+    id: "ticket-for-mao",
     from: "Fortaleza",
     to: "Manaus",
     description: "Voo direto com oxigênio medicinal disponível",
     company: "AZUL",
     rating: 4.5,
-    price: "520,00",
+    price: 520.00,
   },
 ]
 
 export default function TicketsPage() {
+  const { addToCart } = useCart(); // Use o hook do carrinho
+
+  const handleAddToCart = (ticket: typeof tickets[0]) => {
+    addToCart({
+      id: ticket.id,
+      name: `Passagem: ${ticket.from} para ${ticket.to}`,
+      price: ticket.price,
+    });
+  };
+
   return (
     <main className="flex-1 p-4 md:p-6">
       <Card>
@@ -72,10 +86,11 @@ export default function TicketsPage() {
                 {/* Preço e Botão */}
                 <div className="flex flex-col items-start md:items-end gap-2 shrink-0 w-full md:w-auto mt-4 md:mt-0">
                   <div className="text-right">
-                    <p className="text-2xl font-bold">R$ {ticket.price}</p>
+                    <p className="text-2xl font-bold">R$ {ticket.price.toFixed(2)}</p>
                     <p className="text-xs text-muted-foreground">por viagem</p>
                   </div>
-                  <Button className="w-full md:w-auto">
+                  {/* Botão modificado para adicionar ao carrinho */}
+                  <Button className="w-full md:w-auto" onClick={() => handleAddToCart(ticket)}>
                     <IconShoppingCart className="mr-2 h-4 w-4" />
                     Comprar
                   </Button>
