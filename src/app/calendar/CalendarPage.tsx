@@ -15,27 +15,36 @@ import { useIsMobile } from "@/hooks/use-mobile";
 import { IconTrash } from "@tabler/icons-react";
 import { useMemo, useState } from "react";
 import { Toaster, toast } from "sonner";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
-// 1. Interface atualizada
+// 1. Interface atualizada para incluir o tipo
 interface Reminder {
   id: number;
   dateTime: string; // Enviado como ISO String
   text: string;
+  type: 'consulta' | 'remédio' | 'outros';
 }
 
 export default function CalendarPage() {
   const isMobile = useIsMobile();
   const [date, setDate] = useState<Date | undefined>(new Date());
 
-  // 2. Estado inicial atualizado
+  // 2. Estado inicial atualizado para incluir o tipo
   const [reminders, setReminders] = useState<Reminder[]>([
-    { id: 1, dateTime: new Date(new Date().getFullYear(), 6, 26, 9, 0).toISOString(), text: "Consulta de rotina com Dr. Carlos" },
-    { id: 2, dateTime: new Date(new Date().getFullYear(), 5, 13, 10, 0).toISOString(), text: "Sessão de fisioterapia" },
-    { id: 3, dateTime: new Date(new Date().getFullYear(), 5, 6, 12, 0).toISOString(), text: "bom dia" },
+    { id: 1, dateTime: new Date(new Date().getFullYear(), 6, 26, 9, 0).toISOString(), text: "Consulta de rotina com Dr. Carlos", type: 'consulta' },
+    { id: 2, dateTime: new Date(new Date().getFullYear(), 5, 13, 10, 0).toISOString(), text: "Sessão de fisioterapia", type: 'outros' },
+    { id: 3, dateTime: new Date(new Date().getFullYear(), 5, 6, 12, 0).toISOString(), text: "bom dia", type: 'outros' },
   ]);
 
   const [newReminderText, setNewReminderText] = useState("");
   const [newReminderTime, setNewReminderTime] = useState("00:00");
+  const [newReminderType, setNewReminderType] = useState<'consulta' | 'remédio' | 'outros'>('outros');
 
   const reminderDateTime = useMemo(() => {
     if (!date || !newReminderTime) return null;
@@ -52,7 +61,7 @@ export default function CalendarPage() {
     return reminderDateTime < now;
   }, [reminderDateTime]);
 
-  // 3. Lógica de adição atualizada
+  // 3. Lógica de adição atualizada para incluir o tipo
   const handleAddReminder = async () => {
     if (isPastTime) {
       toast.error("Não é possível agendar lembretes para uma data ou hora passada.");
@@ -70,6 +79,7 @@ export default function CalendarPage() {
     const newReminder: Omit<Reminder, 'id'> & { id?: number } = {
         text: newReminderText,
         dateTime: reminderDateTime.toISOString(),
+        type: newReminderType,
     };
 
     try {
@@ -101,7 +111,6 @@ export default function CalendarPage() {
     toast.info("Lembrete removido.");
   };
 
-  // 4. Filtros e agrupamentos atualizados
   const remindersForSelectedDay = reminders
     .filter((r) => {
       if (!date) return false;
@@ -172,12 +181,14 @@ export default function CalendarPage() {
                 {remindersForSelectedDay.length > 0 ? (
                   <div className="space-y-3">
                     {remindersForSelectedDay.map((reminder) => (
-                      <div key={reminder.id} className="flex items-center gap-2">
-                        {/* 5. Exibição na UI atualizada */}
-                        <Badge className="h-fit">
-                          {new Date(reminder.dateTime).toLocaleTimeString("pt-BR", { hour: '2-digit', minute: '2-digit' })}
-                        </Badge>
-                        <p className="text-sm flex-grow">{reminder.text}</p>
+                      <div key={reminder.id} className="flex items-center justify-between gap-2">
+                        <div className="flex items-center gap-2">
+                            <Badge className="h-fit">
+                              {new Date(reminder.dateTime).toLocaleTimeString("pt-BR", { hour: '2-digit', minute: '2-digit' })}
+                            </Badge>
+                            <p className="text-sm flex-grow">{reminder.text}</p>
+                        </div>
+                        <Badge variant="outline">{reminder.type}</Badge>
                       </div>
                     ))}
                   </div>
@@ -199,7 +210,18 @@ export default function CalendarPage() {
             </CardDescription>
           </CardHeader>
           <CardContent>
+            {/* 4. Adicionado campo de seleção para o tipo */}
             <div className="flex flex-col md:flex-row gap-2">
+              <Select value={newReminderType} onValueChange={(value) => setNewReminderType(value as 'consulta' | 'remédio' | 'outros')}>
+                <SelectTrigger className="md:w-40">
+                  <SelectValue placeholder="Tipo de lembrete" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="consulta">Consulta</SelectItem>
+                  <SelectItem value="remédio">Remédio</SelectItem>
+                  <SelectItem value="outros">Outros</SelectItem>
+                </SelectContent>
+              </Select>
               <Input
                 type="time"
                 value={newReminderTime}
@@ -232,11 +254,11 @@ export default function CalendarPage() {
                             className="flex items-center justify-between group"
                           >
                             <div className="flex items-center gap-2">
-                              {/* 5. Exibição na UI atualizada */}
                               <Badge variant="secondary">
                                 {new Date(reminder.dateTime).toLocaleTimeString("pt-BR", { hour: '2-digit', minute: '2-digit' })}
                               </Badge>
                               <p className="text-sm">{reminder.text}</p>
+                              <Badge variant="outline">{reminder.type}</Badge>
                             </div>
                             <Button
                               variant="ghost"
