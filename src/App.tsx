@@ -35,13 +35,16 @@ function App() {
               <Route path="psychologist" element={<PsychologistPage />} />
               <Route path="caregivers" element={<CaregiversPage />} />
               <Route path="calendar" element={<CalendarPage />} />
-              <Route path="settings" element={<SettingsPage />} />
             </Route>
 
             <Route path="/purchase" element={<DashboardPage />}>
-              <Route index element={<DashboardContent />} />
-              <Route path="history" element={<PurchaseHistoryPage />} />
-              </Route>
+              <Route path="history" index element={<PurchaseHistoryPage />} />
+              {/*<Route path="history" element={<PurchaseHistoryPage />} /> mais rotas filhas*/}
+            </Route>
+
+            <Route path="/settings" element={<DashboardPage />} >
+              <Route index element={<SettingsPage />} />
+            </Route>
 
             <Route path="/" element={<Navigate to="/dashboard" />} />
           </Routes>
