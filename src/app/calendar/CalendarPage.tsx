@@ -253,11 +253,11 @@ export default function CalendarPage() {
                   {Object.entries(groupedReminders).map(([day, list]) => (
                     <div key={day}>
                       <p className="font-bold text-sm mb-2">{day}</p>
-                      <div className="space-y-2 pl-2 border-l-2">
+                      <div className="space-y-2 pl-2 border-l-3 hover:bg-transparent">
                         {list.map((reminder) => (
                           <div
                             key={reminder.id}
-                            className="flex items-center justify-between group"
+                            className="flex items-center justify-between group h-12"
                           >
                             <div className="flex items-center gap-2">
                               <Badge variant="secondary">
