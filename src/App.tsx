@@ -3,6 +3,7 @@ import { Navigate, Route, Routes } from "react-router-dom";
 import { LoadingSpinner } from "./components/loading-spinner";
 import { ThemeProvider } from "./components/theme-provider";
 import "./index.css";
+import { Toaster } from "./components/ui/sonner";
 
 // --- Páginas carregadas sob demanda (Lazy Loading) ---
 const LoginPage = lazy(() => import("./app/login/LoginPage"));
@@ -38,6 +39,7 @@ function App() {
           <Route path="/" element={<Navigate to="/dashboard" />} />
         </Routes>
       </Suspense>
+            <Toaster richColors position="top-right" /> {/* 2. Adicione o Toaster aqui */}
     </ThemeProvider>
   );
 }

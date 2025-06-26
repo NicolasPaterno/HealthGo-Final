@@ -285,7 +285,7 @@ export function SettingsForm() {
                       <RadioGroup
                         onValueChange={field.onChange}
                         defaultValue={field.value}
-                        className="grid max-w-md grid-cols-3 gap-8 pt-2"
+                        className="grid lg:flex max-w-md grid-cols-3 gap-8 pt-2"
                       >
                         <FormItem>
                           <FormLabel className="[&:has([data-state=checked])>div]:border-primary">
