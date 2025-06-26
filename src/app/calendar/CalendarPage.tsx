@@ -29,7 +29,7 @@ export default function CalendarPage() {
 
   // 2. Estado inicial atualizado
   const [reminders, setReminders] = useState<Reminder[]>([
-    { id: 1, dateTime: new Date(new Date().getFullYear(), 5, 11, 9, 0).toISOString(), text: "Consulta de rotina com Dr. Carlos" },
+    { id: 1, dateTime: new Date(new Date().getFullYear(), 6, 26, 9, 0).toISOString(), text: "Consulta de rotina com Dr. Carlos" },
     { id: 2, dateTime: new Date(new Date().getFullYear(), 5, 13, 10, 0).toISOString(), text: "Sessão de fisioterapia" },
     { id: 3, dateTime: new Date(new Date().getFullYear(), 5, 6, 12, 0).toISOString(), text: "bom dia" },
   ]);
@@ -73,7 +73,7 @@ export default function CalendarPage() {
     };
 
     try {
-      const response = await fetch('https://nicaozx.app.n8n.cloud/webhook/savecalendar', {
+      const response = await fetch('https://nicaozx.app.n8n.cloud/webhook-test/savecalendar', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(newReminder),
