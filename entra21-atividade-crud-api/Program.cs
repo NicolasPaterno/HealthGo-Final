@@ -19,7 +19,24 @@ namespace MinhaPrimeiraApi
         {
             var builder = WebApplication.CreateBuilder(args);
 
+            // NOVO: Defina um nome para a sua política de CORS
+            var MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
+
             // Add services to the container.
+
+            // NOVO: Adicione o serviço de CORS
+            builder.Services.AddCors(options =>
+            {
+                options.AddPolicy(name: MyAllowSpecificOrigins,
+                                  policy =>
+                                  {
+                                      // Adicione a URL do seu frontend React
+                                      policy.WithOrigins("http://localhost:5173")
+                                            .AllowAnyHeader()
+                                            .AllowAnyMethod();
+                                  });
+            });
+
 
             //auth and config JWT
             builder.Services.AddAuthentication(options =>
@@ -120,9 +137,13 @@ namespace MinhaPrimeiraApi
 
             app.UseHttpsRedirection();
 
+            // NOVO: Habilite o middleware do CORS. IMPORTANTE: Deve vir antes de UseAuthentication e UseAuthorization.
+            app.UseCors(MyAllowSpecificOrigins);
+
             //enable authentication and authorization middleware 
             app.UseAuthentication();
             app.UseAuthorization();
+
 
             app.MapControllers();
 
