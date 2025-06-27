@@ -36,13 +36,11 @@ export function LoginForm({
     }
 
     try {
-      // A rota é /Auth/login, conforme definido no seu AuthController.cs
       const response = await api.post("/Auth/login", {
         email,
-        password, // No DTO, o nome da propriedade é "Password" com 'P' maiúsculo
+        password, 
       });
 
-      // Armazena o token e os dados do usuário (ex: no localStorage)
       localStorage.setItem("authToken", response.data.token);
       localStorage.setItem("user", JSON.stringify(response.data.user));
 
@@ -51,7 +49,6 @@ export function LoginForm({
         duration: 2000,
       });
 
-      // Redireciona para o dashboard
       setTimeout(() => {
         navigate("/dashboard");
       }, 2000);

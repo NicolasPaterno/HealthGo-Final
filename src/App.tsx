@@ -1,3 +1,4 @@
+// src/App.tsx
 import { lazy, Suspense } from "react";
 import { Navigate, Route, Routes } from "react-router-dom";
 import { LoadingSpinner } from "./components/loading-spinner";
@@ -6,7 +7,9 @@ import "./index.css";
 import { Toaster } from "./components/ui/sonner";
 import { CartProvider } from "./context/CartContext";
 import { CartSidebar } from "./components/cart-sidebar";
+import { ProtectedRoute } from "./components/protected-route"; // 1. Importe a rota protegida
 
+// Seus componentes lazy-loaded permanecem os mesmos
 const LoginPage = lazy(() => import("./app/login/LoginPage"));
 const RegisterPage = lazy(() => import("./app/register/RegisterPage"));
 const DashboardPage = lazy(() => import("./app/dashboard/DashboardPage"));
@@ -25,27 +28,29 @@ function App() {
       <CartProvider>
         <Suspense fallback={<LoadingSpinner />}>
           <Routes>
+            
             <Route path="/login" element={<LoginPage />} />
             <Route path="/register" element={<RegisterPage />} />
 
-            <Route path="/dashboard" element={<DashboardPage />}>
-              <Route index element={<DashboardContent />} />
-              <Route path="hotels" element={<HotelsPage />} />
-              <Route path="tickets" element={<TicketsPage />} />
-              <Route path="psychologist" element={<PsychologistPage />} />
-              <Route path="caregivers" element={<CaregiversPage />} />
-              <Route path="calendar" element={<CalendarPage />} />
-            </Route>
+            <Route element={<ProtectedRoute />}>
+              <Route path="/dashboard" element={<DashboardPage />}>
+                <Route index element={<DashboardContent />} />
+                <Route path="hotels" element={<HotelsPage />} />
+                <Route path="tickets" element={<TicketsPage />} />
+                <Route path="psychologist" element={<PsychologistPage />} />
+                <Route path="caregivers" element={<CaregiversPage />} />
+                <Route path="calendar" element={<CalendarPage />} />
+              </Route>
 
-            <Route path="/purchase" element={<DashboardPage />}>
-              <Route path="history" index element={<PurchaseHistoryPage />} />
-              {/*<Route path="history" element={<PurchaseHistoryPage />} /> mais rotas filhas*/}
-            </Route>
+              <Route path="/purchase" element={<DashboardPage />}>
+                <Route path="history" index element={<PurchaseHistoryPage />} />
+              </Route>
 
-            <Route path="/settings" element={<DashboardPage />} >
-              <Route index element={<SettingsPage />} />
+              <Route path="/settings" element={<DashboardPage />}>
+                <Route index element={<SettingsPage />} />
+              </Route>
             </Route>
-
+            
             <Route path="/" element={<Navigate to="/dashboard" />} />
           </Routes>
         </Suspense>
