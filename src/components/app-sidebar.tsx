@@ -67,7 +67,7 @@ const data = {
       icon: IconUsers,
     },
     {
-      title: "calendario",
+      title: "calendário",
       url: "/dashboard/calendar",
       icon: IconCalendarTime,
     },
