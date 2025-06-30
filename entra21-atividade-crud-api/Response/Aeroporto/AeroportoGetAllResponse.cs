@@ -1,6 +1,6 @@
-﻿using MinhaPrimeiraApi.Entity;
+﻿using entra21_atividade_crud_api.Entity;
 
-namespace MinhaPrimeiraApi.Response.Aeroporto
+namespace entra21_atividade_crud_api.Response.Aeroporto
 {
     public class AeroportoGetAllResponse
     {

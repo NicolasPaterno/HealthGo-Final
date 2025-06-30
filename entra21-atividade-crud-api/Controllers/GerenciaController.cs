@@ -1,10 +1,10 @@
-﻿using APIHealthGo.Contracts.Service;
-using APIHealthGo.Response;
+﻿using entra21_atividade_crud_api.Contracts.Service;
+using entra21_atividade_crud_api.DTO;
+using entra21_atividade_crud_api.Entity;
+using entra21_atividade_crud_api.Response;
 using Microsoft.AspNetCore.Mvc;
-using MyFirstCRUD.DTO;
-using MyFirstCRUD.Entity;
 
-namespace APIHealthGo.Controllers
+namespace entra21_atividade_crud_api.Controllers
 {
     [ApiController]
     [Route("[controller]")]
@@ -17,7 +17,7 @@ namespace APIHealthGo.Controllers
             _service = gerenciaService;
         }
 
-    [HttpGet]
+        [HttpGet]
         public async Task<IActionResult> Get()
         {
             return Ok(await _service.GetAllGerencia());

@@ -1,11 +1,11 @@
-﻿using APIHealthGo.Contracts.Service;
-using APIHealthGo.Response;
-using MyFirstCRUD.Contracts.Repository;
-using MyFirstCRUD.DTO;
-using MyFirstCRUD.Entity;
+﻿using entra21_atividade_crud_api.Contracts.Repository;
+using entra21_atividade_crud_api.Contracts.Service;
+using entra21_atividade_crud_api.DTO;
+using entra21_atividade_crud_api.Entity;
+using entra21_atividade_crud_api.Response;
 using MyFirstCRUD.Repository;
 
-namespace APIHealthGo.Services
+namespace entra21_atividade_crud_api.Services
 {
     public class LembreteService : ILembreteService
     {

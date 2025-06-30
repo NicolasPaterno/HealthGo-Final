@@ -1,22 +1,22 @@
-﻿using MinhaPrimeiraApi.Contracts.Repository;
-using Dapper;
-using MinhaPrimeiraApi.Entity;
+﻿using Dapper;
 using MySql.Data.MySqlClient;
-using MinhaPrimeiraApi.Contracts.Infrastructure;
 using entra21_atividade_crud_api.DTO;
+using entra21_atividade_crud_api.Contracts.Repository;
+using entra21_atividade_crud_api.Entity;
+using entra21_atividade_crud_api.Contracts.Infrastructure;
 
-namespace MinhaPrimeiraApi.Repository
+namespace entra21_atividade_crud_api.Repository
 {
     class AeroportoRepository : IAeroportoRepository
     {
 
-        private IConnection _connection; 
+        private IConnection _connection;
 
         public AeroportoRepository(IConnection connection)
         {
             _connection = connection;
         }
-        
+
         public async Task<IEnumerable<AeroportoEntity>> GetAll()
         {
             using (MySqlConnection con = _connection.GetConnection())
@@ -79,6 +79,6 @@ namespace MinhaPrimeiraApi.Repository
             await _connection.Execute(sql, aeroporto);
         }
 
-        
+
     }
 }

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MyFirstCRUD.DTO
+namespace entra21_atividade_crud_api.DTO
 {
     public class EspecialidadeInsertDTO
     {

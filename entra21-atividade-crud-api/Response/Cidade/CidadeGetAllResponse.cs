@@ -1,7 +1,6 @@
-﻿
-using MinhaPrimeiraApi.Entity;
+﻿using entra21_atividade_crud_api.Entity;
 
-namespace MinhaPrimeiraApi.Response.Cidade
+namespace entra21_atividade_crud_api.Response.Cidade
 {
     public class CidadeGetAllResponse
     {

@@ -1,7 +1,7 @@
 ﻿
-using MinhaPrimeiraApi.Entity;
+using entra21_atividade_crud_api.Entity;
 
-namespace MinhaPrimeiraApi.Response.Nacao
+namespace entra21_atividade_crud_api.Response.Nacao
 {
     public class NacaoGetAllResponse
     {

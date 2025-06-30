@@ -1,7 +1,7 @@
 ﻿
-using MinhaPrimeiraApi.Entity;
+using entra21_atividade_crud_api.Entity;
 
-namespace MinhaPrimeiraApi.Response.Estado
+namespace entra21_atividade_crud_api.Response.Estado
 {
     public class EstadoGetAllResponse
     {

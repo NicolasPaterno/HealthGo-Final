@@ -1,7 +1,7 @@
 ﻿using entra21_atividade_crud_api.DTO;
-using MinhaPrimeiraApi.Entity;
+using entra21_atividade_crud_api.Entity;
 
-namespace MinhaPrimeiraApi.Contracts.Repository
+namespace entra21_atividade_crud_api.Contracts.Repository
 {
     public interface IAeroportoRepository
     {

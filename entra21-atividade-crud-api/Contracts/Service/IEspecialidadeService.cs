@@ -1,20 +1,20 @@
-﻿using APIHealthGo.Response;
-using MinhaPrimeiraApi.Response.Especialidade;
-using MyFirstCRUD.DTO;
-using MyFirstCRUD.entity;
+﻿using entra21_atividade_crud_api.DTO;
+using entra21_atividade_crud_api.Entity;
+using entra21_atividade_crud_api.Response;
+using entra21_atividade_crud_api.Response.VooResponse;
 
-namespace MinhaPrimeiraApi.Contracts.Service
+namespace entra21_atividade_crud_api.Contracts.Service
 {
     public interface IEspecialidadeService
     {
         Task<MessageResponse> Delete(int id);
-       
+
         Task<MessageResponse> Post(EspecialidadeInsertDTO especialidade);
-        
+
         Task<MessageResponse> Update(EspecialidadeEntity especialidade);
-        
-        Task <EspecialidadeGetAllResponse> GetAll();
-        
+
+        Task<EspecialidadeGetAllResponse> GetAll();
+
         Task<EspecialidadeEntity> GetById(int id);
     }
 }

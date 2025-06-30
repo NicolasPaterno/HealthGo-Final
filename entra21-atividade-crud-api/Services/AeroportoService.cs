@@ -1,16 +1,16 @@
-﻿using MinhaPrimeiraApi.Entity;
-using MinhaPrimeiraApi.Contracts.Services;
-using MinhaPrimeiraApi.Response;
-using MinhaPrimeiraApi.Contracts.Repository;
-using MinhaPrimeiraApi.Response.Aeroporto;
-using APIHealthGo.Response;
+﻿using MinhaPrimeiraApi.Response;
 using entra21_atividade_crud_api.DTO;
+using entra21_atividade_crud_api.Contracts.Repository;
+using entra21_atividade_crud_api.Contracts.Service;
+using entra21_atividade_crud_api.Entity;
+using entra21_atividade_crud_api.Response;
+using entra21_atividade_crud_api.Response.Aeroporto;
 
-namespace MinhaPrimeiraApi.Services
+namespace entra21_atividade_crud_api.Services
 {
     public class AeroportoService : IAeroportoService
     {
-        
+
         private IAeroportoRepository _repository;
 
         public AeroportoService(IAeroportoRepository repository)
@@ -64,7 +64,7 @@ namespace MinhaPrimeiraApi.Services
         //    {
         //        result = result.Where(x => x.Cidade_id == listToFilter.Cidade_id.Value);
         //    }
-           
+
         //    return new AeroportoGetByFilterResponse
         //    {
         //        Data = result
@@ -119,6 +119,6 @@ namespace MinhaPrimeiraApi.Services
             };
         }
 
-        
+
     }
 }

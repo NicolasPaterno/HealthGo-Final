@@ -1,12 +1,11 @@
-﻿
-using APIHealthGo.Response;
-using MinhaPrimeiraApi.Contracts.Service;
-using MinhaPrimeiraApi.Response.Especialidade;
-using MyFirstCRUD.Contracts.Repository;
-using MyFirstCRUD.DTO;
-using MyFirstCRUD.entity;
+﻿using entra21_atividade_crud_api.Contracts.Repository;
+using entra21_atividade_crud_api.Contracts.Service;
+using entra21_atividade_crud_api.DTO;
+using entra21_atividade_crud_api.Entity;
+using entra21_atividade_crud_api.Response;
+using entra21_atividade_crud_api.Response.VooResponse;
 
-namespace MinhaPrimeiraApi.Services
+namespace entra21_atividade_crud_api.Services
 {
     public class EspecialidadeService : IEspecialidadeService
     {
@@ -24,9 +23,9 @@ namespace MinhaPrimeiraApi.Services
             {
                 Message = "Especialidade excluida com sucesso!"
             };
-       }
+        }
 
-        public async Task <EspecialidadeGetAllResponse> GetAll()
+        public async Task<EspecialidadeGetAllResponse> GetAll()
         {
             return new EspecialidadeGetAllResponse
             {

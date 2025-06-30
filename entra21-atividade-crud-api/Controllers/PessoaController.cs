@@ -1,11 +1,11 @@
-﻿using APIHealthGo.Contracts.Service;
-using APIHealthGo.Response;
-using atividade_bd_csharp.Entity;
+﻿using entra21_atividade_crud_api.Contracts.Service;
+using entra21_atividade_crud_api.DTO;
+using entra21_atividade_crud_api.Entity;
+using entra21_atividade_crud_api.Response;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using MyFirstCRUD.DTO;
 
-namespace APIHealthGo.Controllers
+namespace entra21_atividade_crud_api.Controllers
 {
     [ApiController]
     [Route("[controller]")]

@@ -1,4 +1,4 @@
-﻿namespace MyFirstCRUD.Entity
+﻿namespace entra21_atividade_crud_api.Entity
 {
     public class GerenciaEntity
     {

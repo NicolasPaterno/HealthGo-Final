@@ -1,11 +1,11 @@
-﻿using APIHealthGo.Contracts.Service;
-using atividade_bd_csharp.Entity;
-using Microsoft.IdentityModel.Tokens;
+﻿using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Text;
 using System.Security.Claims;
+using entra21_atividade_crud_api.Contracts.Service;
+using entra21_atividade_crud_api.Entity;
 
-namespace APIHealthGo.Services
+namespace entra21_atividade_crud_api.Services
 {
     public class TokenService : ITokenService
     {

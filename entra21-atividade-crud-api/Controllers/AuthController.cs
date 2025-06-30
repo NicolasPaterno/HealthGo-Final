@@ -1,8 +1,8 @@
-﻿using APIHealthGo.Contracts.Service;
+﻿using entra21_atividade_crud_api.Contracts.Repository;
+using entra21_atividade_crud_api.Contracts.Service;
 using Microsoft.AspNetCore.Mvc;
-using MyFirstCRUD.Contracts.Repository;
 
-namespace APIHealthGo.Controllers
+namespace entra21_atividade_crud_api.Controllers
 {
     [ApiController]
     [Route("[controller]")]
@@ -36,7 +36,7 @@ namespace APIHealthGo.Controllers
             var token = _tokenService.GenerateToken(pessoa);
             return Ok(new
             {
-                token = token,
+                token,
                 user = new { pessoa.Id, pessoa.Nome, pessoa.Email }
             });
         }

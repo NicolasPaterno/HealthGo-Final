@@ -1,9 +1,9 @@
-﻿using APIHealthGo.Response;
-using MinhaPrimeiraApi.DTO;
-using MinhaPrimeiraApi.Entity;
-using MinhaPrimeiraApi.Response.Cidade;
+﻿using entra21_atividade_crud_api.DTO;
+using entra21_atividade_crud_api.Entity;
+using entra21_atividade_crud_api.Response;
+using entra21_atividade_crud_api.Response.Cidade;
 
-namespace MinhaPrimeiraApi.Contracts.Services
+namespace entra21_atividade_crud_api.Contracts.Service
 {
     public interface ICidadeService
     {

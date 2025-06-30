@@ -1,11 +1,11 @@
 ﻿using Dapper;
-using MinhaPrimeiraApi.Infrastructure;
-using MyFirstCRUD.Contracts.Repository;
-using MyFirstCRUD.DTO;
-using MyFirstCRUD.entity;
+using entra21_atividade_crud_api.Contracts.Repository;
+using entra21_atividade_crud_api.DTO;
+using entra21_atividade_crud_api.Entity;
+using entra21_atividade_crud_api.Infrastructure;
 using MySql.Data.MySqlClient;
 
-namespace MyFirstCRUD.Repository
+namespace entra21_atividade_crud_api.Repository
 {
     class EspecialidadeRepository : IEspecialidadeRepository
     {

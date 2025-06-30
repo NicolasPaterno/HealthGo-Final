@@ -1,4 +1,4 @@
-﻿namespace APIHealthGo.Response
+﻿namespace entra21_atividade_crud_api.Response
 {
     public class MessageResponse
     {

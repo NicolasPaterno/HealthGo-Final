@@ -1,6 +1,6 @@
 ﻿using MySql.Data.MySqlClient;
 
-namespace MinhaPrimeiraApi.Contracts.Infrastructure
+namespace entra21_atividade_crud_api.Contracts.Infrastructure
 {
     public interface IConnection
     {

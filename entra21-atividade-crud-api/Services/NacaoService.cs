@@ -1,16 +1,16 @@
-﻿using MinhaPrimeiraApi.DTO;
-using MinhaPrimeiraApi.Entity;
-using MinhaPrimeiraApi.Contracts.Services;
-using MinhaPrimeiraApi.Response;
-using MinhaPrimeiraApi.Response.Nacao;
-using MinhaPrimeiraApi.Contracts.Repository;
-using APIHealthGo.Response;
+﻿using MinhaPrimeiraApi.Response;
+using entra21_atividade_crud_api.Contracts.Service;
+using entra21_atividade_crud_api.Contracts.Repository;
+using entra21_atividade_crud_api.Entity;
+using entra21_atividade_crud_api.Response;
+using entra21_atividade_crud_api.DTO;
+using entra21_atividade_crud_api.Response.Nacao;
 
-namespace MinhaPrimeiraApi.Services
+namespace entra21_atividade_crud_api.Services
 {
     public class NacaoService : INacaoService
     {
-        
+
         private INacaoRepository _repository;
 
         public NacaoService(INacaoRepository repository)

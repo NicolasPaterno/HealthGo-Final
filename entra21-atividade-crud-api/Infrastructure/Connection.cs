@@ -5,10 +5,10 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Web;
 using Dapper;
-using MinhaPrimeiraApi.Contracts.Infrastructure;
+using entra21_atividade_crud_api.Contracts.Infrastructure;
 using MySql.Data.MySqlClient;
 
-namespace MinhaPrimeiraApi.Infrastructure
+namespace entra21_atividade_crud_api.Infrastructure
 {
     public class Connection : IConnection
     {
@@ -21,7 +21,7 @@ namespace MinhaPrimeiraApi.Infrastructure
 
         public async Task<int> Execute(string sql, object obj)
         {
-            using(MySqlConnection con = GetConnection())
+            using (MySqlConnection con = GetConnection())
             {
                 return await con.ExecuteAsync(sql, obj);
             }

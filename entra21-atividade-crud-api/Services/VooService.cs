@@ -1,13 +1,13 @@
-﻿using MinhaPrimeiraApi.Contracts.Service;
-using MinhaPrimeiraApi.DTO;
-using MinhaPrimeiraApi.Entity;
-using MinhaPrimeiraApi.Repository;
-using MinhaPrimeiraApi.Response.Especialidade;
+﻿using MinhaPrimeiraApi.Repository;
 using MinhaPrimeiraApi.Response;
-using MinhaPrimeiraApi.Contracts.Repository;
-using APIHealthGo.Response;
+using entra21_atividade_crud_api.DTO;
+using entra21_atividade_crud_api.Contracts.Service;
+using entra21_atividade_crud_api.Entity;
+using entra21_atividade_crud_api.Response;
+using entra21_atividade_crud_api.Response.VooResponse;
+using entra21_atividade_crud_api.Contracts.Repository;
 
-namespace MinhaPrimeiraApi.Services
+namespace entra21_atividade_crud_api.Services
 {
     public class VooService : IVooService
     {

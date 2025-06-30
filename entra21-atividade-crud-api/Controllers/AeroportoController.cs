@@ -1,11 +1,11 @@
-﻿using MinhaPrimeiraApi.Entity;
-using Microsoft.AspNetCore.Mvc;
-using MinhaPrimeiraApi.Contracts.Services;
-using MinhaPrimeiraApi.Response.Aeroporto;
-using APIHealthGo.Response;
+﻿using Microsoft.AspNetCore.Mvc;
 using entra21_atividade_crud_api.DTO;
+using entra21_atividade_crud_api.Contracts.Service;
+using entra21_atividade_crud_api.Entity;
+using entra21_atividade_crud_api.Response;
+using entra21_atividade_crud_api.Response.Aeroporto;
 
-namespace MinhaPrimeiraApi.Controllers
+namespace entra21_atividade_crud_api.Controllers
 {
     [ApiController]
     [Route("[controller]")] // = endpoint
@@ -19,7 +19,7 @@ namespace MinhaPrimeiraApi.Controllers
             _service = service;
         }
 
-        [HttpGet("aeroportos")]  
+        [HttpGet("aeroportos")]
         public async Task<ActionResult<AeroportoGetAllResponse>> Get([FromQuery] int cidade_Id)
         {
             return Ok(await _service.Get(cidade_Id));

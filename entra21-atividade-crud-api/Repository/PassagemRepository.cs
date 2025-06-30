@@ -1,11 +1,11 @@
-﻿using MinhaPrimeiraApi.Contracts.Repository;
-using MinhaPrimeiraApi.DTO;
-using MinhaPrimeiraApi.Entity;
-using Dapper;
+﻿using Dapper;
 using MySql.Data.MySqlClient;
-using MinhaPrimeiraApi.Contracts.Infrastructure;
+using entra21_atividade_crud_api.Entity;
+using entra21_atividade_crud_api.DTO;
+using entra21_atividade_crud_api.Contracts.Infrastructure;
+using entra21_atividade_crud_api.Contracts.Repository;
 
-namespace MinhaPrimeiraApi.Repository
+namespace entra21_atividade_crud_api.Repository
 {
     class PassagemRepository : IPassagemRepository
     {

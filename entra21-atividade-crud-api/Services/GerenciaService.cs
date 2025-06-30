@@ -1,14 +1,14 @@
-﻿using APIHealthGo.Contracts.Service;
-using APIHealthGo.Response;
+﻿using entra21_atividade_crud_api.Contracts.Repository;
+using entra21_atividade_crud_api.Contracts.Service;
+using entra21_atividade_crud_api.DTO;
+using entra21_atividade_crud_api.Entity;
+using entra21_atividade_crud_api.Response;
 using Microsoft.AspNetCore.Mvc;
 using MinhaPrimeiraApi.Contracts.Infrastructure;
-using MyFirstCRUD.Contracts.Repository;
-using MyFirstCRUD.DTO;
-using MyFirstCRUD.Entity;
 using MyFirstCRUD.Repository;
 using System.Security.Cryptography.X509Certificates;
 
-namespace APIHealthGo.Services
+namespace entra21_atividade_crud_api.Services
 {
     public class GerenciaService : IGerenciaService
     {
@@ -38,7 +38,7 @@ namespace APIHealthGo.Services
                 Message = "Gerente inserido com sucesso!!"
             };
         }
-        public async  Task<MessageResponse> Update(GerenciaEntity gerencia)
+        public async Task<MessageResponse> Update(GerenciaEntity gerencia)
         {
             await _repository.UpdateGerencia(gerencia);
             return new MessageResponse

@@ -1,11 +1,11 @@
-﻿using MinhaPrimeiraApi.DTO;
-using MinhaPrimeiraApi.Entity;
-using Microsoft.AspNetCore.Mvc;
-using MinhaPrimeiraApi.Contracts.Services;
-using MinhaPrimeiraApi.Response.Cidade;
-using APIHealthGo.Response;
+﻿using Microsoft.AspNetCore.Mvc;
+using entra21_atividade_crud_api.Response.Cidade;
+using entra21_atividade_crud_api.Contracts.Service;
+using entra21_atividade_crud_api.Response;
+using entra21_atividade_crud_api.Entity;
+using entra21_atividade_crud_api.DTO;
 
-namespace MinhaPrimeiraApi.Controllers
+namespace entra21_atividade_crud_api.Controllers
 {
     [ApiController]
     [Route("[controller]")]

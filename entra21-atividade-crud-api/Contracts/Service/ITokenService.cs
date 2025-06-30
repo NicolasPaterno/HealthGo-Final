@@ -1,6 +1,6 @@
-﻿using atividade_bd_csharp.Entity;
+﻿using entra21_atividade_crud_api.Entity;
 
-namespace APIHealthGo.Contracts.Service
+namespace entra21_atividade_crud_api.Contracts.Service
 {
     public interface ITokenService
     {
