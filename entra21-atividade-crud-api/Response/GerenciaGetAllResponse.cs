@@ -1,7 +1,7 @@
 ﻿using atividade_bd_csharp.Entity;
-using entra21_atividade_crud_api.Entity;
+using API_HealthGo.Entity;
 
-namespace entra21_atividade_crud_api.Response
+namespace API_HealthGo.Response
 {
     public class GerenciaGetAllResponse
     {

@@ -1,6 +1,6 @@
-﻿using entra21_atividade_crud_api.DTO;
+﻿using API_HealthGo.DTO;
 
-namespace entra21_atividade_crud_api.Response.Aeroporto
+namespace API_HealthGo.Response.Aeroporto
 {
     public class AeroportoGetByFilterResponse
     {

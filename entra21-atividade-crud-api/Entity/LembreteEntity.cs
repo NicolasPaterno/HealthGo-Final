@@ -1,4 +1,4 @@
-﻿namespace entra21_atividade_crud_api.Entity
+﻿namespace API_HealthGo.Entity
 {
     public enum Frequencia
     {
@@ -13,6 +13,6 @@
         public int Id { get; set; }
         public string Descricao { get; set; }
         public DateTime DataInicio { get; set; }
-        public int Pessoa_Id { get; set; }
+        public int Pessoa_id { get; set; }
     }
 }

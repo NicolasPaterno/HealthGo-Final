@@ -4,7 +4,7 @@
     <TargetFramework>net7.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
-    <RootNamespace>entra21_atividade_crud_api</RootNamespace>
+    <RootNamespace>API_HealthGo</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>

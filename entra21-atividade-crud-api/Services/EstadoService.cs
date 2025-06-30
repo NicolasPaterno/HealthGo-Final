@@ -1,12 +1,12 @@
 ﻿using MinhaPrimeiraApi.Response;
-using entra21_atividade_crud_api.Contracts.Repository;
-using entra21_atividade_crud_api.DTO;
-using entra21_atividade_crud_api.Contracts.Service;
-using entra21_atividade_crud_api.Entity;
-using entra21_atividade_crud_api.Response;
-using entra21_atividade_crud_api.Response.Estado;
+using API_HealthGo.Response.Estado;
+using API_HealthGo.Response;
+using API_HealthGo.Entity;
+using API_HealthGo.Contracts.Repository;
+using API_HealthGo.Contracts.Service;
+using API_HealthGo.DTO;
 
-namespace entra21_atividade_crud_api.Services
+namespace API_HealthGo.Services
 {
     public class EstadoService : IEstadoService
     {

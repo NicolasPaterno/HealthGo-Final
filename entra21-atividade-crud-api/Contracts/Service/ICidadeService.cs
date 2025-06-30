@@ -1,9 +1,9 @@
-﻿using entra21_atividade_crud_api.DTO;
-using entra21_atividade_crud_api.Entity;
-using entra21_atividade_crud_api.Response;
-using entra21_atividade_crud_api.Response.Cidade;
+﻿using API_HealthGo.DTO;
+using API_HealthGo.Entity;
+using API_HealthGo.Response;
+using API_HealthGo.Response.Cidade;
 
-namespace entra21_atividade_crud_api.Contracts.Service
+namespace API_HealthGo.Contracts.Service
 {
     public interface ICidadeService
     {

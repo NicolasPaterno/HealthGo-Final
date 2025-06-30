@@ -1,11 +1,11 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using entra21_atividade_crud_api.Entity;
-using entra21_atividade_crud_api.DTO;
-using entra21_atividade_crud_api.Contracts.Service;
-using entra21_atividade_crud_api.Response;
-using entra21_atividade_crud_api.Response.VooResponse;
+using API_HealthGo.Contracts.Service;
+using API_HealthGo.Response.VooResponse;
+using API_HealthGo.Response;
+using API_HealthGo.Entity;
+using API_HealthGo.DTO;
 
-namespace entra21_atividade_crud_api.Controllers
+namespace API_HealthGo.Controllers
 {
     [ApiController]
     [Route("[controller]")]

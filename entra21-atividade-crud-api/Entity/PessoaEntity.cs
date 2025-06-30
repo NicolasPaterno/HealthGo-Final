@@ -1,4 +1,4 @@
-﻿namespace entra21_atividade_crud_api.Entity
+﻿namespace API_HealthGo.Entity
 {
     public class PessoaEntity
     {
@@ -15,6 +15,6 @@
         public string Bairro { get; set; }
         public string Rua { get; set; }
         public string NumeroEndereco { get; set; }
-        public int Cidade_Id { get; set; }
+        public int Cidade_id { get; set; }
     }
 }

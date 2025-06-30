@@ -1,7 +1,6 @@
-﻿
-using entra21_atividade_crud_api.Entity;
+﻿using API_HealthGo.Entity;
 
-namespace entra21_atividade_crud_api.Response.Estado
+namespace API_HealthGo.Response.Estado
 {
     public class EstadoGetAllResponse
     {

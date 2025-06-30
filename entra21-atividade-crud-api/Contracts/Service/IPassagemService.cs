@@ -1,9 +1,9 @@
-﻿using entra21_atividade_crud_api.Entity;
-using entra21_atividade_crud_api.DTO;
-using entra21_atividade_crud_api.Response;
-using entra21_atividade_crud_api.Response.VooResponse;
+﻿using API_HealthGo.Response.VooResponse;
+using API_HealthGo.Response;
+using API_HealthGo.Entity;
+using API_HealthGo.DTO;
 
-namespace entra21_atividade_crud_api.Contracts.Service
+namespace API_HealthGo.Contracts.Service
 {
     public interface IPassagemService
     {

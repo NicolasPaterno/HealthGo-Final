@@ -5,14 +5,14 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Web;
 using Dapper;
-using entra21_atividade_crud_api.Contracts.Infrastructure;
+using API_HealthGo.Contracts.Infrastructure;
 using MySql.Data.MySqlClient;
 
-namespace entra21_atividade_crud_api.Infrastructure
+namespace API_HealthGo.Infrastructure
 {
     public class Connection : IConnection
     {
-        protected string connectionString = "Server=localhost;Database=healthgo;User=root;Password=root;";
+        protected string connectionString = "Server=localhost;Database=healthgo;User=root;Password=toor;";
 
         public MySqlConnection GetConnection()
         {
