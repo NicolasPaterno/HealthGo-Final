@@ -6,6 +6,6 @@
 
         public string Nome { get; set; }
 
-        public int Estado_id { get; set; }
+        public int Estado_Id { get; set; }
     }
 }

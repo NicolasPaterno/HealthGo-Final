@@ -100,7 +100,7 @@ namespace API_HealthGo.Services
             return await _repository.GetById(id);
         }
 
-        public async Task<MessageResponse> Post(AeroportoDTO aeroporto)
+        public async Task<MessageResponse> Post(AeroportoInsertDTO aeroporto)
         {
             await _repository.Insert(aeroporto);
             return new MessageResponse

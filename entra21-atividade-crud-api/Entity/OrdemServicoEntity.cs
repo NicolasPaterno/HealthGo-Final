@@ -6,8 +6,8 @@
 
         public DateTime DataCriacao { get; set; }
 
-        public string StatusOS { get; set; }
+        public string StatusOS { get; set; } // ENUM('Concluído', 'Em andamento', 'Cancelado')
 
-        public int Pessoa_id { get; set; }
+        public int Pessoa_Id { get; set; }
     }
 }

@@ -1,6 +1,6 @@
 ﻿namespace API_HealthGo.Entity
 {
-    public class PrestadorServico
+    public class PrestadorServicoEntity
     {
         public int Id { get; set; }
 
@@ -12,8 +12,8 @@
 
         public bool Ativo { get; set; }
 
-        public int Especialidade_id { get; set; }
+        public int Especialidade_Id { get; set; }
 
-        public int Pessoa_id { get; set; }
+        public int Pessoa_Id { get; set; }
     }
 }

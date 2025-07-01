@@ -13,7 +13,7 @@ namespace API_HealthGo.Contracts.Service
 
         Task<AeroportoEntity> GetById(int id);
 
-        Task<MessageResponse> Post(AeroportoDTO aeroporto);
+        Task<MessageResponse> Post(AeroportoInsertDTO aeroporto);
 
         Task<MessageResponse> Update(AeroportoEntity aeroporto);
     }

@@ -34,7 +34,7 @@ namespace API_HealthGo.Repository
         }
 
 
-        public async Task Insert(AeroportoDTO aeroporto)
+        public async Task Insert(AeroportoInsertDTO aeroporto)
         {
             string sql = @$"
                 INSERT INTO AEROPORTO (NOME,CODIGOIATA,CIDADE_ID)

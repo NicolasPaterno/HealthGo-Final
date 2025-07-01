@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Web;
-using Dapper;
+﻿using Dapper;
 using API_HealthGo.Contracts.Infrastructure;
 using MySql.Data.MySqlClient;
 
@@ -12,7 +6,7 @@ namespace API_HealthGo.Infrastructure
 {
     public class Connection : IConnection
     {
-        protected string connectionString = "Server=localhost;Database=healthgo;User=root;Password=toor;";
+        protected string connectionString = "Server=localhost;Database=healthgo;User=root;Password=root;";
 
         public MySqlConnection GetConnection()
         {

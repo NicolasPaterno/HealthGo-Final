@@ -4,6 +4,6 @@ namespace API_HealthGo.Response.Aeroporto
 {
     public class AeroportoGetByFilterResponse
     {
-        public IEnumerable<AeroportoDTO> Data { get; set; }
+        public IEnumerable<AeroportoInsertDTO> Data { get; set; }
     }
 }

@@ -1,11 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Org.BouncyCastle.Asn1.Mozilla;
-
-namespace API_HealthGo.Entity
+﻿namespace API_HealthGo.Entity
 {
     public class AviaoEntity
     {

@@ -1,9 +1,7 @@
-﻿namespace API_HealthGo.Entity
+﻿namespace API_HealthGo.DTO
 {
-    public class AeroportoEntity
+    public class AeroportoInsertDTO
     {
-        public int Id { get; set; }
-
         public string Nome { get; set; }
 
         public string CodigoIata { get; set; }

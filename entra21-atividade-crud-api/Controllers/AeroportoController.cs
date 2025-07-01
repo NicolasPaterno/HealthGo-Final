@@ -32,7 +32,7 @@ namespace API_HealthGo.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<MessageResponse>> Post(AeroportoDTO aeroporto)
+        public async Task<ActionResult<MessageResponse>> Post(AeroportoInsertDTO aeroporto)
         {
             return Ok(await _service.Post(aeroporto));
         }

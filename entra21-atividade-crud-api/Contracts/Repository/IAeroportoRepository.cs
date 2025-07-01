@@ -9,7 +9,7 @@ namespace API_HealthGo.Contracts.Repository
 
         Task<AeroportoEntity> GetById(int id);
 
-        Task Insert(AeroportoDTO aeroporto);
+        Task Insert(AeroportoInsertDTO aeroporto);
 
         Task Delete(int id);
 

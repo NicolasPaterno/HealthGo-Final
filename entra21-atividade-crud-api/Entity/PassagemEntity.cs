@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace API_HealthGo.Entity
+﻿namespace API_HealthGo.Entity
 {
     public class PassagemEntity
     {
@@ -16,6 +10,6 @@ namespace API_HealthGo.Entity
         
         public int Voo_Id { get; set; }
         
-        public int OrdemServico_id { get; set; }
+        public int OrdemServico_Id { get; set; }
     }
 }
