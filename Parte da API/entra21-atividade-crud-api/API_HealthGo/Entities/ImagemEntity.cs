@@ -1,6 +1,6 @@
 ﻿namespace API_HealthGo.Entity
 {
-    public class ImagensEntity
+    public class ImagemEntity
     {
         public int Id { get; set; }
 

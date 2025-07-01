@@ -1,6 +1,6 @@
 ﻿namespace API_HealthGo.Entity
 {
-    public class Cama_QuartoEntity
+    public class CamaQuartoEntity
     {
         public int Id { get; set; }
 
