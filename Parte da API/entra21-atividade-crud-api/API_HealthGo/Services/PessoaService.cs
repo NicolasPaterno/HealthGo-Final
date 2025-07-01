@@ -6,7 +6,6 @@ using API_HealthGo.Response;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
-using MyFirstCRUD.Repository;
 
 namespace API_HealthGo.Services
 {

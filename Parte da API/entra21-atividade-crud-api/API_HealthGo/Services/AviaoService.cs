@@ -4,8 +4,6 @@ using API_HealthGo.DTO;
 using API_HealthGo.Entity;
 using API_HealthGo.Response;
 using API_HealthGo.Response.VooResponse;
-using MinhaPrimeiraApi.Repository;
-using MinhaPrimeiraApi.Response;
 
 namespace API_HealthGo.Services
 {

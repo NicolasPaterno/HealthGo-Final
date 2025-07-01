@@ -1,6 +1,4 @@
-﻿using MinhaPrimeiraApi.Repository;
-using MinhaPrimeiraApi.Response;
-using API_HealthGo.Response;
+﻿using API_HealthGo.Response;
 using API_HealthGo.Contracts.Service;
 using API_HealthGo.Contracts.Repository;
 using API_HealthGo.Response.VooResponse;

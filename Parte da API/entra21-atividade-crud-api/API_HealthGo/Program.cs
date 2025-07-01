@@ -75,9 +75,6 @@ namespace API_HealthGo
             builder.Services.AddScoped<ILembreteService, LembreteService>();
             builder.Services.AddTransient<ILembreteRepository, LembreteRepository>();
 
-            builder.Services.AddScoped<IGerenciaService, GerenciaService>();
-            builder.Services.AddTransient<IGerenciaRepository, GerenciaRepository>();
-
             builder.Services.AddScoped<IEspecialidadeService, EspecialidadeService>();
             builder.Services.AddTransient<IEspecialidadeRepository, EspecialidadeRepository>();
 
@@ -86,9 +83,6 @@ namespace API_HealthGo
 
             builder.Services.AddScoped<IAviaoService, AviaoService>();
             builder.Services.AddTransient<IAviaoRepository, AviaoRepository>();
-
-            builder.Services.AddScoped<IPassagemService, PassagemService>();
-            builder.Services.AddTransient<IPassagemRepository, PassagemRepository>();
 
             builder.Services.AddScoped<IVooService, VooService>();
             builder.Services.AddTransient<IVooRepository, VooRepository>();
