@@ -37,55 +37,55 @@ INSERT INTO Nacao (Nome) VALUES ('Finlândia');
 -- -----------------------------------------------------
 -- Inserts para a tabela Estado
 -- -----------------------------------------------------
-INSERT INTO Estado (Nome, Sigla, Nacao_id) VALUES ('Santa Catarina', 'SC', 1);
-INSERT INTO Estado (Nome, Sigla, Nacao_id) VALUES ('São Paulo', 'SP', 1);
-INSERT INTO Estado (Nome, Sigla, Nacao_id) VALUES ('Rio de Janeiro', 'RJ', 1);
-INSERT INTO Estado (Nome, Sigla, Nacao_id) VALUES ('Minas Gerais', 'MG', 1);
-INSERT INTO Estado (Nome, Sigla, Nacao_id) VALUES ('Paraná', 'PR', 1);
-INSERT INTO Estado (Nome, Sigla, Nacao_id) VALUES ('Rio Grande do Sul', 'RS', 1);
-INSERT INTO Estado (Nome, Sigla, Nacao_id) VALUES ('Bahia', 'BA', 1);
-INSERT INTO Estado (Nome, Sigla, Nacao_id) VALUES ('Pernambuco', 'PE', 1);
-INSERT INTO Estado (Nome, Sigla, Nacao_id) VALUES ('Ceará', 'CE', 1);
-INSERT INTO Estado (Nome, Sigla, Nacao_id) VALUES ('Goiás', 'GO', 1);
-INSERT INTO Estado (Nome, Sigla, Nacao_id) VALUES ('Califórnia', 'CA', 2);
-INSERT INTO Estado (Nome, Sigla, Nacao_id) VALUES ('Nova Iorque', 'NY', 2);
-INSERT INTO Estado (Nome, Sigla, Nacao_id) VALUES ('Flórida', 'FL', 2);
-INSERT INTO Estado (Nome, Sigla, Nacao_id) VALUES ('Texas', 'TX', 2);
-INSERT INTO Estado (Nome, Sigla, Nacao_id) VALUES ('Ontário', 'ON', 3);
-INSERT INTO Estado (Nome, Sigla, Nacao_id) VALUES ('Quebec', 'QC', 3);
-INSERT INTO Estado (Nome, Sigla, Nacao_id) VALUES ('Baviera', 'BY', 4);
-INSERT INTO Estado (Nome, Sigla, Nacao_id) VALUES ('Brandemburgo', 'BB', 4);
-INSERT INTO Estado (Nome, Sigla, Nacao_id) VALUES ('Île-de-France', 'IDF', 5);
-INSERT INTO Estado (Nome, Sigla, Nacao_id) VALUES ('Occitânia', 'OCC', 5);
+INSERT INTO Estado (Nome, Sigla, Nacao_Id) VALUES ('Santa Catarina', 'SC', 1);
+INSERT INTO Estado (Nome, Sigla, Nacao_Id) VALUES ('São Paulo', 'SP', 1);
+INSERT INTO Estado (Nome, Sigla, Nacao_Id) VALUES ('Rio de Janeiro', 'RJ', 1);
+INSERT INTO Estado (Nome, Sigla, Nacao_Id) VALUES ('Minas Gerais', 'MG', 1);
+INSERT INTO Estado (Nome, Sigla, Nacao_Id) VALUES ('Paraná', 'PR', 1);
+INSERT INTO Estado (Nome, Sigla, Nacao_Id) VALUES ('Rio Grande do Sul', 'RS', 1);
+INSERT INTO Estado (Nome, Sigla, Nacao_Id) VALUES ('Bahia', 'BA', 1);
+INSERT INTO Estado (Nome, Sigla, Nacao_Id) VALUES ('Pernambuco', 'PE', 1);
+INSERT INTO Estado (Nome, Sigla, Nacao_Id) VALUES ('Ceará', 'CE', 1);
+INSERT INTO Estado (Nome, Sigla, Nacao_Id) VALUES ('Goiás', 'GO', 1);
+INSERT INTO Estado (Nome, Sigla, Nacao_Id) VALUES ('Califórnia', 'CA', 2);
+INSERT INTO Estado (Nome, Sigla, Nacao_Id) VALUES ('Nova Iorque', 'NY', 2);
+INSERT INTO Estado (Nome, Sigla, Nacao_Id) VALUES ('Flórida', 'FL', 2);
+INSERT INTO Estado (Nome, Sigla, Nacao_Id) VALUES ('Texas', 'TX', 2);
+INSERT INTO Estado (Nome, Sigla, Nacao_Id) VALUES ('Ontário', 'ON', 3);
+INSERT INTO Estado (Nome, Sigla, Nacao_Id) VALUES ('Quebec', 'QC', 3);
+INSERT INTO Estado (Nome, Sigla, Nacao_Id) VALUES ('Baviera', 'BY', 4);
+INSERT INTO Estado (Nome, Sigla, Nacao_Id) VALUES ('Brandemburgo', 'BB', 4);
+INSERT INTO Estado (Nome, Sigla, Nacao_Id) VALUES ('Île-de-France', 'IDF', 5);
+INSERT INTO Estado (Nome, Sigla, Nacao_Id) VALUES ('Occitânia', 'OCC', 5);
 
 -- -----------------------------------------------------
 -- Inserts para a tabela Cidade
 -- -----------------------------------------------------
-INSERT INTO Cidade (Nome, Estado_id) VALUES ('Blumenau', 1);
-INSERT INTO Cidade (Nome, Estado_id) VALUES ('Joinville', 1);
-INSERT INTO Cidade (Nome, Estado_id) VALUES ('Florianópolis', 1);
-INSERT INTO Cidade (Nome, Estado_id) VALUES ('São Paulo', 2);
-INSERT INTO Cidade (Nome, Estado_id) VALUES ('Campinas', 2);
-INSERT INTO Cidade (Nome, Estado_id) VALUES ('Rio de Janeiro', 3);
-INSERT INTO Cidade (Nome, Estado_id) VALUES ('Niterói', 3);
-INSERT INTO Cidade (Nome, Estado_id) VALUES ('Belo Horizonte', 4);
-INSERT INTO Cidade (Nome, Estado_id) VALUES ('Uberlândia', 4);
-INSERT INTO Cidade (Nome, Estado_id) VALUES ('Curitiba', 5);
-INSERT INTO Cidade (Nome, Estado_id) VALUES ('Londrina', 5);
-INSERT INTO Cidade (Nome, Estado_id) VALUES ('Porto Alegre', 6);
-INSERT INTO Cidade (Nome, Estado_id) VALUES ('Caxias do Sul', 6);
-INSERT INTO Cidade (Nome, Estado_id) VALUES ('Salvador', 7);
-INSERT INTO Cidade (Nome, Estado_id) VALUES ('Recife', 8);
-INSERT INTO Cidade (Nome, Estado_id) VALUES ('Fortaleza', 9);
-INSERT INTO Cidade (Nome, Estado_id) VALUES ('Goiânia', 10);
-INSERT INTO Cidade (Nome, Estado_id) VALUES ('Los Angeles', 11);
-INSERT INTO Cidade (Nome, Estado_id) VALUES ('Nova Iorque', 12);
-INSERT INTO Cidade (Nome, Estado_id) VALUES ('Orlando', 13);
+INSERT INTO Cidade (Nome, Estado_Id) VALUES ('Blumenau', 1);
+INSERT INTO Cidade (Nome, Estado_Id) VALUES ('Joinville', 1);
+INSERT INTO Cidade (Nome, Estado_Id) VALUES ('Florianópolis', 1);
+INSERT INTO Cidade (Nome, Estado_Id) VALUES ('São Paulo', 2);
+INSERT INTO Cidade (Nome, Estado_Id) VALUES ('Campinas', 2);
+INSERT INTO Cidade (Nome, Estado_Id) VALUES ('Rio de Janeiro', 3);
+INSERT INTO Cidade (Nome, Estado_Id) VALUES ('Niterói', 3);
+INSERT INTO Cidade (Nome, Estado_Id) VALUES ('Belo Horizonte', 4);
+INSERT INTO Cidade (Nome, Estado_Id) VALUES ('Uberlândia', 4);
+INSERT INTO Cidade (Nome, Estado_Id) VALUES ('Curitiba', 5);
+INSERT INTO Cidade (Nome, Estado_Id) VALUES ('Londrina', 5);
+INSERT INTO Cidade (Nome, Estado_Id) VALUES ('Porto Alegre', 6);
+INSERT INTO Cidade (Nome, Estado_Id) VALUES ('Caxias do Sul', 6);
+INSERT INTO Cidade (Nome, Estado_Id) VALUES ('Salvador', 7);
+INSERT INTO Cidade (Nome, Estado_Id) VALUES ('Recife', 8);
+INSERT INTO Cidade (Nome, Estado_Id) VALUES ('Fortaleza', 9);
+INSERT INTO Cidade (Nome, Estado_Id) VALUES ('Goiânia', 10);
+INSERT INTO Cidade (Nome, Estado_Id) VALUES ('Los Angeles', 11);
+INSERT INTO Cidade (Nome, Estado_Id) VALUES ('Nova Iorque', 12);
+INSERT INTO Cidade (Nome, Estado_Id) VALUES ('Orlando', 13);
 
 -- -----------------------------------------------------
 -- Inserts para a tabela Pessoa
 -- -----------------------------------------------------
-INSERT INTO Pessoa (Nome, DataNascimento, CPF, Telefone, Email, Senha, EnderecoFoto, CaoGuia, CEP, Bairro, Rua, NumeroEndereco, Cidade_id) VALUES
+INSERT INTO Pessoa (Nome, DataNascimento, CPF, Telefone, Email, Senha, EnderecoFoto, CaoGuia, CEP, Bairro, Rua, NumeroEndereco, Cidade_Id) VALUES
 ('João Silva', '1980-01-15', '111.222.333-44', '47988887777', 'joao.silva@email.com', 'senha123', 'foto1.jpg', 0, '89000-000', 'Centro', 'Rua XV de Novembro', '100', 1),
 ('Maria Oliveira', '1992-05-20', '222.333.444-55', '47999998888', 'maria.oliveira@email.com', 'senha456', 'foto2.jpg', 1, '89001-001', 'Boa Vista', 'Rua Bahia', '250', 2),
 ('Pedro Souza', '1975-11-30', '333.444.555-66', '48911112222', 'pedro.souza@email.com', 'senha789', 'foto3.jpg', 0, '88000-000', 'Agronômica', 'Avenida Beira Mar', '500', 3),
@@ -110,7 +110,7 @@ INSERT INTO Pessoa (Nome, DataNascimento, CPF, Telefone, Email, Senha, EnderecoF
 -- -----------------------------------------------------
 -- Inserts para a tabela Hotel
 -- -----------------------------------------------------
-INSERT INTO Hotel (CNPJ, Nome, Tipo, Email, Senha, Telefone, Site, Acessibilidade, CEP, Bairro, Rua, NumeroEndereco, Descricao, Ativo, Cidade_id) VALUES
+INSERT INTO Hotel (CNPJ, Nome, Tipo, Email, Senha, Telefone, Site, Acessibilidade, CEP, Bairro, Rua, NumeroEndereco, Descricao, Ativo, Cidade_Id) VALUES
 ('00.000.000/0001-00', 'Hotel Paradiso', 'Hotel', 'paradiso@email.com', '123', '4733331111', 'www.hotelparadiso.com', 'Rampas, Elevadores, Quartos adaptados', '89010-000', 'Centro', 'Rua Sete de Setembro', '100', 'Um hotel luxuoso com vista para o rio.', 1, 1),
 ('01.000.000/0001-01', 'Pousada Encanto', 'Pousada', 'encanto@email.com', '123', '4734342222', 'www.pousadaencanto.com', 'Cadeiras de rodas disponíveis', '89020-000', 'Vila Nova', 'Rua XV de Outubro', '200', 'Aconchegante pousada familiar.', 1, 2),
 ('02.000.000/0001-02', 'Hostel Aventura', 'Hostel', 'aventura@email.com', '123', '4832323333', 'www.hostelaventura.com', 'Banheiros adaptados', '88030-000', 'Lagoa', 'Rua das Flores', '300', 'Ideal para viajantes e mochileiros.', 1, 3),
@@ -135,7 +135,7 @@ INSERT INTO Hotel (CNPJ, Nome, Tipo, Email, Senha, Telefone, Site, Acessibilidad
 -- -----------------------------------------------------
 -- Inserts para a tabela Lembrete
 -- -----------------------------------------------------
-INSERT INTO Lembrete (Titulo, Data, Tipo, Pessoa_id) VALUES
+INSERT INTO Lembrete (Titulo, Data, Tipo, Pessoa_Id) VALUES
 ('Consulta Médica', '2025-07-10 10:00:00', 'Remédio', 1),
 ('Reunião de Trabalho', '2025-07-15 14:00:00', 'Remédio', 2),
 ('Pagar Contas', '2025-07-05 09:00:00', 'Remédio', 3),
@@ -150,7 +150,7 @@ INSERT INTO Lembrete (Titulo, Data, Tipo, Pessoa_id) VALUES
 -- -----------------------------------------------------
 -- Inserts para a tabela Quarto
 -- -----------------------------------------------------
-INSERT INTO Quarto (Numero, Andar, AceitaAnimal, Observacao, Preco, LimitePessoa, Hotel_id) VALUES
+INSERT INTO Quarto (Numero, Andar, AceitaAnimal, Observacao, Preco, LimitePessoa, Hotel_Id) VALUES
 ('101', 1, 1, 'Vista para a piscina', 150.00, 2, 1),
 ('102', 1, 0, 'Quarto padrão', 120.00, 2, 1),
 ('201', 2, 1, 'Suite com varanda', 250.00, 4, 1),
@@ -175,7 +175,7 @@ INSERT INTO Quarto (Numero, Andar, AceitaAnimal, Observacao, Preco, LimitePessoa
 -- -----------------------------------------------------
 -- Inserts para a tabela OrdemServico
 -- -----------------------------------------------------
-INSERT INTO OrdemServico (DataCriacao, StatusOS, Pessoa_id) VALUES
+INSERT INTO OrdemServico (DataCriacao, StatusOS, Pessoa_Id) VALUES
 ('2025-06-20 10:00:00', 'Concluído', 1),
 ('2025-06-21 11:30:00', 'Em andamento', 2),
 ('2025-06-22 14:00:00', 'Cancelado', 3),
@@ -200,7 +200,7 @@ INSERT INTO OrdemServico (DataCriacao, StatusOS, Pessoa_id) VALUES
 -- -----------------------------------------------------
 -- Inserts para a tabela OrdemServico_Hotel
 -- -----------------------------------------------------
-INSERT INTO OrdemServico_Hotel (StatusOS, Preco, Observacao, QuantAcompanhante, DataInicio, DataFim, Quarto_id, OrdemServico_id) VALUES
+INSERT INTO OrdemServico_Hotel (StatusOS, Preco, Observacao, QuantAcompanhante, DataInicio, DataFim, Quarto_Id, OrdemServico_Id) VALUES
 ('Concluído', 300.00, 'Estadia de 2 noites', 1, '2025-06-20 14:00:00', '2025-06-22 12:00:00', 1, 1),
 ('Em andamento', 240.00, 'Reserva para 1 semana', 0, '2025-06-21 15:00:00', '2025-06-28 12:00:00', 2, 2),
 ('Cancelado', 500.00, 'Cancelamento por motivo de força maior', 2, '2025-06-22 16:00:00', '2025-06-24 12:00:00', 3, 3),
@@ -250,7 +250,7 @@ INSERT INTO Especialidade (Nome) VALUES ('Assistente Pessoal');
 -- -----------------------------------------------------
 -- Inserts para a tabela PrestadorServico
 -- -----------------------------------------------------
-INSERT INTO PrestadorServico (PrecoHora, Observacao, CNPJ, Ativo, Especialidade_id, Pessoa_id) VALUES
+INSERT INTO PrestadorServico (PrecoHora, Observacao, CNPJ, Ativo, Especialidade_Id, Pessoa_Id) VALUES
 (50.00, 'Enfermeira com 5 anos de experiência.', NULL, 1, 1, 1),
 (75.00, 'Fisioterapeuta especialista em reabilitação motora.', NULL, 1, 2, 2),
 (120.00, 'Clínico geral com consultório próprio.', '00.000.000/0001-00', 1, 3, 3),
@@ -275,7 +275,7 @@ INSERT INTO PrestadorServico (PrecoHora, Observacao, CNPJ, Ativo, Especialidade_
 -- -----------------------------------------------------
 -- Inserts para a tabela OrdemServico_PrestadorServico
 -- -----------------------------------------------------
-INSERT INTO OrdemServico_PrestadorServico (Preco, HorasTrabalhadas, DataInicio, DataFim, StatusOS, PrestadorServico_id, OrdemServico_id) VALUES
+INSERT INTO OrdemServico_PrestadorServico (Preco, HorasTrabalhadas, DataInicio, DataFim, StatusOS, PrestadorServico_Id, OrdemServico_Id) VALUES
 (100.00, 2, '2025-06-20 10:00:00', '2025-06-20 12:00:00', 'Concluído', 1, 1),
 (150.00, 2, '2025-06-21 11:30:00', '2025-06-21 13:30:00', 'Em andamento', 2, 2),
 (240.00, 2, '2025-06-22 14:00:00', '2025-06-22 16:00:00', 'Cancelado', 3, 3),
@@ -300,7 +300,7 @@ INSERT INTO OrdemServico_PrestadorServico (Preco, HorasTrabalhadas, DataInicio, 
 -- -----------------------------------------------------
 -- Inserts para a tabela Cama_Quarto
 -- -----------------------------------------------------
-INSERT INTO Cama_Quarto (Quantidade, TipoCama, Quarto_id) VALUES
+INSERT INTO Cama_Quarto (Quantidade, TipoCama, Quarto_Id) VALUES
 (1, 'Casal', 1),
 (2, 'Solteiro', 2),
 (1, 'Casal', 3),
@@ -325,7 +325,7 @@ INSERT INTO Cama_Quarto (Quantidade, TipoCama, Quarto_id) VALUES
 -- -----------------------------------------------------
 -- Inserts para a tabela Aeroporto
 -- -----------------------------------------------------
-INSERT INTO Aeroporto (Nome, CodigoIata, Cidade_id) VALUES
+INSERT INTO Aeroporto (Nome, CodigoIata, Cidade_Id) VALUES
 ('Aeroporto Internacional de Blumenau', 'BNU', 1),
 ('Aeroporto de Joinville - Lauro Carneiro de Loyola', 'JOI', 2),
 ('Aeroporto Internacional de Florianópolis - Hercílio Luz', 'FLN', 3),
@@ -425,7 +425,7 @@ INSERT INTO Voo (CodigoVoo, DataHoraPartida, DataHoraChegada, Origem_Id, Destino
 -- -----------------------------------------------------
 -- Inserts para a tabela Passagem
 -- -----------------------------------------------------
-INSERT INTO Passagem (Preco, Assento_Id, Voo_Id, OrdemServico_id) VALUES
+INSERT INTO Passagem (Preco, Assento_Id, Voo_Id, OrdemServico_Id) VALUES
 (300.00, 5, 1, 1),
 (350.00, 9, 2, 2),
 (280.00, 12, 3, 3),
@@ -448,9 +448,9 @@ INSERT INTO Passagem (Preco, Assento_Id, Voo_Id, OrdemServico_id) VALUES
 (300.00, 6, 20, 20);
 
 -- -----------------------------------------------------
--- Inserts para a tabela Imagens
+-- Inserts para a tabela imagem
 -- -----------------------------------------------------
-INSERT INTO Imagens (Endereco, Nome) VALUES
+INSERT INTO imagem (Endereco, Nome) VALUES
 ('img/hotel/hotel1_quarto1.jpg', 'Quarto Hotel Paradiso 1'),
 ('img/hotel/hotel1_quarto2.jpg', 'Quarto Hotel Paradiso 2'),
 ('img/pousada/pousada1_jardim.jpg', 'Jardim Pousada Encanto'),
@@ -548,9 +548,9 @@ INSERT INTO Hotel_Avaliacao (Hotel_Id, Avaliacao_Id) VALUES
 (10, 20);
 
 -- -----------------------------------------------------
--- Inserts para a tabela Imagens_Quarto
+-- Inserts para a tabela imagem_Quarto
 -- -----------------------------------------------------
-INSERT INTO Imagens_Quarto (Imagens_Id, Quarto_Id) VALUES
+INSERT INTO imagem_Quarto (imagem_Id, Quarto_Id) VALUES
 (1, 1),
 (2, 1),
 (3, 2),
@@ -573,9 +573,9 @@ INSERT INTO Imagens_Quarto (Imagens_Id, Quarto_Id) VALUES
 (20, 19);
 
 -- -----------------------------------------------------
--- Inserts para a tabela Imagens_Hotel
+-- Inserts para a tabela imagem_Hotel
 -- -----------------------------------------------------
-INSERT INTO Imagens_Hotel (Imagens_Id, Hotel_Id) VALUES
+INSERT INTO imagem_Hotel (imagem_Id, Hotel_Id) VALUES
 (1, 1),
 (2, 1),
 (3, 2),
