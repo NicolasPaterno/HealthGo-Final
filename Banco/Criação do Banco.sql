@@ -34,11 +34,11 @@ CREATE TABLE IF NOT EXISTS `HealthGo`.`Estado` (
   `Id` INT NOT NULL AUTO_INCREMENT,
   `Nome` VARCHAR(255) NOT NULL,
   `Sigla` CHAR(4) NULL,
-  `Nacao_id` INT NOT NULL,
+  `Nacao_Id` INT NOT NULL,
   PRIMARY KEY (`Id`),
-  INDEX `fk_Estado_Pais1_idx` (`Nacao_id` ASC) VISIBLE,
+  INDEX `fk_Estado_Pais1_idx` (`Nacao_Id` ASC) VISIBLE,
   CONSTRAINT `fk_Estado_Pais1`
-    FOREIGN KEY (`Nacao_id`)
+    FOREIGN KEY (`Nacao_Id`)
     REFERENCES `HealthGo`.`Nacao` (`Id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
@@ -51,11 +51,11 @@ ENGINE = InnoDB;
 CREATE TABLE IF NOT EXISTS `HealthGo`.`Cidade` (
   `Id` INT NOT NULL AUTO_INCREMENT,
   `Nome` VARCHAR(255) NOT NULL,
-  `Estado_id` INT NOT NULL,
+  `Estado_Id` INT NOT NULL,
   PRIMARY KEY (`Id`),
-  INDEX `fk_Cidade_Estado1_idx` (`Estado_id` ASC) VISIBLE,
+  INDEX `fk_Cidade_Estado1_idx` (`Estado_Id` ASC) VISIBLE,
   CONSTRAINT `fk_Cidade_Estado1`
-    FOREIGN KEY (`Estado_id`)
+    FOREIGN KEY (`Estado_Id`)
     REFERENCES `HealthGo`.`Estado` (`Id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
@@ -79,13 +79,13 @@ CREATE TABLE IF NOT EXISTS `HealthGo`.`Pessoa` (
   `Bairro` VARCHAR(255) NOT NULL,
   `Rua` VARCHAR(255) NOT NULL,
   `NumeroEndereco` VARCHAR(255) NOT NULL,
-  `Cidade_id` INT NOT NULL,
+  `Cidade_Id` INT NOT NULL,
   PRIMARY KEY (`Id`),
-  INDEX `fk_Pessoa_Cidade1_idx` (`Cidade_id` ASC) VISIBLE,
+  INDEX `fk_Pessoa_Cidade1_idx` (`Cidade_Id` ASC) VISIBLE,
   UNIQUE INDEX `CPF_UNIQUE` (`CPF` ASC) VISIBLE,
   UNIQUE INDEX `Email_UNIQUE` (`Email` ASC) VISIBLE,
   CONSTRAINT `fk_Pessoa_Cidade1`
-    FOREIGN KEY (`Cidade_id`)
+    FOREIGN KEY (`Cidade_Id`)
     REFERENCES `HealthGo`.`Cidade` (`Id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
@@ -113,13 +113,13 @@ CREATE TABLE IF NOT EXISTS `HealthGo`.`Hotel` (
   `Ativo` TINYINT(1) NULL DEFAULT 1,
   `DataInicio` DATETIME NULL,
   `DataFim` DATETIME NULL,
-  `Cidade_id` INT NOT NULL,
+  `Cidade_Id` INT NOT NULL,
   PRIMARY KEY (`Id`),
-  INDEX `fk_Hotel_Cidade1_idx` (`Cidade_id` ASC) VISIBLE,
+  INDEX `fk_Hotel_Cidade1_idx` (`Cidade_Id` ASC) VISIBLE,
   UNIQUE INDEX `CNPJ_UNIQUE` (`CNPJ` ASC) VISIBLE,
   UNIQUE INDEX `Email_UNIQUE` (`Email` ASC) VISIBLE,
   CONSTRAINT `fk_Hotel_Cidade1`
-    FOREIGN KEY (`Cidade_id`)
+    FOREIGN KEY (`Cidade_Id`)
     REFERENCES `HealthGo`.`Cidade` (`Id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
@@ -134,11 +134,11 @@ CREATE TABLE IF NOT EXISTS `HealthGo`.`Lembrete` (
   `Titulo` VARCHAR(45) NOT NULL,
   `Data` DATETIME NOT NULL,
   `Tipo` ENUM('Remédio', 'Consulta', 'Outro') NOT NULL,
-  `Pessoa_id` INT NOT NULL,
+  `Pessoa_Id` INT NOT NULL,
   PRIMARY KEY (`Id`),
-  INDEX `fk_Lembrete_Pessoa1_idx` (`Pessoa_id` ASC) VISIBLE,
+  INDEX `fk_Lembrete_Pessoa1_idx` (`Pessoa_Id` ASC) VISIBLE,
   CONSTRAINT `fk_Lembrete_Pessoa1`
-    FOREIGN KEY (`Pessoa_id`)
+    FOREIGN KEY (`Pessoa_Id`)
     REFERENCES `HealthGo`.`Pessoa` (`Id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
@@ -156,11 +156,11 @@ CREATE TABLE IF NOT EXISTS `HealthGo`.`Quarto` (
   `Observacao` VARCHAR(255) NULL,
   `Preco` DECIMAL(10,2) NOT NULL,
   `LimitePessoa` INT NOT NULL,
-  `Hotel_id` INT NOT NULL,
+  `Hotel_Id` INT NOT NULL,
   PRIMARY KEY (`Id`),
-  INDEX `fk_Quarto_Hotel1_idx` (`Hotel_id` ASC) VISIBLE,
+  INDEX `fk_Quarto_Hotel1_idx` (`Hotel_Id` ASC) VISIBLE,
   CONSTRAINT `fk_Quarto_Hotel1`
-    FOREIGN KEY (`Hotel_id`)
+    FOREIGN KEY (`Hotel_Id`)
     REFERENCES `HealthGo`.`Hotel` (`Id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
@@ -174,11 +174,11 @@ CREATE TABLE IF NOT EXISTS `HealthGo`.`OrdemServico` (
   `Id` INT NOT NULL AUTO_INCREMENT,
   `DataCriacao` DATETIME NOT NULL,
   `StatusOS` ENUM('Concluído', 'Em andamento', 'Cancelado') NULL,
-  `Pessoa_id` INT NOT NULL,
+  `Pessoa_Id` INT NOT NULL,
   PRIMARY KEY (`Id`),
-  INDEX `fk_OrdemServico_Pessoa1_idx` (`Pessoa_id` ASC) VISIBLE,
+  INDEX `fk_OrdemServico_Pessoa1_idx` (`Pessoa_Id` ASC) VISIBLE,
   CONSTRAINT `fk_OrdemServico_Pessoa1`
-    FOREIGN KEY (`Pessoa_id`)
+    FOREIGN KEY (`Pessoa_Id`)
     REFERENCES `HealthGo`.`Pessoa` (`Id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
@@ -195,17 +195,17 @@ CREATE TABLE IF NOT EXISTS `HealthGo`.`OrdemServico_Hotel` (
   `QuantAcompanhante` INT NOT NULL,
   `DataInicio` DATETIME NOT NULL,
   `DataFim` DATETIME NOT NULL,
-  `Quarto_id` INT NOT NULL,
-  `OrdemServico_id` INT NOT NULL,
-  INDEX `fk_OrdemServico_Quarto1_idx` (`Quarto_id` ASC) VISIBLE,
-  INDEX `fk_OrdemServico_Hotel_OrdemServico1_idx` (`OrdemServico_id` ASC) VISIBLE,
+  `Quarto_Id` INT NOT NULL,
+  `OrdemServico_Id` INT NOT NULL,
+  INDEX `fk_OrdemServico_Quarto1_idx` (`Quarto_Id` ASC) VISIBLE,
+  INDEX `fk_OrdemServico_Hotel_OrdemServico1_idx` (`OrdemServico_Id` ASC) VISIBLE,
   CONSTRAINT `fk_OrdemServico_Quarto1`
-    FOREIGN KEY (`Quarto_id`)
+    FOREIGN KEY (`Quarto_Id`)
     REFERENCES `HealthGo`.`Quarto` (`Id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_OrdemServico_Hotel_OrdemServico1`
-    FOREIGN KEY (`OrdemServico_id`)
+    FOREIGN KEY (`OrdemServico_Id`)
     REFERENCES `HealthGo`.`OrdemServico` (`Id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
@@ -231,18 +231,18 @@ CREATE TABLE IF NOT EXISTS `HealthGo`.`PrestadorServico` (
   `Observacao` VARCHAR(255) NULL,
   `CNPJ` VARCHAR(45) NULL,
   `Ativo` TINYINT(1) NULL DEFAULT 1,
-  `Especialidade_id` INT NOT NULL,
-  `Pessoa_id` INT NOT NULL,
+  `Especialidade_Id` INT NOT NULL,
+  `Pessoa_Id` INT NOT NULL,
   PRIMARY KEY (`Id`),
-  INDEX `fk_PrestadorServico_has_Especialidade_Especialidade1_idx` (`Especialidade_id` ASC) VISIBLE,
-  INDEX `fk_PrestadorServico_has_Especialidade_Pessoa1_idx` (`Pessoa_id` ASC) VISIBLE,
+  INDEX `fk_PrestadorServico_has_Especialidade_Especialidade1_idx` (`Especialidade_Id` ASC) VISIBLE,
+  INDEX `fk_PrestadorServico_has_Especialidade_Pessoa1_idx` (`Pessoa_Id` ASC) VISIBLE,
   CONSTRAINT `fk_PrestadorServico_has_Especialidade_Especialidade1`
-    FOREIGN KEY (`Especialidade_id`)
+    FOREIGN KEY (`Especialidade_Id`)
     REFERENCES `HealthGo`.`Especialidade` (`Id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_PrestadorServico_has_Especialidade_Pessoa1`
-    FOREIGN KEY (`Pessoa_id`)
+    FOREIGN KEY (`Pessoa_Id`)
     REFERENCES `HealthGo`.`Pessoa` (`Id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
@@ -258,17 +258,17 @@ CREATE TABLE IF NOT EXISTS `HealthGo`.`OrdemServico_PrestadorServico` (
   `DataInicio` DATETIME NOT NULL,
   `DataFim` DATETIME NOT NULL,
   `StatusOS` ENUM('Concluído', 'Em andamento', 'Cancelado') NULL,
-  `PrestadorServico_id` INT NOT NULL,
-  `OrdemServico_id` INT NOT NULL,
-  INDEX `fk_OrdemServico_PrestadorServico_PrestadorServico_has_Espec_idx` (`PrestadorServico_id` ASC) VISIBLE,
-  INDEX `fk_OrdemServico_PrestadorServico_OrdemServico1_idx` (`OrdemServico_id` ASC) VISIBLE,
+  `PrestadorServico_Id` INT NOT NULL,
+  `OrdemServico_Id` INT NOT NULL,
+  INDEX `fk_OrdemServico_PrestadorServico_PrestadorServico_has_Espec_idx` (`PrestadorServico_Id` ASC) VISIBLE,
+  INDEX `fk_OrdemServico_PrestadorServico_OrdemServico1_idx` (`OrdemServico_Id` ASC) VISIBLE,
   CONSTRAINT `fk_OrdemServico_PrestadorServico_PrestadorServico_has_Especia1`
-    FOREIGN KEY (`PrestadorServico_id`)
+    FOREIGN KEY (`PrestadorServico_Id`)
     REFERENCES `HealthGo`.`PrestadorServico` (`Id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_OrdemServico_PrestadorServico_OrdemServico1`
-    FOREIGN KEY (`OrdemServico_id`)
+    FOREIGN KEY (`OrdemServico_Id`)
     REFERENCES `HealthGo`.`OrdemServico` (`Id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
@@ -282,11 +282,11 @@ CREATE TABLE IF NOT EXISTS `HealthGo`.`Cama_Quarto` (
   `Id` INT NOT NULL AUTO_INCREMENT,
   `Quantidade` INT NOT NULL,
   `TipoCama` ENUM('Solteiro', 'Casal', 'Beliche', 'Futon') NOT NULL,
-  `Quarto_id` INT NOT NULL,
+  `Quarto_Id` INT NOT NULL,
   PRIMARY KEY (`Id`),
-  INDEX `fk_Cama_has_Quarto_Quarto1_idx` (`Quarto_id` ASC) VISIBLE,
+  INDEX `fk_Cama_has_Quarto_Quarto1_idx` (`Quarto_Id` ASC) VISIBLE,
   CONSTRAINT `fk_Cama_has_Quarto_Quarto1`
-    FOREIGN KEY (`Quarto_id`)
+    FOREIGN KEY (`Quarto_Id`)
     REFERENCES `HealthGo`.`Quarto` (`Id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
@@ -300,12 +300,12 @@ CREATE TABLE IF NOT EXISTS `HealthGo`.`Aeroporto` (
   `Id` INT NOT NULL AUTO_INCREMENT,
   `Nome` VARCHAR(255) NOT NULL,
   `CodigoIata` CHAR(3) NOT NULL,
-  `Cidade_id` INT NOT NULL,
+  `Cidade_Id` INT NOT NULL,
   PRIMARY KEY (`Id`),
   UNIQUE INDEX `CodigoIata_UNIQUE` (`CodigoIata` ASC) VISIBLE,
-  INDEX `fk_Aeroporto_Cidade1_idx` (`Cidade_id` ASC) VISIBLE,
+  INDEX `fk_Aeroporto_Cidade1_idx` (`Cidade_Id` ASC) VISIBLE,
   CONSTRAINT `fk_Aeroporto_Cidade1`
-    FOREIGN KEY (`Cidade_id`)
+    FOREIGN KEY (`Cidade_Id`)
     REFERENCES `HealthGo`.`Cidade` (`Id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
@@ -387,11 +387,11 @@ CREATE TABLE IF NOT EXISTS `HealthGo`.`Passagem` (
   `Preco` DECIMAL(10,2) NOT NULL,
   `Assento_Id` INT NOT NULL,
   `Voo_Id` INT NOT NULL,
-  `OrdemServico_id` INT NOT NULL,
+  `OrdemServico_Id` INT NOT NULL,
   PRIMARY KEY (`Id`),
   INDEX `fk_Passagem_Assento1_idx` (`Assento_Id` ASC) VISIBLE,
   INDEX `fk_Passagem_Voo1_idx` (`Voo_Id` ASC) VISIBLE,
-  INDEX `fk_Passagem_OrdemServico1_idx` (`OrdemServico_id` ASC) VISIBLE,
+  INDEX `fk_Passagem_OrdemServico1_idx` (`OrdemServico_Id` ASC) VISIBLE,
   CONSTRAINT `fk_Passagem_Assento1`
     FOREIGN KEY (`Assento_Id`)
     REFERENCES `HealthGo`.`Assento` (`Id`)
@@ -403,7 +403,7 @@ CREATE TABLE IF NOT EXISTS `HealthGo`.`Passagem` (
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_Passagem_OrdemServico1`
-    FOREIGN KEY (`OrdemServico_id`)
+    FOREIGN KEY (`OrdemServico_Id`)
     REFERENCES `HealthGo`.`OrdemServico` (`Id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
