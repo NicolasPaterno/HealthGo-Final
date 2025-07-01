@@ -2,10 +2,10 @@
 using System.IdentityModel.Tokens.Jwt;
 using System.Text;
 using System.Security.Claims;
-using entra21_atividade_crud_api.Contracts.Service;
-using entra21_atividade_crud_api.Entity;
+using API_HealthGo.Entity;
+using API_HealthGo.Contracts.Service;
 
-namespace entra21_atividade_crud_api.Services
+namespace API_HealthGo.Services
 {
     public class TokenService : ITokenService
     {

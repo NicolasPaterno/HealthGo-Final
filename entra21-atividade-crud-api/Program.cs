@@ -1,13 +1,13 @@
-using entra21_atividade_crud_api.Contracts.Infrastructure;
-using entra21_atividade_crud_api.Contracts.Repository;
-using entra21_atividade_crud_api.Contracts.Service;
-using entra21_atividade_crud_api.Infrastructure;
-using entra21_atividade_crud_api.Repository;
-using entra21_atividade_crud_api.Services;
+using API_HealthGo.Contracts.Infrastructure;
+using API_HealthGo.Contracts.Repository;
+using API_HealthGo.Contracts.Service;
+using API_HealthGo.Infrastructure;
+using API_HealthGo.Repository;
+using API_HealthGo.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.OpenApi.Models;
 
-namespace entra21_atividade_crud_api
+namespace API_HealthGo
 {
     public class Program
     {

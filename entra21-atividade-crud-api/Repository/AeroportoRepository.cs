@@ -1,11 +1,11 @@
 ﻿using Dapper;
 using MySql.Data.MySqlClient;
-using entra21_atividade_crud_api.DTO;
-using entra21_atividade_crud_api.Contracts.Repository;
-using entra21_atividade_crud_api.Entity;
-using entra21_atividade_crud_api.Contracts.Infrastructure;
+using API_HealthGo.Contracts.Infrastructure;
+using API_HealthGo.DTO;
+using API_HealthGo.Contracts.Repository;
+using API_HealthGo.Entity;
 
-namespace entra21_atividade_crud_api.Repository
+namespace API_HealthGo.Repository
 {
     class AeroportoRepository : IAeroportoRepository
     {
@@ -34,7 +34,7 @@ namespace entra21_atividade_crud_api.Repository
         }
 
 
-        public async Task Insert(AeroportoDTO aeroporto)
+        public async Task Insert(AeroportoInsertDTO aeroporto)
         {
             string sql = @$"
                 INSERT INTO AEROPORTO (NOME,CODIGOIATA,CIDADE_ID)

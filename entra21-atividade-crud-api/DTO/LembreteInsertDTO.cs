@@ -1,12 +1,13 @@
-﻿using MyFirstCRUD.Entity;
-using System;
-
-namespace entra21_atividade_crud_api.DTO
+﻿namespace API_HealthGo.DTO
 {
     public class LembreteInsertDTO
     {
-        public string Descricao { get; set; }
-        public DateTime DataInicio { get; set; }
+        public string Titulo { get; set; }
+
+        public DateTime Data { get; set; }
+
+        public string Tipo { get; set; }
+
         public int Pessoa_Id { get; set; }
     }
 }

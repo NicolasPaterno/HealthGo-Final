@@ -1,14 +1,14 @@
-﻿using entra21_atividade_crud_api.Contracts.Repository;
-using entra21_atividade_crud_api.Contracts.Service;
-using entra21_atividade_crud_api.DTO;
-using entra21_atividade_crud_api.Entity;
-using entra21_atividade_crud_api.Response;
+﻿using API_HealthGo.Contracts.Repository;
+using API_HealthGo.Contracts.Service;
+using API_HealthGo.DTO;
+using API_HealthGo.Entity;
+using API_HealthGo.Response;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using MyFirstCRUD.Repository;
 
-namespace entra21_atividade_crud_api.Services
+namespace API_HealthGo.Services
 {
     public class PessoaService : IPessoaService
     {

@@ -1,9 +1,9 @@
-﻿using entra21_atividade_crud_api.DTO;
-using entra21_atividade_crud_api.Entity;
-using entra21_atividade_crud_api.Response;
-using entra21_atividade_crud_api.Response.Aeroporto;
+﻿using API_HealthGo.DTO;
+using API_HealthGo.Entity;
+using API_HealthGo.Response;
+using API_HealthGo.Response.Aeroporto;
 
-namespace entra21_atividade_crud_api.Contracts.Service
+namespace API_HealthGo.Contracts.Service
 {
     public interface IAeroportoService
     {
@@ -13,7 +13,7 @@ namespace entra21_atividade_crud_api.Contracts.Service
 
         Task<AeroportoEntity> GetById(int id);
 
-        Task<MessageResponse> Post(AeroportoDTO aeroporto);
+        Task<MessageResponse> Post(AeroportoInsertDTO aeroporto);
 
         Task<MessageResponse> Update(AeroportoEntity aeroporto);
     }

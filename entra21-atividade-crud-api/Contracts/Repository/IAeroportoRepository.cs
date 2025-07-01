@@ -1,7 +1,7 @@
-﻿using entra21_atividade_crud_api.DTO;
-using entra21_atividade_crud_api.Entity;
+﻿using API_HealthGo.DTO;
+using API_HealthGo.Entity;
 
-namespace entra21_atividade_crud_api.Contracts.Repository
+namespace API_HealthGo.Contracts.Repository
 {
     public interface IAeroportoRepository
     {
@@ -9,7 +9,7 @@ namespace entra21_atividade_crud_api.Contracts.Repository
 
         Task<AeroportoEntity> GetById(int id);
 
-        Task Insert(AeroportoDTO aeroporto);
+        Task Insert(AeroportoInsertDTO aeroporto);
 
         Task Delete(int id);
 

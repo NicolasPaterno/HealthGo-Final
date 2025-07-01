@@ -1,14 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Web;
-using Dapper;
-using entra21_atividade_crud_api.Contracts.Infrastructure;
+﻿using Dapper;
+using API_HealthGo.Contracts.Infrastructure;
 using MySql.Data.MySqlClient;
 
-namespace entra21_atividade_crud_api.Infrastructure
+namespace API_HealthGo.Infrastructure
 {
     public class Connection : IConnection
     {

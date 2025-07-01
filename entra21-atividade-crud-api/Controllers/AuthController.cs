@@ -1,8 +1,8 @@
-﻿using entra21_atividade_crud_api.Contracts.Repository;
-using entra21_atividade_crud_api.Contracts.Service;
+﻿using API_HealthGo.Contracts.Repository;
+using API_HealthGo.Contracts.Service;
 using Microsoft.AspNetCore.Mvc;
 
-namespace entra21_atividade_crud_api.Controllers
+namespace API_HealthGo.Controllers
 {
     [ApiController]
     [Route("[controller]")]

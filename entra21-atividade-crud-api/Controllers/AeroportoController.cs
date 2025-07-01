@@ -1,11 +1,11 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using entra21_atividade_crud_api.DTO;
-using entra21_atividade_crud_api.Contracts.Service;
-using entra21_atividade_crud_api.Entity;
-using entra21_atividade_crud_api.Response;
-using entra21_atividade_crud_api.Response.Aeroporto;
+using API_HealthGo.Response;
+using API_HealthGo.Response.Aeroporto;
+using API_HealthGo.DTO;
+using API_HealthGo.Contracts.Service;
+using API_HealthGo.Entity;
 
-namespace entra21_atividade_crud_api.Controllers
+namespace API_HealthGo.Controllers
 {
     [ApiController]
     [Route("[controller]")] // = endpoint
@@ -32,7 +32,7 @@ namespace entra21_atividade_crud_api.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<MessageResponse>> Post(AeroportoDTO aeroporto)
+        public async Task<ActionResult<MessageResponse>> Post(AeroportoInsertDTO aeroporto)
         {
             return Ok(await _service.Post(aeroporto));
         }
