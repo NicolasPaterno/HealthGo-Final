@@ -1,6 +1,6 @@
 ﻿using API_HealthGo.Entity;
 
-namespace API_HealthGo.Response.Aeroporto
+namespace API_HealthGo.Response
 {
     public class AeroportoGetAllResponse
     {

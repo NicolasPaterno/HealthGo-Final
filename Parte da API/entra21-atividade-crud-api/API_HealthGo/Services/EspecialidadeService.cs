@@ -3,7 +3,6 @@ using API_HealthGo.Contracts.Service;
 using API_HealthGo.DTO;
 using API_HealthGo.Entity;
 using API_HealthGo.Response;
-using API_HealthGo.Response.VooResponse;
 
 namespace API_HealthGo.Services
 {

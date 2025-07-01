@@ -2,7 +2,6 @@
 using API_HealthGo.DTO;
 using API_HealthGo.Entity;
 using API_HealthGo.Response;
-using API_HealthGo.Response.VooResponse;
 using Microsoft.AspNetCore.Mvc;
 
 namespace API_HealthGo.Controllers

@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using API_HealthGo.Response.Estado;
 using API_HealthGo.Response;
 using API_HealthGo.Entity;
 using API_HealthGo.Contracts.Service;

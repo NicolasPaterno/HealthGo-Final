@@ -1,5 +1,4 @@
-﻿using API_HealthGo.Response.VooResponse;
-using API_HealthGo.Response;
+﻿using API_HealthGo.Response;
 using API_HealthGo.Entity;
 using API_HealthGo.DTO;
 

@@ -1,7 +1,6 @@
 ﻿using API_HealthGo.DTO;
 using API_HealthGo.Entity;
 using API_HealthGo.Response;
-using API_HealthGo.Response.Cidade;
 
 namespace API_HealthGo.Contracts.Service
 {
