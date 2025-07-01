@@ -298,9 +298,9 @@ INSERT INTO OrdemServico_PrestadorServico (Preco, HorasTrabalhadas, DataInicio, 
 (80.00, 2, '2025-07-10 13:00:00', '2025-07-10 15:00:00', 'Em andamento', 20, 20);
 
 -- -----------------------------------------------------
--- Inserts para a tabela Cama_Quarto
+-- Inserts para a tabela CamaQuarto
 -- -----------------------------------------------------
-INSERT INTO Cama_Quarto (Quantidade, TipoCama, Quarto_Id) VALUES
+INSERT INTO CamaQuarto (Quantidade, TipoCama, Quarto_Id) VALUES
 (1, 'Casal', 1),
 (2, 'Solteiro', 2),
 (1, 'Casal', 3),
@@ -448,9 +448,9 @@ INSERT INTO Passagem (Preco, Assento_Id, Voo_Id, OrdemServico_Id) VALUES
 (300.00, 6, 20, 20);
 
 -- -----------------------------------------------------
--- Inserts para a tabela imagem
+-- Inserts para a tabela Imagem
 -- -----------------------------------------------------
-INSERT INTO imagem (Endereco, Nome) VALUES
+INSERT INTO Imagem (Endereco, Nome) VALUES
 ('img/hotel/hotel1_quarto1.jpg', 'Quarto Hotel Paradiso 1'),
 ('img/hotel/hotel1_quarto2.jpg', 'Quarto Hotel Paradiso 2'),
 ('img/pousada/pousada1_jardim.jpg', 'Jardim Pousada Encanto'),
@@ -548,9 +548,9 @@ INSERT INTO Hotel_Avaliacao (Hotel_Id, Avaliacao_Id) VALUES
 (10, 20);
 
 -- -----------------------------------------------------
--- Inserts para a tabela imagem_Quarto
+-- Inserts para a tabela Imagem_Quarto
 -- -----------------------------------------------------
-INSERT INTO imagem_Quarto (imagem_Id, Quarto_Id) VALUES
+INSERT INTO Imagem_Quarto (Imagem_Id, Quarto_Id) VALUES
 (1, 1),
 (2, 1),
 (3, 2),
@@ -573,9 +573,9 @@ INSERT INTO imagem_Quarto (imagem_Id, Quarto_Id) VALUES
 (20, 19);
 
 -- -----------------------------------------------------
--- Inserts para a tabela imagem_Hotel
+-- Inserts para a tabela Imagem_Hotel
 -- -----------------------------------------------------
-INSERT INTO imagem_Hotel (imagem_Id, Hotel_Id) VALUES
+INSERT INTO Imagem_Hotel (Imagem_Id, Hotel_Id) VALUES
 (1, 1),
 (2, 1),
 (3, 2),
