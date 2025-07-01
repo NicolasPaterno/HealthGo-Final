@@ -448,9 +448,9 @@ INSERT INTO Passagem (Preco, Assento_Id, Voo_Id, OrdemServico_id) VALUES
 (300.00, 6, 20, 20);
 
 -- -----------------------------------------------------
--- Inserts para a tabela Imagens
+-- Inserts para a tabela imagem
 -- -----------------------------------------------------
-INSERT INTO Imagens (Endereco, Nome) VALUES
+INSERT INTO imagem (Endereco, Nome) VALUES
 ('img/hotel/hotel1_quarto1.jpg', 'Quarto Hotel Paradiso 1'),
 ('img/hotel/hotel1_quarto2.jpg', 'Quarto Hotel Paradiso 2'),
 ('img/pousada/pousada1_jardim.jpg', 'Jardim Pousada Encanto'),
@@ -548,9 +548,9 @@ INSERT INTO Hotel_Avaliacao (Hotel_Id, Avaliacao_Id) VALUES
 (10, 20);
 
 -- -----------------------------------------------------
--- Inserts para a tabela Imagens_Quarto
+-- Inserts para a tabela imagem_Quarto
 -- -----------------------------------------------------
-INSERT INTO Imagens_Quarto (Imagens_Id, Quarto_Id) VALUES
+INSERT INTO imagem_Quarto (imagem_Id, Quarto_Id) VALUES
 (1, 1),
 (2, 1),
 (3, 2),
@@ -573,9 +573,9 @@ INSERT INTO Imagens_Quarto (Imagens_Id, Quarto_Id) VALUES
 (20, 19);
 
 -- -----------------------------------------------------
--- Inserts para a tabela Imagens_Hotel
+-- Inserts para a tabela imagem_Hotel
 -- -----------------------------------------------------
-INSERT INTO Imagens_Hotel (Imagens_Id, Hotel_Id) VALUES
+INSERT INTO imagem_Hotel (imagem_Id, Hotel_Id) VALUES
 (1, 1),
 (2, 1),
 (3, 2),

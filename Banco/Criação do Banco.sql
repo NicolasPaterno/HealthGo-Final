@@ -411,9 +411,9 @@ ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `HealthGo`.`Imagens`
+-- Table `HealthGo`.`imagem`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `HealthGo`.`Imagens` (
+CREATE TABLE IF NOT EXISTS `HealthGo`.`imagem` (
   `Id` INT NOT NULL AUTO_INCREMENT,
   `Endereco` VARCHAR(255) NOT NULL,
   `Nome` VARCHAR(255) NULL,
@@ -484,20 +484,20 @@ ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `HealthGo`.`Imagens_Quarto`
+-- Table `HealthGo`.`imagem_Quarto`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `HealthGo`.`Imagens_Quarto` (
-  `Imagens_Id` INT NOT NULL,
+CREATE TABLE IF NOT EXISTS `HealthGo`.`imagem_Quarto` (
+  `imagem_Id` INT NOT NULL,
   `Quarto_Id` INT NOT NULL,
-  PRIMARY KEY (`Imagens_Id`, `Quarto_Id`),
-  INDEX `fk_Imagens_has_Quarto_Quarto1_idx` (`Quarto_Id` ASC) VISIBLE,
-  INDEX `fk_Imagens_has_Quarto_Imagens1_idx` (`Imagens_Id` ASC) VISIBLE,
-  CONSTRAINT `fk_Imagens_has_Quarto_Imagens1`
-    FOREIGN KEY (`Imagens_Id`)
-    REFERENCES `HealthGo`.`Imagens` (`Id`)
+  PRIMARY KEY (`imagem_Id`, `Quarto_Id`),
+  INDEX `fk_imagem_has_Quarto_Quarto1_idx` (`Quarto_Id` ASC) VISIBLE,
+  INDEX `fk_imagem_has_Quarto_imagem1_idx` (`imagem_Id` ASC) VISIBLE,
+  CONSTRAINT `fk_imagem_has_Quarto_imagem1`
+    FOREIGN KEY (`imagem_Id`)
+    REFERENCES `HealthGo`.`imagem` (`Id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
-  CONSTRAINT `fk_Imagens_has_Quarto_Quarto1`
+  CONSTRAINT `fk_imagem_has_Quarto_Quarto1`
     FOREIGN KEY (`Quarto_Id`)
     REFERENCES `HealthGo`.`Quarto` (`Id`)
     ON DELETE NO ACTION
@@ -506,20 +506,20 @@ ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `HealthGo`.`Imagens_Hotel`
+-- Table `HealthGo`.`imagem_Hotel`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `HealthGo`.`Imagens_Hotel` (
-  `Imagens_Id` INT NOT NULL,
+CREATE TABLE IF NOT EXISTS `HealthGo`.`imagem_Hotel` (
+  `imagem_Id` INT NOT NULL,
   `Hotel_Id` INT NOT NULL,
-  PRIMARY KEY (`Imagens_Id`, `Hotel_Id`),
-  INDEX `fk_Imagens_has_Hotel_Hotel1_idx` (`Hotel_Id` ASC) VISIBLE,
-  INDEX `fk_Imagens_has_Hotel_Imagens1_idx` (`Imagens_Id` ASC) VISIBLE,
-  CONSTRAINT `fk_Imagens_has_Hotel_Imagens1`
-    FOREIGN KEY (`Imagens_Id`)
-    REFERENCES `HealthGo`.`Imagens` (`Id`)
+  PRIMARY KEY (`imagem_Id`, `Hotel_Id`),
+  INDEX `fk_imagem_has_Hotel_Hotel1_idx` (`Hotel_Id` ASC) VISIBLE,
+  INDEX `fk_imagem_has_Hotel_imagem1_idx` (`imagem_Id` ASC) VISIBLE,
+  CONSTRAINT `fk_imagem_has_Hotel_imagem1`
+    FOREIGN KEY (`imagem_Id`)
+    REFERENCES `HealthGo`.`imagem` (`Id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
-  CONSTRAINT `fk_Imagens_has_Hotel_Hotel1`
+  CONSTRAINT `fk_imagem_has_Hotel_Hotel1`
     FOREIGN KEY (`Hotel_Id`)
     REFERENCES `HealthGo`.`Hotel` (`Id`)
     ON DELETE NO ACTION
