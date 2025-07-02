@@ -1,0 +1,1593 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HealthGo - Plataforma de Saúde</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'health-red': '#EF4444',
+                        'health-blue': '#3B82F6',
+                        'health-blue-light': '#DBEAFE',
+                        'health-pink-light': '#FCE7F3',
+                        'health-gray': '#F8FAFC',
+                        'sidebar-dark': '#1a2332',
+                        'sidebar-medium': '#2c3e50',
+                        'sidebar-light': '#34495e',
+                        'accent-blue': '#3498db',
+                        'accent-red': '#e74c3c',
+                        'accent-green': '#27ae60',
+                        'text-gray-light': '#7f8c8d',
+                        'text-gray-medium': '#95a5a6',
+                        'text-gray-dark': '#bdc3c7',
+                        'border-light': '#ecf0f1',
+                        'input-border': '#e9ecef',
+                    },
+                    fontFamily: {
+                        'sans': ['Inter', 'system-ui', 'sans-serif']
+                    }
+                }
+            }
+        }
+    </script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        .scrollbar-hide {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+        .scrollbar-hide::-webkit-scrollbar {
+            display: none;
+        }
+        
+        .sidebar-toggle {
+            position: absolute;
+            top: 25px;
+            right: -18px;
+            background: linear-gradient(45deg, #3498db, #2980b9);
+            color: white;
+            border: none;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 15px rgba(52, 152, 219, 0.4);
+            transition: all 0.3s ease;
+            z-index: 1001;
+        }
+        
+        .sidebar-toggle:hover {
+            background: linear-gradient(45deg, #2980b9, #1f5f8b);
+            transform: scale(1.1);
+            box-shadow: 0 6px 20px rgba(52, 152, 219, 0.6);
+        }
+        
+        .sidebar.collapsed {
+            width: 90px;
+            padding: 25px 15px;
+        }
+        
+        .sidebar.collapsed .logo h1,
+        .sidebar.collapsed .nav-link span,
+        .sidebar.collapsed .contact-info,
+        .sidebar.collapsed .user-stats {
+            display: none;
+        }
+        
+        .sidebar.collapsed .logo {
+            justify-content: center;
+        }
+        
+        .sidebar.collapsed .nav-link {
+            justify-content: center;
+            padding: 15px;
+        }
+        
+        .sidebar.collapsed .nav-link i {
+            margin-right: 0;
+        }
+        
+        .main-content.expanded {
+            margin-left: 90px;
+        }
+        
+        .nav-link.active {
+            background: linear-gradient(45deg, rgba(59, 130, 246, 0.3), rgba(29, 78, 216, 0.3));
+            border-left: 4px solid #3B82F6;
+        }
+        
+        .page-content {
+            display: none;
+        }
+        
+        .page-content.active {
+            display: block;
+        }
+        
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(40px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        @keyframes slideInRight {
+            from {
+                opacity: 0;
+                transform: translateX(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+        
+        .category-card {
+            animation: fadeInUp 0.8s ease forwards;
+            position: relative;
+            z-index: 1; /* FIXED: Changed from -10 to 1 */
+        }
+        
+        .service-item {
+            animation: slideInRight 0.6s ease forwards;
+            position: relative; /* ADDED: Ensure proper stacking context */
+            z-index: 2; /* ADDED: Higher z-index for service items */
+        }
+        
+        .service-item.hidden {
+            display: none;
+        }
+        
+        /* FIXED: Ensure buttons are clickable */
+        .service-actions {
+            position: relative;
+            z-index: 10;
+        }
+        
+        .purchase-btn, .ver-mais-btn {
+            position: relative;
+            z-index: 11;
+            cursor: pointer;
+            pointer-events: auto;
+        }
+        
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255,255,255,.3);
+            border-radius: 50%;
+            border-top-color: #fff;
+            animation: spin 1s ease-in-out infinite;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Category icon backgrounds */
+        .cuidador .category-header i { background: linear-gradient(45deg, #3498db, #2980b9); }
+        .hoteis .category-header i { background: linear-gradient(45deg, #e67e22, #d35400); }
+        .passagens .category-header i { background: linear-gradient(45deg, #9b59b6, #8e44ad); }
+        .psicologo .category-header i { background: linear-gradient(45deg, #1abc9c, #16a085); }
+        .calendario .category-header i { background: linear-gradient(45deg, #f39c12, #e67e22); }
+        .comprados .category-header i { background: linear-gradient(45deg, #27ae60, #229954); }
+
+        /* Calendar styles */
+        .calendar-day {
+            background: white;
+            padding: 12px 8px;
+            min-height: 80px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .calendar-day:hover {
+            background: #e3f2fd;
+        }
+
+        .calendar-day.other-month {
+            background: #f8f9fa;
+            color: #bdc3c7;
+        }
+
+        .calendar-day.today {
+            background: #3498db;
+            color: white;
+        }
+
+        .calendar-day.has-appointment {
+            background: #e8f5e8;
+            border-left: 4px solid #27ae60;
+        }
+
+        .day-number {
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+
+        .appointment-count {
+            font-size: 0.7rem;
+            background: #e74c3c;
+            color: white;
+            border-radius: 10px;
+            padding: 2px 6px;
+            margin-top: 2px;
+        }
+
+        /* Modal styles */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+        }
+
+        .modal.show {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-content {
+            background: white;
+            padding: 20px;
+            border-radius: 15px;
+            max-width: 500px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .sidebar {
+                width: 100%;
+                height: auto;
+                position: relative;
+            }
+
+            .sidebar.collapsed {
+                width: 100%;
+            }
+
+            .main-content, .main-content.expanded {
+                margin-left: 0;
+            }
+
+            .sidebar-toggle {
+                display: none;
+            }
+
+            .service-item {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 15px;
+            }
+
+            .service-actions {
+                width: 100%;
+                justify-content: space-between;
+            }
+        }
+
+        /* Smooth Profile Dropdown Styles */
+        .user-dropdown {
+            position: relative;
+            z-index: 100; /* ADDED: Higher z-index for dropdown container */
+        }
+
+        .user-dropdown .dropdown-menu {
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(-10px) scale(0.95);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            pointer-events: none;
+            z-index: 1000; /* INCREASED: Much higher z-index to appear above cards */
+            position: absolute; /* ENSURE: Proper positioning */
+        }
+
+        .user-dropdown:hover .dropdown-menu,
+        .dropdown-menu:hover {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0) scale(1);
+            pointer-events: auto;
+        }
+
+        .user-dropdown .user-name {
+            transition: all 0.2s ease;
+            padding: 8px 12px;
+            border-radius: 8px;
+        }
+
+        .user-dropdown .user-name:hover {
+            background: rgba(59, 130, 246, 0.1);
+            transform: translateY(-1px);
+        }
+
+        .user-dropdown .user-name i {
+            transition: transform 0.3s ease;
+        }
+
+        .user-dropdown:hover .user-name i {
+            transform: rotate(180deg);
+        }
+
+        .dropdown-menu a {
+            transition: all 0.2s ease;
+            border-radius: 6px;
+            margin: 2px 8px;
+        }
+
+        .dropdown-menu a:hover {
+            transform: translateX(4px);
+            background: #dbeafe !important;
+            color: #3b82f6 !important;
+        }
+
+        /* Add hover bridge to prevent menu from closing */
+        .user-dropdown::before {
+            content: '';
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            height: 8px;
+            background: transparent;
+        }
+
+        .appointments-list {
+            max-height: 60px;
+            overflow-y: auto;
+            scrollbar-width: thin;
+        }
+
+        .appointment-item {
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            font-size: 0.7rem;
+            position: relative;
+            padding-right: 20px; /* Space for delete button */
+        }
+
+        .appointment-item:hover .delete-appointment-btn {
+            opacity: 1;
+        }
+
+        .delete-appointment-btn {
+            position: absolute;
+            right: 4px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 50%;
+            width: 16px;
+            height: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .delete-appointment-btn:hover {
+            background: rgba(0, 0, 0, 0.4);
+        }
+
+        .calendar-day {
+            min-height: 100px;
+            padding: 8px;
+        }
+
+        .calendar-day.has-appointment {
+            background: #f8f9fa;
+            border-left: none;
+        }
+
+        .calendar-day:hover {
+            transform: scale(1.02);
+            z-index: 1;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+
+        .past-date {
+            background-color: #f5f5f5;
+            cursor: not-allowed;
+            opacity: 0.7;
+        }
+
+        .past-date:hover {
+            transform: none !important;
+            box-shadow: none !important;
+        }
+
+        .past-date .appointments-list {
+            opacity: 0.5;
+        }
+
+        .header {
+            position: relative;
+            z-index: 100; /* ADDED: Ensure header has high z-index */
+        }
+    </style>
+</head>
+<body class="bg-health-gray font-sans min-h-screen">
+    <div class="flex min-h-screen">
+        <!-- Sidebar -->
+        <nav class="sidebar w-80 bg-gradient-to-b from-sidebar-dark via-sidebar-medium to-sidebar-light text-white p-6 shadow-2xl fixed h-screen overflow-y-auto scrollbar-hide transition-all duration-400 ease-in-out z-50 border-r-2 border-gray-700" id="sidebar">
+            <button class="sidebar-toggle" id="sidebarToggle" onclick="toggleSidebar()">
+                <i class="fas fa-chevron-left"></i>
+            </button>
+            
+            <div class="logo flex items-center mb-8 pb-5 border-b border-gray-700 transition-all duration-300 ease-in-out">
+                <i class="fas fa-heart text-accent-red text-4xl mr-4 drop-shadow-md"></i>
+                <h1 class="text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-white to-gray-200">HealthGo</h1>
+            </div>
+
+            <div class="user-stats bg-white bg-opacity-10 rounded-xl p-4 mb-6 backdrop-blur-sm">
+                <h4 class="text-sm mb-3 text-text-gray-dark">Resumo da Conta</h4>
+                <div class="grid grid-cols-2 gap-3">
+                    <div class="text-center">
+                        <div class="text-2xl font-bold text-accent-blue" id="totalServices">0</div>
+                        <div class="text-xs text-text-gray-medium">Serviços</div>
+                    </div>
+                    <div class="text-center">
+                        <div class="text-2xl font-bold text-accent-blue" id="scheduledServices">0</div>
+                        <div class="text-xs text-text-gray-medium">Agendados</div>
+                    </div>
+                    <div class="text-center">
+                        <div class="text-2xl font-bold text-accent-blue" id="totalSaved">R$ 0</div>
+                        <div class="text-xs text-text-gray-medium">Gasto Total</div>
+                    </div>
+                    <div class="text-center">
+                        <div class="text-2xl font-bold text-accent-blue">98%</div>
+                        <div class="text-xs text-text-gray-medium">Satisfação</div>
+                    </div>
+                </div>
+            </div>
+            
+            <ul class="nav-menu list-none mb-8">
+                <li class="nav-item mb-2">
+                    <a href="#" class="nav-link flex items-center p-4 text-white no-underline rounded-xl transition-all duration-300 ease-in-out relative overflow-hidden hover:bg-white hover:bg-opacity-15 hover:translate-x-2 hover:shadow-lg active" data-page="dashboard" onclick="showPage('dashboard')">
+                        <i class="fas fa-home mr-4 w-6 text-center text-lg"></i>
+                        <span>Dashboard</span>
+                    </a>
+                </li>
+                <li class="nav-item mb-2">
+                    <a href="#" class="nav-link flex items-center p-4 text-white no-underline rounded-xl transition-all duration-300 ease-in-out relative overflow-hidden hover:bg-white hover:bg-opacity-15 hover:translate-x-2 hover:shadow-lg" data-page="cuidadores" onclick="showPage('cuidadores')">
+                        <i class="fas fa-user-nurse mr-4 w-6 text-center text-lg"></i>
+                        <span>Cuidadores</span>
+                    </a>
+                </li>
+                <li class="nav-item mb-2">
+                    <a href="#" class="nav-link flex items-center p-4 text-white no-underline rounded-xl transition-all duration-300 ease-in-out relative overflow-hidden hover:bg-white hover:bg-opacity-15 hover:translate-x-2 hover:shadow-lg" data-page="hoteis" onclick="showPage('hoteis')">
+                        <i class="fas fa-hotel mr-4 w-6 text-center text-lg"></i>
+                        <span>Hotéis</span>
+                    </a>
+                </li>
+                <li class="nav-item mb-2">
+                    <a href="#" class="nav-link flex items-center p-4 text-white no-underline rounded-xl transition-all duration-300 ease-in-out relative overflow-hidden hover:bg-white hover:bg-opacity-15 hover:translate-x-2 hover:shadow-lg" data-page="passagens" onclick="showPage('passagens')">
+                        <i class="fas fa-plane mr-4 w-6 text-center text-lg"></i>
+                        <span>Passagens Aéreas</span>
+                    </a>
+                </li>
+                <li class="nav-item mb-2">
+                    <a href="#" class="nav-link flex items-center p-4 text-white no-underline rounded-xl transition-all duration-300 ease-in-out relative overflow-hidden hover:bg-white hover:bg-opacity-15 hover:translate-x-2 hover:shadow-lg" data-page="psicologos" onclick="showPage('psicologos')">
+                        <i class="fas fa-brain mr-4 w-6 text-center text-lg"></i>
+                        <span>Psicólogos</span>
+                    </a>
+                </li>
+                <li class="nav-item mb-2">
+                    <a href="#" class="nav-link flex items-center p-4 text-white no-underline rounded-xl transition-all duration-300 ease-in-out relative overflow-hidden hover:bg-white hover:bg-opacity-15 hover:translate-x-2 hover:shadow-lg" data-page="calendario" onclick="showPage('calendario')">
+                        <i class="fas fa-calendar-alt mr-4 w-6 text-center text-lg"></i>
+                        <span>Calendário</span>
+                    </a>
+                </li>
+                <li class="nav-item mb-2">
+                    <a href="#" class="nav-link flex items-center p-4 text-white no-underline rounded-xl transition-all duration-300 ease-in-out relative overflow-hidden hover:bg-white hover:bg-opacity-15 hover:translate-x-2 hover:shadow-lg" data-page="comprados" onclick="showPage('comprados')">
+                        <i class="fas fa-shopping-bag mr-4 w-6 text-center text-lg"></i>
+                        <span>Serviços Comprados</span>
+                    </a>
+                </li>
+            </ul>
+            
+            <div class="contact-info bg-black bg-opacity-20 rounded-xl p-5 mt-auto text-sm">
+                <h4 class="mb-4 text-accent-blue font-semibold">Contato & Suporte</h4>
+                <div class="flex items-center mb-2 transition-all duration-300 ease-in-out hover:text-accent-blue hover:translate-x-1"><i class="fas fa-phone mr-3 w-4 text-accent-blue"></i> +55 11 99999-9999</div>
+                <div class="flex items-center mb-2 transition-all duration-300 ease-in-out hover:text-accent-blue hover:translate-x-1"><i class="fab fa-whatsapp mr-3 w-4 text-accent-blue"></i> WhatsApp 24h</div>
+                <div class="flex items-center mb-2 transition-all duration-300 ease-in-out hover:text-accent-blue hover:translate-x-1"><i class="fab fa-instagram mr-3 w-4 text-accent-blue"></i> @healthgo</div>
+                <div class="flex items-center mb-2 transition-all duration-300 ease-in-out hover:text-accent-blue hover:translate-x-1"><i class="fas fa-envelope mr-3 w-4 text-accent-blue"></i> healthgo@gmail.com</div>
+                <div class="flex items-center transition-all duration-300 ease-in-out hover:text-accent-blue hover:translate-x-1"><i class="fas fa-headset mr-3 w-4 text-accent-blue"></i> Suporte Online</div>
+            </div>
+        </nav>
+
+        <!-- Main Content -->
+        <main class="main-content flex-1 ml-80 p-6 transition-all duration-400 ease-in-out" id="mainContent">
+            <header class="header bg-white p-6 rounded-2xl shadow-xl mb-8 flex justify-between items-center border border-gray-200 backdrop-blur-md">
+                <div class="user-greeting flex items-center">
+                    <i class="fas fa-user-circle text-health-blue text-4xl mr-5"></i>
+                    <div class="greeting-text">
+                        <h2 class="text-2xl font-semibold text-gray-800 mb-1" id="userGreeting">Olá, Visitante!</h2>
+                        <p class="text-gray-600">Bem-vindo à sua plataforma de saúde</p>
+                    </div>
+                </div>
+                <div class="header-actions flex items-center gap-4">
+                    <button class="notification-btn bg-gray-100 border-2 border-gray-200 text-gray-600 w-12 h-12 rounded-xl flex items-center justify-center relative transition-all duration-300 ease-in-out hover:bg-health-blue hover:text-white hover:border-health-blue hover:-translate-y-0.5">
+                        <i class="fas fa-bell"></i>
+                        <span class="notification-badge absolute -top-1 -right-1 bg-accent-red text-white text-xs w-5 h-5 rounded-full flex items-center justify-center">3</span>
+                    </button>
+                    <div id="user-section">
+                        <div class="user-profile flex items-center gap-3">
+                            <div class="user-avatar bg-health-blue text-white w-10 h-10 rounded-full flex items-center justify-center">
+                                
+                            </div>
+                            <div class="user-dropdown">
+                                <button class="user-name flex items-center gap-2 text-gray-800 font-semibold hover:text-health-blue transition-colors">
+                                    
+                                    <i class="fas fa-chevron-down text-xs"></i>
+                                </button>
+                                <div class="dropdown-menu absolute right-0 top-full mt-2 w-48 bg-white rounded-xl shadow-lg border border-gray-200 py-2" style="z-index: 1000;">
+                                    <a href="#" class="block px-4 py-2 text-gray-700 hover:bg-health-blue-light hover:text-health-blue" onclick="event.preventDefault();">
+                                        <i class="fas fa-user-circle mr-2"></i> Meu Perfil
+                                    </a>
+                                    <a href="#" class="block px-4 py-2 text-gray-700 hover:bg-health-blue-light hover:text-health-blue" onclick="event.preventDefault();">
+                                        <i class="fas fa-cog mr-2"></i> Configurações
+                                    </a>
+                                    <div class="border-t border-gray-200 my-1"></div>
+                                    <a href="#" class="block px-4 py-2 text-gray-700 hover:bg-health-blue-light hover:text-health-blue" onclick="event.preventDefault(); window.location.href='login.html';">
+                                        <i class="fas fa-sign-out-alt mr-2"></i> Sair
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Dashboard Page -->
+            <div class="page-content active" id="dashboard-page">
+                <!-- Calendar -->
+                <div class="calendar-container bg-white rounded-2xl p-6 shadow-xl mb-8 border border-gray-200">
+                    <div class="calendar-header flex justify-between items-center mb-8 pb-5 border-b-2 border-border-light">
+                        <h2 class="text-xl font-semibold text-gray-800"><i class="fas fa-calendar-alt mr-3 text-health-blue"></i> Calendário de Compromissos</h2>
+                        <div class="calendar-nav flex items-center gap-4">
+                            <button onclick="previousMonth()" class="bg-accent-blue text-white w-10 h-10 rounded-full flex items-center justify-center transition-all duration-300 ease-in-out hover:bg-blue-700 hover:scale-110"><i class="fas fa-chevron-left"></i></button>
+                            <span class="calendar-title text-xl font-semibold text-gray-800" id="calendarTitle"></span>
+                            <button onclick="nextMonth()" class="bg-accent-blue text-white w-10 h-10 rounded-full flex items-center justify-center transition-all duration-300 ease-in-out hover:bg-blue-700 hover:scale-110"><i class="fas fa-chevron-right"></i></button>
+                        </div>
+                    </div>
+                    <div class="calendar-grid grid grid-cols-7 gap-px bg-border-light rounded-xl overflow-hidden" id="calendarGrid"></div>
+                </div>
+
+                <!-- Services Summary -->
+                <div class="services-summary bg-white rounded-2xl p-6 shadow-xl mb-8 border border-gray-200">
+                    <div class="summary-header flex justify-between items-center mb-6 pb-5 border-b-2 border-border-light">
+                        <h2 class="summary-title text-xl font-semibold text-gray-800"><i class="fas fa-chart-pie mr-3 text-health-blue"></i> Resumo de Gastos</h2>
+                        <div class="total-spent text-4xl font-bold text-accent-green" id="totalSpent">R$ 0,00</div>
+                    </div>
+                    <div class="summary-grid grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5" id="summaryGrid">
+                        <div class="summary-item bg-gray-50 p-5 rounded-xl text-center transition-all duration-300 ease-in-out hover:bg-gray-100 hover:-translate-y-0.5">
+                            <i class="fas fa-user-nurse text-health-blue text-3xl mb-3"></i>
+                            <h4 class="text-lg text-gray-800 mb-1">Cuidadores</h4>
+                            <div class="amount text-xl font-semibold text-accent-green" id="cuidadoresAmount">R$ 0,00</div>
+                            <div class="count text-sm text-gray-600" id="cuidadoresCount">0 serviços</div>
+                        </div>
+                        <div class="summary-item bg-gray-50 p-5 rounded-xl text-center transition-all duration-300 ease-in-out hover:bg-gray-100 hover:-translate-y-0.5">
+                            <i class="fas fa-hotel text-health-blue text-3xl mb-3"></i>
+                            <h4 class="text-lg text-gray-800 mb-1">Hotéis</h4>
+                            <div class="amount text-xl font-semibold text-accent-green" id="hoteisAmount">R$ 0,00</div>
+                            <div class="count text-sm text-gray-600" id="hoteisCount">0 serviços</div>
+                        </div>
+                        <div class="summary-item bg-gray-50 p-5 rounded-xl text-center transition-all duration-300 ease-in-out hover:bg-gray-100 hover:-translate-y-0.5">
+                            <i class="fas fa-plane text-health-blue text-3xl mb-3"></i>
+                            <h4 class="text-lg text-gray-800 mb-1">Passagens Aéreas</h4>
+                            <div class="amount text-xl font-semibold text-accent-green" id="passagensAmount">R$ 0,00</div>
+                            <div class="count text-sm text-gray-600" id="passagensCount">0 serviços</div>
+                        </div>
+                        <div class="summary-item bg-gray-50 p-5 rounded-xl text-center transition-all duration-300 ease-in-out hover:bg-gray-100 hover:-translate-y-0.5">
+                            <i class="fas fa-brain text-health-blue text-3xl mb-3"></i>
+                            <h4 class="text-lg text-gray-800 mb-1">Psicólogos</h4>
+                            <div class="amount text-xl font-semibold text-accent-green" id="psicologosAmount">R$ 0,00</div>
+                            <div class="count text-sm text-gray-600" id="psicologosCount">0 serviços</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Cuidadores Page -->
+            <div class="page-content" id="cuidadores-page">
+                <div class="category-card cuidador bg-white rounded-2xl p-6 shadow-xl border border-gray-200">
+                    <div class="category-header flex items-center justify-between mb-6 pb-5 border-b-2 border-border-light">
+                        <div class="category-title flex items-center">
+                            <i class="fas fa-user-nurse text-white text-3xl p-4 rounded-xl mr-5 shadow-md"></i>
+                            <h3 class="text-2xl font-semibold text-gray-800">Cuidadores Especializados</h3>
+                        </div>
+                        <button type="button" class="ver-mais-btn bg-gradient-to-r from-health-blue to-blue-700 text-white py-2 px-4 rounded-lg font-medium transition-all duration-300 ease-in-out hover:-translate-y-0.5 hover:shadow-lg" onclick="toggleVerMais('cuidadores')">Ver mais</button>
+                    </div>
+                    <ul class="service-list list-none" id="cuidadores-list">
+                        <!-- Services will be populated by JavaScript -->
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Hotéis Page -->
+            <div class="page-content" id="hoteis-page">
+                <div class="category-card hoteis bg-white rounded-2xl p-6 shadow-xl border border-gray-200">
+                    <div class="category-header flex items-center justify-between mb-6 pb-5 border-b-2 border-border-light">
+                        <div class="category-title flex items-center">
+                            <i class="fas fa-hotel text-white text-3xl p-4 rounded-xl mr-5 shadow-md"></i>
+                            <h3 class="text-2xl font-semibold text-gray-800">Hotéis & Hospedagem Médica</h3>
+                        </div>
+                        <button type="button" class="ver-mais-btn bg-gradient-to-r from-health-blue to-blue-700 text-white py-2 px-4 rounded-lg font-medium transition-all duration-300 ease-in-out hover:-translate-y-0.5 hover:shadow-lg" onclick="toggleVerMais('hoteis')">Ver mais</button>
+                    </div>
+                    <ul class="service-list list-none" id="hoteis-list">
+                        <!-- Services will be populated by JavaScript -->
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Passagens Page -->
+            <div class="page-content" id="passagens-page">
+                <div class="category-card passagens bg-white rounded-2xl p-6 shadow-xl border border-gray-200">
+                    <div class="category-header flex items-center justify-between mb-6 pb-5 border-b-2 border-border-light">
+                        <div class="category-title flex items-center">
+                            <i class="fas fa-plane text-white text-3xl p-4 rounded-xl mr-5 shadow-md"></i>
+                            <h3 class="text-2xl font-semibold text-gray-800">Passagens Aéreas Médicas</h3>
+                        </div>
+                        <button type="button" class="ver-mais-btn bg-gradient-to-r from-health-blue to-blue-700 text-white py-2 px-4 rounded-lg font-medium transition-all duration-300 ease-in-out hover:-translate-y-0.5 hover:shadow-lg" onclick="toggleVerMais('passagens')">Ver mais</button>
+                    </div>
+                    <ul class="service-list list-none" id="passagens-list">
+                        <!-- Services will be populated by JavaScript -->
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Psicólogos Page -->
+            <div class="page-content" id="psicologos-page">
+                <div class="category-card psicologo bg-white rounded-2xl p-6 shadow-xl border border-gray-200">
+                    <div class="category-header flex items-center justify-between mb-6 pb-5 border-b-2 border-border-light">
+                        <div class="category-title flex items-center">
+                            <i class="fas fa-brain text-white text-3xl p-4 rounded-xl mr-5 shadow-md"></i>
+                            <h3 class="text-2xl font-semibold text-gray-800">Psicólogos & Terapeutas</h3>
+                        </div>
+                        <button type="button" class="ver-mais-btn bg-gradient-to-r from-health-blue to-blue-700 text-white py-2 px-4 rounded-lg font-medium transition-all duration-300 ease-in-out hover:-translate-y-0.5 hover:shadow-lg" onclick="toggleVerMais('psicologos')">Ver mais</button>
+                    </div>
+                    <ul class="service-list list-none" id="psicologos-list">
+                        <!-- Services will be populated by JavaScript -->
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Calendário Page -->
+            <div class="page-content" id="calendario-page">
+                <div class="calendar-container bg-white rounded-2xl p-6 shadow-xl mb-8 border border-gray-200">
+                    <div class="calendar-header flex justify-between items-center mb-8 pb-5 border-b-2 border-border-light">
+                        <h2 class="text-xl font-semibold text-gray-800"><i class="fas fa-calendar-alt mr-3 text-health-blue"></i> Calendário Detalhado</h2>
+                        <div class="calendar-nav flex items-center gap-4">
+                            <button onclick="previousMonth()" class="bg-accent-blue text-white w-10 h-10 rounded-full flex items-center justify-center transition-all duration-300 ease-in-out hover:bg-blue-700 hover:scale-110"><i class="fas fa-chevron-left"></i></button>
+                            <span class="calendar-title text-xl font-semibold text-gray-800" id="calendarTitle2"></span>
+                            <button onclick="nextMonth()" class="bg-accent-blue text-white w-10 h-10 rounded-full flex items-center justify-center transition-all duration-300 ease-in-out hover:bg-blue-700 hover:scale-110"><i class="fas fa-chevron-right"></i></button>
+                        </div>
+                    </div>
+                    <div class="calendar-grid grid grid-cols-7 gap-px bg-border-light rounded-xl overflow-hidden" id="calendarGrid2"></div>
+                    <div class="mt-8 bg-white p-5 rounded-xl">
+                        <h3 class="text-lg font-semibold text-gray-800 mb-4">Próximos Compromissos</h3>
+                        <div id="upcomingAppointments"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Serviços Comprados Page -->
+            <div class="page-content" id="comprados-page">
+                <div class="services-summary bg-white rounded-2xl p-6 shadow-xl mb-8 border border-gray-200">
+                    <div class="summary-header flex justify-between items-center mb-6 pb-5 border-b-2 border-border-light">
+                        <h2 class="summary-title text-xl font-semibold text-gray-800"><i class="fas fa-shopping-bag mr-3 text-health-blue"></i> Serviços Comprados</h2>
+                        <div class="total-spent text-4xl font-bold text-accent-green" id="totalSpentDetailed">R$ 0,00</div>
+                    </div>
+                    <div id="purchasedServicesDetails">
+                        <p class="text-center text-gray-600 py-10">
+                            Nenhum serviço comprado ainda. Navegue pelas categorias e adicione serviços para vê-los aqui.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Purchase Modal -->
+    <div id="purchaseModal" class="modal">
+        <div class="modal-content">
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="text-xl font-semibold text-gray-800">Confirmar Compra</h3>
+                <button onclick="closePurchaseModal()" class="text-gray-500 hover:text-gray-700">
+                    <i class="fas fa-times text-xl"></i>
+                </button>
+            </div>
+            <div id="modalServiceDetails"></div>
+            <div class="mt-6 flex gap-4">
+                <button onclick="closePurchaseModal()" class="flex-1 bg-gray-200 text-gray-700 py-3 px-6 rounded-lg font-medium transition-all duration-300 ease-in-out hover:bg-gray-300">
+                    Cancelar
+                </button>
+                <button onclick="confirmPurchase()" class="flex-1 bg-gradient-to-r from-accent-green to-green-700 text-white py-3 px-6 rounded-lg font-medium transition-all duration-300 ease-in-out hover:-translate-y-0.5 hover:shadow-lg">
+                    Confirmar Compra
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Login Modal -->
+    <div id="loginModal" class="modal">
+        <div class="modal-content">
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="text-xl font-semibold text-gray-800">Entrar na Plataforma</h3>
+                <button onclick="closeLoginModal()" class="text-gray-500 hover:text-gray-700">
+                    <i class="fas fa-times text-xl"></i>
+                </button>
+            </div>
+            <form onsubmit="handleLogin(event)">
+                <div class="mb-4">
+                    <label class="block text-gray-700 text-sm font-bold mb-2">Email</label>
+                    <input type="email" class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:border-health-blue" placeholder="seu@email.com" required>
+                </div>
+                <div class="mb-6">
+                    <label class="block text-gray-700 text-sm font-bold mb-2">Senha</label>
+                    <input type="password" class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:border-health-blue" placeholder="Sua senha" required>
+                </div>
+                <button type="submit" class="w-full bg-gradient-to-r from-health-blue to-blue-700 text-white py-3 px-6 rounded-lg font-medium transition-all duration-300 ease-in-out hover:-translate-y-0.5 hover:shadow-lg">
+                    Entrar
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Appointment Modal -->
+    <div id="appointmentModal" class="modal">
+        <div class="modal-content">
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="text-xl font-semibold text-gray-800">Novo Compromisso</h3>
+                <button onclick="closeAppointmentModal()" class="text-gray-500 hover:text-gray-700">
+                    <i class="fas fa-times text-xl"></i>
+                </button>
+            </div>
+            <form id="appointmentForm" onsubmit="handleAppointmentSubmit(event)">
+                <div class="mb-4">
+                    <label class="block text-gray-700 text-sm font-bold mb-2">Data</label>
+                    <input type="date" id="appointmentDate" class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:border-health-blue" required>
+                </div>
+                <div class="mb-4">
+                    <label class="block text-gray-700 text-sm font-bold mb-2">Horário</label>
+                    <input type="time" id="appointmentTime" class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:border-health-blue" required>
+                </div>
+                <div class="mb-4">
+                    <label class="block text-gray-700 text-sm font-bold mb-2">Título</label>
+                    <input type="text" id="appointmentTitle" class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:border-health-blue" placeholder="Ex: Consulta Cardiologista" required>
+                </div>
+                <div class="mb-6">
+                    <label class="block text-gray-700 text-sm font-bold mb-2">Tipo</label>
+                    <select id="appointmentType" class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:border-health-blue" required>
+                        <option value="consulta">Consulta</option>
+                        <option value="exame">Exame</option>
+                        <option value="terapia">Terapia</option>
+                        <option value="outro">Outro</option>
+                    </select>
+                </div>
+                <button type="submit" class="w-full bg-gradient-to-r from-health-blue to-blue-700 text-white py-3 px-6 rounded-lg font-medium transition-all duration-300 ease-in-out hover:-translate-y-0.5 hover:shadow-lg">
+                    Salvar Compromisso
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // Global variables and functions
+        let currentDate = new Date();
+        let selectedServices = JSON.parse(localStorage.getItem('healthgo_selected_services')) || {};
+        let currentServiceForPurchase = null;
+        let showingMore = {};
+        let appointments = {
+            '2024-12-28': [
+                { time: '14:30', title: 'Cardiologista', type: 'consulta' },
+                { time: '16:00', title: 'Fisioterapia', type: 'terapia' }
+            ],
+            '2024-12-29': [
+                { time: '09:00', title: 'Fisioterapia', type: 'terapia' }
+            ],
+            '2024-12-30': [
+                { time: '07:30', title: 'Exame de Sangue', type: 'exame' }
+            ],
+            '2025-01-02': [
+                { time: '16:00', title: 'Neurologista', type: 'consulta' }
+            ],
+            '2025-01-03': [
+                { time: '10:30', title: 'Terapia Ocupacional', type: 'terapia' }
+            ]
+        };
+
+        // Services database
+        const servicesDatabase = {
+            cuidadores: [
+                { id: 'c1', name: 'Maria Silva - Cuidadora Premium', description: 'Especialista em Alzheimer e demência • 15 anos de experiência', price: 180, period: 'dia', rating: 4.9, reviews: 127, city: 'São Paulo' },
+                { id: 'c2', name: 'João Santos - Enfermeiro Domiciliar', description: 'Cuidados médicos especializados • Técnico em Enfermagem', price: 250, period: 'dia', rating: 4.8, reviews: 89, city: 'Rio de Janeiro' },
+                { id: 'c3', name: 'Ana Costa - Fisioterapeuta', description: 'Reabilitação domiciliar • Especialista em geriatria', price: 200, period: 'sessão', rating: 4.7, reviews: 156, city: 'Belo Horizonte' },
+                { id: 'c4', name: 'Carlos Oliveira - Cuidador Noturno', description: 'Especialista em cuidados noturnos • Disponível 24h', price: 160, period: 'noite', rating: 4.5, reviews: 91, city: 'Brasília' },
+                { id: 'c5', name: 'Lucia Pereira - Nutricionista', description: 'Planejamento nutricional para idosos • CRN ativo', price: 150, period: 'sessão', rating: 4.6, reviews: 73, city: 'Salvador' },
+                { id: 'c6', name: 'Roberto Lima - Terapeuta Ocupacional', description: 'Atividades terapêuticas e reabilitação cognitiva', price: 180, period: 'sessão', rating: 4.8, reviews: 62, city: 'Fortaleza' }
+            ],
+            hoteis: [
+                { id: 'h1', name: 'Hotel Saúde Premium', description: 'Quartos adaptados com equipamentos médicos • Enfermagem 24h', price: 320, period: 'noite', rating: 4.8, reviews: 234, city: 'São Paulo' },
+                { id: 'h2', name: 'Resort Terapêutico Águas Claras', description: 'Spa completo com tratamentos inclusos • Hidroterapia', price: 450, period: 'noite', rating: 4.9, reviews: 156, city: 'Rio de Janeiro' },
+                { id: 'h3', name: 'Pousada Recuperação', description: 'Ambiente tranquilo e totalmente acessível • Jardim terapêutico', price: 180, period: 'noite', rating: 4.6, reviews: 187, city: 'Belo Horizonte' },
+                { id: 'h4', name: 'Hotel Reabilitação Cardíaca', description: 'Especializado em pós-operatório cardíaco • UTI móvel', price: 380, period: 'noite', rating: 4.9, reviews: 98, city: 'Brasília' },
+                { id: 'h5', name: 'Flat Hospitalar Executivo', description: 'Apartamentos com cozinha e enfermaria • Próximo ao Einstein', price: 350, period: 'noite', rating: 4.6, reviews: 89, city: 'Salvador' }
+            ],
+            passagens: [
+                { id: 'p1', name: 'São Paulo → Rio de Janeiro', description: 'Voo direto com assistência médica especializada • TAM', price: 380, period: 'viagem', rating: 4.8, reviews: 0, city: 'São Paulo' },
+                { id: 'p2', name: 'Brasília → Salvador', description: 'Voo com escala - Adaptado para cadeirantes • GOL', price: 420, period: 'viagem', rating: 4.6, reviews: 0, city: 'Brasília' },
+                { id: 'p3', name: 'Fortaleza → Manaus', description: 'Voo direto com oxigênio medicinal disponível • AZUL', price: 520, period: 'viagem', rating: 4.5, reviews: 0, city: 'Fortaleza' },
+                { id: 'p4', name: 'Rio de Janeiro → São Paulo', description: 'Voo executivo com acompanhamento médico • LATAM', price: 450, period: 'viagem', rating: 4.7, reviews: 0, city: 'Rio de Janeiro' },
+                { id: 'p5', name: 'Belo Horizonte → Brasília', description: 'Voo direto com kit médico de emergência • GOL', price: 320, period: 'viagem', rating: 4.4, reviews: 0, city: 'Belo Horizonte' }
+            ],
+            psicologos: [
+                { id: 'ps1', name: 'Dr. Ana Silva - Psicóloga Clínica', description: 'Especialista em idosos e terceira idade • CRP 06/123456', price: 150, period: 'sessão', rating: 4.9, reviews: 0, city: 'São Paulo' },
+                { id: 'ps2', name: 'Dr. Carlos Santos - Terapia Online', description: 'Videochamada segura e criptografada • CRP 06/789012', price: 120, period: 'sessão', rating: 4.7, reviews: 0, city: 'Rio de Janeiro' },
+                { id: 'ps3', name: 'Dra. Maria Oliveira - Terapia em Grupo', description: 'Sessão coletiva de 90 minutos - máximo 8 pessoas', price: 80, period: 'sessão', rating: 4.6, reviews: 0, city: 'Belo Horizonte' },
+                { id: 'ps4', name: 'Dr. João Pereira - Psicoterapia Familiar', description: 'Sessão com toda a família - 90 minutos', price: 200, period: 'sessão', rating: 4.8, reviews: 0, city: 'Brasília' },
+                { id: 'ps5', name: 'Dra. Lucia Costa - Neuropsicóloga', description: 'Avaliação neuropsicológica completa - 2 horas', price: 350, period: 'sessão', rating: 4.9, reviews: 0, city: 'Salvador' }
+            ]
+        };
+
+        // Global function declarations
+        function toggleVerMais(category) {
+            console.log('toggleVerMais called with category:', category);
+            showingMore[category] = !showingMore[category];
+            populateServices();
+            
+            const button = document.querySelector(`#${category}-page .ver-mais-btn`);
+            if (button) {
+                button.textContent = showingMore[category] ? 'Ver menos' : 'Ver mais';
+            }
+        }
+
+        function showPurchaseModal(serviceId, category) {
+            console.log('showPurchaseModal called with:', serviceId, category);
+            const service = servicesDatabase[category].find(s => s.id === serviceId);
+            if (!service) return;
+
+            currentServiceForPurchase = { ...service, category };
+            
+            const modal = document.getElementById('purchaseModal');
+            const details = document.getElementById('modalServiceDetails');
+            
+            details.innerHTML = `
+                <div class="service-details">
+                    <h4 class="text-lg font-semibold text-gray-800 mb-2">${service.name}</h4>
+                    <p class="text-gray-600 mb-4">${service.description}</p>
+                    <div class="service-meta grid grid-cols-2 gap-4 mb-4">
+                        <div><strong>Localização:</strong> ${service.city}</div>
+                        <div><strong>Avaliação:</strong> ${service.rating} ⭐</div>
+                        <div><strong>Preço:</strong> R$ ${service.price}</div>
+                        <div><strong>Período:</strong> ${service.period}</div>
+                    </div>
+                    <div class="total-price bg-gray-50 p-4 rounded-lg">
+                        <div class="text-lg font-semibold text-gray-800">Total: R$ ${service.price}</div>
+                        <div class="text-sm text-gray-600">Pagamento via PIX, cartão ou boleto</div>
+                    </div>
+                </div>
+            `;
+            
+            modal.classList.add('show');
+        }
+
+        function removeService(serviceId) {
+            console.log('removeService called with:', serviceId);
+            delete selectedServices[serviceId];
+            localStorage.setItem('healthgo_selected_services', JSON.stringify(selectedServices));
+            
+            populateServices();
+            updateServicesSummary();
+            updateStats();
+            updatePurchasedServicesDetails();
+        }
+
+        // Make functions globally accessible
+        window.toggleVerMais = toggleVerMais;
+        window.showPurchaseModal = showPurchaseModal;
+        window.removeService = removeService;
+
+        // Check if user is logged in and update header
+        function checkUserLogin() {
+            const userSection = document.getElementById('user-section');
+            const userGreeting = document.getElementById('userGreeting');
+            const userData = JSON.parse(localStorage.getItem('healthgo_user'));
+            
+            if (userData && userData.name) {
+                // User is logged in, show user info
+                userSection.innerHTML = `
+                    <div class="user-profile flex items-center gap-3">
+                        <div class="user-avatar bg-health-blue text-white w-10 h-10 rounded-full flex items-center justify-center">
+                            ${userData.name.charAt(0).toUpperCase()}
+                        </div>
+                        <div class="user-dropdown">
+                            <button class="user-name flex items-center gap-2 text-gray-800 font-semibold hover:text-health-blue transition-colors">
+                                ${userData.name}
+                                <i class="fas fa-chevron-down text-xs"></i>
+                            </button>
+                            <div class="dropdown-menu absolute right-0 top-full mt-2 w-48 bg-white rounded-xl shadow-lg border border-gray-200 py-2 z-50">
+                                <a href="#" class="block px-4 py-2 text-gray-700 hover:bg-health-blue-light hover:text-health-blue" onclick="event.preventDefault();">
+                                    <i class="fas fa-user-circle mr-2"></i> Meu Perfil
+                                </a>
+                                <a href="#" class="block px-4 py-2 text-gray-700 hover:bg-health-blue-light hover:text-health-blue" onclick="event.preventDefault();">
+                                    <i class="fas fa-cog mr-2"></i> Configurações
+                                </a>
+                                <div class="border-t border-gray-200 my-1"></div>
+                                <a href="#" class="block px-4 py-2 text-gray-700 hover:bg-health-blue-light hover:text-health-blue" onclick="event.preventDefault(); window.location.href='login.html';">
+                                    <i class="fas fa-sign-out-alt mr-2"></i> Sair
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                
+                // Update greeting
+                if (userGreeting) {
+                    userGreeting.textContent = `Olá, ${userData.name}!`;
+                }
+            } else {
+                // User is not logged in, show login button
+                userSection.innerHTML = `
+                    <button class="login-btn bg-gradient-to-r from-health-red to-red-700 text-white py-3 px-6 rounded-xl font-semibold transition-all duration-300 ease-in-out shadow-md hover:-translate-y-1 hover:shadow-lg flex items-center gap-2" onclick="showLoginModal()">
+                        <i class="fas fa-sign-in-alt"></i> Entrar
+                    </button>
+                `;
+                
+                // Reset greeting
+                if (userGreeting) {
+                    userGreeting.textContent = 'Olá, Visitante!';
+                }
+            }
+        }
+
+        // Enhanced dropdown behavior with smooth transitions
+        function initializeDropdownBehavior() {
+            let hoverTimeout;
+            
+            // Wait for DOM to be ready and user section to be populated
+            setTimeout(() => {
+                const userDropdown = document.querySelector('.user-dropdown');
+                const dropdownMenu = document.querySelector('.dropdown-menu');
+                
+                if (userDropdown && dropdownMenu) {
+                    // Remove the default group-hover behavior
+                    dropdownMenu.classList.remove('hidden', 'group-hover:block');
+                    
+                    // Add smooth hover behavior
+                    userDropdown.addEventListener('mouseenter', function() {
+                        clearTimeout(hoverTimeout);
+                        dropdownMenu.style.opacity = '1';
+                        dropdownMenu.style.visibility = 'visible';
+                        dropdownMenu.style.transform = 'translateY(0) scale(1)';
+                        dropdownMenu.style.pointerEvents = 'auto';
+                    });
+                    
+                    userDropdown.addEventListener('mouseleave', function() {
+                        hoverTimeout = setTimeout(function() {
+                            dropdownMenu.style.opacity = '0';
+                            dropdownMenu.style.visibility = 'hidden';
+                            dropdownMenu.style.transform = 'translateY(-10px) scale(0.95)';
+                            dropdownMenu.style.pointerEvents = 'none';
+                        }, 200); // 200ms delay before hiding
+                    });
+                    
+                    // Keep menu open when hovering over it
+                    dropdownMenu.addEventListener('mouseenter', function() {
+                        clearTimeout(hoverTimeout);
+                    });
+                    
+                    dropdownMenu.addEventListener('mouseleave', function() {
+                        hoverTimeout = setTimeout(function() {
+                            dropdownMenu.style.opacity = '0';
+                            dropdownMenu.style.visibility = 'hidden';
+                            dropdownMenu.style.transform = 'translateY(-10px) scale(0.95)';
+                            dropdownMenu.style.pointerEvents = 'none';
+                        }, 150);
+                    });
+                }
+            }, 100);
+        }
+
+        // Call the function when page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeCalendar();
+            populateServices();
+            updateServicesSummary();
+            updateStats();
+            checkUserLogin();
+            initializeDropdownBehavior();
+        });
+
+        // Navigation functions
+        function showPage(pageId) {
+            // Hide all pages
+            const pages = document.querySelectorAll('.page-content');
+            pages.forEach(page => {
+                page.classList.remove('active');
+            });
+
+            // Show selected page
+            const targetPage = document.getElementById(pageId + '-page');
+            if (targetPage) {
+                targetPage.classList.add('active');
+            }
+
+            // Update navigation
+            const navLinks = document.querySelectorAll('.nav-link');
+            navLinks.forEach(link => {
+                link.classList.remove('active');
+            });
+
+            const activeLink = document.querySelector(`[data-page="${pageId}"]`);
+            if (activeLink) {
+                activeLink.classList.add('active');
+            }
+
+            // Update calendar if calendar page
+            if (pageId === 'calendario') {
+                updateCalendar('calendarGrid2', 'calendarTitle2');
+                updateUpcomingAppointments();
+            }
+        }
+
+        // Sidebar toggle
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            const mainContent = document.getElementById('mainContent');
+            const toggleBtn = document.getElementById('sidebarToggle');
+            
+            sidebar.classList.toggle('collapsed');
+            mainContent.classList.toggle('expanded');
+            
+            const icon = toggleBtn.querySelector('i');
+            if (sidebar.classList.contains('collapsed')) {
+                icon.className = 'fas fa-chevron-right';
+            } else {
+                icon.className = 'fas fa-chevron-left';
+            }
+        }
+
+        // Calendar functions
+        function initializeCalendar() {
+            updateCalendar('calendarGrid', 'calendarTitle');
+        }
+
+        function updateCalendar(gridId, titleId) {
+            const grid = document.getElementById(gridId);
+            const title = document.getElementById(titleId);
+            
+            if (!grid || !title) return;
+
+            const now = new Date();
+            const year = currentDate.getFullYear();
+            const month = currentDate.getMonth();
+            
+            title.textContent = currentDate.toLocaleDateString('pt-BR', { 
+                month: 'long', 
+                year: 'numeric' 
+            });
+
+            // Clear grid
+            grid.innerHTML = '';
+
+            // Add day headers
+            const dayHeaders = ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb'];
+            dayHeaders.forEach(day => {
+                const header = document.createElement('div');
+                header.className = 'calendar-day bg-gray-100 font-semibold text-gray-700 text-center py-3';
+                header.textContent = day;
+                grid.appendChild(header);
+            });
+
+            // Get first day of month and number of days
+            const firstDay = new Date(year, month, 1);
+            const lastDay = new Date(year, month + 1, 0);
+            const daysInMonth = lastDay.getDate();
+            const startingDayOfWeek = firstDay.getDay();
+
+            // Add empty cells for days before month starts
+            for (let i = 0; i < startingDayOfWeek; i++) {
+                const emptyDay = document.createElement('div');
+                emptyDay.className = 'calendar-day other-month';
+                grid.appendChild(emptyDay);
+            }
+
+            // Add days of month
+            for (let day = 1; day <= daysInMonth; day++) {
+                const dayElement = document.createElement('div');
+                const currentDayDate = new Date(year, month, day);
+                const dateString = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+                
+                // Check if this date is before the current datetime
+                const isPastDate = currentDayDate < now && currentDayDate.toDateString() !== now.toDateString();
+                const isToday = currentDayDate.toDateString() === now.toDateString();
+                
+                dayElement.className = `calendar-day ${isPastDate  ? 'past-date' : 'cursor-pointer hover:bg-health-blue-light'} transition-all duration-300`;
+                
+                if (isToday) {
+                    dayElement.classList.add('today');
+                }
+
+                // Add click handler for adding appointments
+                if (!isPastDate) {
+                    dayElement.onclick = () => showAppointmentModal(dateString);
+                }
+
+                const dayNumber = document.createElement('div');
+                dayNumber.className = `day-number ${isPastDate ? 'text-gray-400' : ''}`;
+                dayNumber.textContent = day;
+                dayElement.appendChild(dayNumber);
+
+                // Check for appointments and add them to the day
+                if (appointments[dateString]) {
+                    const appointmentsList = document.createElement('div');
+                    appointmentsList.className = 'appointments-list mt-2';
+                    
+                    appointments[dateString].forEach(appointment => {
+                        const appointmentDateTime = new Date(dateString + 'T' + appointment.time);
+                        const isPastAppointment = appointmentDateTime < now;
+
+                        const appointmentElement = document.createElement('div');
+                        appointmentElement.className = `appointment-item text-xs p-1 mb-1 rounded text-white ${getAppointmentTypeClass(appointment.type)} flex justify-between items-center ${isPastAppointment ? 'opacity-50' : ''}`;
+                        
+                        const appointmentText = document.createElement('span');
+                        appointmentText.textContent = `${appointment.time} - ${appointment.title}`;
+                        appointmentElement.appendChild(appointmentText);
+
+                        // Only show delete button for future appointments
+                        if (!isPastAppointment) {
+                            const deleteBtn = document.createElement('button');
+                            deleteBtn.className = 'delete-appointment-btn ml-2 opacity-0 group-hover:opacity-100 transition-opacity';
+                            deleteBtn.innerHTML = '<i class="fas fa-times"></i>';
+                            deleteBtn.onclick = (e) => {
+                                e.stopPropagation();
+                                if (confirm('Tem certeza que deseja excluir este compromisso?')) {
+                                    deleteAppointment(dateString, appointment.id);
+                                }
+                            };
+                            appointmentElement.appendChild(deleteBtn);
+                        }
+
+                        appointmentsList.appendChild(appointmentElement);
+                    });
+
+                    dayElement.appendChild(appointmentsList);
+                    dayElement.classList.add('has-appointment');
+                }
+
+                grid.appendChild(dayElement);
+            }
+        }
+
+        function getAppointmentTypeClass(type) {
+            const typeClasses = {
+                'consulta': 'bg-health-blue',
+                'exame': 'bg-accent-red',
+                'terapia': 'bg-accent-green',
+                'outro': 'bg-gray-500'
+            };
+            return typeClasses[type] || typeClasses.outro;
+        }
+
+        function showAppointmentModal(dateString) {
+            const modal = document.getElementById('appointmentModal');
+            const dateInput = document.getElementById('appointmentDate');
+            const timeInput = document.getElementById('appointmentTime');
+            
+            const now = new Date();
+            const selectedDate = new Date(dateString);
+            const isToday = selectedDate.toDateString() === now.toDateString();
+            
+            // Set minimum date to today
+            dateInput.min = now.toISOString().split('T')[0];
+            dateInput.value = dateString;
+
+            if (isToday) {
+                // For today, set current time as minimum
+                const currentHours = String(now.getHours()).padStart(2, '0');
+                const currentMinutes = String(now.getMinutes()).padStart(2, '0');
+                timeInput.min = `${currentHours}:${currentMinutes}`;
+                
+                // Set default time to current time
+                timeInput.value = `${currentHours}:${currentMinutes}`;
+            } else {
+                timeInput.min = '';
+                timeInput.value = '09:00';
+            }
+
+            modal.classList.add('show');
+        }
+
+        function closeAppointmentModal() {
+            const modal = document.getElementById('appointmentModal');
+            modal.classList.remove('show');
+        }
+
+        function handleAppointmentSubmit(event) {
+            event.preventDefault();
+            
+            const date = document.getElementById('appointmentDate').value;
+            const time = document.getElementById('appointmentTime').value;
+            const title = document.getElementById('appointmentTitle').value;
+            const type = document.getElementById('appointmentType').value;
+
+            const now = new Date();
+            const appointmentDateTime = new Date(date + 'T' + time);
+
+            // Compare with current time
+            if (appointmentDateTime < now) {
+                alert('Por favor, selecione um horário futuro para o compromisso.');
+                return;
+            }
+
+            // Initialize the date's appointments array if it doesn't exist
+            if (!appointments[date]) {
+                appointments[date] = [];
+            }
+
+            // Add the new appointment with a unique ID
+            const newAppointment = {
+                id: Date.now().toString(),
+                time,
+                title,
+                type
+            };
+
+            appointments[date].push(newAppointment);
+
+            // Sort appointments by time
+            appointments[date].sort((a, b) => a.time.localeCompare(b.time));
+
+            // Save appointments to localStorage
+            localStorage.setItem('healthgo_appointments', JSON.stringify(appointments));
+
+            // Update the calendar and upcoming appointments
+            updateCalendar('calendarGrid', 'calendarTitle');
+            updateCalendar('calendarGrid2', 'calendarTitle2');
+            updateUpcomingAppointments();
+
+            // Close the modal
+            closeAppointmentModal();
+
+            // Show success message
+            alert('Compromisso adicionado com sucesso!');
+        }
+
+        function deleteAppointment(dateString, appointmentId) {
+            if (appointments[dateString]) {
+                // Find and remove the appointment
+                appointments[dateString] = appointments[dateString].filter(
+                    appointment => appointment.id !== appointmentId
+                );
+
+                // If no appointments left for this date, remove the date entry
+                if (appointments[dateString].length === 0) {
+                    delete appointments[dateString];
+                }
+
+                // Save to localStorage
+                localStorage.setItem('healthgo_appointments', JSON.stringify(appointments));
+
+                // Update the calendar and upcoming appointments
+                updateCalendar('calendarGrid', 'calendarTitle');
+                updateCalendar('calendarGrid2', 'calendarTitle2');
+                updateUpcomingAppointments();
+
+                // Show success message
+                alert('Compromisso excluído com sucesso!');
+            }
+        }
+
+        function previousMonth() {
+            currentDate.setMonth(currentDate.getMonth() - 1);
+            updateCalendar('calendarGrid', 'calendarTitle');
+            updateCalendar('calendarGrid2', 'calendarTitle2');
+        }
+
+        function nextMonth() {
+            currentDate.setMonth(currentDate.getMonth() + 1);
+            updateCalendar('calendarGrid', 'calendarTitle');
+            updateCalendar('calendarGrid2', 'calendarTitle2');
+        }
+
+        function updateUpcomingAppointments() {
+            const container = document.getElementById('upcomingAppointments');
+            if (!container) return;
+
+            const today = new Date();
+            const upcoming = [];
+
+            Object.keys(appointments).forEach(dateString => {
+                appointments[dateString].forEach(appointment => {
+                    const appointmentDateTime = new Date(dateString + 'T' + appointment.time);
+                    if (appointmentDateTime >= today) {
+                        upcoming.push({
+                            id: appointment.id,
+                            date: dateString,
+                            ...appointment
+                        });
+                    }
+                });
+            });
+
+            upcoming.sort((a, b) => {
+                const dateA = new Date(a.date + 'T' + a.time);
+                const dateB = new Date(b.date + 'T' + b.time);
+                return dateA - dateB;
+            });
+
+            if (upcoming.length === 0) {
+                container.innerHTML = '<p class="text-gray-600">Nenhum compromisso agendado.</p>';
+                return;
+            }
+
+            container.innerHTML = upcoming.slice(0, 5).map(appointment => `
+                <div class="flex items-center justify-between p-3 bg-gray-50 rounded-lg mb-2 group">
+                    <div>
+                        <div class="font-semibold text-gray-800 text-2xl">${appointment.title}</div>
+                        <div class="text-sm text-gray-600">${new Date(appointment.date).toLocaleDateString('pt-BR')} às ${appointment.time}</div>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <div class="text-xs ${getAppointmentTypeClass(appointment.type)} px-2 py-1 rounded">${appointment.type}</div>
+                        <button onclick="if(confirm('Tem certeza que deseja excluir este compromisso?')) deleteAppointment('${appointment.date}', '${appointment.id}')" 
+                                class="text-red-500 opacity-0 group-hover:opacity-100 transition-opacity">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Services functions
+        function populateServices() {
+            Object.keys(servicesDatabase).forEach(category => {
+                const list = document.getElementById(category + '-list');
+                if (list) {
+                    list.innerHTML = '';
+                    servicesDatabase[category].forEach((service, index) => {
+                        const isSelected = selectedServices[service.id];
+                        const isHidden = index >= 3 && !showingMore[category] ? 'hidden' : '';
+                        
+                        const serviceItem = document.createElement('li');
+                        serviceItem.className = `service-item flex justify-between items-center p-4 mb-3 bg-gray-50 rounded-xl transition-all duration-300 ease-in-out border border-gray-200 hover:bg-health-blue-light hover:translate-x-2 hover:border-health-blue hover:shadow-md ${isHidden}`;
+                        
+                        serviceItem.innerHTML = `
+                            <div class="service-info flex-1">
+                                <h4 class="service-name text-lg font-semibold text-gray-800 mb-2">${service.name}</h4>
+                                <p class="service-description text-gray-600 mb-2">${service.description}</p>
+                                <div class="service-meta flex items-center gap-4 text-sm text-gray-500">
+                                    <span><i class="fas fa-map-marker-alt mr-1"></i> ${service.city}</span>
+                                    <span><i class="fas fa-star mr-1 text-yellow-500"></i> ${service.rating}</span>
+                                    ${service.reviews > 0 ? `<span><i class="fas fa-comment mr-1"></i> ${service.reviews} avaliações</span>` : ''}
+                                </div>
+                            </div>
+                            <div class="service-actions flex items-center gap-3">
+                                <div class="service-price text-right">
+                                    <div class="price text-2xl font-bold text-accent-green">R$ ${service.price}</div>
+                                    <div class="period text-sm text-gray-500">por ${service.period}</div>
+                                </div>
+                                <button class="purchase-btn ${isSelected ? 'bg-accent-green' : 'bg-gradient-to-r from-health-blue to-blue-700'} text-white py-2 px-4 rounded-lg font-medium transition-all duration-300 ease-in-out hover:-translate-y-0.5 hover:shadow-lg" 
+                                        onclick="${isSelected ? `removeService('${service.id}')` : `showPurchaseModal('${service.id}', '${category}')`}">
+                                    <i class="fas ${isSelected ? 'fa-check' : 'fa-shopping-cart'} mr-2"></i>
+                                    ${isSelected ? 'Comprado' : 'Comprar'}
+                                </button>
+                            </div>
+                        `;
+                        
+                        list.appendChild(serviceItem);
+                    });
+                }
+            });
+        }
+
+        // Purchase functions
+        function closePurchaseModal() {
+            const modal = document.getElementById('purchaseModal');
+            modal.classList.remove('show');
+            currentServiceForPurchase = null;
+        }
+
+        function confirmPurchase() {
+            if (!currentServiceForPurchase) return;
+
+            selectedServices[currentServiceForPurchase.id] = {
+                ...currentServiceForPurchase,
+                purchaseDate: new Date().toISOString(),
+                status: 'ativo'
+            };
+
+            localStorage.setItem('healthgo_selected_services', JSON.stringify(selectedServices));
+            
+            populateServices();
+            updateServicesSummary();
+            updateStats();
+            updatePurchasedServicesDetails();
+            
+            closePurchaseModal();
+            
+            // Show success message
+            alert('Serviço comprado com sucesso!');
+        }
+
+        // Update functions
+        function updateServicesSummary() {
+            const categories = ['cuidadores', 'hoteis', 'passagens', 'psicologos'];
+            let totalSpent = 0;
+
+            categories.forEach(category => {
+                let categoryTotal = 0;
+                let categoryCount = 0;
+
+                Object.values(selectedServices).forEach(service => {
+                    if (service.category === category) {
+                        categoryTotal += service.price;
+                        categoryCount++;
+                    }
+                });
+
+                totalSpent += categoryTotal;
+
+                const amountElement = document.getElementById(category + 'Amount');
+                const countElement = document.getElementById(category + 'Count');
+                
+                if (amountElement) amountElement.textContent = `R$ ${categoryTotal.toFixed(2)}`;
+                if (countElement) countElement.textContent = `${categoryCount} serviços`;
+            });
+
+            const totalElement = document.getElementById('totalSpent');
+            const totalDetailedElement = document.getElementById('totalSpentDetailed');
+            
+            if (totalElement) totalElement.textContent = `R$ ${totalSpent.toFixed(2)}`;
+            if (totalDetailedElement) totalDetailedElement.textContent = `R$ ${totalSpent.toFixed(2)}`;
+        }
+
+        function updateStats() {
+            const totalServicesElement = document.getElementById('totalServices');
+            const scheduledServicesElement = document.getElementById('scheduledServices');
+            const totalSavedElement = document.getElementById('totalSaved');
+
+            const totalServices = Object.keys(selectedServices).length;
+            const scheduledServices = Object.values(selectedServices).filter(s => s.status === 'agendado').length;
+            const totalSaved = Object.values(selectedServices).reduce((sum, service) => sum + service.price, 0);
+
+            if (totalServicesElement) totalServicesElement.textContent = totalServices;
+            if (scheduledServicesElement) scheduledServicesElement.textContent = scheduledServices;
+            if (totalSavedElement) totalSavedElement.textContent = `R$ ${totalSaved.toFixed(0)}`;
+        }
+
+        function updatePurchasedServicesDetails() {
+            const container = document.getElementById('purchasedServicesDetails');
+            if (!container) return;
+
+            const purchased = Object.values(selectedServices);
+            
+            if (purchased.length === 0) {
+                container.innerHTML = `
+                    <p class="text-center text-gray-600 py-10">
+                        Nenhum serviço comprado ainda. Navegue pelas categorias e adicione serviços para vê-los aqui.
+                    </p>
+                `;
+                return;
+            }
+
+            container.innerHTML = purchased.map(service => `
+                <div class="service-card bg-gray-50 p-5 rounded-xl mb-4 border border-gray-200">
+                    <div class="flex justify-between items-start">
+                        <div class="flex-1">
+                            <h4 class="text-lg font-semibold text-gray-800 mb-2">${service.name}</h4>
+                            <p class="text-gray-600 mb-2">${service.description}</p>
+                            <div class="service-meta flex items-center gap-4 text-sm text-gray-500 mb-2">
+                                <span><i class="fas fa-map-marker-alt mr-1"></i> ${service.city}</span>
+                                <span><i class="fas fa-calendar mr-1"></i> Comprado em ${new Date(service.purchaseDate).toLocaleDateString('pt-BR')}</span>
+                            </div>
+                            <div class="status-badge inline-block bg-accent-green text-white px-3 py-1 rounded-full text-sm">
+                                ${service.status === 'ativo' ? 'Ativo' : 'Agendado'}
+                            </div>
+                        </div>
+                        <div class="text-right">
+                            <div class="price text-xl font-bold text-accent-green mb-2">R$ ${service.price}</div>
+                            <button onclick="removeService('${service.id}')" class="bg-accent-red text-white py-1 px-3 rounded-lg text-sm transition-all duration-300 ease-in-out hover:bg-red-700">
+                                <i class="fas fa-trash mr-1"></i> Remover
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Login functions
+        function showLoginModal() {
+            const modal = document.getElementById('loginModal');
+            modal.classList.add('show');
+        }
+
+        function closeLoginModal() {
+            const modal = document.getElementById('loginModal');
+            modal.classList.remove('show');
+        }
+
+        function handleLogin(event) {
+            event.preventDefault();
+            
+            // Simulate login
+            const userGreeting = document.getElementById('userGreeting');
+            if (userGreeting) {
+                userGreeting.textContent = 'Olá, Usuário!';
+            }
+            
+            closeLoginModal();
+            alert('Login realizado com sucesso!');
+        }
+
+        // Close modals when clicking outside
+        window.onclick = function(event) {
+            const purchaseModal = document.getElementById('purchaseModal');
+            const loginModal = document.getElementById('loginModal');
+            
+            if (event.target === purchaseModal) {
+                closePurchaseModal();
+            }
+            if (event.target === loginModal) {
+                closeLoginModal();
+            }
+        }
+
+        // Initialize on page load
+        window.addEventListener('load', function() {
+            updatePurchasedServicesDetails();
+        });
+
+        // Add event listener to update time input min value when date changes
+        document.getElementById('appointmentDate').addEventListener('change', function(e) {
+            const timeInput = document.getElementById('appointmentTime');
+            const now = new Date();
+            const selectedDate = new Date(e.target.value);
+            const isToday = selectedDate.toDateString() === now.toDateString();
+            
+            if (isToday) {
+                const currentHours = String(now.getHours()).padStart(2, '0');
+                const currentMinutes = String(now.getMinutes()).padStart(2, '0');
+                timeInput.min = `${currentHours}:${currentMinutes}`;
+                
+                // If selected time is before current time, update to current time
+                if (timeInput.value < timeInput.min) {
+                    timeInput.value = timeInput.min;
+                }
+            } else {
+                timeInput.min = '';
+            }
+        });
+    </script>
+</body>
+</html>

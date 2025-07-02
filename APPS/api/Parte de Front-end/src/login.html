@@ -1,0 +1,970 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HealthGo - Login & Cadastro</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #89CFF0;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .login-container {
+            background: linear-gradient(135deg, #fff 0%, #f8f9fa 100%);
+            border-radius: 24px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.15);
+            overflow: hidden;
+            width: 100%;
+            max-width: 1000px;
+            min-height: 600px;
+            display: flex;
+            position: relative;
+        }
+
+        .login-sidebar {
+            background: linear-gradient(135deg, #2c3e50 0%, #34495e 50%, #1a2332 100%);
+            color: white;
+            padding: 60px 40px;
+            width: 45%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .login-sidebar::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grid" width="10" height="10" patternUnits="userSpaceOnUse"><path d="M 10 0 L 0 0 0 10" fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="0.5"/></pattern></defs><rect width="100" height="100" fill="url(%23grid)"/></svg>');
+            opacity: 0.3;
+        }
+
+        .logo-section {
+            position: relative;
+            z-index: 2;
+        }
+
+        .logo-section .logo {
+            display: flex;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+
+        .logo-section .logo i {
+            font-size: 3rem;
+            color: #e74c3c;
+            margin-right: 15px;
+            filter: drop-shadow(0 4px 8px rgba(0,0,0,0.3));
+        }
+
+        .logo-section .logo h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            background: linear-gradient(45deg, #fff, #ecf0f1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .welcome-text h2 {
+            font-size: 2rem;
+            margin-bottom: 20px;
+            font-weight: 600;
+        }
+
+        .welcome-text p {
+            font-size: 1.1rem;
+            line-height: 1.6;
+            color: #bdc3c7;
+            margin-bottom: 30px;
+        }
+
+        .features-list {
+            list-style: none;
+        }
+
+        .features-list li {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+            font-size: 1rem;
+        }
+
+        .features-list li i {
+            color: #3498db;
+            margin-right: 12px;
+            width: 20px;
+        }
+
+        .login-form-section {
+            padding: 60px 50px;
+            width: 55%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .form-header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .form-header h2 {
+            color: #2c3e50;
+            font-size: 2rem;
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+
+        .form-header p {
+            color: #7f8c8d;
+            font-size: 1rem;
+        }
+
+        .form-tabs {
+            display: flex;
+            margin-bottom: 30px;
+            background: #f8f9fa;
+            border-radius: 12px;
+            padding: 4px;
+        }
+
+        .tab-button {
+            flex: 1;
+            padding: 12px 20px;
+            border: none;
+            background: transparent;
+            color: #7f8c8d;
+            font-weight: 500;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .tab-button.active {
+            background: white;
+            color: #2c3e50;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .form-content {
+            position: relative;
+        }
+
+        .form-panel {
+            display: none;
+            animation: fadeInUp 0.5s ease;
+        }
+
+        .form-panel.active {
+            display: block;
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #2c3e50;
+            font-weight: 500;
+            font-size: 0.95rem;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 15px 20px;
+            border: 2px solid #e9ecef;
+            border-radius: 12px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            background: #fff;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: #3498db;
+            box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.1);
+        }
+
+        .form-input.error {
+            border-color: #e74c3c;
+            box-shadow: 0 0 0 3px rgba(231, 76, 60, 0.1);
+        }
+
+        .input-group {
+            position: relative;
+        }
+
+        .input-icon {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #7f8c8d;
+            font-size: 1.1rem;
+        }
+
+        .input-group .form-input {
+            padding-left: 50px;
+        }
+
+        .password-toggle {
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #7f8c8d;
+            cursor: pointer;
+            font-size: 1.1rem;
+            transition: color 0.3s ease;
+        }
+
+        .password-toggle:hover {
+            color: #3498db;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .checkbox-group {
+            display: flex;
+            align-items: center;
+            margin-bottom: 25px;
+        }
+
+        .checkbox-group input[type="checkbox"] {
+            margin-right: 10px;
+            transform: scale(1.2);
+        }
+
+        .checkbox-group label {
+            margin-bottom: 0;
+            font-size: 0.9rem;
+            color: #7f8c8d;
+        }
+
+        .checkbox-group a {
+            color: #3498db;
+            text-decoration: none;
+        }
+
+        .checkbox-group a:hover {
+            text-decoration: underline;
+        }
+
+        .submit-button {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(45deg, #3498db, #2980b9);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(52, 152, 219, 0.3);
+            margin-bottom: 20px;
+        }
+
+        .submit-button:hover {
+            background: linear-gradient(45deg, #2980b9, #1f5f8b);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(52, 152, 219, 0.4);
+        }
+
+        .submit-button:active {
+            transform: translateY(0);
+        }
+
+        .submit-button.loading {
+            background: #95a5a6;
+            cursor: not-allowed;
+        }
+
+        .divider {
+            text-align: center;
+            margin: 25px 0;
+            position: relative;
+            color: #7f8c8d;
+            font-size: 0.9rem;
+        }
+
+        .divider::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: #e9ecef;
+            z-index: 1;
+        }
+
+        .divider span {
+            background: white;
+            padding: 0 20px;
+            position: relative;
+            z-index: 2;
+        }
+
+        .social-buttons {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+
+        .social-button {
+            padding: 12px;
+            border: 2px solid #e9ecef;
+            border-radius: 12px;
+            background: white;
+            color: #7f8c8d;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .social-button:hover {
+            border-color: #3498db;
+            color: #3498db;
+            transform: translateY(-2px);
+        }
+
+        .social-button i {
+            margin-right: 8px;
+            font-size: 1.2rem;
+        }
+
+        .google { color: #db4437; }
+        .facebook { color: #4267B2; }
+
+        .back-link {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .back-link a {
+            color: #3498db;
+            text-decoration: none;
+            font-weight: 500;
+            display: inline-flex;
+            align-items: center;
+            transition: all 0.3s ease;
+        }
+
+        .back-link a:hover {
+            color: #2980b9;
+            transform: translateX(-5px);
+        }
+
+        .back-link a i {
+            margin-right: 8px;
+        }
+
+        .error-message {
+            color: #e74c3c;
+            font-size: 0.9rem;
+            margin-top: 5px;
+            display: none;
+        }
+
+        .success-message {
+            background: #d4edda;
+            color: #155724;
+            padding: 12px 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            border: 1px solid #c3e6cb;
+            display: none;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .login-container {
+                flex-direction: column;
+                max-width: 500px;
+            }
+
+            .login-sidebar,
+            .login-form-section {
+                width: 100%;
+                padding: 40px 30px;
+            }
+
+            .login-sidebar {
+                min-height: 300px;
+            }
+
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+
+            .social-buttons {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes slideInLeft {
+            from {
+                opacity: 0;
+                transform: translateX(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        .login-sidebar {
+            animation: slideInLeft 0.8s ease;
+        }
+
+        .login-form-section {
+            animation: fadeInUp 0.8s ease;
+        }
+
+        /* Loading animation */
+        .loading-spinner {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255,255,255,.3);
+            border-radius: 50%;
+            border-top-color: #fff;
+            animation: spin 1s ease-in-out infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <div class="login-container">
+        <!-- Sidebar -->
+        <div class="login-sidebar">
+            <div class="logo-section">
+                <div class="logo">
+                    <i class="fas fa-heart"></i>
+                    <h1>HealthGo</h1>
+                </div>
+                <div class="welcome-text">
+                    <h2>Bem-vindo à sua plataforma de saúde</h2>
+                    <p>Conecte-se com os melhores profissionais e serviços de saúde do Brasil. Sua saúde e bem-estar são nossa prioridade.</p>
+                </div>
+                <ul class="features-list">
+                    <li><i class="fas fa-check-circle"></i> Cuidadores especializados 24h</li>
+                    <li><i class="fas fa-check-circle"></i> Hotéis adaptados para saúde</li>
+                    <li><i class="fas fa-check-circle"></i> Passagens com assistência médica</li>
+                    <li><i class="fas fa-check-circle"></i> Passagens de ônibus médicas</li>
+                    <li><i class="fas fa-check-circle"></i> Psicólogos e terapeutas</li>
+                    <li><i class="fas fa-check-circle"></i> Filtros avançados personalizados</li>
+                    <li><i class="fas fa-check-circle"></i> Agendamento inteligente</li>
+                    <li><i class="fas fa-check-circle"></i> Suporte 24/7</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Form Section -->
+        <div class="login-form-section">
+            <div class="form-header">
+                <h2>Acesse sua conta</h2>
+                <p>Entre ou crie uma nova conta para continuar</p>
+            </div>
+
+            <div class="form-tabs">
+                <button class="tab-button active" onclick="switchTab('login')">Entrar</button>
+                <button class="tab-button" onclick="switchTab('register')">Cadastrar</button>
+            </div>
+
+            <div class="form-content">
+                <!-- Login Form -->
+                <div class="form-panel active" id="login-panel">
+                    <form id="login-form" onsubmit="handleLogin(event)">
+                        <div class="success-message" id="login-success"></div>
+                        
+                        <div class="form-group">
+                            <label for="login-email">E-mail</label>
+                            <div class="input-group">
+                                <i class="input-icon fas fa-envelope"></i>
+                                <input type="email" id="login-email" class="form-input" placeholder="seu@email.com" required>
+                            </div>
+                            <div class="error-message" id="login-email-error"></div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="login-password">Senha</label>
+                            <div class="input-group">
+                                <i class="input-icon fas fa-lock"></i>
+                                <input type="password" id="login-password" class="form-input" placeholder="Sua senha" required>
+                                <i class="password-toggle fas fa-eye" onclick="togglePassword('login-password', this)"></i>
+                            </div>
+                            <div class="error-message" id="login-password-error"></div>
+                        </div>
+
+                        <div class="checkbox-group">
+                            <input type="checkbox" id="remember-me">
+                            <label for="remember-me">Lembrar de mim</label>
+                            <a href="#" style="margin-left: auto;">Esqueceu a senha?</a>
+                        </div>
+
+                        <button type="submit" class="submit-button" id="login-submit">
+                            Entrar
+                        </button>
+                    </form>
+
+                    <div class="divider">
+                        <span>ou continue com</span>
+                    </div>
+
+                    <div class="social-buttons">
+                        <a href="#" class="social-button google" onclick="socialLogin('google')">
+                            <i class="fab fa-google"></i>
+                            Google
+                        </a>
+                        <a href="#" class="social-button facebook" onclick="socialLogin('facebook')">
+                            <i class="fab fa-facebook-f"></i>
+                            Facebook
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Register Form -->
+                <div class="form-panel" id="register-panel">
+                    <form id="register-form" onsubmit="handleRegister(event)">
+                        <div class="success-message" id="register-success"></div>
+                        
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="register-name">Nome</label>
+                                <div class="input-group">
+                                    <i class="input-icon fas fa-user"></i>
+                                    <input type="text" id="register-name" class="form-input" placeholder="Seu nome" required>
+                                </div>
+                                <div class="error-message" id="register-name-error"></div>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="register-lastname">Sobrenome</label>
+                                <div class="input-group">
+                                    <i class="input-icon fas fa-user"></i>
+                                    <input type="text" id="register-lastname" class="form-input" placeholder="Seu sobrenome" required>
+                                </div>
+                                <div class="error-message" id="register-lastname-error"></div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="register-email">E-mail</label>
+                            <div class="input-group">
+                                <i class="input-icon fas fa-envelope"></i>
+                                <input type="email" id="register-email" class="form-input" placeholder="seu@email.com" required>
+                            </div>
+                            <div class="error-message" id="register-email-error"></div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="register-phone">Telefone</label>
+                                <div class="input-group">
+                                    <i class="input-icon fas fa-phone"></i>
+                                    <input type="tel" id="register-phone" class="form-input" placeholder="(11) 99999-9999" required>
+                                </div>
+                                <div class="error-message" id="register-phone-error"></div>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="register-cpf">CPF</label>
+                                <div class="input-group">
+                                    <i class="input-icon fas fa-id-card"></i>
+                                    <input type="text" id="register-cpf" class="form-input" placeholder="000.000.000-00" required>
+                                </div>
+                                <div class="error-message" id="register-cpf-error"></div>
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="register-password">Senha</label>
+                                <div class="input-group">
+                                    <i class="input-icon fas fa-lock"></i>
+                                    <input type="password" id="register-password" class="form-input" placeholder="Mínimo 8 caracteres" required>
+                                    <i class="password-toggle fas fa-eye" onclick="togglePassword('register-password', this)"></i>
+                                </div>
+                                <div class="error-message" id="register-password-error"></div>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="register-confirm-password">Confirmar Senha</label>
+                                <div class="input-group">
+                                    <i class="input-icon fas fa-lock"></i>
+                                    <input type="password" id="register-confirm-password" class="form-input" placeholder="Confirme sua senha" required>
+                                    <i class="password-toggle fas fa-eye" onclick="togglePassword('register-confirm-password', this)"></i>
+                                </div>
+                                <div class="error-message" id="register-confirm-password-error"></div>
+                            </div>
+                        </div>
+
+                        <div class="checkbox-group">
+                            <input type="checkbox" id="terms-agreement" required>
+                            <label for="terms-agreement">
+                                Aceito os <a href="#">Termos de Uso</a> e <a href="#">Política de Privacidade</a>
+                            </label>
+                        </div>
+
+                        <div class="checkbox-group">
+                            <input type="checkbox" id="newsletter">
+                            <label for="newsletter">
+                                Quero receber novidades e ofertas por e-mail
+                            </label>
+                        </div>
+
+                        <button type="submit" class="submit-button" id="register-submit">
+                            Criar Conta
+                        </button>
+                    </form>
+
+                    <div class="divider">
+                        <span>ou cadastre-se com</span>
+                    </div>
+
+                    <div class="social-buttons">
+                        <a href="#" class="social-button google" onclick="socialLogin('google')">
+                            <i class="fab fa-google"></i>
+                            Google
+                        </a>
+                        <a href="#" class="social-button facebook" onclick="socialLogin('facebook')">
+                            <i class="fab fa-facebook-f"></i>
+                            Facebook
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="back-link">
+                <a href="Home.html">
+                    <i class="fas fa-arrow-left"></i>
+                    Voltar para o HealthGo
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Tab switching functionality
+        function switchTab(tab) {
+            // Update tab buttons
+            document.querySelectorAll('.tab-button').forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+
+            // Update form panels
+            document.querySelectorAll('.form-panel').forEach(panel => panel.classList.remove('active'));
+            document.getElementById(tab + '-panel').classList.add('active');
+
+            // Clear any error messages
+            clearErrors();
+        }
+
+        // Password toggle functionality
+        function togglePassword(inputId, icon) {
+            const input = document.getElementById(inputId);
+            if (input.type === 'password') {
+                input.type = 'text';
+                icon.classList.remove('fa-eye');
+                icon.classList.add('fa-eye-slash');
+            } else {
+                input.type = 'password';
+                icon.classList.remove('fa-eye-slash');
+                icon.classList.add('fa-eye');
+            }
+        }
+
+        // Input formatting
+        document.getElementById('register-phone').addEventListener('input', function(e) {
+            let value = e.target.value.replace(/\D/g, '');
+            value = value.replace(/(\d{2})(\d)/, '($1) $2');
+            value = value.replace(/(\d{5})(\d)/, '$1-$2');
+            e.target.value = value;
+        });
+
+        document.getElementById('register-cpf').addEventListener('input', function(e) {
+            let value = e.target.value.replace(/\D/g, '');
+            value = value.replace(/(\d{3})(\d)/, '$1.$2');
+            value = value.replace(/(\d{3})(\d)/, '$1.$2');
+            value = value.replace(/(\d{3})(\d{1,2})$/, '$1-$2');
+            e.target.value = value;
+        });
+
+        // Form validation
+        function validateEmail(email) {
+            const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            return re.test(email);
+        }
+
+        function validatePassword(password) {
+            return password.length >= 8;
+        }
+
+        function validateCPF(cpf) {
+            cpf = cpf.replace(/\D/g, '');
+            return cpf.length === 11;
+        }
+
+        function showError(fieldId, message) {
+            const field = document.getElementById(fieldId);
+            const errorDiv = document.getElementById(fieldId + '-error');
+            
+            field.classList.add('error');
+            errorDiv.textContent = message;
+            errorDiv.style.display = 'block';
+        }
+
+        function clearErrors() {
+            document.querySelectorAll('.form-input').forEach(input => {
+                input.classList.remove('error');
+            });
+            document.querySelectorAll('.error-message').forEach(error => {
+                error.style.display = 'none';
+            });
+            document.querySelectorAll('.success-message').forEach(success => {
+                success.style.display = 'none';
+            });
+        }
+
+        function showSuccess(panelId, message) {
+            const successDiv = document.getElementById(panelId + '-success');
+            successDiv.textContent = message;
+            successDiv.style.display = 'block';
+        }
+
+        // Login form handler
+        function handleLogin(event) {
+            event.preventDefault();
+            clearErrors();
+
+            const email = document.getElementById('login-email').value;
+            const password = document.getElementById('login-password').value;
+            const submitBtn = document.getElementById('login-submit');
+
+            let hasErrors = false;
+
+            // Validate email
+            if (!validateEmail(email)) {
+                showError('login-email', 'Por favor, insira um e-mail válido');
+                hasErrors = true;
+            }
+
+            // Validate password
+            if (!password) {
+                showError('login-password', 'Por favor, insira sua senha');
+                hasErrors = true;
+            }
+
+            if (hasErrors) return;
+
+            // Show loading state
+            submitBtn.innerHTML = '<span class="loading-spinner"></span> Entrando...';
+            submitBtn.classList.add('loading');
+
+            // Simulate API call
+            setTimeout(() => {
+                // Reset button
+                submitBtn.innerHTML = 'Entrar';
+                submitBtn.classList.remove('loading');
+
+                // Create user object
+                const userData = {
+                    name: email.split('@')[0].charAt(0).toUpperCase() + email.split('@')[0].slice(1),
+                    email: email,
+                    loginTime: new Date().toISOString()
+                };
+
+                // Store user data in localStorage
+                localStorage.setItem('healthgo_user', JSON.stringify(userData));
+
+                // Show success message
+                showSuccess('login', 'Login realizado com sucesso! Redirecionando...');
+                
+                setTimeout(() => {
+                    window.location.href = 'Home.html';
+                }, 2000);
+            }, 2000);
+        }
+
+        // Register form handler
+        function handleRegister(event) {
+            event.preventDefault();
+            clearErrors();
+
+            const name = document.getElementById('register-name').value;
+            const lastname = document.getElementById('register-lastname').value;
+            const email = document.getElementById('register-email').value;
+            const phone = document.getElementById('register-phone').value;
+            const cpf = document.getElementById('register-cpf').value;
+            const password = document.getElementById('register-password').value;
+            const confirmPassword = document.getElementById('register-confirm-password').value;
+            const termsAccepted = document.getElementById('terms-agreement').checked;
+            const submitBtn = document.getElementById('register-submit');
+
+            let hasErrors = false;
+
+            // Validate name
+            if (name.length < 2) {
+                showError('register-name', 'Nome deve ter pelo menos 2 caracteres');
+                hasErrors = true;
+            }
+
+            // Validate lastname
+            if (lastname.length < 2) {
+                showError('register-lastname', 'Sobrenome deve ter pelo menos 2 caracteres');
+                hasErrors = true;
+            }
+
+            // Validate email
+            if (!validateEmail(email)) {
+                showError('register-email', 'Por favor, insira um e-mail válido');
+                hasErrors = true;
+            }
+
+            // Validate phone
+            if (phone.replace(/\D/g, '').length < 10) {
+                showError('register-phone', 'Por favor, insira um telefone válido');
+                hasErrors = true;
+            }
+
+            // Validate CPF
+            if (!validateCPF(cpf)) {
+                showError('register-cpf', 'Por favor, insira um CPF válido');
+                hasErrors = true;
+            }
+
+            // Validate password
+            if (!validatePassword(password)) {
+                showError('register-password', 'Senha deve ter pelo menos 8 caracteres');
+                hasErrors = true;
+            }
+
+            // Validate password confirmation
+            if (password !== confirmPassword) {
+                showError('register-confirm-password', 'Senhas não coincidem');
+                hasErrors = true;
+            }
+
+            // Validate terms
+            if (!termsAccepted) {
+                alert('Você deve aceitar os Termos de Uso e Política de Privacidade');
+                hasErrors = true;
+            }
+
+            if (hasErrors) return;
+
+            // Show loading state
+            submitBtn.innerHTML = '<span class="loading-spinner"></span> Criando conta...';
+            submitBtn.classList.add('loading');
+
+            // Simulate API call
+            setTimeout(() => {
+                // Reset button
+                submitBtn.innerHTML = 'Criar Conta';
+                submitBtn.classList.remove('loading');
+
+                // Create user object
+                const userData = {
+                    name: name + ' ' + lastname,
+                    email: email,
+                    phone: phone,
+                    cpf: cpf,
+                    registerTime: new Date().toISOString()
+                };
+
+                // Store user data in localStorage
+                localStorage.setItem('healthgo_user', JSON.stringify(userData));
+
+                // Show success message
+                showSuccess('register', 'Conta criada com sucesso! Redirecionando...');
+                
+                setTimeout(() => {
+                    window.location.href = 'Home.html';
+                }, 2000);
+            }, 3000);
+        }
+
+        // Social login handler
+        function socialLogin(provider) {
+            const providerName = provider.charAt(0).toUpperCase() + provider.slice(1);
+            
+            // Simulate social login
+            const userData = {
+                name: `Usuário ${providerName}`,
+                email: `usuario@${provider}.com`,
+                loginTime: new Date().toISOString(),
+                provider: provider
+            };
+
+            // Store user data
+            localStorage.setItem('healthgo_user', JSON.stringify(userData));
+            
+            // Show success and redirect
+            alert(`Login com ${providerName} realizado com sucesso!`);
+            setTimeout(() => {
+                window.location.href = 'Home.html';
+            }, 1000);
+        }
+
+        // Add loading animation to page
+        document.addEventListener('DOMContentLoaded', function() {
+            document.body.style.opacity = '0';
+            setTimeout(() => {
+                document.body.style.transition = 'opacity 0.5s ease';
+                document.body.style.opacity = '1';
+            }, 100);
+
+            // Auto-focus first input
+            setTimeout(() => {
+                document.getElementById('login-email').focus();
+            }, 500);
+        });
+    </script>
+</body>
+</html>
