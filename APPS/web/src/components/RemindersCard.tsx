@@ -13,16 +13,15 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { IconArrowRight, IconBell } from "@tabler/icons-react";
 import { Link } from "react-router-dom";
 import { useState, useEffect } from "react";
+import api from "@/services/api"; // Importe a instância do Axios
+import { toast } from "sonner"; // Para exibir notificações
 
-// 1. Interface movida para um local que possa ser compartilhado ou duplicada aqui
 interface Reminder {
   id: number;
   dateTime: string;
   text: string;
   type: 'consulta' | 'remédio' | 'outros';
 }
-
-const REMINDERS_STORAGE_KEY = 'healthgo-reminders';
 
 const typeBadgeVariant = {
   consulta: "default",
@@ -32,27 +31,36 @@ const typeBadgeVariant = {
 
 
 export function RemindersCard() {
-  const [reminders, setReminders] = useState<Reminder[]>(() => {
-    if (typeof window === 'undefined') return [];
-    const savedReminders = localStorage.getItem(REMINDERS_STORAGE_KEY);
-    return savedReminders ? JSON.parse(savedReminders) : [];
-  });
-  
+  const [reminders, setReminders] = useState<Reminder[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+
   useEffect(() => {
-    const handleStorageChange = (event: StorageEvent) => {
-      if (event.key === REMINDERS_STORAGE_KEY && event.newValue) {
-        setReminders(JSON.parse(event.newValue));
+    const fetchReminders = async () => {
+      try {
+        const response = await api.get('/Lembrete'); 
+        if (response.data && Array.isArray(response.data.data)) {
+            setReminders(response.data.data);
+        } else {
+            setReminders([]);
+        }
+      } catch (error) {
+        console.error("Erro ao buscar lembretes:", error);
+        toast.error("Erro ao carregar lembretes", {
+            description: "Não foi possível buscar seus lembretes. Tente novamente mais tarde.",
+        });
+        setReminders([]); // Limpa os lembretes em caso de erro
+      } finally {
+          setIsLoading(false);
       }
     };
-    window.addEventListener('storage', handleStorageChange);
-    return () => {
-      window.removeEventListener('storage', handleStorageChange);
-    };
-  }, []);
+
+    fetchReminders();
+  }, []); // O array vazio garante que o useEffect execute apenas uma vez
 
   const upcomingReminders = reminders
     .filter(r => new Date(r.dateTime) >= new Date())
     .sort((a, b) => new Date(a.dateTime).getTime() - new Date(b.dateTime).getTime())
+    .slice(0, 5); // Pega apenas os próximos 5
 
   return (
     <Card className="h-full flex flex-col">
@@ -67,35 +75,41 @@ export function RemindersCard() {
       </CardHeader>
       <CardContent className="flex-grow">
         <ScrollArea className="h-[250px] pr-4">
-          <div className="space-y-4">
-            {upcomingReminders.length > 0 ? (
-              upcomingReminders.map((reminder) => (
-                <div key={reminder.id} className="flex items-start gap-4">
-                  <div className="flex-1">
-                    <p className="font-semibold text-sm">{reminder.text}</p>
-                    <p className="text-xs text-muted-foreground">
-                      {new Date(reminder.dateTime).toLocaleDateString('pt-BR', {
-                        day: '2-digit',
-                        month: 'long',
-                      })}{' '}
-                      às{' '}
-                      {new Date(reminder.dateTime).toLocaleTimeString('pt-BR', {
-                        hour: '2-digit',
-                        minute: '2-digit',
-                      })}
-                    </p>
+          {isLoading ? (
+            <div className="text-center text-muted-foreground pt-16">
+              <p>Carregando lembretes...</p>
+            </div>
+          ) : (
+            <div className="space-y-4">
+              {upcomingReminders.length > 0 ? (
+                upcomingReminders.map((reminder) => (
+                  <div key={reminder.id} className="flex items-start gap-4">
+                    <div className="flex-1">
+                      <p className="font-semibold text-sm">{reminder.text}</p>
+                      <p className="text-xs text-muted-foreground">
+                        {new Date(reminder.dateTime).toLocaleDateString('pt-BR', {
+                          day: '2-digit',
+                          month: 'long',
+                        })}{' '}
+                        às{' '}
+                        {new Date(reminder.dateTime).toLocaleTimeString('pt-BR', {
+                          hour: '2-digit',
+                          minute: '2-digit',
+                        })}
+                      </p>
+                    </div>
+                    <Badge variant={typeBadgeVariant[reminder.type] || "secondary"} className="capitalize">
+                      {reminder.type}
+                    </Badge>
                   </div>
-                  <Badge variant={typeBadgeVariant[reminder.type] || "secondary"} className="capitalize">
-                    {reminder.type}
-                  </Badge>
+                ))
+              ) : (
+                <div className="text-center text-muted-foreground pt-16">
+                  <p>Nenhum lembrete futuro.</p>
                 </div>
-              ))
-            ) : (
-              <div className="text-center text-muted-foreground pt-16">
-                <p>Nenhum lembrete futuro.</p>
-              </div>
-            )}
-          </div>
+              )}
+            </div>
+          )}
         </ScrollArea>
       </CardContent>
       <div className="p-4 border-t">
