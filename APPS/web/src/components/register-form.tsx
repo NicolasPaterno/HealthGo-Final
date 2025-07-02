@@ -1,0 +1,166 @@
+// src/components/register-form.tsx
+import { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { toast } from "sonner";
+import { cn } from "@/lib/utils";
+import { Button } from "@/components/ui/button";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Checkbox } from "@/components/ui/checkbox";
+import api from "@/services/api";
+
+export function RegisterForm({
+  className,
+  ...props
+}: React.ComponentProps<"div">) {
+  const navigate = useNavigate(); // Hook para navegação
+
+  // Estados para os campos do formulário
+  const [nome, setNome] = useState("");
+  const [email, setEmail] = useState("");
+  const [senha, setSenha] = useState("");
+  const [cpf, setCpf] = useState("");
+  const [dataNascimento, setDataNascimento] = useState("");
+  const [telefone, setTelefone] = useState(""); // Novo estado para telefone
+  const [cep, setCep] = useState("");
+  const [cidade, setCidade] = useState(""); // Usaremos como string por enquanto
+  const [rua, setRua] = useState("");
+  const [bairro, setBairro] = useState("");
+  const [numeroEndereco, setNumeroEndereco] = useState("");
+  const [caoGuia, setCaoGuia] = useState(false);
+
+  const handleSubmit = async (event: React.FormEvent) => {
+    event.preventDefault();
+
+    // Monta o objeto com os dados no formato do PessoaInsertDTO
+    const userData = {
+      Nome: nome,
+      DataNascimento: dataNascimento,
+      CPF: cpf,
+      Telefone: telefone,
+      Email: email,
+      Senha: senha,
+      EnderecoFoto: "default.jpg", // Valor padrão ou a ser implementado
+      CaoGuia: caoGuia,
+      CEP: cep,
+      Bairro: bairro,
+      Rua: rua,
+      NumeroEndereco: numeroEndereco,
+      Cidade_Id: 1, // Valor fixo por enquanto. O ideal é ter um select de cidades.
+    };
+
+    try {
+      // O endpoint é /Pessoa, conforme o seu Controller
+      const response = await api.post("/Pessoa", userData);
+
+      toast.success("Conta criada com sucesso!", {
+        description: "Você será redirecionado para a página de login em instantes.",
+        duration: 3000,
+      });
+
+      // Redireciona para a página de login após um pequeno atraso
+      setTimeout(() => {
+        navigate("/login");
+      }, 3000);
+
+      console.log("Resposta da API:", response.data);
+
+    } catch (error: any) {
+      const errorMessage = error.response?.data?.message || "Por favor, verifique seus dados e tente novamente.";
+      toast.error("Erro ao criar a conta.", {
+        description: errorMessage,
+      });
+      console.error("Erro ao registrar:", error);
+    }
+  };
+
+  return (
+    <Card className={cn("mx-auto max-w-lg", className)} {...props}>
+      <CardHeader>
+        <CardTitle className="text-2xl">Criar conta</CardTitle>
+        <CardDescription>
+          Insira seus dados abaixo para criar sua conta
+        </CardDescription>
+      </CardHeader>
+      <CardContent>
+        <form onSubmit={handleSubmit}>
+          <div className="grid gap-4">
+            {/* Campos do Formulário com 'value' e 'onChange' atualizados */}
+            <div className="grid gap-2">
+              <Label htmlFor="name">Nome</Label>
+              <Input id="name" type="text" placeholder="Seu nome completo" required value={nome} onChange={(e) => setNome(e.target.value)} />
+            </div>
+            <div className="grid grid-cols-2 gap-4">
+              <div className="grid gap-2">
+                <Label htmlFor="email">Email</Label>
+                <Input id="email" type="email" placeholder="nome@exemplo.com" required value={email} onChange={(e) => setEmail(e.target.value)} />
+              </div>
+              <div className="grid gap-2">
+                <Label htmlFor="password">Senha</Label>
+                <Input id="password" type="password" required value={senha} onChange={(e) => setSenha(e.target.value)} />
+              </div>
+            </div>
+            <div className="grid grid-cols-2 gap-4">
+              <div className="grid gap-2">
+                <Label htmlFor="cpf">CPF</Label>
+                <Input id="cpf" type="text" placeholder="000.000.000-00" required value={cpf} onChange={(e) => setCpf(e.target.value)} />
+              </div>
+              <div className="grid gap-2">
+                <Label htmlFor="birthdate">Data de Nascimento</Label>
+                <Input id="birthdate" type="date" required value={dataNascimento} onChange={(e) => setDataNascimento(e.target.value)} />
+              </div>
+            </div>
+             <div className="grid gap-2">
+                <Label htmlFor="telefone">Telefone</Label>
+                <Input id="telefone" type="tel" placeholder="(00) 00000-0000" value={telefone} onChange={(e) => setTelefone(e.target.value)} />
+              </div>
+            <div className="grid grid-cols-2 gap-4">
+              <div className="grid gap-2">
+                <Label htmlFor="cep">CEP</Label>
+                <Input id="cep" type="text" placeholder="00000-000" value={cep} onChange={(e) => setCep(e.target.value)} />
+              </div>
+              <div className="grid gap-2">
+                <Label htmlFor="city">Cidade</Label>
+                <Input id="city" type="text" placeholder="Sua cidade" value={cidade} onChange={(e) => setCidade(e.target.value)} />
+              </div>
+            </div>
+            <div className="grid gap-2">
+              <Label htmlFor="street">Rua</Label>
+              <Input id="street" type="text" placeholder="Nome da sua rua" value={rua} onChange={(e) => setRua(e.target.value)} />
+            </div>
+            <div className="grid grid-cols-2 gap-4">
+              <div className="grid gap-2">
+                <Label htmlFor="neighborhood">Bairro</Label>
+                <Input id="neighborhood" type="text" placeholder="Seu bairro" value={bairro} onChange={(e) => setBairro(e.target.value)} />
+              </div>
+              <div className="grid gap-2">
+                <Label htmlFor="addressNumber">Número</Label>
+                <Input id="addressNumber" type="text" placeholder="Número" value={numeroEndereco} onChange={(e) => setNumeroEndereco(e.target.value)} />
+              </div>
+            </div>
+            <div className="flex items-center gap-2">
+              <Checkbox id="guideDog" checked={caoGuia} onCheckedChange={(checked) => setCaoGuia(Boolean(checked))} />
+              <Label htmlFor="guideDog" className="font-normal">Possui cão guia</Label>
+            </div>
+            <Button type="submit" className="w-full">
+              Criar conta
+            </Button>
+          </div>
+        </form>
+        <div className="mt-4 text-center text-sm">
+          Já possui uma conta?{" "}
+          <Link to="/login" className="underline">
+            Entrar
+          </Link>
+        </div>
+      </CardContent>
+    </Card>
+  );
+}
