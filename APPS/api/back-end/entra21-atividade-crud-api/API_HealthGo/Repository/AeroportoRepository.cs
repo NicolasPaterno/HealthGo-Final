@@ -73,7 +73,7 @@ namespace API_HealthGo.Repository
                       UPDATE AEROPORTO
                                SET NOME = @Nome,
                                CODIGOIATA = @CodigoIata,
-                               CIDADE_ID = @Cidade_id
+                               CIDADE_ID = @Cidade_Id
                                WHERE ID = @Id;
                           ";
             await _connection.Execute(sql, aeroporto);
