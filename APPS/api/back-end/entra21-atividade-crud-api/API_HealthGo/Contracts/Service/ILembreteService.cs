@@ -9,7 +9,7 @@ namespace API_HealthGo.Contracts.Service
         Task<LembreteGetAllResponse> GetAllLembrete();
 
         Task<LembreteEntity> GetLembreteById(int id);
-
+        Task<LembreteGetAllResponse> GetLembreteByPessoaId(int pessoaId);
         Task<MessageResponse> Post(LembreteInsertDTO lembrete);
 
         Task<MessageResponse> Delete(int id);

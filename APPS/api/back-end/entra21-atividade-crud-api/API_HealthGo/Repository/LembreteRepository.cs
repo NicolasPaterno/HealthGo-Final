@@ -21,7 +21,7 @@ namespace API_HealthGo.Repository
             using (MySqlConnection con = _connection.GetConnection())
             {
                 string sql = @$"
-                    SELECT ID, DESCRICAO, DATAINICIO, PESSOA_ID 
+                    SELECT ID, TITULO, DATA,TIPO, PESSOA_ID 
                     FROM LEMBRETE
                 ";
 
@@ -42,12 +42,24 @@ namespace API_HealthGo.Repository
                 return lembrete;
             }
         }
+        public async Task<IEnumerable<LembreteEntity>> GetLembreteByPessoaId(int pessoaId)
+        {
+            using (MySqlConnection con = _connection.GetConnection())
+            {
+                string sql = @$"
+                    SELECT * FROM LEMBRETE WHERE Pessoa_ID = @pessoaId
+                ";
+
+                IEnumerable<LembreteEntity> lembreteList = await con.QueryAsync<LembreteEntity>(sql, new {pessoaId});
+                return lembreteList;
+            }
+        }
 
         public async Task InsertLembrete(LembreteInsertDTO lembrete)
         {
             string sql = @"
-                INSERT INTO LEMBRETE ( DESCRICAO, DATAINICIO, PESSOA_ID)
-                VALUES ( @Descricao, @DataInicio,@Pessoa_Id)
+                INSERT INTO LEMBRETE ( TITULO, DATA,TIPO, PESSOA_ID)
+                VALUES ( @Titulo, @Data, @Tipo, @Pessoa_Id)
             ";
 
             await _connection.Execute(sql, lembrete);
@@ -57,8 +69,8 @@ namespace API_HealthGo.Repository
         {
             string sql = @"
                 UPDATE LEMBRETE SET 
-                    DESCRICAO = @Descricao,
-                    DATAINICIO = @DataInicio,
+                    TITULO = @Titulo,
+                    DATA = @Data,
                     PESSOA_ID = @Pessoa_Id
                 WHERE ID = @Id
             ";

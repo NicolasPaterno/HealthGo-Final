@@ -29,6 +29,12 @@ namespace API_HealthGo.Controllers
             return Ok(await _service.GetLembreteById(id));
         }
 
+        [HttpGet("Pessoa/(id)")]
+        public async Task<IActionResult> GetLembreteByPessoaId(int pessoaId)
+        {
+            return Ok(await _service.GetLembreteByPessoaId(pessoaId));
+        }
+
         [HttpPost]
         public async Task<ActionResult<MessageResponse>> Post(LembreteInsertDTO lembrete)
         {
