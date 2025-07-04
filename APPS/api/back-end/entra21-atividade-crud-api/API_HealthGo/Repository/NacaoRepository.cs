@@ -1,16 +1,14 @@
-﻿using Dapper;
-using API_HealthGo.Contracts.Infrastructure;
+﻿using API_HealthGo.Contracts.Infrastructure;
 using API_HealthGo.Contracts.Repository;
 using API_HealthGo.DTO;
-using API_HealthGo.Entity;
-using API_HealthGo.Infrastructure;
+using API_HealthGo.Entity
+using Dapper;
 using MySql.Data.MySqlClient;
 
 namespace API_HealthGo.Repository
 {
-    public class NacaoRepository : INacaoRepository
+    class NacaoRepository : INacaoRepository
     {
-
         private IConnection _connection;
 
         public NacaoRepository(IConnection connection)
@@ -23,27 +21,26 @@ namespace API_HealthGo.Repository
             using (MySqlConnection con = _connection.GetConnection())
             {
                 string sql = @$"
-                     SELECT ID AS {nameof(NacaoEntity.Id)},
-                            NOME AS {nameof(NacaoEntity.Nome)}
-                       FROM Nacao
+                    SELECT ID AS {nameof(NacaoEntity.Id)},
+                           NOME AS {nameof(NacaoEntity.Nome)}
+                      FROM NACAO
                 ";
-                IEnumerable<NacaoEntity> nationList = await con.QueryAsync<NacaoEntity>(sql);
-                return nationList;
+                IEnumerable<NacaoEntity> nacaoList = await con.QueryAsync<NacaoEntity>(sql);
+                return nacaoList;
             }
         }
 
         public async Task Insert(NacaoInsertDTO nacao)
         {
             string sql = @$"
-                 INSERT INTO Nacao (Nome)
-                              VALUE(@Nome)                                                           
+                INSERT INTO NACAO (NOME)
+                             VALUES (@Nome)
             ";
             await _connection.Execute(sql, nacao);
         }
 
         public async Task Delete(int id)
         {
-            Connection _connection = new Connection();
             string sql = "DELETE FROM NACAO WHERE ID = @id";
             await _connection.Execute(sql, new { id });
         }
@@ -53,11 +50,11 @@ namespace API_HealthGo.Repository
             using (MySqlConnection con = _connection.GetConnection())
             {
                 string sql = @$"
-                            SELECT ID AS {nameof(NacaoEntity.Id)},
-                            NOME AS {nameof(NacaoEntity.Nome)}
-                            FROM Nacao
-                            WHERE ID = @id
-                            ";
+                    SELECT ID AS {nameof(NacaoEntity.Id)},
+                           NOME AS {nameof(NacaoEntity.Nome)}
+                      FROM NACAO
+                     WHERE ID = @id
+                ";
                 NacaoEntity nacao = await con.QueryFirstAsync<NacaoEntity>(sql, new { id });
                 return nacao;
             }
@@ -66,10 +63,10 @@ namespace API_HealthGo.Repository
         public async Task Update(NacaoEntity nacao)
         {
             string sql = @$"
-                     UPDATE NACAO
-                        SET Nome = @Nome
-                      WHERE ID= @Id
-                          ";
+                UPDATE NACAO
+                   SET NOME = @Nome
+                 WHERE ID = @Id;
+            ";
             await _connection.Execute(sql, nacao);
         }
     }

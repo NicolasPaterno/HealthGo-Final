@@ -1,6 +1,7 @@
 ﻿using API_HealthGo.Contracts.Infrastructure;
 using API_HealthGo.DTO;
 using API_HealthGo.Entity;
+using Dapper;
 using MySql.Data.MySqlClient;
 
 namespace API_HealthGo.Repository
@@ -55,7 +56,7 @@ namespace API_HealthGo.Repository
                            COMENTARIO AS {nameof(AvaliacaoEntity.Comentario)},
                            PESSOA_ID AS {nameof(AvaliacaoEntity.Pessoa_Id)}
                       FROM AVALIACAO
-                     WHERE ID = @Id
+                     WHERE ID = @id
                 ";
                 AvaliacaoEntity avaliacao = await con.QueryFirstAsync<AvaliacaoEntity>(sql, new { id });
                 return avaliacao;
