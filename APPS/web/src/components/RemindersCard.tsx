@@ -13,8 +13,8 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { IconArrowRight, IconBell } from "@tabler/icons-react";
 import { Link } from "react-router-dom";
 import { useState, useEffect } from "react";
-import api from "@/services/api"; // Importe a instância do Axios
-import { toast } from "sonner"; // Para exibir notificações
+import api from "@/services/api"; 
+import { toast } from "sonner"; 
 
 interface Reminder {
   id: number;
@@ -37,7 +37,7 @@ export function RemindersCard() {
   useEffect(() => {
     const fetchReminders = async () => {
       try {
-        const response = await api.get('/Lembrete'); 
+        const response = await api.get(`/Lembrete/Pessoa/1`); 
         if (response.data && Array.isArray(response.data.data)) {
             setReminders(response.data.data);
         } else {
@@ -48,19 +48,19 @@ export function RemindersCard() {
         toast.error("Erro ao carregar lembretes", {
             description: "Não foi possível buscar seus lembretes. Tente novamente mais tarde.",
         });
-        setReminders([]); // Limpa os lembretes em caso de erro
+        setReminders([]); 
       } finally {
           setIsLoading(false);
       }
     };
 
     fetchReminders();
-  }, []); // O array vazio garante que o useEffect execute apenas uma vez
+  }, []); 
 
   const upcomingReminders = reminders
     .filter(r => new Date(r.dateTime) >= new Date())
     .sort((a, b) => new Date(a.dateTime).getTime() - new Date(b.dateTime).getTime())
-    .slice(0, 5); // Pega apenas os próximos 5
+    .slice(0, 5); 
 
   return (
     <Card className="h-full flex flex-col">
