@@ -6,13 +6,13 @@ namespace API_HealthGo.Contracts.Service
 {
     public interface IImagemService
     {
-        Task<AviaoGetAllResponse> GetAll();
+        Task<ImagemGetAllResponse> GetAll();
 
-        Task<AviaoEntity> GetById(int id);
+        Task<ImagemEntity> GetById(int id);
 
-        Task<MessageResponse> Post(AviaoInsertDTO aviao);
+        Task<MessageResponse> Post(ImagemInsertDTO imagem);
 
-        Task<MessageResponse> Update(AviaoEntity aviao);
+        Task<MessageResponse> Update(ImagemEntity imagem);
 
         Task<MessageResponse> Delete(int id);
     }
