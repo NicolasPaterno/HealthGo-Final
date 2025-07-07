@@ -3,7 +3,7 @@ using API_HealthGo.Entity;
 
 namespace API_HealthGo.Contracts.Repository
 {
-    public class IOrdemServico_HotelRepository
+    public interface IOrdemServico_HotelRepository
     {
         Task<IEnumerable<OrdemServico_HotelEntity>> GetAll();
 
