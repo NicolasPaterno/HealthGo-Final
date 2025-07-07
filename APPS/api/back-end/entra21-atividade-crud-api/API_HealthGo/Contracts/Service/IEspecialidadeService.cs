@@ -6,14 +6,14 @@ namespace API_HealthGo.Contracts.Service
 {
     public interface IEspecialidadeService
     {
-        Task<MessageResponse> Delete(int id);
+        Task<EspecialidadeGetAllResponse> GetAll();
+
+        Task<EspecialidadeEntity> GetById(int id);
 
         Task<MessageResponse> Post(EspecialidadeInsertDTO especialidade);
 
         Task<MessageResponse> Update(EspecialidadeEntity especialidade);
 
-        Task<EspecialidadeGetAllResponse> GetAll();
-
-        Task<EspecialidadeEntity> GetById(int id);
+        Task<MessageResponse> Delete(int id);
     }
 }

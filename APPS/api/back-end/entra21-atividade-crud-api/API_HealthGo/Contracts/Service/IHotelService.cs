@@ -4,7 +4,7 @@ using API_HealthGo.Response;
 
 namespace API_HealthGo.Contracts.Service
 {
-    public interface IAviaoService
+    public interface IHotelService
     {
         Task<AviaoGetAllResponse> GetAll();
 

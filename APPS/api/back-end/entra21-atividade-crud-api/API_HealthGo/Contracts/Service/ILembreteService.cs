@@ -6,14 +6,14 @@ namespace API_HealthGo.Contracts.Service
 {
     public interface ILembreteService
     {
-        Task<LembreteGetAllResponse> GetAllLembrete();
+        Task<LembreteGetAllResponse> GetAll();
 
-        Task<LembreteEntity> GetLembreteById(int id);
+        Task<LembreteEntity> GetById(int id);
 
         Task<MessageResponse> Post(LembreteInsertDTO lembrete);
 
-        Task<MessageResponse> Delete(int id);
+        Task<MessageResponse> Update(LembreteEntity lembrete);
 
-        Task<MessageResponse> Update(LembreteEntity lemberete);
+        Task<MessageResponse> Delete(int id);
     }
 }
