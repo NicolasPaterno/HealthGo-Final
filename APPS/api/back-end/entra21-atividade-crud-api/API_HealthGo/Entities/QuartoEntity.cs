@@ -16,6 +16,6 @@
 
         public int LimitePessoa { get; set; }
 
-        public int Hotel { get; set; }
+        public int Hotel_Id { get; set; }
     }
 }
