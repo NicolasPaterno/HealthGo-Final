@@ -22,35 +22,68 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import api from "@/services/api"; // 1. Importar o serviço da API
 
 interface Reminder {
   id: number;
+  // Mantive 'dateTime' e 'text' para consistência com o front-end existente.
+  // A API retorna 'data' e 'titulo'. Faremos a conversão.
   dateTime: string;
   text: string;
   type: 'consulta' | 'remédio' | 'outros';
 }
 
-const REMINDERS_STORAGE_KEY = 'healthgo-reminders';
+// Interface para o formato do lembrete retornado pela API
+interface ApiReminder {
+    id: number;
+    titulo: string;
+    data: string;
+    tipo: 'consulta' | 'remédio' | 'outros';
+    pessoa_Id: number;
+}
+
 
 export default function CalendarPage() {
   const isMobile = useIsMobile();
   const [date, setDate] = useState<Date | undefined>(new Date());
-
-  // 1. O estado agora é inicializado a partir do localStorage
-  const [reminders, setReminders] = useState<Reminder[]>(() => {
-    if (typeof window === 'undefined') return [];
-    const savedReminders = localStorage.getItem(REMINDERS_STORAGE_KEY);
-    return savedReminders ? JSON.parse(savedReminders) : [];
-  });
+  const [reminders, setReminders] = useState<Reminder[]>([]);
+  const [isLoading, setIsLoading] = useState(true); // Estado de carregamento
 
   const [newReminderText, setNewReminderText] = useState("");
   const [newReminderTime, setNewReminderTime] = useState("00:00");
   const [newReminderType, setNewReminderType] = useState<'consulta' | 'remédio' | 'outros'>('outros');
 
-  // 2. Salva os lembretes no localStorage sempre que eles mudam
+  // 2. Buscar lembretes da API ao carregar a página
   useEffect(() => {
-    localStorage.setItem(REMINDERS_STORAGE_KEY, JSON.stringify(reminders));
-  }, [reminders]);
+    const fetchReminders = async () => {
+      setIsLoading(true);
+      try {
+        // Supondo que o ID do usuário (pessoa) esteja disponível. Usando '1' como exemplo.
+        const response = await api.get('/Lembrete/Pessoa/23');
+        if (response.data && Array.isArray(response.data.data)) {
+          // Converte os dados da API para o formato do frontend
+          const formattedReminders = response.data.data.map((r: ApiReminder) => ({
+            id: r.id,
+            text: r.titulo,
+            dateTime: r.data,
+            type: r.tipo,
+          }));
+          setReminders(formattedReminders);
+        } else {
+            setReminders([]);
+        }
+      } catch (error) {
+        console.error("Erro ao buscar lembretes:", error);
+        toast.error("Erro ao carregar lembretes.");
+        setReminders([]);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchReminders();
+  }, []);
+
 
   const reminderDateTime = useMemo(() => {
     if (!date || !newReminderTime) return null;
@@ -81,13 +114,16 @@ export default function CalendarPage() {
       return;
     }
 
-    const newReminder: Omit<Reminder, 'id'> & { id?: number } = {
-        text: newReminderText,
-        dateTime: reminderDateTime.toISOString(),
-        type: newReminderType,
+    const newReminderPayload = {
+        Titulo: newReminderText,
+        Data: reminderDateTime.toISOString(),
+        Tipo: newReminderType,
+        Pessoa_Id: 1, // Usando ID do usuário fixo como exemplo
     };
 
     try {
+      // 3. Comentando a chamada para o n8n
+      /*
       const response = await fetch('https://nicaozx.app.n8n.cloud/webhook-test/savecalendar', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -97,12 +133,24 @@ export default function CalendarPage() {
       if (!response.ok) {
         throw new Error('A resposta da rede não foi OK');
       }
+      */
 
-      // 3. A lógica de atualização do estado permanece a mesma
-      const createdReminder = { ...newReminder, id: Date.now() };
-      setReminders(
-        [...reminders, createdReminder].sort((a, b) => new Date(a.dateTime).getTime() - new Date(b.dateTime).getTime())
-      );
+      // 4. Adicionando a chamada para a nossa API
+      const response = await api.post('/Lembrete', newReminderPayload);
+
+      // Atualiza a lista de lembretes após adicionar
+      // A maneira mais simples é buscar todos novamente
+      const updatedRemindersResponse = await api.get('/Lembrete/Pessoa/1');
+      if (updatedRemindersResponse.data && Array.isArray(updatedRemindersResponse.data.data)) {
+        const formattedReminders = updatedRemindersResponse.data.data.map((r: ApiReminder) => ({
+            id: r.id,
+            text: r.titulo,
+            dateTime: r.data,
+            type: r.tipo,
+          }));
+        setReminders(formattedReminders);
+      }
+
       setNewReminderText("");
       toast.success("Lembrete adicionado com sucesso!");
 
@@ -112,10 +160,17 @@ export default function CalendarPage() {
     }
   };
 
-  const handleDeleteReminder = (idToDelete: number) => {
-    setReminders(reminders.filter((r) => r.id !== idToDelete));
-    toast.info("Lembrete removido.");
+  const handleDeleteReminder = async (idToDelete: number) => {
+    try {
+        await api.delete(`/Lembrete/${idToDelete}`);
+        setReminders(reminders.filter((r) => r.id !== idToDelete));
+        toast.info("Lembrete removido.");
+    } catch (error) {
+        console.error("Erro ao deletar lembrete:", error);
+        toast.error("Erro ao remover o lembrete. Tente novamente.");
+    }
   };
+
 
   const remindersForSelectedDay = reminders
     .filter((r) => {
@@ -183,7 +238,9 @@ export default function CalendarPage() {
               </p>
               <Separator />
               <ScrollArea className="h-64 mt-4">
-                {remindersForSelectedDay.length > 0 ? (
+                {isLoading ? (
+                    <p className="text-sm text-muted-foreground text-center pt-8">Carregando...</p>
+                ) : remindersForSelectedDay.length > 0 ? (
                   <div className="space-y-3">
                     {remindersForSelectedDay.map((reminder) => (
                       <div key={reminder.id} className="flex items-center justify-between gap-2">
@@ -215,7 +272,6 @@ export default function CalendarPage() {
             </CardDescription>
           </CardHeader>
           <CardContent>
-            {/* 4. Adicionado campo de seleção para o tipo */}
             <div className="flex flex-col md:flex-row gap-2">
               <Select value={newReminderType} onValueChange={(value) => setNewReminderType(value as 'consulta' | 'remédio' | 'outros')}>
                 <SelectTrigger className="md:w-40">
@@ -247,7 +303,9 @@ export default function CalendarPage() {
             <Separator className="my-6" />
             <h3 className="text-lg font-semibold mb-4">Próximos Lembretes</h3>
             <ScrollArea className="h-72">
-              {Object.keys(groupedReminders).length > 0 ? (
+             {isLoading ? (
+                  <p className="text-sm text-muted-foreground text-center pt-10">Carregando...</p>
+             ) : Object.keys(groupedReminders).length > 0 ? (
                 <div className="space-y-4">
                   {Object.entries(groupedReminders).map(([day, list]) => (
                     <div key={day}>

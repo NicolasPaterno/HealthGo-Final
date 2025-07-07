@@ -1,4 +1,3 @@
-// src/components/register-form.tsx
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { toast } from "sonner";
@@ -20,17 +19,16 @@ export function RegisterForm({
   className,
   ...props
 }: React.ComponentProps<"div">) {
-  const navigate = useNavigate(); // Hook para navegação
+  const navigate = useNavigate(); 
 
-  // Estados para os campos do formulário
   const [nome, setNome] = useState("");
   const [email, setEmail] = useState("");
   const [senha, setSenha] = useState("");
   const [cpf, setCpf] = useState("");
   const [dataNascimento, setDataNascimento] = useState("");
-  const [telefone, setTelefone] = useState(""); // Novo estado para telefone
+  const [telefone, setTelefone] = useState(""); 
   const [cep, setCep] = useState("");
-  const [cidade, setCidade] = useState(""); // Usaremos como string por enquanto
+  const [cidade, setCidade] = useState(""); 
   const [rua, setRua] = useState("");
   const [bairro, setBairro] = useState("");
   const [numeroEndereco, setNumeroEndereco] = useState("");
@@ -39,7 +37,6 @@ export function RegisterForm({
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
 
-    // Monta o objeto com os dados no formato do PessoaInsertDTO
     const userData = {
       Nome: nome,
       DataNascimento: dataNascimento,
@@ -47,17 +44,16 @@ export function RegisterForm({
       Telefone: telefone,
       Email: email,
       Senha: senha,
-      EnderecoFoto: "default.jpg", // Valor padrão ou a ser implementado
+      EnderecoFoto: "default.jpg", 
       CaoGuia: caoGuia,
       CEP: cep,
       Bairro: bairro,
       Rua: rua,
       NumeroEndereco: numeroEndereco,
-      Cidade_Id: 1, // Valor fixo por enquanto. O ideal é ter um select de cidades.
+      Cidade_Id: 1, 
     };
 
     try {
-      // O endpoint é /Pessoa, conforme o seu Controller
       const response = await api.post("/Pessoa", userData);
 
       toast.success("Conta criada com sucesso!", {
@@ -65,7 +61,6 @@ export function RegisterForm({
         duration: 3000,
       });
 
-      // Redireciona para a página de login após um pequeno atraso
       setTimeout(() => {
         navigate("/login");
       }, 3000);
