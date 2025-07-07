@@ -1,6 +1,6 @@
 ﻿namespace API_HealthGo.DTO
 {
-    public class Cama_QuartoInsertDTO
+    public class CamaQuartoInsertDTO
     {
         public string Quantidade { get; set; }
 
