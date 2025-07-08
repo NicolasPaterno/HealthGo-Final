@@ -47,21 +47,18 @@ export default function CalendarPage() {
   const isMobile = useIsMobile();
   const [date, setDate] = useState<Date | undefined>(new Date());
   const [reminders, setReminders] = useState<Reminder[]>([]);
-  const [isLoading, setIsLoading] = useState(true); // Estado de carregamento
+  const [isLoading, setIsLoading] = useState(true); 
 
   const [newReminderText, setNewReminderText] = useState("");
   const [newReminderTime, setNewReminderTime] = useState("00:00");
   const [newReminderType, setNewReminderType] = useState<'consulta' | 'remédio' | 'outros'>('outros');
 
-  // 2. Buscar lembretes da API ao carregar a página
   useEffect(() => {
     const fetchReminders = async () => {
       setIsLoading(true);
       try {
-        // Supondo que o ID do usuário (pessoa) esteja disponível. Usando '1' como exemplo.
         const response = await api.get('/Lembrete/Pessoa/23');
         if (response.data && Array.isArray(response.data.data)) {
-          // Converte os dados da API para o formato do frontend
           const formattedReminders = response.data.data.map((r: ApiReminder) => ({
             id: r.id,
             text: r.titulo,
