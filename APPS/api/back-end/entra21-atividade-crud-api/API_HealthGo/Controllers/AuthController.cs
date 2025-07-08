@@ -1,4 +1,4 @@
-﻿using API_HealthGo.Contracts.Repository;
+﻿using API_HealthGo.Contracts.Repositories;
 using API_HealthGo.Contracts.Service;
 using Microsoft.AspNetCore.Mvc;
 
