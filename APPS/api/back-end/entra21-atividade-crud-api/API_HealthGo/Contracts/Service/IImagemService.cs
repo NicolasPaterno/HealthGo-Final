@@ -1,9 +1,6 @@
 ﻿using API_HealthGo.DTO;
 using API_HealthGo.Entities;
-using API_HealthGo.Responses.Estado;
 using API_HealthGo.Responses;
-using API_HealthGo.Responses.Lembrete;
-
 namespace API_HealthGo.Contracts.Service
 {
     public interface IImagemService

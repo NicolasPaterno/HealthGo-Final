@@ -1,10 +1,8 @@
-﻿using API_HealthGo.DTO;
+﻿using API_HealthGo.Contracts.Service;
+using API_HealthGo.DTO;
 using API_HealthGo.Entities;
 using API_HealthGo.Responses;
 using Microsoft.AspNetCore.Mvc;
-
-Com certeza! Aqui está o código para CamaQuartoController, seguindo o modelo que você forneceu:
-C#
 
 namespace API_HealthGo.Controllers
 {

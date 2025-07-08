@@ -1,5 +1,4 @@
 ﻿using API_HealthGo.Responses;
-using API_HealthGo.Responses.Aeroporto;
 using API_HealthGo.DTO;
 using API_HealthGo.Contracts.Repositories;
 using API_HealthGo.Contracts.Service;
@@ -28,7 +27,7 @@ namespace API_HealthGo.Services
 
         public async Task<AeroportoGetAllResponse> Get(int? cidade_Id)
         {
-            var allAeroports = await _repository.GetAll(); // Retorna List<AeroportoEntity>
+            var allAeroports = await _repository.GetAll();
 
             if (cidade_Id != 0)
             {

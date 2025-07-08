@@ -1,4 +1,5 @@
-﻿using API_HealthGo.DTO;
+﻿using API_HealthGo.Contracts.Service;
+using API_HealthGo.DTO;
 using API_HealthGo.Entities;
 using API_HealthGo.Responses;
 using Microsoft.AspNetCore.Mvc;
@@ -10,7 +11,7 @@ namespace API_HealthGo.Controllers
     public class PrestadorServicoController : ControllerBase
     {
         private IPrestadorServicoService _service;
-
+        
         public PrestadorServicoController(IPrestadorServicoService prestadorServicoService)
         {
             _service = prestadorServicoService;
