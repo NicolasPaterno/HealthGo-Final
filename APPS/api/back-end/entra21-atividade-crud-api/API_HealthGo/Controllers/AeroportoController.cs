@@ -19,7 +19,7 @@ namespace API_HealthGo.Controllers
         }
 
         [HttpGet("aeroportos")]
-        public async Task<ActionResult<AeroportoGetAllResponse>> Get([FromQuery] int cidade_Id)
+        public async Task<ActionResult<AeroportoGetAllResponse>> Get([FromQuery] int cidade_Id) // "filtro" pra retornar aeroportos de uma cidade só
         {
             return Ok(await _service.Get(cidade_Id));
         }

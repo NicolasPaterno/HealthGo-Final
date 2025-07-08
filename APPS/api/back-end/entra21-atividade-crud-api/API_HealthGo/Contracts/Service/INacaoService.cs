@@ -6,8 +6,6 @@ namespace API_HealthGo.Contracts.Service
 {
     public interface INacaoService
     {
-        Task<MessageResponse> Delete(int id);
-
         Task<NacaoGetAllResponse> GetAll();
 
         Task<NacaoEntity> GetById(int id);
@@ -15,5 +13,7 @@ namespace API_HealthGo.Contracts.Service
         Task<MessageResponse> Post(NacaoInsertDTO nacao);
 
         Task<MessageResponse> Update(NacaoEntity nacao);
+
+        Task<MessageResponse> Delete(int id);
     }
 }
