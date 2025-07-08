@@ -1,4 +1,4 @@
-﻿namespace API_HealthGo.Response
+﻿namespace API_HealthGo.Responses
 {
     public class MessageResponse
     {

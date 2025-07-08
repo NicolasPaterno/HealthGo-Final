@@ -1,19 +1,19 @@
 ﻿using API_HealthGo.DTO;
-using API_HealthGo.Entity;
-using API_HealthGo.Response;
+using API_HealthGo.Entities;
+using API_HealthGo.Responses;
 
 namespace API_HealthGo.Contracts.Service
 {
     public interface IAviaoService
     {
-        Task<AviaoGetAllResponse> GetAll();
-
-        Task<AviaoEntity> GetById(int id);
+        Task<MessageResponse> Delete(int id);
 
         Task<MessageResponse> Post(AviaoInsertDTO aviao);
 
         Task<MessageResponse> Update(AviaoEntity aviao);
 
-        Task<MessageResponse> Delete(int id);
+        Task<AviaoGetAllResponse> GetAll();
+
+        Task<AviaoEntity> GetById(int id);
     }
 }

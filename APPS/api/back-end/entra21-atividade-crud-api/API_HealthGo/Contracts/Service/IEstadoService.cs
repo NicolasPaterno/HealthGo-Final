@@ -1,11 +1,13 @@
 ﻿using API_HealthGo.DTO;
-using API_HealthGo.Entity;
-using API_HealthGo.Response;
+using API_HealthGo.Entities;
+using API_HealthGo.Responses;
 
 namespace API_HealthGo.Contracts.Service
 {
     public interface IEstadoService
     {
+        Task<MessageResponse> Delete(int id);
+
         Task<EstadoGetAllResponse> GetAll();
 
         Task<EstadoEntity> GetById(int id);
@@ -13,7 +15,5 @@ namespace API_HealthGo.Contracts.Service
         Task<MessageResponse> Post(EstadoInsertDTO estado);
 
         Task<MessageResponse> Update(EstadoEntity estado);
-
-        Task<MessageResponse> Delete(int id);
     }
 }
