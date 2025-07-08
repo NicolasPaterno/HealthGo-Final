@@ -1,0 +1,4 @@
+Tem atualmente 24 tabelas no BD, e 20 aqui
+As 4 que restam são de ligação N x N
+
+Falta saber como faz update N x N aqui na API

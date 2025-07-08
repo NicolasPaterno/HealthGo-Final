@@ -1,5 +1,5 @@
-﻿using API_HealthGo.Response;
-using API_HealthGo.Entity;
+﻿using API_HealthGo.Responses;
+using API_HealthGo.Entities;
 using API_HealthGo.DTO;
 
 namespace API_HealthGo.Contracts.Service
