@@ -11,7 +11,7 @@ namespace API_HealthGo.Controllers
     [Route("[controller]")]
     public class AvaliacaoController : ControllerBase
     {
-        private IAssentoService _service;
+        private IAvaliacaoService _service;
 
         public AvaliacaoController(IAvaliacaoService avaliacaoService)
         {
