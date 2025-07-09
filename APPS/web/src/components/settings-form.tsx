@@ -2,7 +2,7 @@
 
 import * as React from "react"
 import { zodResolver } from "@hookform/resolvers/zod"
-import { BellIcon, CheckIcon, LockIcon, SunIcon, UserIcon } from "lucide-react"
+import { BellIcon, LockIcon, SunIcon, UserIcon } from "lucide-react"
 import { useForm } from "react-hook-form"
 import { toast } from "sonner"
 import * as z from "zod"
@@ -16,7 +16,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Switch } from "@/components/ui/switch"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Textarea } from "@/components/ui/textarea"
-import { useTheme } from "@/components/theme-provider" // Importa o useTheme
+import { useTheme } from "@/components/theme-provider"
 import { Separator } from "./ui/separator"
 import api from "@/services/api"
 
@@ -93,8 +93,46 @@ type ChangeEmailFormValues = z.infer<typeof changeEmailFormSchema>;
 type ChangePasswordFormValues = z.infer<typeof changePasswordFormSchema>;
 
 export function SettingsForm() {
-  const [activeTab, setActiveTab] = React.useState("profile")
-  const { setTheme } = useTheme() // Usa o hook useTheme
+  const [activeTab, setActiveTab] = React.useState("security")
+  const { setTheme } = useTheme()
+  const [currentUserEmail, setCurrentUserEmail] = React.useState("");
+  const [isLoadingEmail, setIsLoadingEmail] = React.useState(true);
+
+  React.useEffect(() => {
+    const fetchUserData = async () => {
+      setIsLoadingEmail(true);
+      try {
+        const userDataString = localStorage.getItem("user");
+        if (!userDataString) {
+          throw new Error("Usuário não autenticado.");
+        }
+        
+        const userData = JSON.parse(userDataString);
+        const userId = userData?.id;
+
+        if (!userId) {
+          throw new Error("ID do usuário não encontrado no localStorage.");
+        }
+
+        const response = await api.get(`/Pessoa/${userId}`);
+
+        if (response.data && response.data.email) {
+          setCurrentUserEmail(response.data.email);
+        } else {
+          throw new Error("O e-mail não foi retornado pela API.");
+        }
+      } catch (error) {
+        console.error("Falha ao buscar e-mail do usuário:", error);
+        toast.error("Erro ao carregar e-mail", {
+          description: "Não foi possível carregar seu e-mail atual do servidor.",
+        });
+      } finally {
+        setIsLoadingEmail(false);
+      }
+    };
+
+    fetchUserData();
+  }, []);
 
   const profileForm = useForm<ProfileFormValues>({
     resolver: zodResolver(profileFormSchema),
@@ -163,7 +201,7 @@ export function SettingsForm() {
   }
 
   function onAppearanceSubmit(data: AppearanceFormValues) {
-    setTheme(data.theme) // Aplica o tema
+    setTheme(data.theme)
     toast.success("Appearance updated", {
       description: "Your appearance settings have been updated successfully.",
     })
@@ -183,18 +221,28 @@ export function SettingsForm() {
 
   async function onChangeEmailSubmit(data: ChangeEmailFormValues) {
     try {
-      // TODO: Substitua "user-id-from-auth" pelo ID do usuário logado
-      const userId = "user-id-from-auth";
+      const userData = localStorage.getItem("user");
+      if (!userData) {
+        toast.error("Erro de autenticação", {
+          description: "Usuário não encontrado. Por favor, faça login novamente.",
+        });
+        return;
+      }
+      const user = JSON.parse(userData);
+      const userId = user.id;
+
       await api.put(`/Pessoa/change-email`, {
-        id: userId,
+        userId: userId,
         newEmail: data.newEmail,
         password: data.passwordForEmail,
       });
+      
+      setCurrentUserEmail(data.newEmail);
 
       toast.success("E-mail alterado com sucesso!", {
         description: "Seu endereço de e-mail foi atualizado.",
       });
-      changeEmailForm.reset(); // Limpa o formulário após o sucesso
+      changeEmailForm.reset(); 
     } catch (error) {
       console.error("Erro ao alterar o e-mail:", error);
       toast.error("Falha ao alterar o e-mail", {
@@ -205,10 +253,18 @@ export function SettingsForm() {
 
   async function onChangePasswordSubmit(data: ChangePasswordFormValues) {
     try {
-      // TODO: Substitua "user-id-from-auth" pelo ID do usuário logado
-      const userId = "user-id-from-auth";
+      const userData = localStorage.getItem("user");
+      if (!userData) {
+        toast.error("Erro de autenticação", {
+          description: "Usuário não encontrado. Por favor, faça login novamente.",
+        });
+        return;
+      }
+      const user = JSON.parse(userData);
+      const userId = user.id;
+
       await api.put(`/Pessoa/change-password`, {
-        id: userId,
+        userId: userId,
         currentPassword: data.currentPassword,
         newPassword: data.newPassword,
       });
@@ -216,7 +272,7 @@ export function SettingsForm() {
       toast.success("Senha alterada com sucesso!", {
         description: "Sua senha foi atualizada com segurança.",
       });
-      changePasswordForm.reset(); // Limpa o formulário após o sucesso
+      changePasswordForm.reset();
     } catch (error) {
       console.error("Erro ao alterar a senha:", error);
       toast.error("Falha ao alterar a senha", {
@@ -601,7 +657,6 @@ export function SettingsForm() {
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-8">
-            {/* Formulário de Troca de Email (Topo) */}
             <div>
               <CardTitle className="text-lg">Alterar E-mail</CardTitle>
               <CardDescription className="mt-1">
@@ -612,7 +667,17 @@ export function SettingsForm() {
                   <FormField control={changeEmailForm.control} name="newEmail" render={({ field }) => (
                     <FormItem>
                       <FormLabel>Novo E-mail</FormLabel>
-                      <FormControl><Input placeholder="novo@exemplo.com" {...field} /></FormControl>
+                      <FormControl>
+                        <Input 
+                          placeholder={
+                            isLoadingEmail 
+                              ? "Carregando e-mail atual..." 
+                              : (currentUserEmail || "novo@exemplo.com")
+                          } 
+                          {...field}
+                          disabled={isLoadingEmail}
+                        />
+                      </FormControl>
                       <FormMessage />
                     </FormItem>
                   )} />
@@ -624,7 +689,7 @@ export function SettingsForm() {
                       <FormMessage />
                     </FormItem>
                   )} />
-                  <Button type="submit" disabled={changeEmailForm.formState.isSubmitting}>
+                  <Button type="submit" disabled={changeEmailForm.formState.isSubmitting || isLoadingEmail}>
                     {changeEmailForm.formState.isSubmitting ? 'Atualizando...' : 'Atualizar E-mail'}
                   </Button>
                 </form>
@@ -633,7 +698,6 @@ export function SettingsForm() {
 
             <Separator />
 
-            {/* Formulário de Troca de Senha (Embaixo) */}
             <div>
               <CardTitle className="text-lg">Alterar Senha</CardTitle>
               <CardDescription className="mt-1">
