@@ -20,13 +20,14 @@ namespace API_HealthGo.Controllers
         }
 
         [HttpGet]
+        [AllowAnonymous]
         public async Task<IActionResult> Get()
         {
             return Ok(await _service.GetAllPessoa());
         }
 
 
-        [HttpGet("(id)")]
+        [HttpGet("{id}")]
         public async Task<IActionResult> GetPessoaById(int id)
         {
             return Ok(await _service.GetPessoaById(id));
