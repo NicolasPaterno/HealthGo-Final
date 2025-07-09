@@ -17,6 +17,8 @@ import { Switch } from "@/components/ui/switch"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Textarea } from "@/components/ui/textarea"
 import { useTheme } from "@/components/theme-provider" // Importa o useTheme
+import { Separator } from "./ui/separator"
+import api from "@/services/api"
 
 const profileFormSchema = z.object({
   name: z.string().min(2, {
@@ -61,10 +63,34 @@ const securityFormSchema = z.object({
   }),
 })
 
+const changeEmailFormSchema = z.object({
+  newEmail: z.string().email({
+    message: "Por favor, insira um endereço de e-mail válido.",
+  }),
+  passwordForEmail: z.string().min(1, {
+    message: "A senha é obrigatória.",
+  }),
+});
+
+const changePasswordFormSchema = z.object({
+  currentPassword: z.string().min(1, {
+    message: "A senha atual é obrigatória.",
+  }),
+  newPassword: z.string().min(8, {
+    message: "A nova senha deve ter pelo menos 8 caracteres.",
+  }),
+  confirmPassword: z.string(),
+}).refine((data) => data.newPassword === data.confirmPassword, {
+  message: "As senhas não coincidem.",
+  path: ["confirmPassword"],
+});
+
 type ProfileFormValues = z.infer<typeof profileFormSchema>
 type AppearanceFormValues = z.infer<typeof appearanceFormSchema>
 type NotificationsFormValues = z.infer<typeof notificationsFormSchema>
 type SecurityFormValues = z.infer<typeof securityFormSchema>
+type ChangeEmailFormValues = z.infer<typeof changeEmailFormSchema>;
+type ChangePasswordFormValues = z.infer<typeof changePasswordFormSchema>;
 
 export function SettingsForm() {
   const [activeTab, setActiveTab] = React.useState("profile")
@@ -113,6 +139,23 @@ export function SettingsForm() {
     },
   })
 
+  const changeEmailForm = useForm<ChangeEmailFormValues>({
+    resolver: zodResolver(changeEmailFormSchema),
+    defaultValues: {
+      newEmail: "",
+      passwordForEmail: "",
+    },
+  });
+
+  const changePasswordForm = useForm<ChangePasswordFormValues>({
+    resolver: zodResolver(changePasswordFormSchema),
+    defaultValues: {
+      currentPassword: "",
+      newPassword: "",
+      confirmPassword: "",
+    },
+  });
+
   function onProfileSubmit(data: ProfileFormValues) {
     toast.success("Profile updated", {
       description: "Your profile has been updated successfully.",
@@ -136,6 +179,50 @@ export function SettingsForm() {
     toast.success("Security settings updated", {
       description: "Your security settings have been updated successfully.",
     })
+  }
+
+  async function onChangeEmailSubmit(data: ChangeEmailFormValues) {
+    try {
+      // TODO: Substitua "user-id-from-auth" pelo ID do usuário logado
+      const userId = "user-id-from-auth";
+      await api.put(`/Pessoa/change-email`, {
+        id: userId,
+        newEmail: data.newEmail,
+        password: data.passwordForEmail,
+      });
+
+      toast.success("E-mail alterado com sucesso!", {
+        description: "Seu endereço de e-mail foi atualizado.",
+      });
+      changeEmailForm.reset(); // Limpa o formulário após o sucesso
+    } catch (error) {
+      console.error("Erro ao alterar o e-mail:", error);
+      toast.error("Falha ao alterar o e-mail", {
+        description: "Ocorreu um erro. Verifique sua senha e tente novamente.",
+      });
+    }
+  }
+
+  async function onChangePasswordSubmit(data: ChangePasswordFormValues) {
+    try {
+      // TODO: Substitua "user-id-from-auth" pelo ID do usuário logado
+      const userId = "user-id-from-auth";
+      await api.put(`/Pessoa/change-password`, {
+        id: userId,
+        currentPassword: data.currentPassword,
+        newPassword: data.newPassword,
+      });
+
+      toast.success("Senha alterada com sucesso!", {
+        description: "Sua senha foi atualizada com segurança.",
+      });
+      changePasswordForm.reset(); // Limpa o formulário após o sucesso
+    } catch (error) {
+      console.error("Erro ao alterar a senha:", error);
+      toast.error("Falha ao alterar a senha", {
+        description: "Ocorreu um erro. Verifique sua senha atual e tente novamente.",
+      });
+    }
   }
 
   return (
@@ -508,107 +595,79 @@ export function SettingsForm() {
       <TabsContent value="security">
         <Card>
           <CardHeader>
-            <CardTitle>Security</CardTitle>
-            <CardDescription>Manage your security settings and preferences.</CardDescription>
+            <CardTitle>Segurança</CardTitle>
+            <CardDescription>
+              Gerencie suas configurações de segurança.
+            </CardDescription>
           </CardHeader>
           <CardContent className="space-y-8">
-            <Form {...securityForm}>
-              <form onSubmit={securityForm.handleSubmit(onSecuritySubmit)} className="space-y-8">
-                <FormField
-                  control={securityForm.control}
-                  name="twoFactorAuth"
-                  render={({ field }) => (
-                    <FormItem className="flex flex-row items-center justify-between rounded-lg border p-4">
-                      <div className="space-y-0.5">
-                        <FormLabel className="text-base">Two-Factor Authentication</FormLabel>
-                        <FormDescription>Add an extra layer of security to your account.</FormDescription>
-                      </div>
-                      <FormControl>
-                        <Switch checked={field.value} onCheckedChange={field.onChange} />
-                      </FormControl>
-                    </FormItem>
-                  )}
-                />
-                <FormField
-                  control={securityForm.control}
-                  name="passwordChangeInterval"
-                  render={({ field }) => (
+            {/* Formulário de Troca de Email (Topo) */}
+            <div>
+              <CardTitle className="text-lg">Alterar E-mail</CardTitle>
+              <CardDescription className="mt-1">
+                Atualize seu endereço de e-mail.
+              </CardDescription>
+              <Form {...changeEmailForm}>
+                <form onSubmit={changeEmailForm.handleSubmit(onChangeEmailSubmit)} className="space-y-8 mt-6">
+                  <FormField control={changeEmailForm.control} name="newEmail" render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Password Change Interval</FormLabel>
-                      <Select onValueChange={field.onChange} defaultValue={field.value}>
-                        <FormControl>
-                          <SelectTrigger>
-                            <SelectValue placeholder="Select an interval" />
-                          </SelectTrigger>
-                        </FormControl>
-                        <SelectContent>
-                          <SelectItem value="never">Never</SelectItem>
-                          <SelectItem value="30days">Every 30 days</SelectItem>
-                          <SelectItem value="60days">Every 60 days</SelectItem>
-                          <SelectItem value="90days">Every 90 days</SelectItem>
-                        </SelectContent>
-                      </Select>
-                      <FormDescription>How often you'll be prompted to change your password.</FormDescription>
+                      <FormLabel>Novo E-mail</FormLabel>
+                      <FormControl><Input placeholder="novo@exemplo.com" {...field} /></FormControl>
                       <FormMessage />
                     </FormItem>
-                  )}
-                />
-                <FormField
-                  control={securityForm.control}
-                  name="sessionTimeout"
-                  render={({ field }) => (
+                  )} />
+                  <FormField control={changeEmailForm.control} name="passwordForEmail" render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Session Timeout</FormLabel>
-                      <Select onValueChange={field.onChange} defaultValue={field.value}>
-                        <FormControl>
-                          <SelectTrigger>
-                            <SelectValue placeholder="Select a timeout" />
-                          </SelectTrigger>
-                        </FormControl>
-                        <SelectContent>
-                          <SelectItem value="15min">15 minutes</SelectItem>
-                          <SelectItem value="30min">30 minutes</SelectItem>
-                          <SelectItem value="1hour">1 hour</SelectItem>
-                          <SelectItem value="4hours">4 hours</SelectItem>
-                          <SelectItem value="1day">1 day</SelectItem>
-                        </SelectContent>
-                      </Select>
-                      <FormDescription>How long until your session expires due to inactivity.</FormDescription>
+                      <FormLabel>Sua Senha Atual</FormLabel>
+                      <FormControl><Input type="password" placeholder="Digite sua senha" {...field} /></FormControl>
+                      <FormDescription>Para sua segurança, digite sua senha para alterar o e-mail.</FormDescription>
                       <FormMessage />
                     </FormItem>
-                  )}
-                />
-                <div className="space-y-4">
-                  <h3 className="text-sm font-medium">Active Sessions</h3>
-                  <div className="space-y-4">
-                    <div className="flex items-center justify-between rounded-lg border p-4">
-                      <div className="space-y-0.5">
-                        <div className="text-sm font-medium">Current Session</div>
-                        <div className="text-xs text-muted-foreground">
-                          <span className="font-medium">Chrome on Windows</span> • Active now
-                        </div>
-                      </div>
-                      <div className="flex items-center gap-2">
-                        <CheckIcon className="h-4 w-4 text-green-500" />
-                        <span className="text-xs text-muted-foreground">This device</span>
-                      </div>
-                    </div>
-                    <div className="flex items-center justify-between rounded-lg border p-4">
-                      <div className="space-y-0.5">
-                        <div className="text-sm font-medium">Mobile App</div>
-                        <div className="text-xs text-muted-foreground">
-                          <span className="font-medium">iOS 16</span> • Last active 2 hours ago
-                        </div>
-                      </div>
-                      <Button variant="outline" size="sm">
-                        Sign out
-                      </Button>
-                    </div>
-                  </div>
-                </div>
-                <Button type="submit">Update security settings</Button>
-              </form>
-            </Form>
+                  )} />
+                  <Button type="submit" disabled={changeEmailForm.formState.isSubmitting}>
+                    {changeEmailForm.formState.isSubmitting ? 'Atualizando...' : 'Atualizar E-mail'}
+                  </Button>
+                </form>
+              </Form>
+            </div>
+
+            <Separator />
+
+            {/* Formulário de Troca de Senha (Embaixo) */}
+            <div>
+              <CardTitle className="text-lg">Alterar Senha</CardTitle>
+              <CardDescription className="mt-1">
+                Atualize sua senha. Use uma senha forte e única.
+              </CardDescription>
+              <Form {...changePasswordForm}>
+                <form onSubmit={changePasswordForm.handleSubmit(onChangePasswordSubmit)} className="space-y-8 mt-6">
+                  <FormField control={changePasswordForm.control} name="currentPassword" render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Senha Atual</FormLabel>
+                      <FormControl><Input type="password" {...field} /></FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )} />
+                  <FormField control={changePasswordForm.control} name="newPassword" render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Nova Senha</FormLabel>
+                      <FormControl><Input type="password" {...field} /></FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )} />
+                  <FormField control={changePasswordForm.control} name="confirmPassword" render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Confirmar Nova Senha</FormLabel>
+                      <FormControl><Input type="password" {...field} /></FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )} />
+                  <Button type="submit" disabled={changePasswordForm.formState.isSubmitting}>
+                    {changePasswordForm.formState.isSubmitting ? 'Atualizando...' : 'Atualizar Senha'}
+                  </Button>
+                </form>
+              </Form>
+            </div>
           </CardContent>
         </Card>
       </TabsContent>
