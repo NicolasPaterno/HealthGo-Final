@@ -73,6 +73,46 @@ namespace API_HealthGo.Services
                 Message = "Pessoa atualizada com sucesso!"
             };
         }
+        public async Task<MessageResponse> ChangePassword(ChangePasswordDTO changePasswordDto)
+        {
+            var pessoa = await _repository.GetPessoaById(changePasswordDto.UserId);
+            if (pessoa == null)
+            {
+                throw new ArgumentException("Usuário não encontrado.");
+            }
+
+            if (!BCrypt.Net.BCrypt.Verify(changePasswordDto.CurrentPassword, pessoa.Senha))
+            {
+                throw new ArgumentException("A senha atual está incorreta.");
+            }
+
+            ValidatePassword(changePasswordDto.NewPassword);
+            pessoa.Senha = BCrypt.Net.BCrypt.HashPassword(changePasswordDto.NewPassword);
+
+            await _repository.UpdatePessoa(pessoa);
+
+            return new MessageResponse { Message = "Senha alterada com sucesso!" };
+        }
+
+        public async Task<MessageResponse> ChangeEmail(ChangeEmailDTO changeEmailDto)
+        {
+            var pessoa = await _repository.GetPessoaById(changeEmailDto.UserId);
+            if (pessoa == null)
+            {
+                throw new ArgumentException("Usuário não encontrado.");
+            }
+
+            if (!BCrypt.Net.BCrypt.Verify(changeEmailDto.Password, pessoa.Senha))
+            {
+                throw new ArgumentException("A senha está incorreta.");
+            }
+
+            pessoa.Email = changeEmailDto.NewEmail;
+            await _repository.UpdatePessoa(pessoa);
+
+            return new MessageResponse { Message = "E-mail alterado com sucesso!" };
+        }
+
         public async Task<MessageResponse> Delete(int id)
         {
             await _repository.DeletePessoa(id);

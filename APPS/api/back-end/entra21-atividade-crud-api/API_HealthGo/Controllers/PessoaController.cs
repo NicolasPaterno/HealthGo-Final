@@ -60,6 +60,44 @@ namespace API_HealthGo.Controllers
             return Ok(await _service.Update(pessoa));
         }
 
+        [HttpPut("change-password")]
+        public async Task<IActionResult> ChangePassword([FromBody] ChangePasswordDTO changePasswordDto)
+        {
+            try
+            {
+                var response = await _service.ChangePassword(changePasswordDto);
+                return Ok(response);
+            }
+            catch (ArgumentException ex)
+            {
+                return BadRequest(new MessageResponse { Message = ex.Message });
+            }
+            catch (Exception ex)
+            {
+                var response = new MessageResponse { Message = $"Ocorreu um erro interno: {ex.Message}" };
+                return StatusCode(500, response);
+            }
+        }
+
+        [HttpPut("change-email")]
+        public async Task<IActionResult> ChangeEmail([FromBody] ChangeEmailDTO changeEmailDto)
+        {
+            try
+            {
+                var response = await _service.ChangeEmail(changeEmailDto);
+                return Ok(response);
+            }
+            catch (ArgumentException ex)
+            {
+                return BadRequest(new MessageResponse { Message = ex.Message });
+            }
+            catch (Exception ex)
+            {
+                var response = new MessageResponse { Message = $"Ocorreu um erro interno: {ex.Message}" };
+                return StatusCode(500, response);
+            }
+        }
+
         [HttpDelete("(id)")]
         public async Task<ActionResult<MessageResponse>> Delete(int id)
         {
