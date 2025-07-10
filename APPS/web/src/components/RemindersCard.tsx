@@ -37,7 +37,7 @@ export function RemindersCard() {
   useEffect(() => {
     const fetchReminders = async () => {
       try {
-        const response = await api.get(`/Lembrete/Pessoa/1`); 
+        const response = await api.get(`/Lembrete/Pessoa/21`); 
         if (response.data && Array.isArray(response.data.data)) {
             setReminders(response.data.data);
         } else {

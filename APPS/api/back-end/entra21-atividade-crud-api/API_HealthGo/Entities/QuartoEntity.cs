@@ -1,4 +1,4 @@
-﻿namespace API_HealthGo.Entity
+﻿namespace API_HealthGo.Entities
 {
     public class QuartoEntity
     {
@@ -16,6 +16,6 @@
 
         public int LimitePessoa { get; set; }
 
-        public int Hotel { get; set; }
+        public int Hotel_Id { get; set; }
     }
 }

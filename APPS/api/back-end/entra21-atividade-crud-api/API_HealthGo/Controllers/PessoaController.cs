@@ -1,7 +1,7 @@
 ﻿using API_HealthGo.Contracts.Service;
 using API_HealthGo.DTO;
-using API_HealthGo.Entity;
-using API_HealthGo.Response;
+using API_HealthGo.Entities;
+using API_HealthGo.Responses;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -20,13 +20,14 @@ namespace API_HealthGo.Controllers
         }
 
         [HttpGet]
+        [AllowAnonymous]
         public async Task<IActionResult> Get()
         {
             return Ok(await _service.GetAllPessoa());
         }
 
 
-        [HttpGet("(id)")]
+        [HttpGet("{id}")]
         public async Task<IActionResult> GetPessoaById(int id)
         {
             return Ok(await _service.GetPessoaById(id));
@@ -58,6 +59,44 @@ namespace API_HealthGo.Controllers
         public async Task<ActionResult<MessageResponse>> Update(PessoaEntity pessoa)
         {
             return Ok(await _service.Update(pessoa));
+        }
+
+        [HttpPut("change-password")]
+        public async Task<IActionResult> ChangePassword([FromBody] ChangePasswordDTO changePasswordDto)
+        {
+            try
+            {
+                var response = await _service.ChangePassword(changePasswordDto);
+                return Ok(response);
+            }
+            catch (ArgumentException ex)
+            {
+                return BadRequest(new MessageResponse { Message = ex.Message });
+            }
+            catch (Exception ex)
+            {
+                var response = new MessageResponse { Message = $"Ocorreu um erro interno: {ex.Message}" };
+                return StatusCode(500, response);
+            }
+        }
+
+        [HttpPut("change-email")]
+        public async Task<IActionResult> ChangeEmail([FromBody] ChangeEmailDTO changeEmailDto)
+        {
+            try
+            {
+                var response = await _service.ChangeEmail(changeEmailDto);
+                return Ok(response);
+            }
+            catch (ArgumentException ex)
+            {
+                return BadRequest(new MessageResponse { Message = ex.Message });
+            }
+            catch (Exception ex)
+            {
+                var response = new MessageResponse { Message = $"Ocorreu um erro interno: {ex.Message}" };
+                return StatusCode(500, response);
+            }
         }
 
         [HttpDelete("(id)")]
