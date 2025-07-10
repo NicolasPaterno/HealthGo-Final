@@ -46,6 +46,20 @@ namespace API_HealthGo.Controllers
 
         }
 
+        [HttpPost("recuperar-senha")]
+        public async Task<IActionResult> RecuperarSenha([FromBody] string email)
+        {
+            try
+            {
+                await _authService.SolicitarRecuperacaoSenhaAsync(email);
+                return Ok("Email de recuperação enviado.");
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
         [HttpPost("redefinir-senha")]
         public async Task<IActionResult> RedefinirSenha([FromBody] RedefinirSenhaDTO dto)
         {
