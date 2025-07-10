@@ -1,7 +1,6 @@
 ﻿using API_HealthGo.Contracts.Repositories;
 using API_HealthGo.Contracts.Service;
 using API_HealthGo.DTO;
-using API_HealthGo.Services;
 using Microsoft.AspNetCore.Mvc;
 
 namespace API_HealthGo.Controllers
@@ -30,6 +29,11 @@ namespace API_HealthGo.Controllers
                 return Unauthorized(new { message = "Email ou senha inválidos." });
             }
 
+            if (string.IsNullOrWhiteSpace(pessoa.Senha) || !pessoa.Senha.StartsWith("$2"))
+            {
+                return StatusCode(500, new { message = "Hash de senha inválido no banco de dados." });
+            }
+
             //Password verification using BCrypt
             bool isPasswordValid = BCrypt.Net.BCrypt.Verify(loginDto.Password, pessoa.Senha);
             if (!isPasswordValid)
@@ -46,7 +50,7 @@ namespace API_HealthGo.Controllers
 
         }
 
-        [HttpPost("{recuperar-senha}")]
+        [HttpPost("recuperar-senha")]
         public async Task<IActionResult> RecuperarSenha([FromBody] string email)
         {
             try

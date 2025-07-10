@@ -3,9 +3,6 @@ using API_HealthGo.Contracts.Service;
 using API_HealthGo.DTO;
 using API_HealthGo.Entities;
 using API_HealthGo.Responses;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http.HttpResults;
-using Microsoft.AspNetCore.Mvc;
 
 namespace API_HealthGo.Services
 {
@@ -124,5 +121,3 @@ namespace API_HealthGo.Services
 
     }
 }
-
-
