@@ -6,7 +6,7 @@ namespace API_HealthGo.Infrastructure
 {
     public class Connection : IConnection
     {
-        protected string connectionString = "Server=localhost;Database=healthgo;User=root;Password=toor;";
+        protected string connectionString = "Server=localhost;Database=healthgo;User=root;Password=root;";
 
         public MySqlConnection GetConnection()
         {
