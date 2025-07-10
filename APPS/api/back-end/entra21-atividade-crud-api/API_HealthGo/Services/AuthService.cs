@@ -49,7 +49,7 @@ namespace API_HealthGo.Services
                 throw new Exception("Token inválido, expirado ou já utilizado.");
 
             // 2. Buscar a pessoa
-            var pessoa = await _pessoaRepository.GetPessoaByIdAsync(tokenEntity.Pessoa_Id);
+            var pessoa = await _pessoaRepository.GetPessoaById(tokenEntity.Pessoa_Id);
 
             if (pessoa == null)
                 throw new Exception("Pessoa associada ao token não encontrada.");
