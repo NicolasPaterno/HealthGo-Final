@@ -73,6 +73,7 @@ namespace API_HealthGo
             //recuperação de senha por email
             builder.Services.AddScoped<ITokenRecuperacaoSenhaRepository, TokenRecuperacaoSenhaRepository>();
             builder.Services.AddScoped<IAuthService, AuthService>();
+            builder.Services.AddScoped<IEmailService, EmailService>();
 
             builder.Services.AddScoped<IPessoaService, PessoaService>();
             builder.Services.AddTransient<IPessoaRepository, PessoaRepository>();

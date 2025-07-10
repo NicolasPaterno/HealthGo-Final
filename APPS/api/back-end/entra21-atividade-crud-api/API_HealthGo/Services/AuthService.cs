@@ -9,11 +9,13 @@ namespace API_HealthGo.Services
     {
         private IPessoaRepository _pessoaRepository;
         private ITokenRecuperacaoSenhaRepository _tokenRecuperacaoSenhaRepository;
+        private IEmailService _emailService;
 
-        public AuthService(IPessoaRepository pessoaRepository, ITokenRecuperacaoSenhaRepository tokenRecuperacaoSenhaRepository)
+        public AuthService(IPessoaRepository pessoaRepository, ITokenRecuperacaoSenhaRepository tokenRecuperacaoSenhaRepository, IEmailService emailService)
         {
             _pessoaRepository = pessoaRepository;
             _tokenRecuperacaoSenhaRepository = tokenRecuperacaoSenhaRepository;
+            _emailService = emailService;
         }
 
         public async Task SolicitarRecuperacaoSenhaAsync(string email)
@@ -34,10 +36,16 @@ namespace API_HealthGo.Services
             await _tokenRecuperacaoSenhaRepository.SaveAsync(token);
 
             // 4. Aqui você pode chamar um serviço de e-mail
-            // Ex: await _emailService.SendPasswordResetEmail(email, token.Token);
+            string link = $"http://localhost:3000/redefinir-senha?token={token.Token}";
 
-            // Por enquanto, pode só fazer um log:
-            Console.WriteLine($"Link de recuperação: http://localhost:3000/redefinir-senha?token={token.Token}");
+            string corpo = $@"
+                <p>Olá,</p>
+                <p>Recebemos uma solicitação para redefinir sua senha.</p>
+                <p><a href='{link}'>Clique aqui para redefinir sua senha</a></p>
+                <p>Se você não fez essa solicitação, ignore este e-mail.</p>
+            ";
+
+            await _emailService.EnviarEmailAsync(pessoa.Email, "Redefinição de Senha - HealthGo", corpo);
         }
 
         public async Task RedefinirSenhaAsync(RedefinirSenhaDTO dto)
