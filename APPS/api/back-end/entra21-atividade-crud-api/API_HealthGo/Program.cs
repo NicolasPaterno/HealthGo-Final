@@ -2,6 +2,7 @@ using API_HealthGo.Contracts.Infrastructure;
 using API_HealthGo.Contracts.Repositories;
 using API_HealthGo.Contracts.Service;
 using API_HealthGo.Infrastructure;
+using API_HealthGo.Repositories;
 using API_HealthGo.Repository;
 using API_HealthGo.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -68,6 +69,10 @@ namespace API_HealthGo
             builder.Services.AddSingleton<IConnection, Connection>();
             //service for token generation
             builder.Services.AddScoped<ITokenService, TokenService>();
+
+            //recuperação de senha por email
+            builder.Services.AddScoped<ITokenRecuperacaoSenhaRepository, TokenRecuperacaoSenhaRepository>();
+            builder.Services.AddScoped<IAuthService, AuthService>();
 
             builder.Services.AddScoped<IPessoaService, PessoaService>();
             builder.Services.AddTransient<IPessoaRepository, PessoaRepository>();
