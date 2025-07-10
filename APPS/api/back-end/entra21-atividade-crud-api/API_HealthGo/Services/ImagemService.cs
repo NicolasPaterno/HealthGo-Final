@@ -2,7 +2,6 @@
 using API_HealthGo.Contracts.Repositories;
 using API_HealthGo.Contracts.Service;
 using API_HealthGo.DTO;
-using API_HealthGo.Responses.Lembrete;
 using API_HealthGo.Responses;
 
 namespace API_HealthGo.Services
