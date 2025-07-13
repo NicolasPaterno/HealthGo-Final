@@ -22,42 +22,53 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import api from "@/services/api"; // 1. Importar o serviço da API
+import api from "@/services/api";
 
 interface Reminder {
   id: number;
-  // Mantive 'dateTime' e 'text' para consistência com o front-end existente.
-  // A API retorna 'data' e 'titulo'. Faremos a conversão.
   dateTime: string;
   text: string;
-  type: 'consulta' | 'remédio' | 'outros';
+  type: 'Consulta' | 'Remédio' | 'Outro';
 }
 
-// Interface para o formato do lembrete retornado pela API
 interface ApiReminder {
     id: number;
     titulo: string;
     data: string;
-    tipo: 'consulta' | 'remédio' | 'outros';
+    tipo: 'Consulta' | 'Remédio' | 'Outro';
     pessoa_Id: number;
 }
 
+interface User {
+  id: number;
+  nome: string;
+  email: string;
+}
 
 export default function CalendarPage() {
   const isMobile = useIsMobile();
   const [date, setDate] = useState<Date | undefined>(new Date());
   const [reminders, setReminders] = useState<Reminder[]>([]);
-  const [isLoading, setIsLoading] = useState(true); 
+  const [isLoading, setIsLoading] = useState(true);
+  const [currentUser, setCurrentUser] = useState<User | null>(null);
 
   const [newReminderText, setNewReminderText] = useState("");
   const [newReminderTime, setNewReminderTime] = useState("00:00");
-  const [newReminderType, setNewReminderType] = useState<'consulta' | 'remédio' | 'outros'>('outros');
+  const [newReminderType, setNewReminderType] = useState<'Consulta' | 'Remédio' | 'Outro'>('Outro');
+
+  useEffect(() => {
+    const userDataString = localStorage.getItem("user");
+    if (userDataString) {
+      setCurrentUser(JSON.parse(userDataString));
+    }
+  }, []);
 
   useEffect(() => {
     const fetchReminders = async () => {
+      if (!currentUser) return;
       setIsLoading(true);
       try {
-        const response = await api.get('/Lembrete/Pessoa/23');
+        const response = await api.get(`/Lembrete/Pessoa/${currentUser.id}`);
         if (response.data && Array.isArray(response.data.data)) {
           const formattedReminders = response.data.data.map((r: ApiReminder) => ({
             id: r.id,
@@ -78,8 +89,10 @@ export default function CalendarPage() {
       }
     };
 
-    fetchReminders();
-  }, []);
+    if (currentUser) {
+        fetchReminders();
+    }
+  }, [currentUser]);
 
 
   const reminderDateTime = useMemo(() => {
@@ -98,6 +111,10 @@ export default function CalendarPage() {
   }, [reminderDateTime]);
 
   const handleAddReminder = async () => {
+    if (!currentUser) {
+        toast.error("Você precisa estar logado para criar um lembrete.");
+        return;
+    }
     if (isPastTime) {
       toast.error("Não é possível agendar lembretes para uma data ou hora passada.");
       return;
@@ -115,29 +132,13 @@ export default function CalendarPage() {
         Titulo: newReminderText,
         Data: reminderDateTime.toISOString(),
         Tipo: newReminderType,
-        Pessoa_Id: 1, // Usando ID do usuário fixo como exemplo
+        Pessoa_Id: currentUser.id,
     };
 
     try {
-      // 3. Comentando a chamada para o n8n
-      /*
-      const response = await fetch('https://nicaozx.app.n8n.cloud/webhook-test/savecalendar', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(newReminder),
-      });
+      await api.post('/Lembrete', newReminderPayload);
 
-      if (!response.ok) {
-        throw new Error('A resposta da rede não foi OK');
-      }
-      */
-
-      // 4. Adicionando a chamada para a nossa API
-      const response = await api.post('/Lembrete', newReminderPayload);
-
-      // Atualiza a lista de lembretes após adicionar
-      // A maneira mais simples é buscar todos novamente
-      const updatedRemindersResponse = await api.get('/Lembrete/Pessoa/1');
+      const updatedRemindersResponse = await api.get(`/Lembrete/Pessoa/${currentUser.id}`);
       if (updatedRemindersResponse.data && Array.isArray(updatedRemindersResponse.data.data)) {
         const formattedReminders = updatedRemindersResponse.data.data.map((r: ApiReminder) => ({
             id: r.id,
@@ -203,20 +204,21 @@ export default function CalendarPage() {
           <CardHeader>
             <CardTitle>Calendário</CardTitle>
             <CardDescription>
-              Dias com lembretes são marcados com um sublinhado e negrito.
+              Marque e gerencie seus compromissos e lembretes de saúde.
             </CardDescription>
           </CardHeader>
-          <CardContent className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <div className=" md:col-span-2">
+          <CardContent className="flex flex-col lg:flex-row gap-8">
+            {/* Calendário */}
+            <div className="flex-grow flex justify-center">
               <Calendar
                 mode="single"
                 selected={date}
                 onSelect={setDate}
                 numberOfMonths={isMobile ? 1 : 2}
-                className="rounded-md p-0 w-max"
+                className="p-0"
                 disabled={{ before: new Date(new Date().setDate(new Date().getDate() - 1)) }}
                 footer={
-                  <Button variant="outline" className="w-full mt-2 rounded-3xl" onClick={() => setDate(new Date())}>
+                  <Button variant="outline" className="w-full mt-4" onClick={() => setDate(new Date())}>
                     Hoje
                   </Button>
                 }
@@ -224,9 +226,11 @@ export default function CalendarPage() {
                 modifiersClassNames={{ hasReminder: "day-with-reminder" }}
               />
             </div>
-            <div className="md:col-span-1 border-l md:pl-6">
-              <h3 className="text-lg font-semibold mb-2">Lembretes do Dia</h3>
-              <p className="text-sm text-muted-foreground mb-4">
+            
+            {/* Lembretes do Dia */}
+            <div className="lg:border-l lg:pl-6 lg:basis-1/3">
+              <h3 className="text-lg font-semibold mb-2">Lembretes para</h3>
+              <p className="text-sm text-muted-foreground mb-4 font-medium">
                 {date?.toLocaleDateString("pt-BR", {
                   weekday: "long",
                   day: "numeric",
@@ -234,20 +238,20 @@ export default function CalendarPage() {
                 }) || "Selecione uma data"}
               </p>
               <Separator />
-              <ScrollArea className="h-64 mt-4">
+              <ScrollArea className="h-60 mt-4 pr-3">
                 {isLoading ? (
                     <p className="text-sm text-muted-foreground text-center pt-8">Carregando...</p>
                 ) : remindersForSelectedDay.length > 0 ? (
                   <div className="space-y-3">
                     {remindersForSelectedDay.map((reminder) => (
                       <div key={reminder.id} className="flex items-center justify-between gap-2">
-                        <div className="flex items-center gap-2">
+                        <div className="flex items-center gap-2 flex-grow min-w-0">
                             <Badge className="h-fit">
                               {new Date(reminder.dateTime).toLocaleTimeString("pt-BR", { hour: '2-digit', minute: '2-digit' })}
                             </Badge>
-                            <p className="text-sm flex-grow">{reminder.text}</p>
+                            <p className="text-sm truncate">{reminder.text}</p>
                         </div>
-                        <Badge variant="outline">{reminder.type}</Badge>
+                        <Badge variant="outline" className="shrink-0">{reminder.type}</Badge>
                       </div>
                     ))}
                   </div>
@@ -263,37 +267,37 @@ export default function CalendarPage() {
 
         <Card>
           <CardHeader>
-            <CardTitle>Agendar e Visualizar Todos os Lembretes</CardTitle>
+            <CardTitle>Agendar e Visualizar Lembretes</CardTitle>
             <CardDescription>
-              Adicione um novo lembrete para a data selecionada acima.
+              Adicione e veja todos os seus lembretes futuros.
             </CardDescription>
           </CardHeader>
           <CardContent>
-            <div className="flex flex-col md:flex-row gap-2">
-              <Select value={newReminderType} onValueChange={(value) => setNewReminderType(value as 'consulta' | 'remédio' | 'outros')}>
-                <SelectTrigger className="md:w-40">
-                  <SelectValue placeholder="Tipo de lembrete" />
+            <div className="flex flex-wrap gap-2">
+              <Select value={newReminderType} onValueChange={(value) => setNewReminderType(value as 'Consulta' | 'Remédio' | 'Outro')}>
+                <SelectTrigger className="w-full sm:w-auto">
+                  <SelectValue placeholder="Tipo" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="consulta">Consulta</SelectItem>
-                  <SelectItem value="remédio">Remédio</SelectItem>
-                  <SelectItem value="outros">Outros</SelectItem>
+                  <SelectItem value="Consulta">Consulta</SelectItem>
+                  <SelectItem value="Remédio">Remédio</SelectItem>
+                  <SelectItem value="Outro">Outro</SelectItem>
                 </SelectContent>
               </Select>
               <Input
                 type="time"
                 value={newReminderTime}
                 onChange={(e) => setNewReminderTime(e.target.value)}
-                className="md:w-32"
+                className="w-full sm:w-auto"
               />
               <Input
                 value={newReminderText}
                 onChange={(e) => setNewReminderText(e.target.value)}
                 placeholder="Descrição do lembrete..."
-                className="flex-grow"
+                className="flex-grow min-w-[150px]"
               />
-              <Button onClick={handleAddReminder} disabled={isPastTime}>
-                Agendar Lembrete
+              <Button onClick={handleAddReminder} disabled={isPastTime} className="w-full sm:w-auto">
+                Agendar
               </Button>
             </div>
             {isPastTime && <p className="text-destructive text-xs mt-2">Você não pode agendar um lembrete no passado.</p>}
@@ -307,24 +311,24 @@ export default function CalendarPage() {
                   {Object.entries(groupedReminders).map(([day, list]) => (
                     <div key={day}>
                       <p className="font-bold text-sm mb-2">{day}</p>
-                      <div className="space-y-2 pl-2 border-l-3 hover:bg-transparent">
+                      <div className="space-y-2 pl-2 border-l-2">
                         {list.map((reminder) => (
                           <div
                             key={reminder.id}
-                            className="flex items-center justify-between group h-12"
+                            className="flex items-center justify-between group p-2 rounded-md hover:bg-muted"
                           >
-                            <div className="flex items-center gap-2">
-                              <Badge variant="secondary">
+                            <div className="flex items-center gap-2 overflow-hidden">
+                              <Badge variant="secondary" className="shrink-0">
                                 {new Date(reminder.dateTime).toLocaleTimeString("pt-BR", { hour: '2-digit', minute: '2-digit' })}
                               </Badge>
-                              <p className="text-sm">{reminder.text}</p>
-                              <Badge variant="outline">{reminder.type}</Badge>
+                              <p className="text-sm truncate">{reminder.text}</p>
+                              <Badge variant="outline" className="shrink-0">{reminder.type}</Badge>
                             </div>
                             <Button
                               variant="ghost"
                               size="icon"
                               onClick={() => handleDeleteReminder(reminder.id)}
-                              className="h-8 w-8 text-muted-foreground opacity-0 mr-3.5 group-hover:opacity-100 hover:bg-destructive/10 hover:text-destructive"
+                              className="h-8 w-8 text-muted-foreground opacity-0 group-hover:opacity-100 hover:bg-destructive/10 hover:text-destructive shrink-0"
                             >
                               <IconTrash className="h-4 w-4" />
                             </Button>

@@ -6,9 +6,8 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { IconPill, IconStethoscope, IconListDetails } from "@tabler/icons-react";
-import { useState, useEffect } from "react";
 
-// Interface para os lembretes
+// Interface para os lembretes (deve corresponder à do DashboardContent)
 interface Reminder {
   id: number;
   dateTime: string;
@@ -16,7 +15,10 @@ interface Reminder {
   type: 'consulta' | 'remédio' | 'outros';
 }
 
-const REMINDERS_STORAGE_KEY = 'healthgo-reminders';
+// Interface para as props do componente
+interface HealthSummaryCardProps {
+  reminders: Reminder[];
+}
 
 // Função para formatar a data e hora de forma amigável
 const formatDateTime = (date: Date) => {
@@ -41,35 +43,13 @@ const formatDateTime = (date: Date) => {
 }
 
 
-export function HealthSummaryCard() {
-  const [reminders, setReminders] = useState<Reminder[]>([]);
-
-  useEffect(() => {
-    // Carrega os lembretes do localStorage ao montar o componente
-    if (typeof window !== 'undefined') {
-        const savedReminders = localStorage.getItem(REMINDERS_STORAGE_KEY);
-        const parsedReminders = savedReminders ? JSON.parse(savedReminders) : [];
-        setReminders(parsedReminders);
-    }
-
-    // Ouve por mudanças no storage para manter os dados sincronizados entre abas/janelas
-    const handleStorageChange = (event: StorageEvent) => {
-      if (event.key === REMINDERS_STORAGE_KEY && event.newValue) {
-        setReminders(JSON.parse(event.newValue));
-      }
-    };
-    window.addEventListener('storage', handleStorageChange);
-    return () => {
-      window.removeEventListener('storage', handleStorageChange);
-    };
-  }, []);
-
-  // Filtra e ordena os lembretes para pegar apenas os futuros
+export function HealthSummaryCard({ reminders }: HealthSummaryCardProps) {
+  // Filtra e ordena os lembretes futuros
   const upcomingReminders = reminders
     .filter(r => new Date(r.dateTime) >= new Date())
     .sort((a, b) => new Date(a.dateTime).getTime() - new Date(b.dateTime).getTime());
 
-  // Encontra o próximo lembrete de cada categoria
+  // Encontra o *primeiro* (mais próximo) lembrete de cada categoria
   const nextAppointment = upcomingReminders.find(r => r.type === 'consulta');
   const nextMedication = upcomingReminders.find(r => r.type === 'remédio');
   const nextOther = upcomingReminders.find(r => r.type === 'outros');
@@ -106,7 +86,7 @@ export function HealthSummaryCard() {
                 </p>
             </div>
         </div>
-        {/* Próximo Outro Lembrete */}
+        {/* Outro Lembrete */}
         <div className="flex items-center gap-4">
             <IconListDetails className="h-6 w-6 text-yellow-500" />
             <div>

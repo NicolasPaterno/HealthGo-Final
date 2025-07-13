@@ -49,7 +49,7 @@ namespace API_HealthGo.Controllers
             return Ok(await _service.Update(lembrete));
         }
 
-        [HttpDelete("(id)")]
+        [HttpDelete("{id}")]
         public async Task<ActionResult<MessageResponse>> Delete(int id)
         {
             return Ok(await _service.Delete(id));
