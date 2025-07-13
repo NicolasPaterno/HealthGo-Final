@@ -24,7 +24,11 @@ api.interceptors.response.use(
     if (error.response?.status === 401) {
       localStorage.removeItem('authToken');
       localStorage.removeItem('user');
+<<<<<<< HEAD
 
+=======
+      
+>>>>>>> parent of ffe79df (starting better security process to get user information)
       toast.error("Sessão Expirada", {
         description: "Por favor, faça o login novamente.",
       });
