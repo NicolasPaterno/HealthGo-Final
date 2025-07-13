@@ -7,7 +7,7 @@ const api = axios.create({
 
 api.interceptors.request.use(
   (config) => {
-    const token = sessionStorage.getItem('authToken'); // Usando sessionStorage temporariamente
+    const token = localStorage.getItem('authToken');
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
     }
@@ -22,8 +22,9 @@ api.interceptors.response.use(
   (response) => response,
   (error) => {
     if (error.response?.status === 401) {
-      sessionStorage.removeItem('authToken'); // Usando sessionStorage temporariamente
-      
+      localStorage.removeItem('authToken');
+      localStorage.removeItem('user');
+
       toast.error("Sessão Expirada", {
         description: "Por favor, faça o login novamente.",
       });
@@ -35,5 +36,4 @@ api.interceptors.response.use(
     return Promise.reject(error);
   }
 );
-
 export default api;
