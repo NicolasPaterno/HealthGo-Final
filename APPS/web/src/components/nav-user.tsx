@@ -40,8 +40,7 @@ export function NavUser({
   const navigate = useNavigate();
 
   const handleLogout = () => {
-    localStorage.removeItem("authToken");
-    localStorage.removeItem("user");
+    sessionStorage.removeItem("authToken"); // Usando sessionStorage temporariamente
     navigate("/login");
   };
   const { isMobile } = useSidebar()

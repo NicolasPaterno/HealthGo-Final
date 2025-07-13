@@ -104,8 +104,6 @@ type ChangePasswordFormValues = z.infer<typeof changePasswordFormSchema>;
 export function SettingsForm() {
     const [activeTab, setActiveTab] = React.useState("profile")
     const { setTheme } = useTheme()
-    const [currentUser, setCurrentUser] = React.useState<ProfileFormValues | null>(null);
-    const [isLoading, setIsLoading] = React.useState(true);
 
 
     const profileForm = useForm<ProfileFormValues>({
@@ -173,19 +171,14 @@ export function SettingsForm() {
   });
 
 
+    const [currentUser, setCurrentUser] = React.useState<ProfileFormValues | null>(null);
+    const [isLoading, setIsLoading] = React.useState(true);
+
     React.useEffect(() => {
         const fetchUserData = async () => {
             setIsLoading(true);
             try {
-                const userDataString = localStorage.getItem("user");
-                if (!userDataString) throw new Error("Usuário não autenticado.");
-
-                const localUserData = JSON.parse(userDataString);
-                const userId = localUserData?.id;
-
-                if (!userId) throw new Error("ID do usuário não encontrado.");
-
-                const response = await api.get(`/Pessoa/${userId}`);
+                const response = await api.get(`/Auth/me`);
                 const fetchedUser = response.data;
 
                 const formattedUser = {

@@ -14,6 +14,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import api from "@/services/api"; // Serviço axios para chamadas à API
 
+
 export function LoginForm({
   className,
   ...props
@@ -38,11 +39,10 @@ export function LoginForm({
     try {
       const response = await api.post("/Auth/login", {
         email,
-        password, 
+        password,
       });
 
-      localStorage.setItem("authToken", response.data.token);
-      localStorage.setItem("user", JSON.stringify(response.data.user));
+      sessionStorage.setItem("authToken", response.data.token); // Usando sessionStorage como alternativa temporária
 
       toast.success("Login bem-sucedido!", {
         description: "Você será redirecionado para o dashboard.",
@@ -75,10 +75,8 @@ export function LoginForm({
           </CardDescription>
         </CardHeader>
         <CardContent>
-          {/* O formulário agora chama o handleSubmit */}
           <form onSubmit={handleSubmit}>
             <div className="grid gap-6">
-              {/* Removidos os botões de login social para focar no seu fluxo */}
               <div className="grid gap-6">
                 <div className="grid gap-3">
                   <Label htmlFor="email">Email</Label>
