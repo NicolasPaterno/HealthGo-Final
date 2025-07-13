@@ -8,7 +8,7 @@ import {
   CardTitle,
 } from "@/components/ui/card"
 import { useCart } from "@/context/CartContext"
-import { IconShoppingCart } from "@tabler/icons-react"
+import { ShoppingCart } from "lucide-react"
 
 // Dados de exemplo para os hotéis (com IDs e preços numéricos)
 const hotels = [
@@ -72,7 +72,7 @@ export default function HotelsPage() {
             </CardContent>
             <CardFooter>
               <Button onClick={() => handleAddToCart(hotel)} className="w-full">
-                 <IconShoppingCart className="mr-2 h-4 w-4" />
+                 <ShoppingCart className="mr-2 h-4 w-4" />
                 Adicionar ao Carrinho
               </Button>
             </CardFooter>

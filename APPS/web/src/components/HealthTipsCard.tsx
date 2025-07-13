@@ -5,29 +5,29 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { IconBottle, IconBowl, IconHeartbeat, IconMoon } from "@tabler/icons-react";
+import { Utensils, HeartPulse, Moon, PillBottle } from "lucide-react";
 
 const tips = [
   {
-    icon: IconBottle,
+    icon: PillBottle,
     title: "Hidrate-se",
     description: "Beber água ao longo do dia é essencial para o corpo.",
     color: "text-blue-500",
   },
   {
-    icon: IconBowl,
+    icon: Utensils,
     title: "Coma bem",
     description: "Uma dieta balanceada fornece os nutrientes necessários.",
     color: "text-green-500",
   },
    {
-    icon: IconHeartbeat,
+    icon: HeartPulse,
     title: "Movimente-se",
     description: "Atividades físicas regulares melhoram a saúde geral.",
     color: "text-red-500",
   },
   {
-    icon: IconMoon,
+    icon: Moon,
     title: "Descanse",
     description: "Uma boa noite de sono é crucial para a recuperação.",
     color: "text-purple-500",

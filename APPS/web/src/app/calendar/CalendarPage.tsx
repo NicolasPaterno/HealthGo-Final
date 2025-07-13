@@ -12,7 +12,7 @@ import { Input } from "@/components/ui/input";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Separator } from "@/components/ui/separator";
 import { useIsMobile } from "@/hooks/use-mobile";
-import { IconTrash } from "@tabler/icons-react";
+import { Trash2 } from "lucide-react";
 import { useMemo, useState, useEffect } from "react";
 import { Toaster, toast } from "sonner";
 import {
@@ -330,7 +330,7 @@ export default function CalendarPage() {
                               onClick={() => handleDeleteReminder(reminder.id)}
                               className="h-8 w-8 text-muted-foreground opacity-0 group-hover:opacity-100 hover:bg-destructive/10 hover:text-destructive shrink-0"
                             >
-                              <IconTrash className="h-4 w-4" />
+                              <Trash2 className="h-4 w-4" />
                             </Button>
                           </div>
                         ))}

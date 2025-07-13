@@ -2,7 +2,7 @@ import { Button } from "@/components/ui/button"
 import { Separator } from "@/components/ui/separator"
 import { SidebarTrigger } from "@/components/ui/sidebar"
 import { useCart } from "@/context/CartContext"; // Importe o useCart
-import { IconShoppingCart } from "@tabler/icons-react"; // Importe o ícone do carrinho
+import { ShoppingCart } from "lucide-react";
 import { Badge } from "./ui/badge";
 
 export function SiteHeader() {
@@ -20,7 +20,7 @@ export function SiteHeader() {
         <div className="ml-auto flex items-center gap-2">
           {/* Botão do Carrinho */}
           <Button variant="ghost" size="icon" className="relative" onClick={openCart}>
-            <IconShoppingCart />
+            <ShoppingCart />
             {cartCount > 0 && (
               <Badge variant="destructive" className="absolute -top-2 -right-2 h-5 w-5 justify-center rounded-full p-0">
                 {cartCount}

@@ -10,7 +10,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { IconArrowRight, IconBell } from "@tabler/icons-react";
+import { ArrowRight, Bell } from "lucide-react";
 import { Link } from "react-router-dom";
 
 interface Reminder {
@@ -42,7 +42,7 @@ export function RemindersCard({ reminders, isLoading }: RemindersCardProps) {
     <Card className="h-full flex flex-col">
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
-          <IconBell size={22} />
+          <Bell size={22} />
           <span>Próximos Lembretes</span>
         </CardTitle>
         <CardDescription>
@@ -92,7 +92,7 @@ export function RemindersCard({ reminders, isLoading }: RemindersCardProps) {
           <Button asChild variant="outline" className="w-full">
             <Link to="calendar">
               Ver todos os lembretes
-              <IconArrowRight className="ml-2" size={16} />
+              <ArrowRight className="ml-2" size={16} />
             </Link>
           </Button>
       </div>

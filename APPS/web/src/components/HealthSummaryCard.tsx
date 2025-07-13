@@ -5,7 +5,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { IconPill, IconStethoscope, IconListDetails } from "@tabler/icons-react";
+import { Pill, Stethoscope, List } from "lucide-react";
 
 // Interface para os lembretes (deve corresponder à do DashboardContent)
 interface Reminder {
@@ -64,7 +64,7 @@ export function HealthSummaryCard({ reminders }: HealthSummaryCardProps) {
       <CardContent className="space-y-4 content-around">
         {/* Próxima Consulta */}
         <div className="flex items-center gap-4">
-            <IconStethoscope className="h-6 w-6 text-primary" />
+            <Stethoscope className="h-6 w-6 text-primary" />
             <div>
                 <p className="font-semibold">Próxima Consulta</p>
                 <p className="text-sm text-muted-foreground">
@@ -76,7 +76,7 @@ export function HealthSummaryCard({ reminders }: HealthSummaryCardProps) {
         </div>
         {/* Próximo Remédio */}
         <div className="flex items-center gap-4">
-            <IconPill className="h-6 w-6 text-destructive" />
+            <Pill className="h-6 w-6 text-destructive" />
             <div>
                 <p className="font-semibold">Próximo Remédio</p>
                 <p className="text-sm text-muted-foreground">
@@ -88,7 +88,7 @@ export function HealthSummaryCard({ reminders }: HealthSummaryCardProps) {
         </div>
         {/* Outro Lembrete */}
         <div className="flex items-center gap-4">
-            <IconListDetails className="h-6 w-6 text-yellow-500" />
+            <List className="h-6 w-6 text-yellow-500" />
             <div>
                 <p className="font-semibold">Outro Lembrete</p>
                 <p className="text-sm text-muted-foreground">

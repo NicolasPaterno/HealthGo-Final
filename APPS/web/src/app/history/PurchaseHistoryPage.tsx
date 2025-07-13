@@ -11,7 +11,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { useCart } from "@/context/CartContext";
-import { IconHistory, IconReceipt } from "@tabler/icons-react";
+import { History, ReceiptText } from "lucide-react";
 
 export default function PurchaseHistoryPage() {
   const { purchaseHistory } = useCart();
@@ -21,7 +21,7 @@ export default function PurchaseHistoryPage() {
       <Card>
         <CardHeader>
             <CardTitle className="flex items-center gap-2 text-2xl">
-              <IconHistory />
+              <History />
               Histórico de Compras
             </CardTitle>
         </CardHeader>
@@ -73,7 +73,7 @@ export default function PurchaseHistoryPage() {
             </Accordion>
           ) : (
             <div className="text-center text-muted-foreground py-16">
-              <IconReceipt size={48} className="mx-auto mb-4" />
+              <ReceiptText size={48} className="mx-auto mb-4" />
               <p className="text-lg font-semibold">
                 Nenhuma compra foi realizada ainda.
               </p>

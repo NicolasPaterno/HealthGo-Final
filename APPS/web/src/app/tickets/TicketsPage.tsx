@@ -2,11 +2,11 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { useCart } from "@/context/CartContext" // Importe o useCart
 import {
-  IconMapPin,
-  IconPlane,
-  IconShoppingCart,
-  IconStar,
-} from "@tabler/icons-react"
+  MapPin,
+  Plane,
+  ShoppingCart,
+  Star,
+} from "lucide-react"
 
 const tickets = [
   {
@@ -54,7 +54,7 @@ export default function TicketsPage() {
       <Card>
         <CardHeader className="flex flex-row items-center justify-between">
           <div className="flex items-center gap-4">
-            <IconPlane className="size-8 text-primary" />
+            <Plane className="size-8 text-primary" />
             <CardTitle className="text-2xl">Passagens Aéreas Médicas</CardTitle>
           </div>
           <Button variant="outline">Ver mais</Button>
@@ -75,9 +75,9 @@ export default function TicketsPage() {
                     {ticket.description} • {ticket.company}
                   </p>
                   <div className="flex items-center text-sm text-muted-foreground mt-2">
-                    <IconMapPin className="mr-1 h-4 w-4" />
+                    <MapPin className="mr-1 h-4 w-4" />
                     <span>{ticket.from}</span>
-                    <IconStar className="ml-3 mr-1 h-4 w-4 text-yellow-500 fill-yellow-500" />
+                    <Star className="ml-3 mr-1 h-4 w-4 text-yellow-500 fill-yellow-500" />
                     <span>{ticket.rating}</span>
                   </div>
                 </div>
@@ -90,7 +90,7 @@ export default function TicketsPage() {
                   </div>
                   {/* Botão modificado para adicionar ao carrinho */}
                   <Button className="w-full md:w-auto" onClick={() => handleAddToCart(ticket)}>
-                    <IconShoppingCart className="mr-2 h-4 w-4" />
+                    <ShoppingCart className="mr-2 h-4 w-4" />
                     Comprar
                   </Button>
                 </div>

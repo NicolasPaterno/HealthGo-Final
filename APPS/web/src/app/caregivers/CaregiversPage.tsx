@@ -10,7 +10,7 @@ import {
   CardTitle,
 } from "@/components/ui/card"
 import { useCart } from "@/context/CartContext"
-import { IconShoppingCart } from "@tabler/icons-react"
+import { ShoppingCart } from "lucide-react"
 
 // Dados de exemplo para os cuidadores (com IDs e preços numéricos)
 const caregivers = [
@@ -81,7 +81,7 @@ export default function CaregiversPage() {
             </CardContent>
             <CardFooter>
               <Button className="w-full" onClick={() => handleAddToCart(caregiver)}>
-                <IconShoppingCart className="mr-2 h-4 w-4" />
+                <ShoppingCart className="mr-2 h-4 w-4" />
                 Adicionar ao Carrinho
               </Button>
             </CardFooter>
