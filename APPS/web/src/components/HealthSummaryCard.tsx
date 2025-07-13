@@ -12,7 +12,7 @@ interface Reminder {
   id: number;
   dateTime: string;
   text: string;
-  type: 'consulta' | 'remédio' | 'outros';
+  type: 'consulta' | 'remédio' | 'outro';
 }
 
 // Interface para as props do componente
@@ -52,7 +52,7 @@ export function HealthSummaryCard({ reminders }: HealthSummaryCardProps) {
   // Encontra o *primeiro* (mais próximo) lembrete de cada categoria
   const nextAppointment = upcomingReminders.find(r => r.type === 'consulta');
   const nextMedication = upcomingReminders.find(r => r.type === 'remédio');
-  const nextOther = upcomingReminders.find(r => r.type === 'outros');
+  const nextOther = upcomingReminders.find(r => r.type === 'outro');
 
 
   return (
