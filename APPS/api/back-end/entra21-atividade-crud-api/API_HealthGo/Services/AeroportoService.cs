@@ -27,13 +27,13 @@ namespace API_HealthGo.Services
 
         public async Task<AeroportoGetAllResponse> Get(int? cidade_Id)
         {
-            var allAeroports = await _repository.GetAll(); // Retorna List<AeroportoEntity>
+            var allAeroports = await _repository.GetAll();
 
             if (cidade_Id != 0)
             {
-                allAeroports = allAeroports.Where(x => x.Cidade_Id == cidade_Id.Value); // filtragem por LINQ
+                allAeroports = allAeroports.Where(x => x.Cidade_Id == cidade_Id.Value); 
 
-                var aeroportsFiltered = allAeroports.Select(aeroporto => new AeroportoEntity // teve que ser Entity pra eu n perder a cabeça
+                var aeroportsFiltered = allAeroports.Select(aeroporto => new AeroportoEntity 
                 {
                     Nome = aeroporto.Nome,
                     CodigoIata = aeroporto.CodigoIata,

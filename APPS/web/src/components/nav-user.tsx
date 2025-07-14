@@ -1,10 +1,13 @@
+// APPS/web/src/components/nav-user.tsx
+
 import {
-  IconCreditCard,
-  IconDotsVertical,
-  IconLogout,
-  IconNotification,
-  IconUserCircle,
-} from "@tabler/icons-react"
+  CreditCard,
+  MoreVertical,
+  LogOut,
+  Bell,
+  User,
+  LogOutIcon,
+} from "lucide-react"
 
 import {
   Avatar,
@@ -27,24 +30,38 @@ import {
   useSidebar,
 } from "@/components/ui/sidebar"
 import { Link, useNavigate } from "react-router-dom";
+import { getAuthUser } from "@/lib/jwt"; // Import the JWT utility
+import { useEffect, useState } from "react"; // Import useState and useEffect
 
 export function NavUser({
-  user,
+  // user, // No longer passed as prop directly from outside
 }: {
-  user: {
-    name: string
-    email: string
-    avatar: string
-  }
+  // user: { // Remove type definition from props
+  //   name: string
+  //   email: string
+  //   avatar: string
+  // }
 }) {
   const navigate = useNavigate();
+  const { isMobile } = useSidebar();
+  const [currentUser, setCurrentUser] = useState({ name: "Usuário", email: "carregando...", avatar: "/avatars/default.jpg" });
+
+  useEffect(() => {
+    const authUser = getAuthUser();
+    if (authUser) {
+      setCurrentUser({
+        name: authUser.name,
+        email: authUser.email,
+        avatar: "/avatars/default.jpg" // Or fetch from /Pessoa/me if stored in DB
+      });
+    }
+  }, []);
 
   const handleLogout = () => {
     localStorage.removeItem("authToken");
-    localStorage.removeItem("user");
+    // localStorage.removeItem("user"); // Remove this line
     navigate("/login");
   };
-  const { isMobile } = useSidebar()
 
   return (
     <SidebarMenu>
@@ -56,16 +73,16 @@ export function NavUser({
               className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
             >
               <Avatar className="h-8 w-8 rounded-lg grayscale">
-                <AvatarImage src={user.avatar} alt={user.name} />
+                <AvatarImage src={currentUser.avatar} alt={currentUser.name} />
                 <AvatarFallback className="rounded-lg">CN</AvatarFallback>
               </Avatar>
               <div className="grid flex-1 text-left text-sm leading-tight">
-                <span className="truncate font-medium">{user.name}</span>
+                <span className="truncate font-medium">{currentUser.name}</span>
                 <span className="text-muted-foreground truncate text-xs">
-                  {user.email}
+                  {currentUser.email}
                 </span>
               </div>
-              <IconDotsVertical className="ml-auto size-4" />
+              <MoreVertical className="ml-auto size-4" />
             </SidebarMenuButton>
           </DropdownMenuTrigger>
           <DropdownMenuContent
@@ -77,13 +94,13 @@ export function NavUser({
             <DropdownMenuLabel className="p-0 font-normal">
               <div className="flex items-center gap-2 px-1 py-1.5 text-left text-sm">
                 <Avatar className="h-8 w-8 rounded-lg">
-                  <AvatarImage src={user.avatar} alt={user.name} />
+                  <AvatarImage src={currentUser.avatar} alt={currentUser.name} />
                   <AvatarFallback className="rounded-lg">CN</AvatarFallback>
                 </Avatar>
                 <div className="grid flex-1 text-left text-sm leading-tight">
-                  <span className="truncate font-medium">{user.name}</span>
+                  <span className="truncate font-medium">{currentUser.name}</span>
                   <span className="text-muted-foreground truncate text-xs">
-                    {user.email}
+                    {currentUser.email}
                   </span>
                 </div>
               </div>
@@ -91,21 +108,21 @@ export function NavUser({
             <DropdownMenuSeparator />
             <DropdownMenuGroup>
               <DropdownMenuItem>
-                <IconUserCircle />
+                <User />
                 <Link to={"settings"}>Account</Link>
               </DropdownMenuItem>
               <DropdownMenuItem>
-                <IconCreditCard />
+                <CreditCard />
                 Billing
               </DropdownMenuItem>
               <DropdownMenuItem>
-                <IconNotification />
+                <Bell />
                 Notifications
               </DropdownMenuItem>
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
             <DropdownMenuItem onClick={handleLogout}>
-              <IconLogout />
+              <LogOut />
               Log out
             </DropdownMenuItem>
           </DropdownMenuContent>

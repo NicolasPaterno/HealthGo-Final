@@ -8,6 +8,7 @@ namespace API_HealthGo.Contracts.Repositories
         Task<IEnumerable<LembreteEntity>> GetAllLembrete();
         Task<LembreteEntity> GetLembreteById(int id);
         Task<IEnumerable<LembreteEntity>> GetLembreteByPessoaId(int pessoaId);
+        Task<IEnumerable<LembreteEntity>> DeleteLembreteByPessoaId(int pessoaId);
         Task InsertLembrete(LembreteInsertDTO lembrete);
         Task UpdateLembrete(LembreteEntity lembrete);
         Task DeleteLembrete(int id);

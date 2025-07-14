@@ -1,4 +1,4 @@
-import { IconTrendingUp, IconUsers, IconCalendar, IconCheck } from "@tabler/icons-react"
+import { TrendingUp, Users, Calendar, Check } from "lucide-react"
 import { Badge } from "@/components/ui/badge"
 import {
   Card,
@@ -20,14 +20,14 @@ export function SectionCards() {
           </CardTitle>
           <CardAction>
             <Badge variant="outline">
-              <IconTrendingUp />
+              <TrendingUp />
               +12.5%
             </Badge>
           </CardAction>
         </CardHeader>
         <CardFooter className="flex-col items-start gap-1.5 text-sm">
           <div className="line-clamp-1 flex gap-2 font-medium">
-            <IconCalendar className="size-4" />
+            <Calendar className="size-4" />
             Agendamentos este mês
           </div>
           <div className="text-muted-foreground">
@@ -43,14 +43,14 @@ export function SectionCards() {
           </CardTitle>
           <CardAction>
             <Badge variant="outline">
-              <IconCheck />
+              <Check />
               +5%
             </Badge>
           </CardAction>
         </CardHeader>
         <CardFooter className="flex-col items-start gap-1.5 text-sm">
           <div className="line-clamp-1 flex gap-2 font-medium">
-            <IconCheck className="size-4" />
+            <Check className="size-4" />
             Consultas finalizadas com sucesso
           </div>
           <div className="text-muted-foreground">
@@ -66,14 +66,14 @@ export function SectionCards() {
           </CardTitle>
           <CardAction>
             <Badge variant="outline">
-              <IconTrendingUp />
+              <TrendingUp />
               +12.5%
             </Badge>
           </CardAction>
         </CardHeader>
         <CardFooter className="flex-col items-start gap-1.5 text-sm">
           <div className="line-clamp-1 flex gap-2 font-medium">
-            <IconUsers className="size-4" />
+            <Users className="size-4" />
             Forte retenção de usuários
           </div>
           <div className="text-muted-foreground">O engajamento excedeu as metas</div>
@@ -87,14 +87,14 @@ export function SectionCards() {
           </CardTitle>
           <CardAction>
             <Badge variant="outline">
-              <IconTrendingUp />
+              <TrendingUp />
               +4.5%
             </Badge>
           </CardAction>
         </CardHeader>
         <CardFooter className="flex-col items-start gap-1.5 text-sm">
           <div className="line-clamp-1 flex gap-2 font-medium">
-            <IconUsers className="size-4" />
+            <Users className="size-4" />
             Disponibilidade de profissionais
           </div>
           <div className="text-muted-foreground">Atende às projeções de crescimento</div>

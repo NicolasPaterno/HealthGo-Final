@@ -1,8 +1,9 @@
+// APPS/web/src/services/api.ts
 import axios from 'axios';
 import { toast } from "sonner";
 
 const api = axios.create({
-  baseURL: 'https://localhost:7243',
+  baseURL: 'https://localhost:7243', // Changed from http://localhost:3000
 });
 
 api.interceptors.request.use(
@@ -24,7 +25,7 @@ api.interceptors.response.use(
     if (error.response?.status === 401) {
       localStorage.removeItem('authToken');
       localStorage.removeItem('user');
-      
+
       toast.error("Sessão Expirada", {
         description: "Por favor, faça o login novamente.",
       });
@@ -36,5 +37,4 @@ api.interceptors.response.use(
     return Promise.reject(error);
   }
 );
-
 export default api;

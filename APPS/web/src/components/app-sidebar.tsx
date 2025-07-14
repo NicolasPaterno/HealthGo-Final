@@ -1,23 +1,20 @@
 import * as React from "react"
 import {
-  IconBuilding,
-  IconCalendarTime,
-  IconCamera,
-  IconDashboard,
-  IconDatabase,
-  IconFileAi,
-  IconFileDescription,
-  IconFileWord,
-  IconHelp,
-  IconHistory,
-  IconMapPinHeart,
-  IconPlane,
-  IconReport,
-  IconSearch,
-  IconSettings,
-  IconUserHeart,
-  IconUsers,
-} from "@tabler/icons-react"
+  Building,
+  CalendarClock,
+  Camera,
+  LayoutDashboard,
+  Database,
+  FileCode,
+  FileText,
+  HelpCircle,
+  History,
+  Heart,
+  Plane,
+  Search,
+  Settings,
+  Users,
+} from "lucide-react"
 
 import { NavDocuments } from "@/components/nav-documents"
 import { NavMain } from "@/components/nav-main"
@@ -44,38 +41,38 @@ const data = {
     {
       title: "Dashboard",
       url: "/dashboard",
-      icon: IconDashboard,
+      icon: LayoutDashboard,
     },
     {
       title: "Hoteis",
       url: "/dashboard/hotels",
-      icon: IconBuilding,
+      icon: Building,
     },
     {
       title: "Passagens",
       url: "/dashboard/tickets",
-      icon: IconPlane,
+      icon: Plane,
     },
     {
       title: "Psicologos",
       url: "/dashboard/Psychologist",
-      icon: IconUserHeart,
+      icon: Heart,
     },
     {
       title: "cuidadores",
       url: "/dashboard/caregivers",
-      icon: IconUsers,
+      icon: Users,
     },
     {
       title: "calendário",
       url: "/dashboard/calendar",
-      icon: IconCalendarTime,
+      icon: CalendarClock,
     },
   ],
   navClouds: [
     {
       title: "Capture",
-      icon: IconCamera,
+      icon: Camera,
       isActive: true,
       url: "#",
       items: [
@@ -91,7 +88,7 @@ const data = {
     },
     {
       title: "Proposal",
-      icon: IconFileDescription,
+      icon: FileText,
       url: "/dashboard",
       items: [
         {
@@ -106,7 +103,7 @@ const data = {
     },
     {
       title: "Prompts",
-      icon: IconFileAi,
+      icon: FileCode,
       url: "/dashboard",
       items: [
         {
@@ -124,34 +121,34 @@ const data = {
     {
       title: "Configurações",
       url: "/settings",
-      icon: IconSettings,
+      icon: Settings,
     },
     {
       title: "Get Help",
       url: "/dashboard/help",
-      icon: IconHelp,
+      icon: HelpCircle,
     },
     {
       title: "Search",
       url: "/dashboard",
-      icon: IconSearch,
+      icon: Search,
     },
   ],
   documents: [
     {
       name: "Histórico de compras",
       url: "/purchase/history",
-      icon: IconHistory,
+      icon: History,
     },
     {
       name: "Reports",
       url: "/dashboard",
-      icon: IconReport,
+      icon: FileText,
     },
     {
       name: "Word Assistant",
       url: "/dashboard",
-      icon: IconFileWord,
+      icon: FileText,
     },
   ],
 }
@@ -167,7 +164,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
               className="data-[slot=sidebar-menu-button]:!p-1.5"
             >
               <Link to="/dashboard">
-                <IconMapPinHeart className="!size-7" />
+                <Heart className="!size-7" />
                 <span className="text-base font-semibold">HealthGo</span>
               </Link>
 

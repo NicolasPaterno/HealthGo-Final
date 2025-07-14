@@ -83,5 +83,18 @@ namespace API_HealthGo.Repository
             string sql = "DELETE FROM LEMBRETE WHERE ID = @id";
             await _connection.Execute(sql, new { id });
         }
+
+        public async Task<IEnumerable<LembreteEntity>> DeleteLembreteByPessoaId(int pessoaId)
+        {
+            using (MySqlConnection con = _connection.GetConnection())
+            {
+                string sql = @$"
+                    DELETE * FROM LEMBRETE WHERE Pessoa_ID = @pessoaId
+                ";
+
+                IEnumerable<LembreteEntity> lembreteList = await con.QueryAsync<LembreteEntity>(sql, new { pessoaId });
+                return lembreteList;
+            }
+        }
     }
 }

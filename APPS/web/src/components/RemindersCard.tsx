@@ -10,63 +10,39 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { IconArrowRight, IconBell } from "@tabler/icons-react";
+import { ArrowRight, Bell } from "lucide-react";
 import { Link } from "react-router-dom";
-import { useState, useEffect } from "react";
-import api from "@/services/api"; 
-import { toast } from "sonner"; 
 
 interface Reminder {
   id: number;
   dateTime: string;
   text: string;
-  type: 'consulta' | 'remédio' | 'outros';
+  type: 'consulta' | 'remédio' | 'outro';
+}
+
+interface RemindersCardProps {
+  reminders: Reminder[];
+  isLoading: boolean;
 }
 
 const typeBadgeVariant = {
   consulta: "default",
   remédio: "destructive",
-  outros: "secondary",
+  outro: "secondary",
 } as const;
 
 
-export function RemindersCard() {
-  const [reminders, setReminders] = useState<Reminder[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
-
-  useEffect(() => {
-    const fetchReminders = async () => {
-      try {
-        const response = await api.get(`/Lembrete/Pessoa/23`); 
-        if (response.data && Array.isArray(response.data.data)) {
-            setReminders(response.data.data);
-        } else {
-            setReminders([]);
-        }
-      } catch (error) {
-        console.error("Erro ao buscar lembretes:", error);
-        toast.error("Erro ao carregar lembretes", {
-            description: "Não foi possível buscar seus lembretes. Tente novamente mais tarde.",
-        });
-        setReminders([]); 
-      } finally {
-          setIsLoading(false);
-      }
-    };
-
-    fetchReminders();
-  }, []); 
-
+export function RemindersCard({ reminders, isLoading }: RemindersCardProps) {
   const upcomingReminders = reminders
     .filter(r => new Date(r.dateTime) >= new Date())
     .sort((a, b) => new Date(a.dateTime).getTime() - new Date(b.dateTime).getTime())
-    .slice(0, 5); 
+    .slice(0, 5);
 
   return (
     <Card className="h-full flex flex-col">
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
-          <IconBell size={22} />
+          <Bell size={22} />
           <span>Próximos Lembretes</span>
         </CardTitle>
         <CardDescription>
@@ -116,7 +92,7 @@ export function RemindersCard() {
           <Button asChild variant="outline" className="w-full">
             <Link to="calendar">
               Ver todos os lembretes
-              <IconArrowRight className="ml-2" size={16} />
+              <ArrowRight className="ml-2" size={16} />
             </Link>
           </Button>
       </div>

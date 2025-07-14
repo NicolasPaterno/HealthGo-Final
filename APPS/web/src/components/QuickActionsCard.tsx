@@ -7,15 +7,15 @@ import {
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
-import { IconCalendarPlus, IconHotelService, IconPlane, IconStethoscope, IconUsers, IconUserHeart, IconLifebuoy, IconCash } from "@tabler/icons-react";
+import { CalendarPlus, Hotel, Plane, Stethoscope, Users, Heart, LifeBuoy, Wallet } from "lucide-react";
 
 const actions = [
-  { to: "calendar", label: "Agendar", icon: IconCalendarPlus },
-  { to: "psychologist", label: "Psicólogos", icon: IconUserHeart },
-  { to: "caregivers", label: "Cuidadores", icon: IconUsers },
-  { to: "tickets", label: "Passagens", icon: IconPlane },
-  { to: "hotels", label: "Hotéis", icon: IconHotelService },
-  { to: "/settings", label: "Compras", icon: IconCash}
+  { to: "calendar", label: "Agendar", icon: CalendarPlus },
+  { to: "psychologist", label: "Psicólogos", icon: Heart },
+  { to: "caregivers", label: "Cuidadores", icon: Users },
+  { to: "tickets", label: "Passagens", icon: Plane },
+  { to: "hotels", label: "Hotéis", icon: Hotel },
+  { to: "/settings", label: "Compras", icon: Wallet}
 ];
 
 export function QuickActionsCard() {

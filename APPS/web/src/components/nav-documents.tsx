@@ -1,14 +1,14 @@
 "use client"
 
 import {
-  IconCreditCard,
-  IconCreditCardFilled,
-  IconDots,
-  IconFolder,
-  IconShare3,
-  IconTrash,
-  type Icon,
-} from "@tabler/icons-react"
+  CreditCard,
+  MoreHorizontal,
+  Folder,
+  Share2,
+  Trash2,
+  type LucideIcon as Icon,
+  CreditCardIcon, // Renomeando para manter a compatibilidade
+} from "lucide-react"
 
 import {
   DropdownMenu,
@@ -42,7 +42,7 @@ export function NavDocuments({
   return (
     <SidebarGroup className="group-data-[collapsible=icon]:hidden">
       <SidebarGroupLabel>Histórico
-        <IconCreditCardFilled className="ml-2" stroke={2} size={24}/>
+        <CreditCard className="ml-2" strokeWidth={2} size={24}/>
       </SidebarGroupLabel>
       <SidebarMenu>
         {items.map((item) => (
@@ -59,7 +59,7 @@ export function NavDocuments({
                   showOnHover
                   className="data-[state=open]:bg-accent rounded-sm"
                 >
-                  <IconDots />
+                  <MoreHorizontal />
                   <span className="sr-only">More</span>
                 </SidebarMenuAction>
               </DropdownMenuTrigger>
@@ -69,16 +69,16 @@ export function NavDocuments({
                 align={isMobile ? "end" : "start"}
               >
                 <DropdownMenuItem>
-                  <IconFolder />
+                  <Folder />
                   <span>Open</span>
                 </DropdownMenuItem>
                 <DropdownMenuItem>
-                  <IconShare3 />
+                  <Share2 />
                   <span>Share</span>
                 </DropdownMenuItem>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem variant="destructive">
-                  <IconTrash />
+                  <Trash2 />
                   <span>Delete</span>
                 </DropdownMenuItem>
               </DropdownMenuContent>
@@ -87,7 +87,7 @@ export function NavDocuments({
         ))}
         <SidebarMenuItem>
           <SidebarMenuButton className="text-sidebar-foreground/70">
-            <IconDots className="text-sidebar-foreground/70" />
+            <MoreHorizontal  className="text-sidebar-foreground/70" />
             <span>More</span>
           </SidebarMenuButton>
         </SidebarMenuItem>
