@@ -17,10 +17,18 @@ const DashboardContent = lazy(() => import("./app/dashboard/DashboardContent"));
 const SettingsPage = lazy(() => import("./app/settings/SettingsPage"));
 const HotelsPage = lazy(() => import("./app/hotels/HotelsPage"));
 const TicketsPage = lazy(() => import("./app/tickets/TicketsPage"));
-const PsychologistPage = lazy(() => import("./app/psychologists/PsychologistPage"));
+const PsychologistPage = lazy(
+  () => import("./app/psychologists/PsychologistPage")
+);
 const CaregiversPage = lazy(() => import("./app/caregivers/CaregiversPage"));
 const CalendarPage = lazy(() => import("./app/calendar/CalendarPage"));
-const PurchaseHistoryPage = lazy(() => import("./app/history/PurchaseHistoryPage"));
+const PurchaseHistoryPage = lazy(
+  () => import("./app/history/PurchaseHistoryPage")
+);
+const HotelRegisterPage = lazy(() => import("./app/hotels/HotelRegisterPage"));
+const HotelsListPage = lazy(() => import("./app/hotels/HotelsListPage"));
+const HotelProfilePage = lazy(() => import("./app/hotels/HotelProfilePage"));
+const HotelEditPage = lazy(() => import("./app/hotels/HotelEditPage"));
 
 function App() {
   return (
@@ -28,7 +36,6 @@ function App() {
       <CartProvider>
         <Suspense fallback={<LoadingSpinner />}>
           <Routes>
-            
             <Route path="/login" element={<LoginPage />} />
             <Route path="/register" element={<RegisterPage />} />
 
@@ -36,6 +43,13 @@ function App() {
               <Route path="/dashboard" element={<DashboardPage />}>
                 <Route index element={<DashboardContent />} />
                 <Route path="hotels" element={<HotelsPage />} />
+                <Route path="hotels/register" element={<HotelRegisterPage />} />
+                <Route path="hotels/list" element={<HotelsListPage />} />
+                <Route
+                  path="hotels/profile/:id"
+                  element={<HotelProfilePage />}
+                />
+                <Route path="hotels/edit/:id" element={<HotelEditPage />} />
                 <Route path="tickets" element={<TicketsPage />} />
                 <Route path="psychologist" element={<PsychologistPage />} />
                 <Route path="caregivers" element={<CaregiversPage />} />
@@ -50,7 +64,7 @@ function App() {
                 <Route index element={<SettingsPage />} />
               </Route>
             </Route>
-            
+
             <Route path="/" element={<Navigate to="/dashboard" />} />
           </Routes>
         </Suspense>

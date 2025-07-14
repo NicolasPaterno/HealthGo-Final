@@ -1,4 +1,4 @@
-import * as React from "react"
+import * as React from "react";
 import {
   IconBuilding,
   IconCalendarTime,
@@ -17,12 +17,12 @@ import {
   IconSettings,
   IconUserHeart,
   IconUsers,
-} from "@tabler/icons-react"
+} from "@tabler/icons-react";
 
-import { NavDocuments } from "@/components/nav-documents"
-import { NavMain } from "@/components/nav-main"
-import { NavSecondary } from "@/components/nav-secondary"
-import { NavUser } from "@/components/nav-user"
+import { NavDocuments } from "@/components/nav-documents";
+import { NavMain } from "@/components/nav-main";
+import { NavSecondary } from "@/components/nav-secondary";
+import { NavUser } from "@/components/nav-user";
 import {
   Sidebar,
   SidebarContent,
@@ -31,8 +31,8 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
-} from "@/components/ui/sidebar"
-import { Link } from "react-router-dom"
+} from "@/components/ui/sidebar";
+import { Link } from "react-router-dom";
 
 const data = {
   user: {
@@ -49,6 +49,16 @@ const data = {
     {
       title: "Hoteis",
       url: "/dashboard/hotels",
+      icon: IconBuilding,
+    },
+    {
+      title: "Listar Hotéis",
+      url: "/dashboard/hotels/list",
+      icon: IconBuilding,
+    },
+    {
+      title: "Cadastrar Hotel",
+      url: "/dashboard/hotels/register",
       icon: IconBuilding,
     },
     {
@@ -154,7 +164,7 @@ const data = {
       icon: IconFileWord,
     },
   ],
-}
+};
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   return (
@@ -170,7 +180,6 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
                 <IconMapPinHeart className="!size-7" />
                 <span className="text-base font-semibold">HealthGo</span>
               </Link>
-
             </SidebarMenuButton>
           </SidebarMenuItem>
         </SidebarMenu>
@@ -184,5 +193,5 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         <NavUser user={data.user} />
       </SidebarFooter>
     </Sidebar>
-  )
+  );
 }
