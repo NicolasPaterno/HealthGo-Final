@@ -138,6 +138,10 @@ export default function CalendarPage() {
       toast.error("Preencha o lembrete e o horário.");
       return;
     }
+    if (newReminderText.length > 100) {
+      toast.error("O lembrete não pode ter mais de 100 caracteres.");
+      return;
+    }
     if (!date || !reminderDateTime) {
       toast.error("Selecione uma data para o lembrete.");
       return;
@@ -264,7 +268,7 @@ export default function CalendarPage() {
                             <Badge className="h-fit">
                               {new Date(reminder.dateTime).toLocaleTimeString("pt-BR", { hour: '2-digit', minute: '2-digit' })}
                             </Badge>
-                            <p className="text-sm truncate">{reminder.text}</p>
+                            <p className="text-sm ">{reminder.text}</p>
                         </div>
                         <Badge variant="outline" className="shrink-0">{reminder.type}</Badge>
                       </div>
@@ -336,7 +340,7 @@ export default function CalendarPage() {
                               <Badge variant="secondary" className="shrink-0">
                                 {new Date(reminder.dateTime).toLocaleTimeString("pt-BR", { hour: '2-digit', minute: '2-digit' })}
                               </Badge>
-                              <p className="text-sm truncate">{reminder.text}</p>
+                              <p className="text-sm ">{reminder.text}</p>
                               <Badge variant="outline" className="shrink-0">{reminder.type}</Badge>
                             </div>
                             <Button
