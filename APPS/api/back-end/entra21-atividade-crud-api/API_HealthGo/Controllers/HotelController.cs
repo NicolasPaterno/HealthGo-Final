@@ -3,7 +3,6 @@ using API_HealthGo.DTO;
 using API_HealthGo.Entities;
 using API_HealthGo.Responses;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Hosting;
 
 namespace API_HealthGo.Controllers
 {
