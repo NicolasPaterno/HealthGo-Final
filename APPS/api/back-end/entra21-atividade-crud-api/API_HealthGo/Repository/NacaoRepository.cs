@@ -2,7 +2,7 @@
 using API_HealthGo.Contracts.Infrastructure;
 using API_HealthGo.Contracts.Repository;
 using API_HealthGo.DTO;
-using API_HealthGo.Entity;
+using API_HealthGo.Entities;
 using API_HealthGo.Infrastructure;
 using MySql.Data.MySqlClient;
 

@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using API_HealthGo.DTO;
-using API_HealthGo.Entity;
+using API_HealthGo.Entities;
 using API_HealthGo.Response;
 using API_HealthGo.Contracts.Service;
 

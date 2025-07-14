@@ -1,4 +1,4 @@
-﻿namespace API_HealthGo.Entity
+﻿namespace API_HealthGo.Entities
 {
     public class AvaliacaoEntity
     {
