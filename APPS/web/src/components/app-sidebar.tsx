@@ -29,7 +29,7 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar"
-import { Link } from "react-router-dom"
+import { Link, useLocation } from "react-router-dom"
 
 const data = {
   user: {
@@ -154,6 +154,8 @@ const data = {
 }
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
+  const location = useLocation();
+
   return (
     <Sidebar collapsible="offcanvas" {...props}>
       <SidebarHeader>
@@ -173,12 +175,16 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         </SidebarMenu>
       </SidebarHeader>
       <SidebarContent>
-        <NavMain items={data.navMain} />
-        <NavDocuments items={data.documents} />
-        <NavSecondary items={data.navSecondary} className="mt-auto" />
+        {/* A LINHA ABAIXO FOI ALTERADA */}
+        <NavMain items={data.navMain} pathname={location.pathname} />
+        {/* A LINHA ABAIXO FOI ALTERADA */}
+        <NavDocuments items={data.documents} pathname={location.pathname}/>
+        {/* A LINHA ABAIXO FOI ALTERADA */}
+        <NavSecondary items={data.navSecondary} pathname={location.pathname} className="mt-auto" />
       </SidebarContent>
       <SidebarFooter>
-        <NavUser user={data.user} />
+        {/* A LINHA ABAIXO FOI ALTERADA */}
+        <NavUser />
       </SidebarFooter>
     </Sidebar>
   )

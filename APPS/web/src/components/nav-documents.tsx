@@ -7,7 +7,6 @@ import {
   Share2,
   Trash2,
   type LucideIcon as Icon,
-  CreditCardIcon, // Renomeando para manter a compatibilidade
 } from "lucide-react"
 
 import {
@@ -28,15 +27,8 @@ import {
 } from "@/components/ui/sidebar"
 import { Link } from "react-router-dom"
 
-export function NavDocuments({
-  items,
-}: {
-  items: {
-    name: string
-    url: string
-    icon: Icon
-  }[]
-}) {
+// A LINHA ABAIXO FOI ALTERADA
+export function NavDocuments({ items, pathname }: { items: { name: string; url: string; icon: Icon }[], pathname: string }) {
   const { isMobile } = useSidebar()
 
   return (
@@ -47,7 +39,8 @@ export function NavDocuments({
       <SidebarMenu>
         {items.map((item) => (
           <SidebarMenuItem key={item.name}>
-            <SidebarMenuButton asChild>
+            {/* A LINHA ABAIXO FOI ALTERADA */}
+            <SidebarMenuButton asChild isActive={pathname === item.url}>
               <Link to={item.url}>
                 <item.icon />
                 <span>{item.name}</span>

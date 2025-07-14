@@ -12,8 +12,10 @@ import {
 } from "@/components/ui/sidebar"
 import { Link } from "react-router-dom"
 
+// AS 10 LINHAS ABAIXO FORAM ALTERADAS
 export function NavSecondary({
   items,
+  pathname,
   ...props
 }: {
   items: {
@@ -21,6 +23,7 @@ export function NavSecondary({
     url: string
     icon: Icon
   }[]
+  pathname: string
 } & React.ComponentPropsWithoutRef<typeof SidebarGroup>) {
   return (
     <SidebarGroup {...props}>
@@ -28,7 +31,8 @@ export function NavSecondary({
         <SidebarMenu>
           {items.map((item) => (
             <SidebarMenuItem key={item.title}>
-              <SidebarMenuButton asChild>
+              {/* A LINHA ABAIXO FOI ALTERADA */}
+              <SidebarMenuButton asChild isActive={pathname === item.url}>
               <Link to={item.url}>
                   <item.icon />
                   <span>{item.title}</span>
