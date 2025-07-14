@@ -65,6 +65,13 @@ namespace API_HealthGo.Services
                 Data = await _repository.GetLembreteByPessoaId(pessoaId)
             };
         }
+        public async Task<LembreteGetAllResponse> DeleteLembreteByPessoaId(int pessoaId)
+        {
+            return new LembreteGetAllResponse
+            {
+                Data = await _repository.DeleteLembreteByPessoaId(pessoaId)
+            };
+        }
     }
 }
 
