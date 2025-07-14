@@ -4,6 +4,7 @@ using API_HealthGo.Entities;
 using API_HealthGo.Responses;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 namespace API_HealthGo.Controllers
 {
@@ -104,6 +105,47 @@ namespace API_HealthGo.Controllers
         {
             return Ok(await _service.Delete(id));
         }
+        [HttpGet("me")]
+        [Authorize]
+        public async Task<IActionResult> GetCurrentUserProfile()
+        {
+            // Get the user ID from the JWT claims
+            var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier);
+            if (userIdClaim == null || !int.TryParse(userIdClaim.Value, out int userId))
+            {
+                return Unauthorized(new { message = "ID de usuário não encontrado nos claims do token." });
+            }
 
+            try
+            {
+                var pessoa = await _service.GetPessoaById(userId);
+                if (pessoa == null)
+                {
+                    return NotFound(new { message = "Usuário não encontrado." });
+                }
+
+                return Ok(new
+                {
+                    pessoa.Id,
+                    pessoa.Nome,
+                    pessoa.Email,
+                    pessoa.DataNascimento,
+                    pessoa.CPF,
+                    pessoa.Telefone,
+                    pessoa.EnderecoFoto,
+                    pessoa.CaoGuia,
+                    pessoa.CEP,
+                    pessoa.Bairro,
+                    pessoa.Rua,
+                    pessoa.NumeroEndereco,
+                    pessoa.Cidade_Id
+                });
+            }
+            catch (Exception ex)
+            {
+                // Log the exception (recommended)
+                return StatusCode(500, new { message = $"Ocorreu um erro interno ao buscar o perfil: {ex.Message}" });
+            }
+        }
     }
 }

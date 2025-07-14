@@ -17,7 +17,7 @@ interface Reminder {
   id: number;
   dateTime: string;
   text: string;
-  type: 'consulta' | 'remédio' | 'outros';
+  type: 'consulta' | 'remédio' | 'outro';
 }
 
 interface RemindersCardProps {
@@ -28,7 +28,7 @@ interface RemindersCardProps {
 const typeBadgeVariant = {
   consulta: "default",
   remédio: "destructive",
-  outros: "secondary",
+  outro: "secondary",
 } as const;
 
 

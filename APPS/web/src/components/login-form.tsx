@@ -12,7 +12,7 @@ import {
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import api from "@/services/api"; // Serviço axios para chamadas à API
+import api from "@/services/api"; 
 
 export function LoginForm({
   className,
@@ -38,11 +38,11 @@ export function LoginForm({
     try {
       const response = await api.post("/Auth/login", {
         email,
-        password, 
+        password,
       });
 
       localStorage.setItem("authToken", response.data.token);
-      localStorage.setItem("user", JSON.stringify(response.data.user));
+      // Remove this line: localStorage.setItem("user", JSON.stringify(response.data.user));
 
       toast.success("Login bem-sucedido!", {
         description: "Você será redirecionado para o dashboard.",

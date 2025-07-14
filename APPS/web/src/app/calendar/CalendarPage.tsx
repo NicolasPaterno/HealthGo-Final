@@ -1,3 +1,4 @@
+// APPS/web/src/app/calendar/CalendarPage.tsx
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
@@ -23,6 +24,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import api from "@/services/api";
+import { getAuthUser } from "@/lib/jwt"; // Import the JWT utility
 
 interface Reminder {
   id: number;
@@ -57,15 +59,28 @@ export default function CalendarPage() {
   const [newReminderType, setNewReminderType] = useState<'Consulta' | 'Remédio' | 'Outro'>('Outro');
 
   useEffect(() => {
-    const userDataString = localStorage.getItem("user");
-    if (userDataString) {
-      setCurrentUser(JSON.parse(userDataString));
+    // Instead of localStorage.getItem("user"), use getAuthUser()
+    const authUser = getAuthUser();
+    if (authUser) {
+      setCurrentUser({
+        id: parseInt(authUser.nameid), // Parse nameid to int for the User interface
+        nome: authUser.name,
+        email: authUser.email,
+      });
+    } else {
+      setIsLoading(false);
+      toast.error("Sessão expirada", { description: "Por favor, faça login novamente." });
+      // Redirect to login if no valid token
+      window.location.href = '/login';
     }
-  }, []);
+  }, []); // Run once on mount
 
   useEffect(() => {
     const fetchReminders = async () => {
-      if (!currentUser) return;
+      if (!currentUser?.id) { // Ensure currentUser and its ID exist
+          setIsLoading(false);
+          return;
+      }
       setIsLoading(true);
       try {
         const response = await api.get(`/Lembrete/Pessoa/${currentUser.id}`);
@@ -89,10 +104,10 @@ export default function CalendarPage() {
       }
     };
 
-    if (currentUser) {
+    if (currentUser) { // Only fetch reminders if currentUser is available
         fetchReminders();
     }
-  }, [currentUser]);
+  }, [currentUser]); // Re-fetch when currentUser changes
 
 
   const reminderDateTime = useMemo(() => {
