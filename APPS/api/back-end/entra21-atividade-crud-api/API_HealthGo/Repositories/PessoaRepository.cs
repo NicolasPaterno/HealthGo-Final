@@ -89,5 +89,13 @@ namespace API_HealthGo.Repository
                 return await con.QueryFirstOrDefaultAsync<PessoaEntity>(sql, new { email });
             }
         }
+
+        public async Task AtualizarSenhaAsync(int pessoa_Id, string novaSenhaDoUsuario)
+        {
+            using var conn = _connection.GetConnection();
+            var sql = "UPDATE Pessoa SET Senha = @NovaSenha WHERE Id = @Pessoa_Id";
+
+            await conn.ExecuteAsync(sql, new { NovaSenha = novaSenhaDoUsuario, Pessoa_Id = pessoa_Id });
+        }
     }
 }
