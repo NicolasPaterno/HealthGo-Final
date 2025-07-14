@@ -38,6 +38,7 @@ namespace API_HealthGo.Controllers
         }
 
         [HttpPost]
+        [Authorize] 
         public async Task<ActionResult<MessageResponse>> Post(LembreteInsertDTO lembrete)
         {
             return Ok(await _service.Post(lembrete));
@@ -49,7 +50,8 @@ namespace API_HealthGo.Controllers
             return Ok(await _service.Update(lembrete));
         }
 
-        [HttpDelete("{id}")]
+        [HttpDelete("{id}")] 
+        [Authorize] 
         public async Task<ActionResult<MessageResponse>> Delete(int id)
         {
             return Ok(await _service.Delete(id));
