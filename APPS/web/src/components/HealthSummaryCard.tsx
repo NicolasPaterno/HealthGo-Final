@@ -88,7 +88,7 @@ export function HealthSummaryCard({ reminders }: HealthSummaryCardProps) {
         </div>
         {/* Outro Lembrete */}
         <div className="flex items-center gap-4">
-            <List className="h-6 w-6 text-yellow-500" />
+            <List className="w-15 h-10 text-yellow-500" />
             <div>
                 <p className="font-semibold">Outro Lembrete</p>
                 <p className="text-sm text-muted-foreground">
