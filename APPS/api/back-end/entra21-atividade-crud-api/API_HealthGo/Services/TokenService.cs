@@ -2,7 +2,7 @@
 using System.IdentityModel.Tokens.Jwt;
 using System.Text;
 using System.Security.Claims;
-using API_HealthGo.Entity;
+using API_HealthGo.Entities;
 using API_HealthGo.Contracts.Service;
 
 namespace API_HealthGo.Services

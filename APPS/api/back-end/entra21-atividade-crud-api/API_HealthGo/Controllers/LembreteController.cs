@@ -1,7 +1,8 @@
 ﻿using API_HealthGo.Contracts.Service;
 using API_HealthGo.DTO;
-using API_HealthGo.Entity;
-using API_HealthGo.Response;
+using API_HealthGo.Entities;
+using API_HealthGo.Responses;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace API_HealthGo.Controllers
@@ -23,10 +24,17 @@ namespace API_HealthGo.Controllers
             return Ok(await _service.GetAllLembrete());
         }
 
-        [HttpGet("(id)")]
+        [HttpGet("{id}")]
         public async Task<IActionResult> GetLembreteById(int id)
         {
             return Ok(await _service.GetLembreteById(id));
+        }
+
+        [HttpGet("Pessoa/{pessoaId}")]
+        [Authorize]
+        public async Task<IActionResult> GetLembreteByPessoaId(int pessoaId)
+        {
+            return Ok(await _service.GetLembreteByPessoaId(pessoaId));
         }
 
         [HttpPost]

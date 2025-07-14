@@ -1,5 +1,5 @@
 using API_HealthGo.Contracts.Infrastructure;
-using API_HealthGo.Contracts.Repository;
+using API_HealthGo.Contracts.Repositories;
 using API_HealthGo.Contracts.Service;
 using API_HealthGo.Infrastructure;
 using API_HealthGo.Repository;

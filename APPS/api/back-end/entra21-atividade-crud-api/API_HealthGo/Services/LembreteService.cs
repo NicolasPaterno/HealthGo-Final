@@ -1,8 +1,8 @@
-﻿using API_HealthGo.Contracts.Repository;
+﻿using API_HealthGo.Contracts.Repositories;
 using API_HealthGo.Contracts.Service;
 using API_HealthGo.DTO;
-using API_HealthGo.Entity;
-using API_HealthGo.Response;
+using API_HealthGo.Entities;
+using API_HealthGo.Responses;
 
 namespace API_HealthGo.Services
 {
@@ -28,13 +28,15 @@ namespace API_HealthGo.Services
         {
             return await _repository.GetLembreteById(id);
         }
+        
+
 
         public async Task<MessageResponse> Post(LembreteInsertDTO lembrete)
         {
             await _repository.InsertLembrete(lembrete);
             return new MessageResponse
             {
-                Message = "Gerente inserido com sucesso!!"
+                Message = "Lembrete inserido com sucesso!!"
             };
         }
 
@@ -52,9 +54,19 @@ namespace API_HealthGo.Services
             await _repository.DeleteLembrete(id);
             return new MessageResponse
             {
-                Message = "Gerente Removido com sucesso!!"
+                Message = "lembrete Removido com sucesso!!"
+            };
+        }
+
+        public async Task<LembreteGetAllResponse> GetLembreteByPessoaId(int pessoaId)
+        {
+            return new LembreteGetAllResponse
+            {
+                Data = await _repository.GetLembreteByPessoaId(pessoaId)
             };
         }
     }
 }
+
+
 

@@ -1,6 +1,6 @@
 ﻿using API_HealthGo.DTO;
-using API_HealthGo.Entity;
-using API_HealthGo.Response;
+using API_HealthGo.Entities;
+using API_HealthGo.Responses;
 
 namespace API_HealthGo.Contracts.Service
 {
@@ -9,7 +9,7 @@ namespace API_HealthGo.Contracts.Service
         Task<LembreteGetAllResponse> GetAllLembrete();
 
         Task<LembreteEntity> GetLembreteById(int id);
-
+        Task<LembreteGetAllResponse> GetLembreteByPessoaId(int pessoaId);
         Task<MessageResponse> Post(LembreteInsertDTO lembrete);
 
         Task<MessageResponse> Delete(int id);
