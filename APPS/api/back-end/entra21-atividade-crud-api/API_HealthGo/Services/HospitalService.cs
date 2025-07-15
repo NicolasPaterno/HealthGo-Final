@@ -1,5 +1,8 @@
-﻿using API_HealthGo.Contracts.Service;
+﻿// APPS/api/back-end/entra21-atividade-crud-api/API_HealthGo/Services/HospitalService.cs
+
+using API_HealthGo.Contracts.Service;
 using API_HealthGo.DTO;
+using API_HealthGo.Responses;
 using Microsoft.AspNetCore.WebUtilities;
 using System.Text.Json;
 using System.Text.Json.Serialization;
@@ -48,6 +51,9 @@ namespace API_HealthGo.Services
     {
         [JsonPropertyName("hospitais_leitos")]
         public List<ExternalHospitalData> HospitaisLeitos { get; set; }
+
+        [JsonPropertyName("total")]
+        public int Total { get; set; }
     }
 
     public class HospitalService : IHospitalService
@@ -59,17 +65,18 @@ namespace API_HealthGo.Services
             _httpClientFactory = httpClientFactory;
         }
 
-        public async Task<IEnumerable<HospitalDTO>> GetHospitais(string uf, int limit, int page)
+        public async Task<HospitalGetAllResponse> GetHospitais(string uf, int limit, int page, string? nome)
         {
             var client = _httpClientFactory.CreateClient();
             var baseUrl = "https://apidadosabertos.saude.gov.br/assistencia-a-saude/hospitais-e-leitos";
 
+            // Aumentamos o limite para garantir que todos os hospitais de uma cidade sejam retornados
             var queryParams = new Dictionary<string, string>
             {
                 { "uf", uf },
-                { "limit", limit.ToString() },
-                { "page", page.ToString() }
+                { "limit", "500" }
             };
+
             var url = QueryHelpers.AddQueryString(baseUrl, queryParams);
 
             var response = await client.GetAsync(url);
@@ -81,8 +88,7 @@ namespace API_HealthGo.Services
 
                 if (result != null && result.HospitaisLeitos != null)
                 {
-                    // Mapeia da estrutura externa para o DTO do seu front-end
-                    return result.HospitaisLeitos.Select(h => new HospitalDTO
+                    var hospitais = result.HospitaisLeitos.Select(h => new HospitalDTO
                     {
                         Cnes = h.Cnes,
                         Nome = h.NomeDoEstabelecimento,
@@ -95,11 +101,34 @@ namespace API_HealthGo.Services
                         Logradouro = h.Logradouro,
                         NumeroEndereco = h.NumeroEndereco,
                         Cep = h.Cep
-                    }).ToList();
+                    });
+
+                    // Aplica o filtro de pesquisa no lado do servidor
+                    if (!string.IsNullOrEmpty(nome))
+                    {
+                        hospitais = hospitais.Where(h =>
+                            (h.Nome != null && h.Nome.ToLower().Contains(nome.ToLower())) ||
+                            (h.Municipio != null && h.Municipio.ToLower().Contains(nome.ToLower()))
+                        );
+                    }
+
+                    // Remove duplicatas usando o CNES como chave única
+                    var uniqueHospitals = hospitais
+                        .GroupBy(h => h.Cnes)
+                        .Select(g => g.First());
+
+                    var totalItems = uniqueHospitals.Count();
+                    var paginatedHospitals = uniqueHospitals.Skip(page * limit).Take(limit).ToList();
+
+                    return new HospitalGetAllResponse
+                    {
+                        Data = paginatedHospitals,
+                        Total = totalItems
+                    };
                 }
             }
 
-            return Enumerable.Empty<HospitalDTO>();
+            return new HospitalGetAllResponse { Data = Enumerable.Empty<HospitalDTO>(), Total = 0 };
         }
     }
 }

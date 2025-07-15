@@ -1,10 +1,10 @@
-﻿// APPS/api/back-end/entra21-atividade-crud-api/API_HealthGo/Contracts/Service/IHospitalService.cs
-using API_HealthGo.DTO;
+﻿using API_HealthGo.DTO;
+using API_HealthGo.Responses;
 
 namespace API_HealthGo.Contracts.Service
 {
     public interface IHospitalService
     {
-        Task<IEnumerable<HospitalDTO>> GetHospitais(string uf, int limit, int page);
+        Task<HospitalGetAllResponse> GetHospitais(string uf, int limit, int page, string? nome);
     }
 }
