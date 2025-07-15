@@ -20,6 +20,7 @@ const TicketsPage = lazy(() => import("./app/tickets/TicketsPage"));
 const PsychologistPage = lazy(() => import("./app/psychologists/PsychologistPage"));
 const CaregiversPage = lazy(() => import("./app/caregivers/CaregiversPage"));
 const CalendarPage = lazy(() => import("./app/calendar/CalendarPage"));
+const HospitalsPage = lazy(() => import("./app/hospitals/HospitalsPage"));
 const PurchaseHistoryPage = lazy(() => import("./app/history/PurchaseHistoryPage"));
 
 function App() {
@@ -40,6 +41,7 @@ function App() {
                 <Route path="psychologist" element={<PsychologistPage />} />
                 <Route path="caregivers" element={<CaregiversPage />} />
                 <Route path="calendar" element={<CalendarPage />} />
+                <Route path="hospitals" element={<HospitalsPage />} />
               </Route>
 
               <Route path="/purchase" element={<DashboardPage />}>

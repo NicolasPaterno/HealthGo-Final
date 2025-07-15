@@ -4,7 +4,6 @@ import {
   CalendarClock,
   Camera,
   LayoutDashboard,
-  Database,
   FileCode,
   FileText,
   HelpCircle,
@@ -14,6 +13,7 @@ import {
   Search,
   Settings,
   Users,
+  Hospital,
 } from "lucide-react"
 
 import { NavDocuments } from "@/components/nav-documents"
@@ -47,6 +47,11 @@ const data = {
       title: "Hoteis",
       url: "/dashboard/hotels",
       icon: Building,
+    },
+     {
+      title: "Hospitais", // Novo item
+      url: "/dashboard/hospitals",
+      icon: Hospital,
     },
     {
       title: "Passagens",
