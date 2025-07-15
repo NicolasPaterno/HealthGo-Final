@@ -1,4 +1,6 @@
-﻿namespace API_HealthGo.Entities
+﻿using Org.BouncyCastle.Asn1.Mozilla;
+
+namespace API_HealthGo.Entities
 {
     public class HotelEntity
     {
@@ -35,5 +37,7 @@
         public DateTime DataFim { get; set; }
 
         public int Cidade_Id { get; set; }
+
+        public int ContaGerencia_Id { get; set; }
     }
 }
