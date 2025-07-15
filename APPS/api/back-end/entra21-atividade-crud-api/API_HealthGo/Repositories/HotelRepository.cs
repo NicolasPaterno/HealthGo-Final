@@ -1,12 +1,20 @@
 ﻿using Dapper;
+<<<<<<< HEAD
 using API_HealthGo.Contracts.Repositories;
 using API_HealthGo.DTO;
 using API_HealthGo.Entities;
 using API_HealthGo.Infrastructure;
+=======
+using API_HealthGo.Contracts.Infrastructure;
+using API_HealthGo.Contracts.Repositories;
+using API_HealthGo.DTO;
+using API_HealthGo.Entities;
+>>>>>>> b18d637a8509b80fd5e62d0fda9767e2fa7e1bce
 using MySql.Data.MySqlClient;
 
 namespace API_HealthGo.Repository
 {
+<<<<<<< HEAD
     // Interface para o repositório de Hotéis
     public interface IHotelRepository
     {
@@ -91,10 +99,32 @@ namespace API_HealthGo.Repository
 
                 IEnumerable<HotelEntity> hotelList = await con.QueryAsync<HotelEntity>(sql);
 
+=======
+    public class HotelRepository : IHotelRepository
+    {
+        private IConnection _connection;
+
+        public HotelRepository(IConnection connection)
+        {
+            _connection = connection;
+        }
+
+        public async Task<IEnumerable<HotelEntity>> GetAll()
+        {
+            using (MySqlConnection con = _connection.GetConnection())
+            {
+                string sql = @$"
+                    SELECT Id, CNPJ, Nome, Tipo, Email, Telefone, Site, Acessibilidade, CEP, Bairro, Rua, NumeroEndereco, Descricao, Ativo, DataInicio, DataFim, Cidade_Id
+                    FROM HOTEL
+                ";
+
+                IEnumerable<HotelEntity> hotelList = await con.QueryAsync<HotelEntity>(sql);
+>>>>>>> b18d637a8509b80fd5e62d0fda9767e2fa7e1bce
                 return hotelList;
             }
         }
 
+<<<<<<< HEAD
         public async Task Insert(HotelInsertDTO hotel)
         {
             Connection _connection = new Connection();
@@ -108,12 +138,38 @@ namespace API_HealthGo.Repository
                     @CNPJ, @Nome, @Tipo, @Email, @Telefone, @Site, @Acessibilidade, 
                     @CEP, @Bairro, @Rua, @NumeroEndereco, @Descricao, @Ativo, 
                     @DataInicio, @DataFim, @Cidade_id
+=======
+        public async Task<HotelEntity> GetById(int id)
+        {
+            using (MySqlConnection con = _connection.GetConnection())
+            {
+                string sql = @$"
+                    SELECT Id, CNPJ, Nome, Tipo, Email, Telefone, Site, Acessibilidade, CEP, Bairro, Rua, NumeroEndereco, Descricao, Ativo, DataInicio, DataFim, Cidade_Id
+                    FROM HOTEL
+                    WHERE Id = @id
+                ";
+
+                HotelEntity hotel = await con.QueryFirstOrDefaultAsync<HotelEntity>(sql, new { id });
+                return hotel;
+            }
+        }
+
+        public async Task Insert(HotelInsertDTO hotel)
+        {
+            string sql = @"
+                INSERT INTO HOTEL (
+                    CNPJ, Nome, Tipo, Email, Telefone, Site, Acessibilidade, CEP, Bairro, Rua, NumeroEndereco, Descricao, Ativo, DataInicio, DataFim, Cidade_Id
+                )
+                VALUES (
+                    @CNPJ, @Nome, @Tipo, @Email, @Telefone, @Site, @Acessibilidade, @CEP, @Bairro, @Rua, @NumeroEndereco, @Descricao, @Ativo, @DataInicio, @DataFim, @Cidade_Id
+>>>>>>> b18d637a8509b80fd5e62d0fda9767e2fa7e1bce
                 )
             ";
 
             await _connection.Execute(sql, hotel);
         }
 
+<<<<<<< HEAD
         public async Task Delete(int id)
         {
             Connection _connection = new Connection();
@@ -161,6 +217,12 @@ namespace API_HealthGo.Repository
             string sql = @"
                 UPDATE Hotel
                 SET 
+=======
+        public async Task Update(HotelEntity hotel)
+        {
+            string sql = @"
+                UPDATE HOTEL SET
+>>>>>>> b18d637a8509b80fd5e62d0fda9767e2fa7e1bce
                     CNPJ = @CNPJ,
                     Nome = @Nome,
                     Tipo = @Tipo,
@@ -176,11 +238,24 @@ namespace API_HealthGo.Repository
                     Ativo = @Ativo,
                     DataInicio = @DataInicio,
                     DataFim = @DataFim,
+<<<<<<< HEAD
                     Cidade_id = @Cidade_id
+=======
+                    Cidade_Id = @Cidade_Id
+>>>>>>> b18d637a8509b80fd5e62d0fda9767e2fa7e1bce
                 WHERE Id = @Id
             ";
 
             await _connection.Execute(sql, hotel);
         }
+<<<<<<< HEAD
+=======
+
+        public async Task Delete(int id)
+        {
+            string sql = "DELETE FROM HOTEL WHERE Id = @id";
+            await _connection.Execute(sql, new { id });
+        }
+>>>>>>> b18d637a8509b80fd5e62d0fda9767e2fa7e1bce
     }
 }
