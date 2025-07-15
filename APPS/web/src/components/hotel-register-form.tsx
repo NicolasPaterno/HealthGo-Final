@@ -13,6 +13,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from "@/components/ui/select";
 import api from "@/services/api";
+import { truncate } from "node:fs/promises";
 
 export function HotelRegisterForm({
   className,
@@ -40,17 +41,22 @@ export function HotelRegisterForm({
       Nome: nome,
       Tipo: tipo,
       Email: email,
-      Senha: "123", // Ajuste conforme necessário
       Telefone: telefone,
       Site: site,
+      Acessibilidade: "",
       CEP: cep,
       Bairro: bairro,
       Rua: rua,
       NumeroEndereco: numeroEndereco,
       Descricao: descricao,
-      Cidade_Id: 1 // Ajuste conforme necessário
+      Ativo: true,
+      DataInicio: "",
+      DataFim: "",
+      Cidade_Id: 1,
+      ContaGerencia_Id: 1
     };
 
+    console.log(hotelData);
     try {
       const response = await api.post("/Hotel", hotelData);
 
