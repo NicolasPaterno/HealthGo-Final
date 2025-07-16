@@ -95,12 +95,13 @@ export function LoginForm({
                 <div className="grid gap-3">
                   <div className="flex items-center">
                     <Label htmlFor="password">Senha</Label>
-                    <a
-                      href="#"
+                    <Link
+                      to="/esqueci-senha"
                       className="ml-auto text-sm underline-offset-4 hover:underline"
                     >
                       Esqueceu sua senha?
-                    </a>
+                    </Link>
+
                   </div>
                   <Input
                     id="password"

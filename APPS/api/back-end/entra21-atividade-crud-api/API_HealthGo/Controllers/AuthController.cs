@@ -64,9 +64,13 @@ namespace API_HealthGo.Controllers
             }
         }
 
-        [HttpPost("{redefinir-senha}")]
+        [HttpPost("redefinir-senha")]
         public async Task<IActionResult> RedefinirSenha([FromBody] RedefinirSenhaDTO dto)
         {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest("DTO inválido.");
+            }
             try
             {
                 await _authService.RedefinirSenhaAsync(dto);

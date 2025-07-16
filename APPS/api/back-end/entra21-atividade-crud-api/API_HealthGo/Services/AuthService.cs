@@ -36,7 +36,7 @@ namespace API_HealthGo.Services
             await _tokenRecuperacaoSenhaRepository.SaveAsync(token);
 
             // 4. Aqui você pode chamar um serviço de e-mail
-            string link = $"http://localhost:3000/redefinir-senha?token={token.Token}";
+            string link = $"http://localhost:5173/redefinir-senha/{token.Token}";
 
             string corpo = $@"
                 <p>Olá,</p>

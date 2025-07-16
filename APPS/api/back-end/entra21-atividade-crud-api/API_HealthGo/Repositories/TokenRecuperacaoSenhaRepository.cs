@@ -28,7 +28,7 @@ namespace API_HealthGo.Repositories
             using var conn = _connection.GetConnection();
 
             var sql = @"SELECT * FROM TokenRecuperacaoSenha 
-                    WHERE TOKEN = @Token AND FoiUsado = 0 AND DataExpiracao > GETUTCDATE()";
+                    WHERE TOKEN = @Token AND FoiUsado = 0 AND DataExpiracao > UTC_TIMESTAMP()";
             return await conn.QueryFirstOrDefaultAsync<TokenRecuperacaoSenhaEntity>(sql, new { Token = token });
         }
 
