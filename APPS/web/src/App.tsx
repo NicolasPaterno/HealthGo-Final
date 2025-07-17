@@ -8,6 +8,9 @@ import { Toaster } from "./components/ui/sonner";
 import { CartProvider } from "./context/CartContext";
 import { CartSidebar } from "./components/cart-sidebar";
 import { ProtectedRoute } from "./components/protected-route"; // 1. Importe a rota protegida
+import LandingPage from "./components/landing-page";
+import WorkWithUsPage from "./components/work-with-us-page";
+import HotelOwnerRegisterForm from "./components/hotel-owner-register-form";
 
 // Seus componentes lazy-loaded permanecem os mesmos
 const LoginPage = lazy(() => import("./app/login/LoginPage"));
@@ -36,8 +39,14 @@ function App() {
       <CartProvider>
         <Suspense fallback={<LoadingSpinner />}>
           <Routes>
+            <Route path="/" element={<LandingPage />} />
             <Route path="/login" element={<LoginPage />} />
             <Route path="/register" element={<RegisterPage />} />
+            <Route path="/work-with-us" element={<WorkWithUsPage />} />
+            <Route
+              path="/work-with-us/hotel-register"
+              element={<HotelOwnerRegisterForm />}
+            />
 
             <Route element={<ProtectedRoute />}>
               <Route path="/dashboard" element={<DashboardPage />}>

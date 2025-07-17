@@ -200,27 +200,27 @@ INSERT INTO Pessoa (Nome, DataNascimento, CPF, Telefone, Email, Senha, EnderecoF
 -- -----------------------------------------------------
 -- Inserts para a tabela ContaGerencia
 -- -----------------------------------------------------
-INSERT INTO ContaGerencia (Email, Senha) VALUES
-('gerente1@healthgo.com', 'senha123'),
-('gerente2@healthgo.com', 'senha123'),
-('gerente3@healthgo.com', 'senha123'),
-('gerente4@healthgo.com', 'senha123'),
-('gerente5@healthgo.com', 'senha123'),
-('gerente6@healthgo.com', 'senha123'),
-('gerente7@healthgo.com', 'senha123'),
-('gerente8@healthgo.com', 'senha123'),
-('gerente9@healthgo.com', 'senha123'),
-('gerente10@healthgo.com', 'senha123'),
-('gerente11@healthgo.com', 'senha123'),
-('gerente12@healthgo.com', 'senha123'),
-('gerente13@healthgo.com', 'senha123'),
-('gerente14@healthgo.com', 'senha123'),
-('gerente15@healthgo.com', 'senha123'),
-('gerente16@healthgo.com', 'senha123'),
-('gerente17@healthgo.com', 'senha123'),
-('gerente18@healthgo.com', 'senha123'),
-('gerente19@healthgo.com', 'senha123'),
-('gerente20@healthgo.com', 'senha123');
+INSERT INTO ContaGerencia (Nome, CNPJ, Email, Senha) VALUES
+('Imóveis Paradiso LTDA', '00.000.000/0001-00', 'gerente1@healthgo.com', 'senha123'),
+('Encanto Empreendimentos Imobiliários', '01.000.000/0001-01', 'gerente2@healthgo.com', 'senha123'),
+('Aventura Patrimonial', '02.000.000/0001-02', 'gerente3@healthgo.com', 'senha123'),
+('Moderno Administradora de Imóveis', '03.000.000/0001-03', 'gerente4@healthgo.com', 'senha123'),
+('Conforto Gestão Residencial', '04.000.000/0001-04', 'gerente5@healthgo.com', 'senha123'),
+('Colonial Propriedades Históricas', '05.000.000/0001-05', 'gerente6@healthgo.com', 'senha123'),
+('Vista Mar Gestão Hoteleira', '06.000.000/0001-06', 'gerente7@healthgo.com', 'senha123'),
+('Verde Imobiliária Sustentável', '07.000.000/0001-07', 'gerente8@healthgo.com', 'senha123'),
+('Executivo Holdings Imobiliários', '08.000.000/0001-08', 'gerente9@healthgo.com', 'senha123'),
+('Urbano Gestão de Hospedagem', '09.000.000/0001-09', 'gerente10@healthgo.com', 'senha123'),
+('Sol Nascente Patrimônio', '10.000.000/0001-10', 'gerente11@healthgo.com', 'senha123'),
+('Serra Alta Propriedades', '11.000.000/0001-11', 'gerente12@healthgo.com', 'senha123'),
+('Charme & Estilo Imóveis', '12.000.000/0001-12', 'gerente13@healthgo.com', 'senha123'),
+('Praia Empreendimentos', '13.000.000/0001-13', 'gerente14@healthgo.com', 'senha123'),
+('Central Administração Hoteleira', '14.000.000/0001-14', 'gerente15@healthgo.com', 'senha123'),
+('Doce Lar Imobiliária', '15.000.000/0001-15', 'gerente16@healthgo.com', 'senha123'),
+('Conexão Imóveis e Gestão', '16.000.000/0001-16', 'gerente17@healthgo.com', 'senha123'),
+('Luxury Group Inc.', '17.000.000/0001-17', 'gerente18@healthgo.com', 'senha123'),
+('Times Square Properties', '18.000.000/0001-18', 'gerente19@healthgo.com', 'senha123'),
+('Magic Kingdom Realty', '19.000.000/0001-19', 'gerente20@healthgo.com', 'senha123');
 
 -- -----------------------------------------------------
 -- Inserts para a tabela Hotel
