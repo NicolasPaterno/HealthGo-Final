@@ -92,7 +92,7 @@ export function RegisterForm({
       Bairro: bairro,
       Rua: rua,
       NumeroEndereco: numeroEndereco,
-      Cidade_Id: cidadeId,
+      Cidade_Id: 1,
     };
 
     try {
