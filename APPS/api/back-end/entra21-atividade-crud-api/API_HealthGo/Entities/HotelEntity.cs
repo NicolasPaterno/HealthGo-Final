@@ -34,8 +34,6 @@ namespace API_HealthGo.Entities
 
         public DateTime DataInicio { get; set; }
 
-        public DateTime DataFim { get; set; }
-
         public int Cidade_Id { get; set; }
 
         public int ContaGerencia_Id { get; set; }

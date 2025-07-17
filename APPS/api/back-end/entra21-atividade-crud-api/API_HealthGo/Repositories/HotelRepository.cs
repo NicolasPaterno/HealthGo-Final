@@ -21,7 +21,7 @@ namespace API_HealthGo.Repository
             using (MySqlConnection con = _connection.GetConnection())
             {
                 string sql = @$"
-                    SELECT Id, CNPJ, Nome, Tipo, Email, Telefone, Site, Acessibilidade, CEP, Bairro, Rua, NumeroEndereco, Descricao, Ativo, DataInicio, DataFim, Cidade_Id, ContaGerencia_Id
+                    SELECT Id, CNPJ, Nome, Tipo, Email, Telefone, Site, Acessibilidade, CEP, Bairro, Rua, NumeroEndereco, Descricao, Ativo, DataInicio, Cidade_Id, ContaGerencia_Id
                     FROM HOTEL
                 ";
 
@@ -35,7 +35,7 @@ namespace API_HealthGo.Repository
             using (MySqlConnection con = _connection.GetConnection())
             {
                 string sql = @$"
-                    SELECT Id, CNPJ, Nome, Tipo, Email, Telefone, Site, Acessibilidade, CEP, Bairro, Rua, NumeroEndereco, Descricao, Ativo, DataInicio, DataFim, Cidade_Id, ContaGerencia_Id FROM HOTEL WHERE Id = @id    
+                    SELECT Id, CNPJ, Nome, Tipo, Email, Telefone, Site, Acessibilidade, CEP, Bairro, Rua, NumeroEndereco, Descricao, Ativo, DataInicio, Cidade_Id, ContaGerencia_Id FROM HOTEL WHERE Id = @id    
                 ";
 
                 HotelEntity hotel = await con.QueryFirstAsync<HotelEntity>(sql, new { id });
@@ -46,8 +46,8 @@ namespace API_HealthGo.Repository
         public async Task Insert(HotelInsertDTO hotel)
         {
             string sql = @"
-                INSERT INTO HOTEL (CNPJ, Nome, Tipo, Email, Telefone, Site, Acessibilidade, CEP, Bairro, Rua, NumeroEndereco, Descricao, Ativo, DataInicio, DataFim, Cidade_Id, ContaGerencia_Id)
-                VALUES (@CNPJ, @Nome, @Tipo, @Email, @Telefone, @Site, @Acessibilidade, @CEP, @Bairro, @Rua, @NumeroEndereco, @Descricao, @Ativo, @DataInicio, @DataFim, @Cidade_Id, @ContaGerencia_Id)
+                INSERT INTO HOTEL (CNPJ, Nome, Tipo, Email, Telefone, Site, Acessibilidade, CEP, Bairro, Rua, NumeroEndereco, Descricao, Ativo, DataInicio, Cidade_Id, ContaGerencia_Id)
+                VALUES (@CNPJ, @Nome, @Tipo, @Email, @Telefone, @Site, @Acessibilidade, @CEP, @Bairro, @Rua, @NumeroEndereco, @Descricao, @Ativo, @DataInicio, @Cidade_Id, @ContaGerencia_Id)
             ";
 
             await _connection.Execute(sql, hotel);
@@ -71,7 +71,6 @@ namespace API_HealthGo.Repository
                     Descricao = @Descricao,
                     Ativo = @Ativo,
                     DataInicio = @DataInicio,
-                    DataFim = @DataFim,
                     Cidade_Id = @Cidade_Id,
                     ContaGerencia_Id = @ContaGerencia_Id
                 WHERE Id = @Id
