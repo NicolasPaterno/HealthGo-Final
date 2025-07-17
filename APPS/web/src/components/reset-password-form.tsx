@@ -8,7 +8,7 @@ import { toast } from "sonner"
 import api from "@/services/api" // Certifique-se de que o serviço está configurado
 // import axios from "axios";
 
-export default function ResetPasswordForm() {
+export default function ResetPasswordForm() { 
   const { token } = useParams()
   // const navigate = useNavigate()
 
@@ -41,8 +41,11 @@ export default function ResetPasswordForm() {
       toast.success("Senha redefinida com sucesso!")
 
     } catch (error: any) {
-      const msg = error.response?.data?.message || "Erro ao redefinir senha."
-      toast.error("Erro", { description: msg })
+      const errorMessage = error.response?.data?.message || "Erro ao redefinir senha.";
+      toast.error("Erro ao criar a conta.", {
+         description: errorMessage,
+    });
+      console.error("Erro ao redefinir:", error);
     } finally {
       setIsLoading(false)
     }
