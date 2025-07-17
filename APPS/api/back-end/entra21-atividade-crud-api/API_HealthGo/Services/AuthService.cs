@@ -39,10 +39,11 @@ namespace API_HealthGo.Services
             string link = $"http://localhost:5173/redefinir-senha/{token.Token}";
 
             string corpo = $@"
-                <p>Olá,</p>
-                <p>Recebemos uma solicitação para redefinir sua senha.</p>
-                <p><a href='{link}'>Clique aqui para redefinir sua senha</a></p>
-                <p>Se você não fez essa solicitação, ignore este e-mail.</p>
+                <p>Olá {pessoa.Nome}!</p>
+                <p>Use o código abaixo para redefinir sua senha.</p>
+
+                <p><a href='{link}'>Clique aqui para redefinir sua senha</a></p> 
+                <p>Se você não fez essa solicitação, ignore este e-mail, e nunca compartilhe para ninguém este link.</p>
             ";
 
             await _emailService.EnviarEmailAsync(pessoa.Email, "Redefinição de Senha - HealthGo", corpo);
