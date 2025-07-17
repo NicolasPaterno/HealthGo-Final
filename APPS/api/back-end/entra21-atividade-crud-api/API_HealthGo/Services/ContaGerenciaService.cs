@@ -40,6 +40,8 @@ namespace API_HealthGo.Services
 
         public async Task<MessageResponse> Post(ContaGerenciaInsertDTO contaGerencia)
         {
+            contaGerencia.Senha = BCrypt.Net.BCrypt.HashPassword(contaGerencia.Senha);
+
             await _repository.Insert(contaGerencia);
             return new MessageResponse
             {

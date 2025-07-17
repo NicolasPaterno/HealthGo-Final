@@ -166,7 +166,29 @@ const data = {
   ],
 };
 
+const navMainHotelOwner = [
+  {
+    title: "Dashboard",
+    url: "/dashboard",
+    icon: IconDashboard,
+  },
+  {
+    title: "Cadastrar Hotel",
+    url: "/dashboard/hotels/register",
+    icon: IconBuilding,
+  },
+  {
+    title: "Listar Hotéis",
+    url: "/dashboard/hotels/list",
+    icon: IconBuilding,
+  },
+];
+
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
+  const user = JSON.parse(localStorage.getItem("user") || "{}");
+  // Aceita tanto UserType quanto userType, e compara em minúsculo
+  const userType = (user.UserType || user.userType || "").toLowerCase();
+
   return (
     <Sidebar collapsible="offcanvas" {...props}>
       <SidebarHeader>
@@ -185,8 +207,14 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         </SidebarMenu>
       </SidebarHeader>
       <SidebarContent>
-        <NavMain items={data.navMain} />
-        <NavDocuments items={data.documents} />
+        <NavMain
+          items={
+            userType === "contagerencia" ? navMainHotelOwner : data.navMain
+          }
+        />
+        {userType !== "contagerencia" && (
+          <NavDocuments items={data.documents} />
+        )}
         <NavSecondary items={data.navSecondary} className="mt-auto" />
       </SidebarContent>
       <SidebarFooter>
