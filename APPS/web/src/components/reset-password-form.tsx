@@ -1,6 +1,6 @@
 import { useState } from "react"
-import { useParams, } from "react-router-dom"
-// import { useNavigate } from "react-router-dom"
+import { Navigate, useParams, } from "react-router-dom"
+ import { useNavigate } from "react-router-dom"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
@@ -10,8 +10,9 @@ import api from "@/services/api" // Certifique-se de que o serviço está config
 
 export default function ResetPasswordForm() { 
   const { token } = useParams()
-  // const navigate = useNavigate()
+  const navigate = useNavigate()
 
+  
   const [password, setPassword] = useState("")
   const [confirmPassword, setConfirmPassword] = useState("")
   const [isLoading, setIsLoading] = useState(false)
@@ -38,7 +39,14 @@ export default function ResetPasswordForm() {
         NovaSenha: password
       });
 
-      toast.success("Senha redefinida com sucesso!")
+      toast.success("Senha redefinida com sucesso!", {
+        description: "Você será redirecionado para o dashboard.",
+        duration: 2000,
+      });
+
+      setTimeout(() => {
+        navigate("/dashboard");
+      }, 2000);
 
     } catch (error: any) {
       const errorMessage = error.response?.data?.message || "Erro ao redefinir senha.";
