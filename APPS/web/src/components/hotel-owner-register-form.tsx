@@ -35,7 +35,7 @@ export default function HotelOwnerRegisterForm({
     e.preventDefault();
     setLoading(true);
     try {
-      await api.post("/HotelOwner/Register", {
+      await api.post("/ContaGerencia", {
         nome: form.nome,
         email: form.email,
         senha: form.senha,

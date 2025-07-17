@@ -50,4 +50,3 @@ namespace API_HealthGo.Controllers
         }
     }
 }
-}

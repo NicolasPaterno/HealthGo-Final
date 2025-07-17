@@ -27,7 +27,7 @@ namespace API_HealthGo.Repository
                            EMAIL AS {nameof(ContaGerenciaEntity.Email)},
                            SENHA AS {nameof(ContaGerenciaEntity.Senha)},
                            CNPJ AS {nameof(ContaGerenciaEntity.CNPJ)}
-                      FROM CONTA_GERENCIA
+                      FROM CONTAGERENCIA
                 ";
                 return await con.QueryAsync<ContaGerenciaEntity>(sql);
             }
@@ -43,7 +43,7 @@ namespace API_HealthGo.Repository
                            EMAIL AS {nameof(ContaGerenciaEntity.Email)},
                            SENHA AS {nameof(ContaGerenciaEntity.Senha)},
                            CNPJ AS {nameof(ContaGerenciaEntity.CNPJ)}
-                      FROM CONTA_GERENCIA
+                      FROM CONTAGERENCIA
                      WHERE ID = @id
                 ";
                 return await con.QueryFirstAsync<ContaGerenciaEntity>(sql, new { id });
@@ -53,7 +53,7 @@ namespace API_HealthGo.Repository
         public async Task Insert(ContaGerenciaInsertDTO contaGerencia)
         {
             string sql = @$"
-                INSERT INTO CONTA_GERENCIA (NOME, CNPJ, EMAIL, SENHA)
+                INSERT INTO CONTAGERENCIA (NOME, CNPJ, EMAIL, SENHA)
                                  VALUES (@Nome, @CNPJ, @Email, @Senha)
             ";
             await _connection.Execute(sql, contaGerencia);
@@ -62,7 +62,7 @@ namespace API_HealthGo.Repository
         public async Task Update(ContaGerenciaEntity contaGerencia)
         {
             string sql = @$"
-                UPDATE CONTA_GERENCIA
+                UPDATE CONTAGERENCIA
                    SET NOME = @Nome,
                        CNPJ = @CNPJ,
                        EMAIL = @Email,
@@ -74,7 +74,7 @@ namespace API_HealthGo.Repository
 
         public async Task Delete(int id)
         {
-            string sql = "DELETE FROM CONTA_GERENCIA WHERE ID = @id";
+            string sql = "DELETE FROM CONTAGERENCIA WHERE ID = @id";
             await _connection.Execute(sql, new { id });
         }
     }
