@@ -1,5 +1,6 @@
 using API_HealthGo.Contracts.Infrastructure;
 using API_HealthGo.Contracts.Repositories;
+using API_HealthGo.Contracts.Repository;
 using API_HealthGo.Contracts.Service;
 using API_HealthGo.Infrastructure;
 using API_HealthGo.Repository;
@@ -83,6 +84,9 @@ namespace API_HealthGo
 
             builder.Services.AddScoped<IHotelService, HotelService>();
             builder.Services.AddTransient<IHotelRepository, HotelRepository>();
+
+            builder.Services.AddScoped<IContaGerenciaService, ContaGerenciaService>();
+            builder.Services.AddTransient<IContaGerenciaRepository, ContaGerenciaRepository>();
 
             builder.Services.AddScoped<IAviaoService, AviaoService>();
             builder.Services.AddTransient<IAviaoRepository, AviaoRepository>();

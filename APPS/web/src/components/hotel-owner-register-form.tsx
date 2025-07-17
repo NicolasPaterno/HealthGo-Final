@@ -23,7 +23,6 @@ export default function HotelOwnerRegisterForm({
     nome: "",
     email: "",
     senha: "",
-    confirmacaoSenha: "",
     cnpj: "",
   });
   const [loading, setLoading] = useState(false);
@@ -34,10 +33,6 @@ export default function HotelOwnerRegisterForm({
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
-    if (form.senha !== form.confirmacaoSenha) {
-      toast.error("As senhas não coincidem.");
-      return;
-    }
     setLoading(true);
     try {
       await api.post("/HotelOwner/Register", {
@@ -81,31 +76,17 @@ export default function HotelOwnerRegisterForm({
         <CardContent>
           <form onSubmit={handleSubmit}>
             <div className="grid gap-4">
-              <div className="grid grid-cols-2 gap-4">
-                <div className="grid gap-2">
-                  <Label htmlFor="email">Email</Label>
-                  <Input
-                    id="email"
-                    name="email"
-                    type="email"
-                    placeholder="nome@exemplo.com"
-                    required
-                    value={form.email}
-                    onChange={handleChange}
-                  />
-                </div>
-                <div className="grid gap-2">
-                  <Label htmlFor="cnpj">CNPJ</Label>
-                  <Input
-                    id="cnpj"
-                    name="cnpj"
-                    type="text"
-                    placeholder="00.000.000/0000-00"
-                    required
-                    value={form.cnpj}
-                    onChange={handleChange}
-                  />
-                </div>
+              <div className="grid gap-2">
+                <Label htmlFor="email">Email</Label>
+                <Input
+                  id="email"
+                  name="email"
+                  type="email"
+                  placeholder="nome@exemplo.com"
+                  required
+                  value={form.email}
+                  onChange={handleChange}
+                />
               </div>
               <div className="grid gap-2">
                 <Label htmlFor="nome">Nome</Label>
@@ -121,6 +102,18 @@ export default function HotelOwnerRegisterForm({
               </div>
               <div className="grid grid-cols-2 gap-4">
                 <div className="grid gap-2">
+                  <Label htmlFor="cnpj">CNPJ</Label>
+                  <Input
+                    id="cnpj"
+                    name="cnpj"
+                    type="text"
+                    placeholder="00.000.000/0000-00"
+                    required
+                    value={form.cnpj}
+                    onChange={handleChange}
+                  />
+                </div>
+                <div className="grid gap-2">
                   <Label htmlFor="senha">Senha</Label>
                   <Input
                     id="senha"
@@ -128,17 +121,6 @@ export default function HotelOwnerRegisterForm({
                     type="password"
                     required
                     value={form.senha}
-                    onChange={handleChange}
-                  />
-                </div>
-                <div className="grid gap-2">
-                  <Label htmlFor="confirmacaoSenha">Confirmação de Senha</Label>
-                  <Input
-                    id="confirmacaoSenha"
-                    name="confirmacaoSenha"
-                    type="password"
-                    required
-                    value={form.confirmacaoSenha}
                     onChange={handleChange}
                   />
                 </div>
