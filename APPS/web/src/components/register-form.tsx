@@ -77,8 +77,9 @@ export function RegisterForm({
   };
 
   return (
-    <Card className={cn("mx-auto max-w-lg", className)} {...props}>
-      <CardHeader>
+    <div className={cn("flex flex-col gap-6", className)} {...props}>
+    <Card className={cn("mx-auto max-w-lg border-2", className)} {...props}>
+      <CardHeader className="text-center">
         <CardTitle className="text-2xl">Criar conta</CardTitle>
         <CardDescription>
           Insira seus dados abaixo para criar sua conta
@@ -157,5 +158,11 @@ export function RegisterForm({
         </div>
       </CardContent>
     </Card>
+    <div className="text-muted-foreground *:[a]:hover:text-primary text-center text-xs text-balance *:[a]:underline *:[a]:underline-offset-4">
+        Ao clicar em continuar, você concorda com nossos{" "}
+        <a href="#">Termos de Serviço</a> e{" "}
+        <a href="#">Política de Privacidade</a>.
+      </div>
+    </div>
   );
 }

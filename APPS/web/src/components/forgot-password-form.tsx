@@ -1,16 +1,21 @@
 import { useState } from "react"
-// import { useNavigate } from "react-router-dom"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
 // import api from "@/services/api" ← quando for conectar
 import { toast } from "sonner";
 import api from "@/services/api" // Certifique-se de que o serviço está configurado
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card"
+import { Button } from "@/components/ui/button"
+import { Input } from "@/components/ui/input"
+import { Label } from "@/components/ui/label"
 
 export default function ForgotPasswordForm() {
   const [email, setEmail] = useState("")
   const [isLoading, setIsLoading] = useState(false)
-  // const navigate = useNavigate()
 
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault()
@@ -50,31 +55,31 @@ export default function ForgotPasswordForm() {
   }
 
   return (
-    <div className="bg-muted flex min-h-svh flex-col items-center justify-center gap-6 p-6 md:p-10">
-      <form className="flex w-full max-w-sm flex-col gap-6" onSubmit={handleSubmit}>
-        <div className="space-y-2 text-center">
-          <h2 className="text-xl font-semibold">Recuperar senha</h2>
-          <p className="text-sm text-muted-foreground">
-            Informe seu e-mail para receber um link de redefinição de senha.
-          </p>
-        </div>
-
-        <div className="space-y-2">
+  <Card className="mx-auto max-w-md w-full border-2">
+    <CardHeader className="text-center">
+      <CardTitle className="text-2xl">Recuperar senha</CardTitle>
+      <CardDescription>
+        Informe seu e-mail para receber um link de redefinição de senha
+      </CardDescription>
+    </CardHeader>
+    <CardContent>
+      <form onSubmit={handleSubmit} className="grid gap-4">
+        <div className="grid gap-2">
           <Label htmlFor="email">E-mail</Label>
           <Input
             id="email"
             type="email"
+            placeholder="seu@email.com"
+            required
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            required
-            placeholder="seu@email.com"
           />
         </div>
-
         <Button type="submit" className="w-full" disabled={isLoading}>
           {isLoading ? "Enviando..." : "Enviar link de redefinição"}
         </Button>
       </form>
-    </div>
-  )
+    </CardContent>
+  </Card>
+);
 }

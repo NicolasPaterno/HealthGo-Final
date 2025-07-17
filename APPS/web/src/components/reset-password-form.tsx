@@ -1,12 +1,18 @@
 import { useState } from "react"
-import { Navigate, useParams, } from "react-router-dom"
+import { useParams, } from "react-router-dom"
  import { useNavigate } from "react-router-dom"
 import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
 import { toast } from "sonner"
 import api from "@/services/api" // Certifique-se de que o serviço está configurado
-// import axios from "axios";
+import {
+     Card,
+     CardContent,
+     CardDescription,
+     CardHeader,
+     CardTitle,
+   } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 
 export default function ResetPasswordForm() { 
   const { token } = useParams()
@@ -59,45 +65,41 @@ export default function ResetPasswordForm() {
     }
   }
 
-  return (
-    <div className="flex min-h-screen items-center justify-center bg-muted p-6">
-      <form
-        onSubmit={handleSubmit}
-        className="w-full max-w-sm space-y-6 rounded-lg bg-white p-6 shadow-md"
-      >
-        <div className="space-y-2 text-center">
-          <h2 className="text-xl font-semibold">Criar nova senha</h2>
-          <p className="text-sm text-muted-foreground">
-            Digite a nova senha para sua conta.
-          </p>
-        </div>
-
-        <div className="space-y-2">
-          <Label htmlFor="password">Nova senha</Label>
-          <Input
-            id="password"
-            type="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-          />
-        </div>
-
-        <div className="space-y-2">
-          <Label htmlFor="confirm">Confirmar senha</Label>
-          <Input
-            id="confirm"
-            type="password"
-            value={confirmPassword}
-            onChange={(e) => setConfirmPassword(e.target.value)}
-            required
-          />
-        </div>
-
-        <Button type="submit" className="w-full" disabled={isLoading}>
-          {isLoading ? "Redefinindo..." : "Redefinir senha"}
-        </Button>
-      </form>
-    </div>
-  )
+return (
+<Card className="mx-auto max-w-md w-full border-2">
+  <CardHeader className="text-center">
+    <CardTitle className="text-2xl">Criar nova senha</CardTitle>
+    <CardDescription>
+      Digite a nova senha para sua conta
+    </CardDescription>
+  </CardHeader>
+  <CardContent>
+    <form onSubmit={handleSubmit} className="grid gap-4">
+      <div className="grid gap-2">
+        <Label htmlFor="password">Nova senha</Label>
+        <Input
+          id="password"
+          type="password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          required
+        />
+      </div>
+      <div className="grid gap-2">
+        <Label htmlFor="confirm">Confirmar senha</Label>
+        <Input
+          id="confirm"
+          type="password"
+          value={confirmPassword}
+          onChange={(e) => setConfirmPassword(e.target.value)}
+          required
+        />
+      </div>
+      <Button type="submit" className="w-full" disabled={isLoading}>
+        {isLoading ? "Redefinindo..." : "Redefinir senha"}
+      </Button>
+    </form>
+  </CardContent>
+</Card>
+)
 }
