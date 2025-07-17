@@ -17,7 +17,7 @@ namespace API_HealthGo
             var builder = WebApplication.CreateBuilder(args);
 
             // NOVO: Defina um nome para a sua política de CORS
-            var MyAllowAllOrigins = "_myAllowSpecificOrigins";
+            var MyAllowAllOrigins = "_myAllowAllOrigins";
 
             // Add services to the container.
 
