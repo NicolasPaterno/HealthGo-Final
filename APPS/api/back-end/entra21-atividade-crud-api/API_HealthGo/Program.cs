@@ -17,18 +17,17 @@ namespace API_HealthGo
             var builder = WebApplication.CreateBuilder(args);
 
             // NOVO: Defina um nome para a sua política de CORS
-            var MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
+            var MyAllowAllOrigins = "_myAllowSpecificOrigins";
 
             // Add services to the container.
 
             // NOVO: Adicione o serviço de CORS
             builder.Services.AddCors(options =>
             {
-                options.AddPolicy(name: MyAllowSpecificOrigins,
+                options.AddPolicy(name: MyAllowAllOrigins,
                                   policy =>
                                   {
-                                      // Adicione a URL do seu frontend React
-                                      policy.WithOrigins("http://localhost:5173") // < -ESSA é a porta do seu front-end
+                                      policy.AllowAnyOrigin()
                                             .AllowAnyHeader()
                                             .AllowAnyMethod();
                                   });
@@ -134,7 +133,7 @@ namespace API_HealthGo
             app.UseHttpsRedirection();
 
             // NOVO: Habilite o middleware do CORS. IMPORTANTE: Deve vir antes de UseAuthentication e UseAuthorization.
-            app.UseCors(MyAllowSpecificOrigins);
+            app.UseCors(MyAllowAllOrigins);
 
             //enable authentication and authorization middleware 
             app.UseAuthentication();
