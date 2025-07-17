@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useCallback } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
@@ -14,28 +14,70 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
 import api from "@/services/api";
+import axios from "axios"; // Import axios for the API call
 
 export function RegisterForm({
   className,
   ...props
 }: React.ComponentProps<"div">) {
-  const navigate = useNavigate(); 
+  const navigate = useNavigate();
 
   const [nome, setNome] = useState("");
   const [email, setEmail] = useState("");
   const [senha, setSenha] = useState("");
   const [cpf, setCpf] = useState("");
   const [dataNascimento, setDataNascimento] = useState("");
-  const [telefone, setTelefone] = useState(""); 
+  const [telefone, setTelefone] = useState("");
   const [cep, setCep] = useState("");
-  const [cidade, setCidade] = useState(""); 
+  const [cidade, setCidade] = useState("");
   const [rua, setRua] = useState("");
   const [bairro, setBairro] = useState("");
   const [numeroEndereco, setNumeroEndereco] = useState("");
   const [caoGuia, setCaoGuia] = useState(false);
+  const [isCepLoading, setIsCepLoading] = useState(false);
+  const [cidadeId, setCidadeId] = useState<number | null>(null);
+
+  const handleCepBlur = useCallback(async (event: React.FocusEvent<HTMLInputElement>) => {
+    const currentCep = event.target.value.replace(/\D/g, "");
+
+    if (currentCep.length !== 8) {
+      return;
+    }
+
+    setIsCepLoading(true);
+    try {
+      const { data } = await axios.get(`https://viacep.com.br/ws/${currentCep}/json/`);
+
+      if (data.erro) {
+        toast.error("CEP não encontrado.");
+        return;
+      }
+
+      setRua(data.logradouro);
+      setBairro(data.bairro);
+      setCidade(data.localidade);
+      if (data.ibge) {
+        setCidadeId(parseInt(data.ibge, 10));
+      }
+
+    } catch (error) {
+      toast.error("Não foi possível buscar o CEP.");
+      console.error("CEP fetch error:", error);
+    } finally {
+      setIsCepLoading(false);
+    }
+  }, []);
+
 
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
+
+    if (!cidadeId) {
+      toast.error("Cidade inválida", {
+        description: "Por favor, insira um CEP válido para buscar a cidade.",
+      });
+      return;
+    }
 
     const userData = {
       Nome: nome,
@@ -44,13 +86,13 @@ export function RegisterForm({
       Telefone: telefone,
       Email: email,
       Senha: senha,
-      EnderecoFoto: "default.jpg", 
+      EnderecoFoto: "default.jpg",
       CaoGuia: caoGuia,
       CEP: cep,
       Bairro: bairro,
       Rua: rua,
       NumeroEndereco: numeroEndereco,
-      Cidade_Id: 1, 
+      Cidade_Id: 1,
     };
 
     try {
@@ -119,21 +161,21 @@ export function RegisterForm({
             <div className="grid grid-cols-2 gap-4">
               <div className="grid gap-2">
                 <Label htmlFor="cep">CEP</Label>
-                <Input id="cep" type="text" placeholder="00000-000" value={cep} onChange={(e) => setCep(e.target.value)} />
+                <Input id="cep" type="text" placeholder="00000-000" value={cep} onChange={(e) => setCep(e.target.value)} onBlur={handleCepBlur} />
               </div>
               <div className="grid gap-2">
                 <Label htmlFor="city">Cidade</Label>
-                <Input id="city" type="text" placeholder="Sua cidade" value={cidade} onChange={(e) => setCidade(e.target.value)} />
+                <Input id="city" type="text" placeholder="Sua cidade" value={cidade} onChange={(e) => setCidade(e.target.value)} disabled={isCepLoading} />
               </div>
             </div>
             <div className="grid gap-2">
               <Label htmlFor="street">Rua</Label>
-              <Input id="street" type="text" placeholder="Nome da sua rua" value={rua} onChange={(e) => setRua(e.target.value)} />
+              <Input id="street" type="text" placeholder="Nome da sua rua" value={rua} onChange={(e) => setRua(e.target.value)} disabled={isCepLoading} />
             </div>
             <div className="grid grid-cols-2 gap-4">
               <div className="grid gap-2">
                 <Label htmlFor="neighborhood">Bairro</Label>
-                <Input id="neighborhood" type="text" placeholder="Seu bairro" value={bairro} onChange={(e) => setBairro(e.target.value)} />
+                <Input id="neighborhood" type="text" placeholder="Seu bairro" value={bairro} onChange={(e) => setBairro(e.target.value)} disabled={isCepLoading} />
               </div>
               <div className="grid gap-2">
                 <Label htmlFor="addressNumber">Número</Label>
@@ -144,8 +186,8 @@ export function RegisterForm({
               <Checkbox id="guideDog" checked={caoGuia} onCheckedChange={(checked) => setCaoGuia(Boolean(checked))} />
               <Label htmlFor="guideDog" className="font-normal">Possui cão guia</Label>
             </div>
-            <Button type="submit" className="w-full">
-              Criar conta
+            <Button type="submit" className="w-full" disabled={isCepLoading}>
+              {isCepLoading ? "Buscando CEP..." : "Criar conta"}
             </Button>
           </div>
         </form>
