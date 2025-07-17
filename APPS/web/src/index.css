@@ -188,6 +188,17 @@
     @apply bg-background text-foreground;
     letter-spacing: var(--tracking-normal);
   }
+  button {
+    @apply cursor-pointer;
+  }
+  input,
+  textarea {
+    @apply cursor-text;
+  }
+
+  select {
+    @apply cursor-pointer;
+  }
 }
 
 /* Estilo final e robusto para o indicador de lembrete */
