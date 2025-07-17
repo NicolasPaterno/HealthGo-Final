@@ -18,8 +18,8 @@ namespace API_HealthGo.Repositories
         {
             using var conn = _connection.GetConnection();
 
-            var sql = @"INSERT INTO TokenRecuperacaoSenha (PESSOA_ID, TOKEN, DATAEXPIRACAO, FOIUSADO)
-                    VALUES (@Pessoa_Id, @Token, @DataExpiracao, 0)";
+            var sql = @"INSERT INTO TokenRecuperacaoSenha (PESSOA_ID, TOKEN, DATAEXPIRACAO)
+                    VALUES (@Pessoa_Id, @Token, @DataExpiracao)";
             await conn.ExecuteAsync(sql, token);
         }
 
@@ -28,7 +28,7 @@ namespace API_HealthGo.Repositories
             using var conn = _connection.GetConnection();
 
             var sql = @"SELECT * FROM TokenRecuperacaoSenha 
-                    WHERE TOKEN = @Token AND FoiUsado = 0 AND DataExpiracao > UTC_TIMESTAMP()";
+                    WHERE TOKEN = @Token AND DataExpiracao > UTC_TIMESTAMP()";
             return await conn.QueryFirstOrDefaultAsync<TokenRecuperacaoSenhaEntity>(sql, new { Token = token });
         }
 
