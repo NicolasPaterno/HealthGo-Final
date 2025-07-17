@@ -27,7 +27,7 @@ namespace API_HealthGo
                                   policy =>
                                   {
                                       // Adicione a URL do seu frontend React
-                                      policy.WithOrigins("http://localhost:5173")
+                                      policy.WithOrigins("http://localhost:5173", "https://localhost:5173")
                                             .AllowAnyHeader()
                                             .AllowAnyMethod();
                                   });

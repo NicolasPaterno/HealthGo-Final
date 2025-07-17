@@ -1,7 +1,9 @@
+import { useEffect, useState } from "react";
+import { useParams, useNavigate } from "react-router-dom";
+import api from "@/services/api";
 import {
   Card,
   CardContent,
-  CardHeader,
   CardTitle,
   CardDescription,
 } from "@/components/ui/card";
@@ -18,21 +20,8 @@ import {
   ResponsiveContainer,
 } from "recharts";
 import { toast } from "sonner";
-import { useNavigate } from "react-router-dom";
 
-// Dados mockados do hotel
-const hotel = {
-  id: "hotel-palace",
-  name: "Hotel Palace",
-  image: "https://via.placeholder.com/800x300/8B4513/FFFFFF?text=Hotel+Palace",
-  rating: 4.7,
-  rua: "Av. Central, 123",
-  cidade: "Florianópolis",
-  descricao:
-    "Um hotel de luxo no coração da cidade com vista panorâmica. Estrutura completa, atendimento premium e localização privilegiada.",
-};
-
-// Dados mockados para o gráfico
+// Dados mockados para o gráfico e avaliações (mantidos)
 const rendaPorMes = [
   { mes: "Jan", renda: 12000, lucro: 8000, despesas: 4000 },
   { mes: "Fev", renda: 15000, lucro: 10000, despesas: 5000 },
@@ -47,8 +36,6 @@ const rendaPorMes = [
   { mes: "Nov", renda: 25000, lucro: 18000, despesas: 7000 },
   { mes: "Dez", renda: 30000, lucro: 22000, despesas: 8000 },
 ];
-
-// Mock de comentários/avaliações
 const comentarios = [
   {
     id: 1,
@@ -74,7 +61,29 @@ const comentarios = [
 ];
 
 export default function HotelProfilePage() {
+  const { id } = useParams();
   const navigate = useNavigate();
+  const [hotel, setHotel] = useState<any>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
+
+  useEffect(() => {
+    async function fetchHotel() {
+      setLoading(true);
+      setError("");
+      try {
+        const response = await api.get(`/Hotel/${id}`);
+        setHotel(response.data);
+        console.log("Hotel detalhado recebido:", response.data);
+      } catch (err) {
+        setError("Erro ao buscar hotel.");
+      } finally {
+        setLoading(false);
+      }
+    }
+    fetchHotel();
+  }, [id]);
+
   const handleDelete = () => {
     if (
       window.confirm(
@@ -86,36 +95,57 @@ export default function HotelProfilePage() {
       // Redirecionar ou atualizar a página, se necessário
     }
   };
+
+  if (loading)
+    return (
+      <main className="flex-1 p-4 md:p-8 w-full">
+        <p>Carregando hotel...</p>
+      </main>
+    );
+  if (error || !hotel)
+    return (
+      <main className="flex-1 p-4 md:p-8 w-full">
+        <p className="text-red-500">{error || "Hotel não encontrado."}</p>
+      </main>
+    );
+
   return (
-    <main className="flex-1 p-4 md:p-8 max-w-5xl mx-auto">
-      <Card className="overflow-hidden mb-8">
+    <main className="flex-1 p-4 md:p-8 w-full">
+      <Card className="overflow-hidden mb-8 w-full">
         <div className="relative h-56 w-full">
+          {/* Imagem mockada, pode trocar se houver campo */}
           <img
-            src={hotel.image}
-            alt={`Imagem do ${hotel.name}`}
+            src={
+              hotel.Imagem ||
+              "https://via.placeholder.com/800x300/8B4513/FFFFFF?text=Hotel"
+            }
+            alt={`Imagem do ${hotel.Nome || hotel.nome}`}
             className="absolute inset-0 w-full h-full object-cover"
           />
           <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent" />
           <div className="absolute left-0 bottom-0 p-6 flex flex-col md:flex-row md:items-end w-full">
             <div className="flex-1">
               <CardTitle className="text-white drop-shadow-lg text-3xl">
-                {hotel.name}
+                {hotel.Nome || hotel.nome}
               </CardTitle>
               <div className="flex items-center gap-2 mt-2">
                 <IconStar className="h-6 w-6 text-yellow-400 fill-yellow-400 drop-shadow" />
                 <span className="text-white font-bold text-lg drop-shadow">
-                  {hotel.rating}
+                  {hotel.Tipo || hotel.tipo}
                 </span>
               </div>
               <CardDescription className="text-white/90 mt-2">
-                {hotel.rua} - {hotel.cidade}
+                {hotel.Rua || hotel.rua} - Cidade:{" "}
+                {hotel.Cidade_Id || hotel.cidade_Id}
               </CardDescription>
             </div>
             <div className="flex-shrink-0 md:ml-auto mt-4 md:mt-0">
               <Button
                 variant="outline"
                 className="flex items-center gap-2 justify-center"
-                onClick={() => navigate(`/dashboard/hotels/edit/${hotel.id}`)}
+                onClick={() =>
+                  navigate(`/dashboard/hotels/edit/${hotel.Id || hotel.id}`)
+                }
               >
                 <IconEdit className="h-5 w-5" /> Editar Informações
               </Button>
@@ -124,7 +154,7 @@ export default function HotelProfilePage() {
         </div>
         <CardContent className="p-6 bg-background">
           <p className="text-lg mb-4 text-muted-foreground">
-            {hotel.descricao}
+            {hotel.Descricao || hotel.descricao}
           </p>
           <div className="flex flex-col md:flex-row gap-8">
             <div className="flex-1 min-w-[320px]">

@@ -1,4 +1,6 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useParams, useNavigate } from "react-router-dom";
+import api from "@/services/api";
 import {
   Card,
   CardHeader,
@@ -18,24 +20,31 @@ import {
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 
-// Dados mockados do hotel para edição
-const hotel = {
-  cnpj: "12.345.678/0001-99",
-  nome: "Hotel Palace",
-  tipo: "Hotel",
-  email: "contato@hotelpalace.com",
-  telefone: "(48) 99999-9999",
-  site: "https://hotelpalace.com",
-  cep: "88000-000",
-  bairro: "Centro",
-  rua: "Av. Central, 123",
-  numeroEndereco: "123",
-  descricao: "Um hotel de luxo no coração da cidade com vista panorâmica.",
-};
-
 export default function HotelEditPage() {
-  const [form, setForm] = useState(hotel);
-  const [loading, setLoading] = useState(false);
+  const { id } = useParams();
+  const navigate = useNavigate();
+  const [form, setForm] = useState<any>(null);
+  const [loading, setLoading] = useState(true);
+  const [saving, setSaving] = useState(false);
+  const [error, setError] = useState("");
+
+  useEffect(() => {
+    async function fetchHotel() {
+      setLoading(true);
+      setError("");
+      try {
+        console.log("ID recebido para edição:", id); // <-- log do id
+        const response = await api.get(`/Hotel/${id}`);
+        console.log("Hotel para edição:", response.data); // <-- log do hotel
+        setForm(response.data);
+      } catch (err) {
+        setError("Erro ao buscar hotel.");
+      } finally {
+        setLoading(false);
+      }
+    }
+    fetchHotel();
+  }, [id]);
 
   function handleChange(
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -47,14 +56,41 @@ export default function HotelEditPage() {
     setForm({ ...form, tipo: value });
   }
 
-  function handleSubmit(e: React.FormEvent) {
+  async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
-    setLoading(true);
-    setTimeout(() => {
+    setSaving(true);
+    try {
+      // Corrigir o campo site para sempre ter http(s)://
+      let site = form.site || "";
+      if (site && !/^https?:\/\//i.test(site)) {
+        site = "http://" + site;
+      }
+      const formToSend = { ...form, site };
+      await api.put("/Hotel", formToSend);
       toast.success("Informações do hotel atualizadas com sucesso!");
-      setLoading(false);
-    }, 1200);
+      navigate(`/dashboard/hotels/profile/${id}`);
+    } catch (err: any) {
+      toast.error("Erro ao atualizar hotel.", {
+        description:
+          err?.response?.data?.message || "Tente novamente mais tarde.",
+      });
+    } finally {
+      setSaving(false);
+    }
   }
+
+  if (loading)
+    return (
+      <div className="bg-background min-h-svh flex items-center justify-center p-4 md:p-10">
+        <p>Carregando hotel...</p>
+      </div>
+    );
+  if (error || !form)
+    return (
+      <div className="bg-background min-h-svh flex items-center justify-center p-4 md:p-10">
+        <p className="text-red-500">{error || "Hotel não encontrado."}</p>
+      </div>
+    );
 
   return (
     <div className="bg-background min-h-svh flex items-center justify-center p-4 md:p-10">
@@ -77,7 +113,7 @@ export default function HotelEditPage() {
                   id="cnpj"
                   name="cnpj"
                   type="text"
-                  value={form.cnpj}
+                  value={form.cnpj || ""}
                   onChange={handleChange}
                   required
                 />
@@ -88,14 +124,17 @@ export default function HotelEditPage() {
                   id="nome"
                   name="nome"
                   type="text"
-                  value={form.nome}
+                  value={form.nome || ""}
                   onChange={handleChange}
                   required
                 />
               </div>
               <div className="grid gap-2 w-full">
                 <Label htmlFor="tipo">Tipo</Label>
-                <Select value={form.tipo} onValueChange={handleTipoChange}>
+                <Select
+                  value={form.tipo || ""}
+                  onValueChange={handleTipoChange}
+                >
                   <SelectTrigger className="w-full">
                     <SelectValue placeholder="Selecione o tipo" />
                   </SelectTrigger>
@@ -113,7 +152,7 @@ export default function HotelEditPage() {
                   id="email"
                   name="email"
                   type="email"
-                  value={form.email}
+                  value={form.email || ""}
                   onChange={handleChange}
                   required
                 />
@@ -124,7 +163,7 @@ export default function HotelEditPage() {
                   id="telefone"
                   name="telefone"
                   type="tel"
-                  value={form.telefone}
+                  value={form.telefone || ""}
                   onChange={handleChange}
                 />
               </div>
@@ -133,8 +172,8 @@ export default function HotelEditPage() {
                 <Input
                   id="site"
                   name="site"
-                  type="url"
-                  value={form.site}
+                  type="text"
+                  value={form.site || ""}
                   onChange={handleChange}
                 />
               </div>
@@ -145,7 +184,7 @@ export default function HotelEditPage() {
                     id="cep"
                     name="cep"
                     type="text"
-                    value={form.cep}
+                    value={form.cep || ""}
                     onChange={handleChange}
                   />
                 </div>
@@ -155,7 +194,7 @@ export default function HotelEditPage() {
                     id="bairro"
                     name="bairro"
                     type="text"
-                    value={form.bairro}
+                    value={form.bairro || ""}
                     onChange={handleChange}
                   />
                 </div>
@@ -167,7 +206,7 @@ export default function HotelEditPage() {
                     id="rua"
                     name="rua"
                     type="text"
-                    value={form.rua}
+                    value={form.rua || ""}
                     onChange={handleChange}
                   />
                 </div>
@@ -177,7 +216,7 @@ export default function HotelEditPage() {
                     id="numeroEndereco"
                     name="numeroEndereco"
                     type="text"
-                    value={form.numeroEndereco}
+                    value={form.numeroEndereco || ""}
                     onChange={handleChange}
                   />
                 </div>
@@ -188,16 +227,16 @@ export default function HotelEditPage() {
                   id="descricao"
                   name="descricao"
                   type="text"
-                  value={form.descricao}
+                  value={form.descricao || ""}
                   onChange={handleChange}
                 />
               </div>
               <Button
                 type="submit"
                 className="w-full md:col-span-2"
-                disabled={loading}
+                disabled={saving}
               >
-                {loading ? "Salvando..." : "Salvar Alterações"}
+                {saving ? "Salvando..." : "Salvar Alterações"}
               </Button>
             </form>
           </CardContent>

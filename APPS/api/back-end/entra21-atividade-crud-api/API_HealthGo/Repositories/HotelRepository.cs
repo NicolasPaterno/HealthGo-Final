@@ -35,7 +35,7 @@ namespace API_HealthGo.Repository
             using (MySqlConnection con = _connection.GetConnection())
             {
                 string sql = @$"
-                    SELECT Id, CNPJ, Nome, Tipo, Email, Telefone, Site, Acessibilidade, CEP, Bairro, Rua, NumeroEndereco, Descricao, Ativo, DataInicio, DataFim, Cidade_Id, ContaGerencia_Id WHERE Id = @id
+                    SELECT Id, CNPJ, Nome, Tipo, Email, Telefone, Site, Acessibilidade, CEP, Bairro, Rua, NumeroEndereco, Descricao, Ativo, DataInicio, DataFim, Cidade_Id, ContaGerencia_Id FROM HOTEL WHERE Id = @id    
                 ";
 
                 HotelEntity hotel = await con.QueryFirstAsync<HotelEntity>(sql, new { id });
