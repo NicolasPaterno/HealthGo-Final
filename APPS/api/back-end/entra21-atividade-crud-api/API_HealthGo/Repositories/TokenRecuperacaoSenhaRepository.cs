@@ -32,11 +32,12 @@ namespace API_HealthGo.Repositories
             return await conn.QueryFirstOrDefaultAsync<TokenRecuperacaoSenhaEntity>(sql, new { Token = token });
         }
 
-        public async Task MarkAsUsedAsync(string token)
+        public async Task DeleteToken(string token)
         {
             using var conn = _connection.GetConnection();
 
-            var sql = @"UPDATE TokenRecuperacaoSenha SET FOIUSADO = 1 WHERE TOKEN = @Token";
+            var sql = @"DELETE FROM TokenRecuperacaoSenha
+                                    WHERE TOKEN = @token;";
             await conn.ExecuteAsync(sql, new { Token = token });
         }
     }

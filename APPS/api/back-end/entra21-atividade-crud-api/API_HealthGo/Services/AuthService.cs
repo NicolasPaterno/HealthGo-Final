@@ -71,8 +71,8 @@ namespace API_HealthGo.Services
             // 4. Atualizar a senha da pessoa
             await _pessoaRepository.AtualizarSenhaAsync(pessoa.Id, novaSenhaCriptografada);
 
-            // 5. Marcar token como usado
-            await _tokenRecuperacaoSenhaRepository.MarkAsUsedAsync(dto.Token);
+            // 5. Deletar o token no Banco de Dados
+            await _tokenRecuperacaoSenhaRepository.DeleteToken(dto.Token);
         }
 
         private void ValidarSenha(string password)
