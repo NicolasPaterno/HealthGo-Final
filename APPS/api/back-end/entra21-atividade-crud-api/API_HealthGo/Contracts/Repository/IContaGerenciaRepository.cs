@@ -14,5 +14,7 @@ namespace API_HealthGo.Contracts.Repository
         Task Delete(int id);
 
         Task Update(ContaGerenciaEntity contaGerencia);
+
+        Task<ContaGerenciaEntity> GetContaGerenciaByEmail(string email);
     }
 }

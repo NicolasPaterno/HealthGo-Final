@@ -77,5 +77,14 @@ namespace API_HealthGo.Repository
             string sql = "DELETE FROM CONTAGERENCIA WHERE ID = @id";
             await _connection.Execute(sql, new { id });
         }
+
+        public async Task<ContaGerenciaEntity> GetContaGerenciaByEmail(string email)
+        {
+            using (MySqlConnection con = _connection.GetConnection())
+            {
+                string sql = "SELECT * FROM CONTAGERENCIA WHERE Email = @Email";
+                return await con.QueryFirstOrDefaultAsync<ContaGerenciaEntity>(sql, new { email });
+            }
+        }
     }
 }

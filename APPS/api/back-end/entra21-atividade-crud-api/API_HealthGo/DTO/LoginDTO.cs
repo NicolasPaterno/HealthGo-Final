@@ -8,4 +8,6 @@ public class LoginDTO
 
     [Required(ErrorMessage = "A senha é obrigatória.")]
     public string Password { get; set; }
+
+    public string UserType { get; set; }
 }

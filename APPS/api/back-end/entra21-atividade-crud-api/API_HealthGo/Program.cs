@@ -73,6 +73,9 @@ namespace API_HealthGo
             builder.Services.AddScoped<IPessoaService, PessoaService>();
             builder.Services.AddTransient<IPessoaRepository, PessoaRepository>();
 
+            builder.Services.AddScoped<IPrestadorServicoService, PrestadorServicoService>();
+            builder.Services.AddTransient<IPrestadorServicoRepository, PrestadorServicoRepository>();
+
             builder.Services.AddScoped<ILembreteService, LembreteService>();
             builder.Services.AddTransient<ILembreteRepository, LembreteRepository>();
 
