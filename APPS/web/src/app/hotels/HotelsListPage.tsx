@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import api from "@/services/api";
+import api from "@/services/api"; // Certifique-se de que este caminho está correto
 import {
   Card,
   CardContent,
@@ -16,6 +16,15 @@ interface Hotel {
   NumeroEndereco: string;
   Cidade_Id: number;
   Tipo: string;
+  ContaGerencia_Id: number; // Adicione esta propriedade
+}
+
+interface UserData {
+  id: number;
+  email: string;
+  nome: string;
+  userType: string;
+  // Outras propriedades do usuário, se houver
 }
 
 export default function HotelsListPage() {
@@ -29,19 +38,31 @@ export default function HotelsListPage() {
       setLoading(true);
       setError("");
       try {
-        const response = await api.get("/Hotel");
-        // Se vier { data: { data: Hotel[] } }
+        const userString = localStorage.getItem("user");
+        const user: UserData = userString ? JSON.parse(userString) : {};
+
+        let response;
+        // Verifica se o usuário é um "ContaGerencia" (dono de hotel)
+        if (user.userType === "ContaGerencia" && user.id) {
+          // Se sim, chama o novo endpoint da API para filtrar por ContaGerencia_Id
+          response = await api.get(`/Hotel/byContaGerencia/${user.id}`);
+        } else {
+          // Caso contrário (administrador ou outro tipo de usuário), busca todos os hotéis
+          response = await api.get("/Hotel");
+        }
+
+        // A estrutura da resposta da API pode variar, ajuste conforme necessário
         const data = response.data?.data || response.data;
         setHotels(data);
-        console.log("Hotéis recebidos da API:", data);
       } catch (err) {
         setError("Erro ao buscar hotéis.");
+        console.error("Erro ao buscar hotéis:", err);
       } finally {
         setLoading(false);
       }
     }
     fetchHotels();
-  }, []);
+  }, []); // Deixe as dependências vazias se você só quer que isso rode uma vez ao montar
 
   return (
     <main className="flex-1 p-4 md:p-6">

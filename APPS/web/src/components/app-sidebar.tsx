@@ -52,16 +52,6 @@ const data = {
       icon: IconBuilding,
     },
     {
-      title: "Listar Hotéis",
-      url: "/dashboard/hotels/list",
-      icon: IconBuilding,
-    },
-    {
-      title: "Cadastrar Hotel",
-      url: "/dashboard/hotels/register",
-      icon: IconBuilding,
-    },
-    {
       title: "Passagens",
       url: "/dashboard/tickets",
       icon: IconPlane,

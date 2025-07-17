@@ -54,5 +54,10 @@ namespace API_HealthGo.Services
                 Message = "Hotel alterado com sucesso!"
             };
         }
+
+        public async Task<IEnumerable<HotelEntity>> GetHotelsByContaGerenciaId(int contaGerenciaId)
+        {
+            return await _repository.GetHotelsByContaGerenciaId(contaGerenciaId);
+        }
     }
 }

@@ -48,5 +48,11 @@ namespace API_HealthGo.Controllers
         {
             return Ok(await _service.Update(hotel));
         }
+
+        [HttpGet("byContaGerencia/{contaGerenciaId}")]
+        public async Task<ActionResult<HotelGetAllResponse>> GetByContaGerenciaId(int contaGerenciaId)
+        {
+            return Ok(await _service.GetHotelsByContaGerenciaId(contaGerenciaId));
+        }
     }
 }

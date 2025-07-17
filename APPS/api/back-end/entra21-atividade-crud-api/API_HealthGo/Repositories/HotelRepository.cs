@@ -84,5 +84,14 @@ namespace API_HealthGo.Repository
             string sql = "DELETE FROM HOTEL WHERE Id = @id";
             await _connection.Execute(sql, new { id });
         }
+
+        public async Task<IEnumerable<HotelEntity>> GetHotelsByContaGerenciaId(int contaGerenciaId)
+        {
+            using (MySqlConnection con = _connection.GetConnection())
+            {
+                string sql = @"SELECT * FROM HOTEL WHERE ContaGerencia_Id = @contaGerenciaId";
+                return await con.QueryAsync<HotelEntity>(sql, new { contaGerenciaId });
+            }
+        }
     }
 }

@@ -77,6 +77,10 @@ export function HotelRegisterForm({
     event.preventDefault();
     setLoading(true);
 
+    // Pega o id do dono de hotel logado
+    const user = JSON.parse(localStorage.getItem("user") || "{}");
+    const contaGerenciaId = user.Id || user.id;
+
     let uploadedImageUrl: string | null = null;
     if (fotoPerfil) {
       uploadedImageUrl = await uploadImageToCloudinary(fotoPerfil);
@@ -100,13 +104,12 @@ export function HotelRegisterForm({
       Rua: rua,
       NumeroEndereco: numeroEndereco,
       Descricao: descricao,
-      // Adiciona a URL da imagem ao objeto que será enviado para sua API
       //FotoPerfilUrl: uploadedImageUrl, // ou uma string vazia se não houver foto
       Ativo: true,
       DataInicio: new Date().toISOString(),
       DataFim: new Date().toISOString(),
       Cidade_Id: 1, // Ajuste conforme a lógica real de cidade
-      ContaGerencia_Id: 1, // Ajuste conforme a lógica real de conta de gerência
+      ContaGerencia_Id: contaGerenciaId, // Agora pega do usuário logado
     };
 
     console.log(hotelData);
