@@ -15,7 +15,9 @@ namespace API_HealthGo.Contracts.Service
         Task<MessageResponse> Delete(int id);
 
         Task<MessageResponse> Update(PessoaEntity pessoa);
+
         Task<MessageResponse> ChangePassword(ChangePasswordDTO changePasswordDto);
+
         Task<MessageResponse> ChangeEmail(ChangeEmailDTO changeEmailDto);
     }
 }

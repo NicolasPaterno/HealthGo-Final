@@ -8,7 +8,6 @@ namespace API_HealthGo.Contracts.Repositories
 
         public Task<TokenRecuperacaoSenhaEntity?> GetByTokenAsync(string token);
 
-        public Task MarkAsUsedAsync(string token);
-
+        public Task DeleteToken(string token);
     }
 }

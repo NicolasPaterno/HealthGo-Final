@@ -100,7 +100,6 @@ CREATE TABLE TokenRecuperacaoSenha (
     Pessoa_Id INT NOT NULL,
     Token VARCHAR(200) NOT NULL,
     DataExpiracao DATETIME NOT NULL,
-    FoiUsado BOOLEAN NOT NULL DEFAULT FALSE,
 
     FOREIGN KEY (Pessoa_Id) REFERENCES Pessoa(Id)
 );

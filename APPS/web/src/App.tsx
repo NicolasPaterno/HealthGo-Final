@@ -11,6 +11,8 @@ import { ProtectedRoute } from "./components/protected-route"; // 1. Importe a r
 
 // Seus componentes lazy-loaded permanecem os mesmos
 const LoginPage = lazy(() => import("./app/login/LoginPage"));
+const ForgotPasswordPage = lazy(() => import("./app/forgot-password/ForgotPasswordPage"));
+const ResetPasswordPage = lazy(() => import("./app/forgot-password/ResetPasswordPage"));
 const RegisterPage = lazy(() => import("./app/register/RegisterPage"));
 const DashboardPage = lazy(() => import("./app/dashboard/DashboardPage"));
 const DashboardContent = lazy(() => import("./app/dashboard/DashboardContent"));
@@ -31,6 +33,8 @@ function App() {
           <Routes>
             
             <Route path="/login" element={<LoginPage />} />
+            <Route path="/esqueci-senha" element={<ForgotPasswordPage />} />
+            <Route path="/redefinir-senha/:token" element={<ResetPasswordPage />} />
             <Route path="/register" element={<RegisterPage />} />
 
             <Route element={<ProtectedRoute />}>

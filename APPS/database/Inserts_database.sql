@@ -598,9 +598,3 @@ INSERT INTO Imagem_Hotel (Imagem_Id, Hotel_Id) VALUES
 (20, 19);
 
 SET FOREIGN_KEY_CHECKS = 1;
-
-
-INSERT INTO Lembrete (Titulo, Data, Tipo, Pessoa_Id) VALUES
-('Consulta Médica', '2025-07-10 10:00:00', 'Remédio', 23);
-
-select * from lembrete; 
