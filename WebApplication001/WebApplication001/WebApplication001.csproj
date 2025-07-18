@@ -1,0 +1,95 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <RuntimeIdentifiers>win-x64</RuntimeIdentifiers>
+    <ContainerRuntimeIdentifier>win-x64</ContainerRuntimeIdentifier>
+    <EnableSdkContainerDebugging>True</EnableSdkContainerDebugging>
+    <ContainerBaseImage>mcr.microsoft.com/dotnet/aspnet:8.0-nanoserver-1809</ContainerBaseImage>
+    <UserSecretsId>6c0e848a-e288-4825-94bd-5b0af6be2a7b</UserSecretsId>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Include="obj\Debug\net6.0\.NETCoreApp,Version=v6.0.AssemblyAttributes.cs" />
+    <Compile Include="obj\Debug\net6.0\atividade-bd-csharp.AssemblyInfo.cs" />
+    <Compile Include="obj\Debug\net6.0\atividade-bd-csharp.GlobalUsings.g.cs" />
+    <Compile Include="obj\Debug\net7.0\.NETCoreApp,Version=v7.0.AssemblyAttributes.cs" />
+    <Compile Include="obj\Debug\net7.0\atividade-bd-csharp.AssemblyInfo.cs" />
+    <Compile Include="obj\Debug\net7.0\atividade-bd-csharp.GlobalUsings.g.cs" />
+    <Compile Include="obj\Debug\net8.0\.NETCoreApp,Version=v8.0.AssemblyAttributes.cs" />
+    <Compile Include="obj\Debug\net8.0\atividade-bd-csharp.AssemblyInfo.cs" />
+    <Compile Include="obj\Debug\net8.0\atividade-bd-csharp.GlobalUsings.g.cs" />
+    <Compile Include="obj\Debug\net8.0\WebApplication001.AssemblyInfo.cs" />
+    <Compile Include="obj\Debug\net8.0\WebApplication001.GlobalUsings.g.cs" />
+    <Compile Include="obj\Release\net8.0\.NETCoreApp,Version=v8.0.AssemblyAttributes.cs" />
+    <Compile Include="obj\Release\net8.0\atividade-bd-csharp.AssemblyInfo.cs" />
+    <Compile Include="obj\Release\net8.0\atividade-bd-csharp.GlobalUsings.g.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Dapper" Version="2.1.66" />
+    <PackageReference Include="MySql.Data" Version="9.3.0" />
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.6.2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ContainerPort Include="8081" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="obj\atividade-bd-csharp.csproj.nuget.dgspec.json" />
+    <Content Include="obj\Debug\net7.0\atividade-bd-csharp.csproj.FileListAbsolute.txt" />
+    <Content Include="obj\Debug\net7.0\atividade-bd-csharp.sourcelink.json" />
+    <Content Include="obj\Debug\net8.0\atividade-bd-csharp.csproj.FileListAbsolute.txt" />
+    <Content Include="obj\Debug\net8.0\atividade-bd-csharp.sourcelink.json" />
+    <Content Include="obj\Debug\net8.0\staticwebassets.removed.txt" />
+    <Content Include="obj\project.assets.json" />
+    <Content Include="obj\WebApplication001.csproj.nuget.dgspec.json" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="atividade-bd-csharp.sln" />
+    <None Include="obj\atividade-bd-csharp.csproj.nuget.g.props" />
+    <None Include="obj\atividade-bd-csharp.csproj.nuget.g.targets" />
+    <None Include="obj\Debug\net6.0\atividade-bd-csharp.AssemblyInfoInputs.cache" />
+    <None Include="obj\Debug\net6.0\atividade-bd-csharp.assets.cache" />
+    <None Include="obj\Debug\net6.0\atividade-bd-csharp.csproj.AssemblyReference.cache" />
+    <None Include="obj\Debug\net6.0\atividade-bd-csharp.GeneratedMSBuildEditorConfig.editorconfig" />
+    <None Include="obj\Debug\net7.0\atividade-bd-csharp.AssemblyInfoInputs.cache" />
+    <None Include="obj\Debug\net7.0\atividade-bd-csharp.assets.cache" />
+    <None Include="obj\Debug\net7.0\atividade-bd-csharp.csproj.AssemblyReference.cache" />
+    <None Include="obj\Debug\net7.0\atividade-bd-csharp.csproj.CoreCompileInputs.cache" />
+    <None Include="obj\Debug\net7.0\atividade-bd-csharp.GeneratedMSBuildEditorConfig.editorconfig" />
+    <None Include="obj\Debug\net8.0\atividade-bd-csharp.AssemblyInfoInputs.cache" />
+    <None Include="obj\Debug\net8.0\atividade-bd-csharp.assets.cache" />
+    <None Include="obj\Debug\net8.0\atividade-bd-csharp.csproj.AssemblyReference.cache" />
+    <None Include="obj\Debug\net8.0\atividade-bd-csharp.csproj.CoreCompileInputs.cache" />
+    <None Include="obj\Debug\net8.0\atividade-bd-csharp.GeneratedMSBuildEditorConfig.editorconfig" />
+    <None Include="obj\Debug\net8.0\WebApplication001.AssemblyInfoInputs.cache" />
+    <None Include="obj\Debug\net8.0\WebApplication001.assets.cache" />
+    <None Include="obj\Debug\net8.0\WebApplication001.csproj.AssemblyReference.cache" />
+    <None Include="obj\Debug\net8.0\WebApplication001.GeneratedMSBuildEditorConfig.editorconfig" />
+    <None Include="obj\project.nuget.cache" />
+    <None Include="obj\Release\net8.0\atividade-bd-csharp.AssemblyInfoInputs.cache" />
+    <None Include="obj\Release\net8.0\atividade-bd-csharp.assets.cache" />
+    <None Include="obj\Release\net8.0\atividade-bd-csharp.csproj.AssemblyReference.cache" />
+    <None Include="obj\Release\net8.0\atividade-bd-csharp.GeneratedMSBuildEditorConfig.editorconfig" />
+    <None Include="obj\WebApplication001.csproj.nuget.g.props" />
+    <None Include="obj\WebApplication001.csproj.nuget.g.targets" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="obj\Debug\net6.0\refint\" />
+    <Folder Include="obj\Debug\net6.0\ref\" />
+    <Folder Include="obj\Debug\net7.0\refint\" />
+    <Folder Include="obj\Debug\net7.0\ref\" />
+    <Folder Include="obj\Debug\net8.0\refint\" />
+    <Folder Include="obj\Debug\net8.0\ref\" />
+    <Folder Include="obj\Debug\net8.0\staticwebassets\" />
+    <Folder Include="obj\Release\net8.0\refint\" />
+    <Folder Include="obj\Release\net8.0\ref\" />
+  </ItemGroup>
+
+</Project>
