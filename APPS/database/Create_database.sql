@@ -80,6 +80,7 @@ CREATE TABLE IF NOT EXISTS `HealthGo`.`Pessoa` (
   `Rua` VARCHAR(255) NOT NULL,
   `NumeroEndereco` VARCHAR(255) NOT NULL,
   `Cidade_Id` INT NOT NULL,
+  `ROLE` VARCHAR(20) NOT NULL DEFAULT 'Consumidor',
   PRIMARY KEY (`Id`),
   INDEX `fk_Pessoa_Cidade1_idx` (`Cidade_Id` ASC) VISIBLE,
   UNIQUE INDEX `CPF_UNIQUE` (`CPF` ASC) VISIBLE,
