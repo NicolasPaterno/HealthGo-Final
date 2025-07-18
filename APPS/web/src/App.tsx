@@ -21,6 +21,7 @@ const PsychologistPage = lazy(() => import("./app/psychologists/PsychologistPage
 const CaregiversPage = lazy(() => import("./app/caregivers/CaregiversPage"));
 const CalendarPage = lazy(() => import("./app/calendar/CalendarPage"));
 const PurchaseHistoryPage = lazy(() => import("./app/history/PurchaseHistoryPage"));
+const MyHotelBookings = lazy(() => import("./app/hotels/HotelsBooking"));
 
 function App() {
   return (
@@ -36,6 +37,7 @@ function App() {
               <Route path="/dashboard" element={<DashboardPage />}>
                 <Route index element={<DashboardContent />} />
                 <Route path="hotels" element={<HotelsPage />} />
+                <Route path="hotels/bookings" element={<MyHotelBookings />} />
                 <Route path="tickets" element={<TicketsPage />} />
                 <Route path="psychologist" element={<PsychologistPage />} />
                 <Route path="caregivers" element={<CaregiversPage />} />

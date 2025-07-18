@@ -52,6 +52,13 @@ export function NavMain({
                 </Link>
             </SidebarMenuItem>
           ))}
+          <SidebarMenuItem>
+            <Link to="/dashboard/hotels/bookings">
+              <SidebarMenuButton tooltip="Minhas Reservas de Hotel">
+                <span>Minhas Reservas de Hotel</span>
+              </SidebarMenuButton>
+            </Link>
+          </SidebarMenuItem>
         </SidebarMenu>
       </SidebarGroupContent>
     </SidebarGroup>
