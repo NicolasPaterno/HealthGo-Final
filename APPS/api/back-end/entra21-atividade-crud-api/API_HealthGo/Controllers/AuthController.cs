@@ -81,31 +81,41 @@ namespace API_HealthGo.Controllers
         [HttpPost("register-prestador")]
         public async Task<IActionResult> RegisterPrestador([FromBody] RegisterPrestadorDTO dto)
         {
-            // Validação básica
-            if (dto.Pessoa == null || dto.Prestador == null)
-                return BadRequest(new { message = "Dados de pessoa ou prestador ausentes." });
 
-            // Hash da senha
-            if (string.IsNullOrWhiteSpace(dto.Pessoa.Senha) || dto.Pessoa.Senha.Length < 8)
-                return BadRequest(new { message = "A senha deve ter no mínimo 8 caracteres." });
-            dto.Pessoa.Senha = BCrypt.Net.BCrypt.HashPassword(dto.Pessoa.Senha);
+            try
+            {
+                // Validação básica
+                if (dto.Pessoa == null || dto.Prestador == null)
+                    return BadRequest(new { message = "Dados de pessoa ou prestador ausentes." });
 
-            // Inserir pessoa
-            await _pessoaRepository.InsertPessoa(dto.Pessoa);
-            // Buscar pessoa pelo e-mail para pegar o ID
-            var pessoaCriada = await _pessoaRepository.GetPessoaByEmail(dto.Pessoa.Email);
-            if (pessoaCriada == null)
-                return StatusCode(500, new { message = "Erro ao criar pessoa." });
+                // Hash da senha
+                if (string.IsNullOrWhiteSpace(dto.Pessoa.Senha) || dto.Pessoa.Senha.Length < 8)
+                    return BadRequest(new { message = "A senha deve ter no mínimo 8 caracteres." });
+                dto.Pessoa.Senha = BCrypt.Net.BCrypt.HashPassword(dto.Pessoa.Senha);
 
-            // Vincular pessoa ao prestador
-            dto.Prestador.Pessoa_Id = pessoaCriada.Id;
-            // Inserir prestador
-            var prestadorRepo = HttpContext.RequestServices.GetService(typeof(IPrestadorServicoRepository)) as IPrestadorServicoRepository;
-            if (prestadorRepo == null)
-                return StatusCode(500, new { message = "Repositório de prestador não encontrado." });
-            await prestadorRepo.Insert(dto.Prestador);
+                // Inserir pessoa
+                await _pessoaRepository.InsertPessoa(dto.Pessoa);
+                // Buscar pessoa pelo e-mail para pegar o ID
+                var pessoaCriada = await _pessoaRepository.GetPessoaByEmail(dto.Pessoa.Email);
+                if (pessoaCriada == null)
+                {
+                    return StatusCode(500, new { message = "Erro ao criar pessoa." });
+                }
 
-            return Ok(new { message = "Prestador cadastrado com sucesso!" });
+                // Vincular pessoa ao prestador
+                dto.Prestador.Pessoa_Id = pessoaCriada.Id;
+                // Inserir prestador
+                var prestadorRepo = HttpContext.RequestServices.GetService(typeof(IPrestadorServicoRepository)) as IPrestadorServicoRepository;
+                if (prestadorRepo == null)
+                    return StatusCode(500, new { message = "Repositório de prestador não encontrado." });
+                await prestadorRepo.Insert(dto.Prestador);
+
+                return Ok(new { message = "Prestador cadastrado com sucesso!" });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { ex.Message });
+            }
         }
     }
 }

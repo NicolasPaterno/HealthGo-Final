@@ -38,8 +38,8 @@ namespace API_HealthGo.Repository
         public async Task Insert(PrestadorServicoInsertDTO prestadorServico)
         {
             string sql = @$"
-                INSERT INTO PRESTADORSERVICO (PRECOHORA, OBSERVACAO, CNPJ, ATIVO, ESPECIALIDADE_ID, PESSOA_ID)
-                             VALUES (@PrecoHora, @Observacao, @CNPJ, @Ativo, @Especialidade_Id, @Pessoa_Id)
+                INSERT INTO PRESTADORSERVICO (PRECOHORA, CNPJ, PESSOA_ID)
+                             VALUES (@PrecoHora, @CNPJ, @Pessoa_Id)
             ";
             await _connection.Execute(sql, prestadorServico);
         }

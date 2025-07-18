@@ -8,12 +8,12 @@ namespace API_HealthGo.Contracts.Service
     {
         Task<MessageResponse> Delete(int id);
 
-        Task<MessageResponse> Post(EspecialidadeInsertDTO especialidade);
-
-        Task<MessageResponse> Update(EspecialidadeEntity especialidade);
-
         Task<EspecialidadeGetAllResponse> GetAll();
 
         Task<EspecialidadeEntity> GetById(int id);
+
+        Task<MessageResponse> Post(EspecialidadeInsertDTO especialidade);
+
+        Task<MessageResponse> Update(EspecialidadeEntity especialidade);
     }
 }

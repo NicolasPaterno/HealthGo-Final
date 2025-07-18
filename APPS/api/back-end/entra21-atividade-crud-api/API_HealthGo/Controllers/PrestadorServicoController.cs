@@ -1,4 +1,5 @@
-﻿using API_HealthGo.Contracts.Service;
+﻿using API_HealthGo.Contracts.Repositories;
+using API_HealthGo.Contracts.Service;
 using API_HealthGo.DTO;
 using API_HealthGo.Entities;
 using API_HealthGo.Responses;

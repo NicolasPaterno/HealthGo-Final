@@ -35,7 +35,7 @@ namespace API_HealthGo.Services
 
         public async Task<PrestadorServicoEntity> GetById(int id)
         {
-            return await _repository.GetById(id);
+            return await _repository.GetByPessoaId(id);
         }
 
         public async Task<MessageResponse> Post(PrestadorServicoInsertDTO prestadorServico)

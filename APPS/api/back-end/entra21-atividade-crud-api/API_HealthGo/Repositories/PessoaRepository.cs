@@ -135,7 +135,7 @@ namespace API_HealthGo.Repository
                                     NUMEROENDERECO AS {nameof(PessoaEntity.NumeroEndereco)},
                                     CIDADE_ID AS {nameof(PessoaEntity.Cidade_Id)}
                                 FROM PESSOA
-                                WHERE EMAIL = @Email
+                                WHERE EMAIL = @email
                             ";
                 return await con.QueryFirstOrDefaultAsync<PessoaEntity>(sql, new { email });
             }

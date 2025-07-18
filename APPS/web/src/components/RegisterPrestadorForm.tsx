@@ -69,7 +69,7 @@ export function RegisterPrestadorForm({
     };
 
     try {
-      const response = await api.post("/PrestadorServico/register", {
+      const response = await api.post("/Auth/register-prestador", {
         pessoa,
         prestador
       });
