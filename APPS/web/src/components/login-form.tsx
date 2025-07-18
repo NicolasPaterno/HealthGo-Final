@@ -1,3 +1,4 @@
+import React from "react";
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { toast } from "sonner";
@@ -12,7 +13,9 @@ import {
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import api from "@/services/api"; 
+import api from "@/services/api";
+import { getAuthUser } from "@/lib/jwt";
+import type { DecodedToken } from "@/lib/jwt";
 
 export function LoginForm({
   className,
@@ -42,7 +45,13 @@ export function LoginForm({
       });
 
       localStorage.setItem("authToken", response.data.token);
-      // Remove this line: localStorage.setItem("user", JSON.stringify(response.data.user));
+      // Decodificar o token para obter a role
+      const user = getAuthUser() as DecodedToken | null;
+      if (user && user.role === "Gerente") {
+        navigate("/dashboard-gerente");
+      } else {
+        navigate("/dashboard");
+      }
 
       toast.success("Login bem-sucedido!", {
         description: "Você será redirecionado para o dashboard.",
@@ -50,8 +59,12 @@ export function LoginForm({
       });
 
       setTimeout(() => {
+       if (user?.role === "Consumidor") {
         navigate("/dashboard");
-      }, 2000);
+       } else {
+        navigate("/dashboard-gerente");
+       }
+      }, 200);
 
     } catch (error: any) {
       const errorMessage =

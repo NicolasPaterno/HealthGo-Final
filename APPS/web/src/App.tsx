@@ -8,6 +8,7 @@ import { Toaster } from "./components/ui/sonner";
 import { CartProvider } from "./context/CartContext";
 import { CartSidebar } from "./components/cart-sidebar";
 import { ProtectedRoute } from "./components/protected-route"; // 1. Importe a rota protegida
+import { RoleProtectedRoute } from "./components/role-protected-route";
 
 // Seus componentes lazy-loaded permanecem os mesmos
 const LoginPage = lazy(() => import("./app/login/LoginPage"));
@@ -24,6 +25,8 @@ const CaregiversPage = lazy(() => import("./app/caregivers/CaregiversPage"));
 const CalendarPage = lazy(() => import("./app/calendar/CalendarPage"));
 const HospitalsPage = lazy(() => import("./app/hospitals/HospitalsPage"));
 const PurchaseHistoryPage = lazy(() => import("./app/history/PurchaseHistoryPage"));
+const DashboardGerentePage = lazy(() => import("./app/dashboard/DashboardGerentePage"));
+const DashboardGerenteContent = lazy(() => import("./app/dashboard/DashboardGerenteContent"));
 
 function App() {
   return (
@@ -31,32 +34,43 @@ function App() {
       <CartProvider>
         <Suspense fallback={<LoadingSpinner />}>
           <Routes>
-            
+
             <Route path="/login" element={<LoginPage />} />
             <Route path="/esqueci-senha" element={<ForgotPasswordPage />} />
             <Route path="/redefinir-senha/:token" element={<ResetPasswordPage />} />
             <Route path="/register" element={<RegisterPage />} />
 
             <Route element={<ProtectedRoute />}>
-              <Route path="/dashboard" element={<DashboardPage />}>
-                <Route index element={<DashboardContent />} />
-                <Route path="hotels" element={<HotelsPage />} />
-                <Route path="tickets" element={<TicketsPage />} />
-                <Route path="psychologist" element={<PsychologistPage />} />
-                <Route path="caregivers" element={<CaregiversPage />} />
-                <Route path="calendar" element={<CalendarPage />} />
-                <Route path="hospitals" element={<HospitalsPage />} />
+              <Route element={<RoleProtectedRoute allowedRoles={["Consumidor"]} />}>
+                <Route path="/dashboard" element={<DashboardPage />}>
+                  <Route index element={<DashboardContent />} />
+                  <Route path="hotels" element={<HotelsPage />} />
+                  <Route path="tickets" element={<TicketsPage />} />
+                  <Route path="psychologist" element={<PsychologistPage />} />
+                  <Route path="caregivers" element={<CaregiversPage />} />
+                  <Route path="calendar" element={<CalendarPage />} />
+                  <Route path="hospitals" element={<HospitalsPage />} />
+                </Route>
+                <Route path="/settings" element={<DashboardPage />}>
+                  <Route index element={<SettingsPage />} />
+                </Route>
+              </Route>
+
+              <Route element={<RoleProtectedRoute allowedRoles={["Gerente"]} />}>
+                <Route path="/dashboard-gerente" element={<DashboardGerentePage />}>
+                  <Route index element={<DashboardGerenteContent />} />
+                </Route>
+                <Route path="/settings" element={<DashboardGerentePage />}>
+                  <Route index element={<SettingsPage />} />
+                </Route>
               </Route>
 
               <Route path="/purchase" element={<DashboardPage />}>
                 <Route path="history" index element={<PurchaseHistoryPage />} />
               </Route>
 
-              <Route path="/settings" element={<DashboardPage />}>
-                <Route index element={<SettingsPage />} />
-              </Route>
             </Route>
-            
+
             <Route path="/" element={<Navigate to="/dashboard" />} />
           </Routes>
         </Suspense>

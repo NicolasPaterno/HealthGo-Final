@@ -1,12 +1,13 @@
 // APPS/web/src/lib/jwt.ts
 
-interface DecodedToken {
-    nameid: string; // User ID
-    name: string;   // User Name
-    email: string;  // User Email
-    exp: number;    // Expiration timestamp
-    // Add other claims you might have, e.g., 'role'
-  }
+export interface DecodedToken {
+  name: string;
+  email: string;
+  nameid: string;
+  role: string;
+  exp: number;
+  [key: string]: any;
+}
   
   export function decodeJwt(token: string): DecodedToken | null {
     try {
