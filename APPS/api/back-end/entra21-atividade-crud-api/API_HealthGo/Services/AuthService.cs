@@ -40,7 +40,7 @@ namespace API_HealthGo.Services
 
             string corpo = $@"
                 <p>Olá {pessoa.Nome}!</p>
-                <p>Use o código abaixo para redefinir sua senha.</p>
+                <p>Use o código abaixo para redefinir sua senha. Você tem 15 minutos para redefinir sua senha.</p>
 
                 <p><a href='{link}'>Clique aqui para redefinir sua senha</a></p> 
                 <p>Se você não fez essa solicitação, ignore este e-mail, e nunca compartilhe para ninguém este link.</p>

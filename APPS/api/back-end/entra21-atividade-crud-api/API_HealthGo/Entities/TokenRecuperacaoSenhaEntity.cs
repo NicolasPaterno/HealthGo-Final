@@ -13,7 +13,7 @@ namespace API_HealthGo.Entities
 
         public TokenRecuperacaoSenhaEntity()
         {
-            DataExpiracao = DateTime.UtcNow.AddMinutes(5);
+            DataExpiracao = DateTime.UtcNow.AddMinutes(15);
         }
     }
 }
