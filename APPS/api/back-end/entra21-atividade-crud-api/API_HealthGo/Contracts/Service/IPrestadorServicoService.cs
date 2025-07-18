@@ -1,19 +1,20 @@
 ﻿using API_HealthGo.DTO;
 using API_HealthGo.Entities;
-using API_HealthGo.Responses;
 
-namespace API_HealthGo.Contracts.Service
+namespace API_HealthGo.Contracts.Repositories
 {
-    public interface IPrestadorServicoService
+    public interface IPrestadorServicoRepository
     {
-        Task<PrestadorServicoGetAllResponse> GetAll();
+        Task<IEnumerable<PrestadorServicoEntity>> GetAll();
 
         Task<PrestadorServicoEntity> GetById(int id);
 
-        Task<MessageResponse> Post(PrestadorServicoInsertDTO prestadorServico);
+        Task Insert(PrestadorServicoInsertDTO prestadorServico);
 
-        Task<MessageResponse> Update(PrestadorServicoEntity prestadorServico);
+        Task Delete(int id);
 
-        Task<MessageResponse> Delete(int id);
+        Task Update(PrestadorServicoEntity prestadorServico);
+
+        Task<PrestadorServicoEntity> GetByPessoaId(int pessoaId);
     }
 }

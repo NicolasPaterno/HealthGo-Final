@@ -1,7 +1,6 @@
 ﻿using API_HealthGo.Contracts.Repositories;
 using API_HealthGo.Contracts.Service;
 using API_HealthGo.DTO;
-using API_HealthGo.Responses;
 using Microsoft.AspNetCore.Mvc;
 
 namespace API_HealthGo.Controllers
@@ -30,7 +29,7 @@ namespace API_HealthGo.Controllers
                 return Unauthorized(new { message = "Email ou senha inválidos." });
             }
 
-            if (string.IsNullOrWhiteSpace(loginDto.Password) || !pessoa.Senha.StartsWith("$2"))
+            if (string.IsNullOrWhiteSpace(pessoa.Senha) || !pessoa.Senha.StartsWith("$2"))
             {
                 return StatusCode(500, new { message = "Hash de senha inválido no banco de dados." });
             }
@@ -65,29 +64,48 @@ namespace API_HealthGo.Controllers
             }
         }
 
-        [HttpPost("redefinir-senha")]
+        [HttpPost("{redefinir-senha}")]
         public async Task<IActionResult> RedefinirSenha([FromBody] RedefinirSenhaDTO dto)
         {
-            if (!ModelState.IsValid) // para verificar se o DTO é válido
-            {
-                return BadRequest("DTO inválido.");
-            }
             try
             {
                 await _authService.RedefinirSenhaAsync(dto);
                 return Ok("Senha redefinida com sucesso.");
             }
-            catch (ArgumentException ex)
-            {
-                // Retorna 400 Bad Request se a senha for inválida
-                return BadRequest(new MessageResponse { Message = ex.Message });
-            }
             catch (Exception ex)
             {
-                // Retorna 500 para outros erros
-                var response = new MessageResponse { Message = $"Ocorreu um erro interno: {ex.Message}" };
-                return StatusCode(500, response);
+                return BadRequest(ex.Message);
             }
+        }
+
+        [HttpPost("register-prestador")]
+        public async Task<IActionResult> RegisterPrestador([FromBody] RegisterPrestadorDTO dto)
+        {
+            // Validação básica
+            if (dto.Pessoa == null || dto.Prestador == null)
+                return BadRequest(new { message = "Dados de pessoa ou prestador ausentes." });
+
+            // Hash da senha
+            if (string.IsNullOrWhiteSpace(dto.Pessoa.Senha) || dto.Pessoa.Senha.Length < 8)
+                return BadRequest(new { message = "A senha deve ter no mínimo 8 caracteres." });
+            dto.Pessoa.Senha = BCrypt.Net.BCrypt.HashPassword(dto.Pessoa.Senha);
+
+            // Inserir pessoa
+            await _pessoaRepository.InsertPessoa(dto.Pessoa);
+            // Buscar pessoa pelo e-mail para pegar o ID
+            var pessoaCriada = await _pessoaRepository.GetPessoaByEmail(dto.Pessoa.Email);
+            if (pessoaCriada == null)
+                return StatusCode(500, new { message = "Erro ao criar pessoa." });
+
+            // Vincular pessoa ao prestador
+            dto.Prestador.Pessoa_Id = pessoaCriada.Id;
+            // Inserir prestador
+            var prestadorRepo = HttpContext.RequestServices.GetService(typeof(IPrestadorServicoRepository)) as IPrestadorServicoRepository;
+            if (prestadorRepo == null)
+                return StatusCode(500, new { message = "Repositório de prestador não encontrado." });
+            await prestadorRepo.Insert(dto.Prestador);
+
+            return Ok(new { message = "Prestador cadastrado com sucesso!" });
         }
     }
 }
