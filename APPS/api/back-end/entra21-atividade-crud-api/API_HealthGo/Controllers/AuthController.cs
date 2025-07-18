@@ -30,7 +30,7 @@ namespace API_HealthGo.Controllers
                 return Unauthorized(new { message = "Email ou senha inválidos." });
             }
 
-            if (string.IsNullOrWhiteSpace(pessoa.Senha) || !pessoa.Senha.StartsWith("$2"))
+            if (string.IsNullOrWhiteSpace(loginDto.Password) || !pessoa.Senha.StartsWith("$2"))
             {
                 return StatusCode(500, new { message = "Hash de senha inválido no banco de dados." });
             }

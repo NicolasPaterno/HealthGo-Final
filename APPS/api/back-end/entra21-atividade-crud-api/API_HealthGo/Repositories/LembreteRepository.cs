@@ -35,8 +35,15 @@ namespace API_HealthGo.Repository
             using (MySqlConnection con = _connection.GetConnection())
             {
                 string sql = @$"
-                    SELECT * FROM LEMBRETE WHERE ID = @id
-                ";
+                                SELECT 
+                                    ID AS {nameof(LembreteEntity.Id)},
+                                    TITULO AS {nameof(LembreteEntity.Titulo)},
+                                    DATA AS {nameof(LembreteEntity.Data)},
+                                    TIPO AS {nameof(LembreteEntity.Tipo)},
+                                    PESSOA_ID AS {nameof(LembreteEntity.Pessoa_Id)}
+                                FROM LEMBRETE
+                                WHERE ID = @id
+                            ";
 
                 LembreteEntity lembrete = await con.QueryFirstAsync<LembreteEntity>(sql, new { id });
                 return lembrete;
@@ -47,8 +54,15 @@ namespace API_HealthGo.Repository
             using (MySqlConnection con = _connection.GetConnection())
             {
                 string sql = @$"
-                    SELECT * FROM LEMBRETE WHERE Pessoa_ID = @pessoaId
-                ";
+                                SELECT 
+                                    ID AS {nameof(LembreteEntity.Id)},
+                                    TITULO AS {nameof(LembreteEntity.Titulo)},
+                                    DATA AS {nameof(LembreteEntity.Data)},
+                                    TIPO AS {nameof(LembreteEntity.Tipo)},
+                                    PESSOA_ID AS {nameof(LembreteEntity.Pessoa_Id)}
+                                FROM LEMBRETE
+                                WHERE Pessoa_ID = @pessoaId
+                            ";
 
                 IEnumerable<LembreteEntity> lembreteList = await con.QueryAsync<LembreteEntity>(sql, new {pessoaId});
                 return lembreteList;

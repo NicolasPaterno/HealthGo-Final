@@ -27,8 +27,16 @@ namespace API_HealthGo.Repositories
         {
             using var conn = _connection.GetConnection();
 
-            var sql = @"SELECT * FROM TokenRecuperacaoSenha 
-                    WHERE TOKEN = @Token AND DataExpiracao > UTC_TIMESTAMP()";
+            string sql = @$"
+                             SELECT 
+                                 ID AS {nameof(TokenRecuperacaoSenhaEntity.Id)},
+                                 PESSOA_ID AS {nameof(TokenRecuperacaoSenhaEntity.Pessoa_Id)},
+                                 TOKEN AS {nameof(TokenRecuperacaoSenhaEntity.Token)},
+                                 DATAEXPIRACAO AS {nameof(TokenRecuperacaoSenhaEntity.DataExpiracao)}
+                              FROM TokenRecuperacaoSenha
+                              WHERE TOKEN = @Token AND DataExpiracao > UTC_TIMESTAMP()
+                            ";
+
             return await conn.QueryFirstOrDefaultAsync<TokenRecuperacaoSenhaEntity>(sql, new { Token = token });
         }
 
