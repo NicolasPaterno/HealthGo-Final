@@ -33,8 +33,9 @@ namespace API_HealthGo.Services
             };
 
             // 3. Salva no banco || NÃO PRECISA MAIS?, APENAS LOCALMENTE NA API É SUFICIENTE, MAS TERIA QUE SER IMPLEMENTADO
-                                        //UM EXTRAIDOR DE TOKEN, PEGAR O PESSOA_ID E TEMPO DE EXPIRAÇÃO, PARA A VERIFICAÇÃO DE AMBOS
-                                        //E ATUALIZAR COM O UPDATE 
+            //UM EXTRAIDOR DE TOKEN, PEGAR O PESSOA_ID E TEMPO DE EXPIRAÇÃO, PARA A VERIFICAÇÃO DE AMBOS
+            //E ATUALIZAR COM O UPDATE 
+            //ISSO SERIA APENAS FEITO POSTERIORMENTE, SE SOBRAR TEMPO, POIS É UM EXTRA, NÃO É O FOCO PRINCIPAL DO PROJETO
 
             await _tokenRecuperacaoSenhaRepository.SaveAsync(token);
 
