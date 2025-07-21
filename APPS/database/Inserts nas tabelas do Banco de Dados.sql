@@ -11,76 +11,166 @@ USE HealthGo;
 SET FOREIGN_KEY_CHECKS = 0;
 
 -- -----------------------------------------------------
--- Inserts para a tabela Nacao
--- -----------------------------------------------------
-INSERT INTO Nacao (Nome) VALUES ('Brasil');
-INSERT INTO Nacao (Nome) VALUES ('Estados Unidos');
-INSERT INTO Nacao (Nome) VALUES ('Canadá');
-INSERT INTO Nacao (Nome) VALUES ('Alemanha');
-INSERT INTO Nacao (Nome) VALUES ('França');
-INSERT INTO Nacao (Nome) VALUES ('Japão');
-INSERT INTO Nacao (Nome) VALUES ('Austrália');
-INSERT INTO Nacao (Nome) VALUES ('Reino Unido');
-INSERT INTO Nacao (Nome) VALUES ('Argentina');
-INSERT INTO Nacao (Nome) VALUES ('Portugal');
-INSERT INTO Nacao (Nome) VALUES ('Espanha');
-INSERT INTO Nacao (Nome) VALUES ('Itália');
-INSERT INTO Nacao (Nome) VALUES ('México');
-INSERT INTO Nacao (Nome) VALUES ('China');
-INSERT INTO Nacao (Nome) VALUES ('Índia');
-INSERT INTO Nacao (Nome) VALUES ('África do Sul');
-INSERT INTO Nacao (Nome) VALUES ('Nova Zelândia');
-INSERT INTO Nacao (Nome) VALUES ('Suécia');
-INSERT INTO Nacao (Nome) VALUES ('Noruega');
-INSERT INTO Nacao (Nome) VALUES ('Finlândia');
-
--- -----------------------------------------------------
 -- Inserts para a tabela Estado
 -- -----------------------------------------------------
-INSERT INTO Estado (Nome, Sigla, Nacao_Id) VALUES ('Santa Catarina', 'SC', 1);
-INSERT INTO Estado (Nome, Sigla, Nacao_Id) VALUES ('São Paulo', 'SP', 1);
-INSERT INTO Estado (Nome, Sigla, Nacao_Id) VALUES ('Rio de Janeiro', 'RJ', 1);
-INSERT INTO Estado (Nome, Sigla, Nacao_Id) VALUES ('Minas Gerais', 'MG', 1);
-INSERT INTO Estado (Nome, Sigla, Nacao_Id) VALUES ('Paraná', 'PR', 1);
-INSERT INTO Estado (Nome, Sigla, Nacao_Id) VALUES ('Rio Grande do Sul', 'RS', 1);
-INSERT INTO Estado (Nome, Sigla, Nacao_Id) VALUES ('Bahia', 'BA', 1);
-INSERT INTO Estado (Nome, Sigla, Nacao_Id) VALUES ('Pernambuco', 'PE', 1);
-INSERT INTO Estado (Nome, Sigla, Nacao_Id) VALUES ('Ceará', 'CE', 1);
-INSERT INTO Estado (Nome, Sigla, Nacao_Id) VALUES ('Goiás', 'GO', 1);
-INSERT INTO Estado (Nome, Sigla, Nacao_Id) VALUES ('Califórnia', 'CA', 2);
-INSERT INTO Estado (Nome, Sigla, Nacao_Id) VALUES ('Nova Iorque', 'NY', 2);
-INSERT INTO Estado (Nome, Sigla, Nacao_Id) VALUES ('Flórida', 'FL', 2);
-INSERT INTO Estado (Nome, Sigla, Nacao_Id) VALUES ('Texas', 'TX', 2);
-INSERT INTO Estado (Nome, Sigla, Nacao_Id) VALUES ('Ontário', 'ON', 3);
-INSERT INTO Estado (Nome, Sigla, Nacao_Id) VALUES ('Quebec', 'QC', 3);
-INSERT INTO Estado (Nome, Sigla, Nacao_Id) VALUES ('Baviera', 'BY', 4);
-INSERT INTO Estado (Nome, Sigla, Nacao_Id) VALUES ('Brandemburgo', 'BB', 4);
-INSERT INTO Estado (Nome, Sigla, Nacao_Id) VALUES ('Île-de-France', 'IDF', 5);
-INSERT INTO Estado (Nome, Sigla, Nacao_Id) VALUES ('Occitânia', 'OCC', 5);
+INSERT INTO `HealthGo`.`Estado` (`Nome`, `Sigla`) VALUES
+('Acre', 'AC'),
+('Alagoas', 'AL'),
+('Amapá', 'AP'),
+('Amazonas', 'AM'),
+('Bahia', 'BA'),
+('Ceará', 'CE'),
+('Distrito Federal', 'DF'),
+('Espírito Santo', 'ES'),
+('Goiás', 'GO'),
+('Maranhão', 'MA'),
+('Mato Grosso', 'MT'),
+('Mato Grosso do Sul', 'MS'),
+('Minas Gerais', 'MG'),
+('Pará', 'PA'),
+('Paraíba', 'PB'),
+('Paraná', 'PR'),
+('Pernambuco', 'PE'),
+('Piauí', 'PI'),
+('Rio de Janeiro', 'RJ'),
+('Rio Grande do Norte', 'RN'),
+('Rio Grande do Sul', 'RS'),
+('Rondônia', 'RO'),
+('Roraima', 'RR'),
+('Santa Catarina', 'SC'),
+('São Paulo', 'SP'),
+('Sergipe', 'SE'),
+('Tocantins', 'TO');
 
 -- -----------------------------------------------------
 -- Inserts para a tabela Cidade
 -- -----------------------------------------------------
-INSERT INTO Cidade (Nome, Estado_Id) VALUES ('Blumenau', 1);
-INSERT INTO Cidade (Nome, Estado_Id) VALUES ('Joinville', 1);
-INSERT INTO Cidade (Nome, Estado_Id) VALUES ('Florianópolis', 1);
-INSERT INTO Cidade (Nome, Estado_Id) VALUES ('São Paulo', 2);
-INSERT INTO Cidade (Nome, Estado_Id) VALUES ('Campinas', 2);
-INSERT INTO Cidade (Nome, Estado_Id) VALUES ('Rio de Janeiro', 3);
-INSERT INTO Cidade (Nome, Estado_Id) VALUES ('Niterói', 3);
-INSERT INTO Cidade (Nome, Estado_Id) VALUES ('Belo Horizonte', 4);
-INSERT INTO Cidade (Nome, Estado_Id) VALUES ('Uberlândia', 4);
-INSERT INTO Cidade (Nome, Estado_Id) VALUES ('Curitiba', 5);
-INSERT INTO Cidade (Nome, Estado_Id) VALUES ('Londrina', 5);
-INSERT INTO Cidade (Nome, Estado_Id) VALUES ('Porto Alegre', 6);
-INSERT INTO Cidade (Nome, Estado_Id) VALUES ('Caxias do Sul', 6);
-INSERT INTO Cidade (Nome, Estado_Id) VALUES ('Salvador', 7);
-INSERT INTO Cidade (Nome, Estado_Id) VALUES ('Recife', 8);
-INSERT INTO Cidade (Nome, Estado_Id) VALUES ('Fortaleza', 9);
-INSERT INTO Cidade (Nome, Estado_Id) VALUES ('Goiânia', 10);
-INSERT INTO Cidade (Nome, Estado_Id) VALUES ('Los Angeles', 11);
-INSERT INTO Cidade (Nome, Estado_Id) VALUES ('Nova Iorque', 12);
-INSERT INTO Cidade (Nome, Estado_Id) VALUES ('Orlando', 13);
+INSERT INTO `HealthGo`.`Cidade` (`Nome`, `Estado_Id`) VALUES
+-- Cidades do Acre (AC)
+('Rio Branco', (SELECT Id FROM `HealthGo`.`Estado` WHERE Sigla = 'AC')),
+('Cruzeiro do Sul', (SELECT Id FROM `HealthGo`.`Estado` WHERE Sigla = 'AC')),
+
+-- Cidades de Alagoas (AL)
+('Maceió', (SELECT Id FROM `HealthGo`.`Estado` WHERE Sigla = 'AL')),
+('Arapiraca', (SELECT Id FROM `HealthGo`.`Estado` WHERE Sigla = 'AL')),
+
+-- Cidades do Amapá (AP)
+('Macapá', (SELECT Id FROM `HealthGo`.`Estado` WHERE Sigla = 'AP')),
+('Santana', (SELECT Id FROM `HealthGo`.`Estado` WHERE Sigla = 'AP')),
+
+-- Cidades do Amazonas (AM)
+('Manaus', (SELECT Id FROM `HealthGo`.`Estado` WHERE Sigla = 'AM')),
+('Parintins', (SELECT Id FROM `HealthGo`.`Estado` WHERE Sigla = 'AM')),
+
+-- Cidades da Bahia (BA)
+('Salvador', (SELECT Id FROM `HealthGo`.`Estado` WHERE Sigla = 'BA')),
+('Feira de Santana', (SELECT Id FROM `HealthGo`.`Estado` WHERE Sigla = 'BA')),
+('Vitória da Conquista', (SELECT Id FROM `HealthGo`.`Estado` WHERE Sigla = 'BA')),
+
+-- Cidades do Ceará (CE)
+('Fortaleza', (SELECT Id FROM `HealthGo`.`Estado` WHERE Sigla = 'CE')),
+('Caucaia', (SELECT Id FROM `HealthGo`.`Estado` WHERE Sigla = 'CE')),
+('Juazeiro do Norte', (SELECT Id FROM `HealthGo`.`Estado` WHERE Sigla = 'CE')),
+
+-- Cidades do Distrito Federal (DF)
+('Brasília', (SELECT Id FROM `HealthGo`.`Estado` WHERE Sigla = 'DF')),
+
+-- Cidades do Espírito Santo (ES)
+('Vitória', (SELECT Id FROM `HealthGo`.`Estado` WHERE Sigla = 'ES')),
+('Vila Velha', (SELECT Id FROM `HealthGo`.`Estado` WHERE Sigla = 'ES')),
+
+-- Cidades de Goiás (GO)
+('Goiânia', (SELECT Id FROM `HealthGo`.`Estado` WHERE Sigla = 'GO')),
+('Aparecida de Goiânia', (SELECT Id FROM `HealthGo`.`Estado` WHERE Sigla = 'GO')),
+('Anápolis', (SELECT Id FROM `HealthGo`.`Estado` WHERE Sigla = 'GO')),
+
+-- Cidades do Maranhão (MA)
+('São Luís', (SELECT Id FROM `HealthGo`.`Estado` WHERE Sigla = 'MA')),
+('Imperatriz', (SELECT Id FROM `HealthGo`.`Estado` WHERE Sigla = 'MA')),
+
+-- Cidades de Mato Grosso (MT)
+('Cuiabá', (SELECT Id FROM `HealthGo`.`Estado` WHERE Sigla = 'MT')),
+('Várzea Grande', (SELECT Id FROM `HealthGo`.`Estado` WHERE Sigla = 'MT')),
+
+-- Cidades de Mato Grosso do Sul (MS)
+('Campo Grande', (SELECT Id FROM `HealthGo`.`Estado` WHERE Sigla = 'MS')),
+('Dourados', (SELECT Id FROM `HealthGo`.`Estado` WHERE Sigla = 'MS')),
+
+-- Cidades de Minas Gerais (MG)
+('Belo Horizonte', (SELECT Id FROM `HealthGo`.`Estado` WHERE Sigla = 'MG')),
+('Uberlândia', (SELECT Id FROM `HealthGo`.`Estado` WHERE Sigla = 'MG')),
+('Contagem', (SELECT Id FROM `HealthGo`.`Estado` WHERE Sigla = 'MG')),
+('Juiz de Fora', (SELECT Id FROM `HealthGo`.`Estado` WHERE Sigla = 'MG')),
+('Montes Claros', (SELECT Id FROM `HealthGo`.`Estado` WHERE Sigla = 'MG')),
+
+-- Cidades do Pará (PA)
+('Belém', (SELECT Id FROM `HealthGo`.`Estado` WHERE Sigla = 'PA')),
+('Ananindeua', (SELECT Id FROM `HealthGo`.`Estado` WHERE Sigla = 'PA')),
+('Santarém', (SELECT Id FROM `HealthGo`.`Estado` WHERE Sigla = 'PA')),
+
+-- Cidades da Paraíba (PB)
+('João Pessoa', (SELECT Id FROM `HealthGo`.`Estado` WHERE Sigla = 'PB')),
+('Campina Grande', (SELECT Id FROM `HealthGo`.`Estado` WHERE Sigla = 'PB')),
+
+-- Cidades do Paraná (PR)
+('Curitiba', (SELECT Id FROM `HealthGo`.`Estado` WHERE Sigla = 'PR')),
+('Londrina', (SELECT Id FROM `HealthGo`.`Estado` WHERE Sigla = 'PR')),
+('Maringá', (SELECT Id FROM `HealthGo`.`Estado` WHERE Sigla = 'PR')),
+
+-- Cidades de Pernambuco (PE)
+('Recife', (SELECT Id FROM `HealthGo`.`Estado` WHERE Sigla = 'PE')),
+('Jaboatão dos Guararapes', (SELECT Id FROM `HealthGo`.`Estado` WHERE Sigla = 'PE')),
+('Olinda', (SELECT Id FROM `HealthGo`.`Estado` WHERE Sigla = 'PE')),
+
+-- Cidades do Piauí (PI)
+('Teresina', (SELECT Id FROM `HealthGo`.`Estado` WHERE Sigla = 'PI')),
+('Parnaíba', (SELECT Id FROM `HealthGo`.`Estado` WHERE Sigla = 'PI')),
+
+-- Cidades do Rio de Janeiro (RJ)
+('Rio de Janeiro', (SELECT Id FROM `HealthGo`.`Estado` WHERE Sigla = 'RJ')),
+('Niterói', (SELECT Id FROM `HealthGo`.`Estado` WHERE Sigla = 'RJ')),
+('Duque de Caxias', (SELECT Id FROM `HealthGo`.`Estado` WHERE Sigla = 'RJ')),
+('Nova Iguaçu', (SELECT Id FROM `HealthGo`.`Estado` WHERE Sigla = 'RJ')),
+('Petrópolis', (SELECT Id FROM `HealthGo`.`Estado` WHERE Sigla = 'RJ')),
+
+-- Cidades do Rio Grande do Norte (RN)
+('Natal', (SELECT Id FROM `HealthGo`.`Estado` WHERE Sigla = 'RN')),
+('Mossoró', (SELECT Id FROM `HealthGo`.`Estado` WHERE Sigla = 'RN')),
+
+-- Cidades do Rio Grande do Sul (RS)
+('Porto Alegre', (SELECT Id FROM `HealthGo`.`Estado` WHERE Sigla = 'RS')),
+('Caxias do Sul', (SELECT Id FROM `HealthGo`.`Estado` WHERE Sigla = 'RS')),
+('Canoas', (SELECT Id FROM `HealthGo`.`Estado` WHERE Sigla = 'RS')),
+
+-- Cidades de Rondônia (RO)
+('Porto Velho', (SELECT Id FROM `HealthGo`.`Estado` WHERE Sigla = 'RO')),
+('Ji-Paraná', (SELECT Id FROM `HealthGo`.`Estado` WHERE Sigla = 'RO')),
+
+-- Cidades de Roraima (RR)
+('Boa Vista', (SELECT Id FROM `HealthGo`.`Estado` WHERE Sigla = 'RR')),
+('Rorainópolis', (SELECT Id FROM `HealthGo`.`Estado` WHERE Sigla = 'RR')),
+
+-- Cidades de Santa Catarina (SC)
+('Florianópolis', (SELECT Id FROM `HealthGo`.`Estado` WHERE Sigla = 'SC')),
+('Joinville', (SELECT Id FROM `HealthGo`.`Estado` WHERE Sigla = 'SC')),
+('Blumenau', (SELECT Id FROM `HealthGo`.`Estado` WHERE Sigla = 'SC')),
+('São José', (SELECT Id FROM `HealthGo`.`Estado` WHERE Sigla = 'SC')),
+('Criciúma', (SELECT Id FROM `HealthGo`.`Estado` WHERE Sigla = 'SC')),
+
+-- Cidades de São Paulo (SP)
+('São Paulo', (SELECT Id FROM `HealthGo`.`Estado` WHERE Sigla = 'SP')),
+('Campinas', (SELECT Id FROM `HealthGo`.`Estado` WHERE Sigla = 'SP')),
+('Guarulhos', (SELECT Id FROM `HealthGo`.`Estado` WHERE Sigla = 'SP')),
+('Santo André', (SELECT Id FROM `HealthGo`.`Estado` WHERE Sigla = 'SP')),
+('Osasco', (SELECT Id FROM `HealthGo`.`Estado` WHERE Sigla = 'SP')),
+
+-- Cidades de Sergipe (SE)
+('Aracaju', (SELECT Id FROM `HealthGo`.`Estado` WHERE Sigla = 'SE')),
+('Nossa Senhora do Socorro', (SELECT Id FROM `HealthGo`.`Estado` WHERE Sigla = 'SE')),
+
+-- Cidades do Tocantins (TO)
+('Palmas', (SELECT Id FROM `HealthGo`.`Estado` WHERE Sigla = 'TO')),
+('Araguaína', (SELECT Id FROM `HealthGo`.`Estado` WHERE Sigla = 'TO'));
 
 -- -----------------------------------------------------
 -- Inserts para a tabela Pessoa
@@ -108,29 +198,54 @@ INSERT INTO Pessoa (Nome, DataNascimento, CPF, Telefone, Email, Senha, EnderecoF
 ('Emily Brown', '1994-08-12', '012.345.678-90', '4072345678', 'emily.brown@email.com', 'senha1010', 'foto20.jpg', 1, '32801', 'Downtown', 'Church Street', '789', 20);
 
 -- -----------------------------------------------------
+-- Inserts para a tabela ContaGerencia
+-- -----------------------------------------------------
+INSERT INTO ContaGerencia (Nome, CNPJ, Email, Senha) VALUES
+('Imóveis Paradiso LTDA', '00.000.000/0001-00', 'gerente1@healthgo.com', 'senha123'),
+('Encanto Empreendimentos Imobiliários', '01.000.000/0001-01', 'gerente2@healthgo.com', 'senha123'),
+('Aventura Patrimonial', '02.000.000/0001-02', 'gerente3@healthgo.com', 'senha123'),
+('Moderno Administradora de Imóveis', '03.000.000/0001-03', 'gerente4@healthgo.com', 'senha123'),
+('Conforto Gestão Residencial', '04.000.000/0001-04', 'gerente5@healthgo.com', 'senha123'),
+('Colonial Propriedades Históricas', '05.000.000/0001-05', 'gerente6@healthgo.com', 'senha123'),
+('Vista Mar Gestão Hoteleira', '06.000.000/0001-06', 'gerente7@healthgo.com', 'senha123'),
+('Verde Imobiliária Sustentável', '07.000.000/0001-07', 'gerente8@healthgo.com', 'senha123'),
+('Executivo Holdings Imobiliários', '08.000.000/0001-08', 'gerente9@healthgo.com', 'senha123'),
+('Urbano Gestão de Hospedagem', '09.000.000/0001-09', 'gerente10@healthgo.com', 'senha123'),
+('Sol Nascente Patrimônio', '10.000.000/0001-10', 'gerente11@healthgo.com', 'senha123'),
+('Serra Alta Propriedades', '11.000.000/0001-11', 'gerente12@healthgo.com', 'senha123'),
+('Charme & Estilo Imóveis', '12.000.000/0001-12', 'gerente13@healthgo.com', 'senha123'),
+('Praia Empreendimentos', '13.000.000/0001-13', 'gerente14@healthgo.com', 'senha123'),
+('Central Administração Hoteleira', '14.000.000/0001-14', 'gerente15@healthgo.com', 'senha123'),
+('Doce Lar Imobiliária', '15.000.000/0001-15', 'gerente16@healthgo.com', 'senha123'),
+('Conexão Imóveis e Gestão', '16.000.000/0001-16', 'gerente17@healthgo.com', 'senha123'),
+('Luxury Group Inc.', '17.000.000/0001-17', 'gerente18@healthgo.com', 'senha123'),
+('Times Square Properties', '18.000.000/0001-18', 'gerente19@healthgo.com', 'senha123'),
+('Magic Kingdom Realty', '19.000.000/0001-19', 'gerente20@healthgo.com', 'senha123');
+
+-- -----------------------------------------------------
 -- Inserts para a tabela Hotel
 -- -----------------------------------------------------
-INSERT INTO Hotel (CNPJ, Nome, Tipo, Email, Senha, Telefone, Site, Acessibilidade, CEP, Bairro, Rua, NumeroEndereco, Descricao, Ativo, Cidade_Id) VALUES
-('00.000.000/0001-00', 'Hotel Paradiso', 'Hotel', 'paradiso@email.com', '123', '4733331111', 'www.hotelparadiso.com', 'Rampas, Elevadores, Quartos adaptados', '89010-000', 'Centro', 'Rua Sete de Setembro', '100', 'Um hotel luxuoso com vista para o rio.', 1, 1),
-('01.000.000/0001-01', 'Pousada Encanto', 'Pousada', 'encanto@email.com', '123', '4734342222', 'www.pousadaencanto.com', 'Cadeiras de rodas disponíveis', '89020-000', 'Vila Nova', 'Rua XV de Outubro', '200', 'Aconchegante pousada familiar.', 1, 2),
-('02.000.000/0001-02', 'Hostel Aventura', 'Hostel', 'aventura@email.com', '123', '4832323333', 'www.hostelaventura.com', 'Banheiros adaptados', '88030-000', 'Lagoa', 'Rua das Flores', '300', 'Ideal para viajantes e mochileiros.', 1, 3),
-('03.000.000/0001-03', 'Hotel Moderno', 'Hotel', 'moderno@email.com', '123', '1130304444', 'www.hotelmoderno.com', 'Elevadores, Sinalização em Braille', '01300-000', 'Consolação', 'Rua Augusta', '400', 'Hotel com design arrojado e moderno.', 1, 4),
-('04.000.000/0001-04', 'Apartamento Conforto', 'Apartamento', 'conforto@email.com', '123', '1931315555', 'www.apartamentoconforto.com', 'Portas largas', '13050-000', 'Centro', 'Avenida Aquidabã', '500', 'Apartamentos completos para longa estadia.', 1, 5),
-('05.000.000/0001-05', 'Casa Colonial', 'Casa', 'colonial@email.com', '123', '2135356666', 'www.casacolonial.com', 'Acesso sem degraus', '20200-000', 'Santa Teresa', 'Rua Aprazível', '600', 'Casa histórica com charme colonial.', 1, 6),
-('06.000.000/0001-06', 'Hotel Vista Mar', 'Hotel', 'vistamar@email.com', '123', '2136367777', 'www.hotelvistamar.com', 'Corrimãos', '24200-000', 'Praia', 'Avenida Atlântica', '700', 'Quartos com vista deslumbrante para o mar.', 1, 7),
-('07.000.000/0001-07', 'Pousada Verde', 'Pousada', 'pousadaverde@email.com', '123', '3137378888', 'www.pousadaverde.com', 'Rampas de acesso', '30100-000', 'Funcionários', 'Rua Cláudio Manuel', '800', 'Ambiente tranquilo e arborizado.', 1, 8),
-('08.000.000/0001-08', 'Hotel Executivo', 'Hotel', 'executivo@email.com', '123', '3438389999', 'www.hotelexecutivo.com', 'Elevadores, Sinalização tátil', '38400-000', 'Centro', 'Avenida Afonso Pena', '900', 'Ideal para viagens a negócios.', 1, 9),
-('09.000.000/0001-09', 'Hostel Urbano', 'Hostel', 'urbano@email.com', '123', '4139390000', 'www.hostelurbano.com', 'Acesso fácil', '80000-000', 'Centro', 'Rua Cândido Lopes', '1000', 'Localização central e vibrante.', 1, 10),
-('10.000.000/0001-10', 'Hotel Sol Nascente', 'Hotel', 'solnascente@email.com', '123', '4330001111', 'www.hotelsolnascente.com', 'Quartos com barras de apoio', '86000-000', 'Aurora', 'Rua do Sol', '1100', 'Conforto e bom gosto para sua estadia.', 1, 11),
-('11.000.000/0001-11', 'Pousada da Serra', 'Pousada', 'serrana@email.com', '123', '5131112222', 'www.pousadaserra.com', 'Rampas, Vagas especiais', '90000-000', 'Centro Histórico', 'Rua da Praia', '1200', 'A tranquilidade da serra ao seu alcance.', 1, 12),
-('12.000.000/0001-12', 'Hotel Charme', 'Hotel', 'charme@email.com', '123', '5432223333', 'www.hotelcharme.com', 'Elevadores, Sinalização visual', '95000-000', 'Lourdes', 'Rua dos Plátanos', '1300', 'Com estilo único e atendimento impecável.', 1, 13),
-('13.000.000/0001-13', 'Hostel Praia', 'Hostel', 'hostelpraia@email.com', '123', '7133334444', 'www.hostelpraia.com', 'Áreas comuns acessíveis', '40100-000', 'Ondina', 'Avenida Oceânica', '1400', 'Próximo às melhores praias.', 1, 14),
-('14.000.000/0001-14', 'Hotel Central', 'Hotel', 'hotelcentral@email.com', '123', '8134445555', 'www.hotelcentral.com', 'Rampas, Portas automáticas', '50000-000', 'Boa Vista', 'Avenida Dantas Barreto', '1500', 'No coração da cidade, perto de tudo.', 1, 15),
-('15.000.000/0001-15', 'Pousada Doce Lar', 'Pousada', 'docelar@email.com', '123', '8535556666', 'www.pousadadocelar.com', 'Banheiros adaptados, Sinalização em Braille', '60100-000', 'Meireles', 'Avenida Abolição', '1600', 'Sua casa fora de casa.', 1, 16),
-('16.000.000/0001-16', 'Hotel Conexão', 'Hotel', 'conexao@email.com', '123', '6236667777', 'www.hotelconexao.com', 'Vagas de estacionamento especiais', '74000-000', 'Aeroporto', 'Avenida Anhanguera', '1700', 'Localização estratégica perto do aeroporto.', 1, 17),
-('17.000.000/0001-17', 'Luxury Suites', 'Hotel', 'luxurysuites@email.com', '123', '3101234567', 'www.luxurysuites.com', 'Wheelchair accessible rooms', '90210', 'Beverly Hills', 'Wilshire Blvd', '1800', 'Exclusive suites for discerning guests.', 1, 18),
-('18.000.000/0001-18', 'Times Square Inn', 'Hostel', 'tsinn@email.com', '123', '2129876543', 'www.timessquareinn.com', 'Elevator access', '10036', 'Midtown', 'Broadway', '1900', 'Affordable stay in the heart of NYC.', 1, 19),
-('19.000.000/0001-19', 'Magic Kingdom Resort', 'Hotel', 'mkresort@email.com', '123', '4078765432', 'www.magickingdomresort.com', 'Full accessibility features', '32830', 'Lake Buena Vista', 'World Dr', '2000', 'Family-friendly resort near attractions.', 1, 20);
+INSERT INTO Hotel (CNPJ, Nome, Tipo, Email, Telefone, Site, Acessibilidade, CEP, Bairro, Rua, NumeroEndereco, Descricao, Ativo, Cidade_Id, ContaGerencia_Id) VALUES
+('00.000.000/0001-00', 'Hotel Paradiso', 'Hotel', 'paradiso@email.com', '4733331111', 'www.hotelparadiso.com', 'Rampas, Elevadores, Quartos adaptados', '89010-000', 'Centro', 'Rua Sete de Setembro', '100', 'Um hotel luxuoso com vista para o rio.', 1, 1, 1),
+('01.000.000/0001-01', 'Pousada Encanto', 'Pousada', 'encanto@email.com', '4734342222', 'www.pousadaencanto.com', 'Cadeiras de rodas disponíveis', '89020-000', 'Vila Nova', 'Rua XV de Outubro', '200', 'Aconchegante pousada familiar.', 1, 2, 2),
+('02.000.000/0001-02', 'Hostel Aventura', 'Hostel', 'aventura@email.com', '4832323333', 'www.hostelaventura.com', 'Banheiros adaptados', '88030-000', 'Lagoa', 'Rua das Flores', '300', 'Ideal para viajantes e mochileiros.', 1, 3, 3),
+('03.000.000/0001-03', 'Hotel Moderno', 'Hotel', 'moderno@email.com', '1130304444', 'www.hotelmoderno.com', 'Elevadores, Sinalização em Braille', '01300-000', 'Consolação', 'Rua Augusta', '400', 'Hotel com design arrojado e moderno.', 1, 4, 4),
+('04.000.000/0001-04', 'Apartamento Conforto', 'Apartamento', 'conforto@email.com', '1931315555', 'www.apartamentoconforto.com', 'Portas largas', '13050-000', 'Centro', 'Avenida Aquidabã', '500', 'Apartamentos completos para longa estadia.', 1, 5, 5),
+('05.000.000/0001-05', 'Casa Colonial', 'Casa', 'colonial@email.com', '2135356666', 'www.casacolonial.com', 'Acesso sem degraus', '20200-000', 'Santa Teresa', 'Rua Aprazível', '600', 'Casa histórica com charme colonial.', 1, 6, 6),
+('06.000.000/0001-06', 'Hotel Vista Mar', 'Hotel', 'vistamar@email.com', '2136367777', 'www.hotelvistamar.com', 'Corrimãos', '24200-000', 'Praia', 'Avenida Atlântica', '700', 'Quartos com vista deslumbrante para o mar.', 1, 7, 7),
+('07.000.000/0001-07', 'Pousada Verde', 'Pousada', 'pousadaverde@email.com', '3137378888', 'www.pousadaverde.com', 'Rampas de acesso', '30100-000', 'Funcionários', 'Rua Cláudio Manuel', '800', 'Ambiente tranquilo e arborizado.', 1, 8, 8),
+('08.000.000/0001-08', 'Hotel Executivo', 'Hotel', 'executivo@email.com', '3438389999', 'www.hotelexecutivo.com', 'Elevadores, Sinalização tátil', '38400-000', 'Centro', 'Avenida Afonso Pena', '900', 'Ideal para viagens a negócios.', 1, 9, 9),
+('09.000.000/0001-09', 'Hostel Urbano', 'Hostel', 'urbano@email.com', '4139390000', 'www.hostelurbano.com', 'Acesso fácil', '80000-000', 'Centro', 'Rua Cândido Lopes', '1000', 'Localização central e vibrante.', 1, 10, 10),
+('10.000.000/0001-10', 'Hotel Sol Nascente', 'Hotel', 'solnascente@email.com', '4330001111', 'www.hotelsolnascente.com', 'Quartos com barras de apoio', '86000-000', 'Aurora', 'Rua do Sol', '1100', 'Conforto e bom gosto para sua estadia.', 1, 11, 11),
+('11.000.000/0001-11', 'Pousada da Serra', 'Pousada', 'serrana@email.com', '5131112222', 'www.pousadaserra.com', 'Rampas, Vagas especiais', '90000-000', 'Centro Histórico', 'Rua da Praia', '1200', 'A tranquilidade da serra ao seu alcance.', 1, 12, 12),
+('12.000.000/0001-12', 'Hotel Charme', 'Hotel', 'charme@email.com', '5432223333', 'www.hotelcharme.com', 'Elevadores, Sinalização visual', '95000-000', 'Lourdes', 'Rua dos Plátanos', '1300', 'Com estilo único e atendimento impecável.', 1, 13, 13),
+('13.000.000/0001-13', 'Hostel Praia', 'Hostel', 'hostelpraia@email.com', '7133334444', 'www.hostelpraia.com', 'Áreas comuns acessíveis', '40100-000', 'Ondina', 'Avenida Oceânica', '1400', 'Próximo às melhores praias.', 1, 14, 14),
+('14.000.000/0001-14', 'Hotel Central', 'Hotel', 'hotelcentral@email.com', '8134445555', 'www.hotelcentral.com', 'Rampas, Portas automáticas', '50000-000', 'Boa Vista', 'Avenida Dantas Barreto', '1500', 'No coração da cidade, perto de tudo.', 1, 15, 15),
+('15.000.000/0001-15', 'Pousada Doce Lar', 'Pousada', 'docelar@email.com', '8535556666', 'www.pousadadocelar.com', 'Banheiros adaptados, Sinalização em Braille', '60100-000', 'Meireles', 'Avenida Abolição', '1600', 'Sua casa fora de casa.', 1, 16, 16),
+('16.000.000/0001-16', 'Hotel Conexão', 'Hotel', 'conexao@email.com', '6236667777', 'www.hotelconexao.com', 'Vagas de estacionamento especiais', '74000-000', 'Aeroporto', 'Avenida Anhanguera', '1700', 'Localização estratégica perto do aeroporto.', 1, 17, 17),
+('17.000.000/0001-17', 'Luxury Suites', 'Hotel', 'luxurysuites@email.com', '3101234567', 'www.luxurysuites.com', 'Wheelchair accessible rooms', '90210', 'Beverly Hills', 'Wilshire Blvd', '1800', 'Exclusive suites for discerning guests.', 1, 18, 18),
+('18.000.000/0001-18', 'Times Square Inn', 'Hostel', 'tsinn@email.com', '2129876543', 'www.timessquareinn.com', 'Elevator access', '10036', 'Midtown', 'Broadway', '1900', 'Affordable stay in the heart of NYC.', 1, 19, 19),
+('19.000.000/0001-19', 'Magic Kingdom Resort', 'Hotel', 'mkresort@email.com', '4078765432', 'www.magickingdomresort.com', 'Full accessibility features', '32830', 'Lake Buena Vista', 'World Dr', '2000', 'Family-friendly resort near attractions.', 1, 20, 20);
 
 -- -----------------------------------------------------
 -- Inserts para a tabela Lembrete
@@ -250,52 +365,77 @@ INSERT INTO Especialidade (Nome) VALUES ('Assistente Pessoal');
 -- -----------------------------------------------------
 -- Inserts para a tabela PrestadorServico
 -- -----------------------------------------------------
-INSERT INTO PrestadorServico (PrecoHora, Observacao, CNPJ, Ativo, Especialidade_Id, Pessoa_Id) VALUES
-(50.00, 'Enfermeira com 5 anos de experiência.', NULL, 1, 1, 1),
-(75.00, 'Fisioterapeuta especialista em reabilitação motora.', NULL, 1, 2, 2),
-(120.00, 'Clínico geral com consultório próprio.', '00.000.000/0001-00', 1, 3, 3),
-(60.00, 'Nutricionista esportiva.', NULL, 1, 4, 4),
-(80.00, 'Psicóloga com foco em terapia cognitivo-comportamental.', NULL, 1, 5, 5),
-(70.00, 'Terapeuta ocupacional para reabilitação de idosos.', NULL, 1, 6, 6),
-(40.00, 'Cuidador com experiência em pacientes com Alzheimer.', NULL, 1, 7, 7),
-(35.00, 'Motorista com carro adaptado para cadeirantes.', NULL, 1, 8, 8),
-(45.00, 'Acompanhante para plantões hospitalares.', NULL, 1, 9, 9),
-(90.00, 'Personal trainer com certificação em pilates.', NULL, 1, 10, 10),
-(65.00, 'Fonoaudióloga para distúrbios da fala.', NULL, 1, 11, 11),
-(55.00, 'Podólogo especializado em pés diabéticos.', NULL, 1, 12, 12),
-(70.00, 'Massoterapeuta com diversas técnicas.', NULL, 1, 13, 13),
-(85.00, 'Quiropraxia para problemas de coluna.', NULL, 1, 14, 14),
-(95.00, 'Acupunturista para alívio da dor.', NULL, 1, 15, 15),
-(50.00, 'Farmacêutico para orientações sobre medicamentos.', NULL, 1, 16, 16),
-(70.00, 'Técnico em radiologia para exames domiciliares.', NULL, 1, 17, 17),
-(80.00, 'Terapeuta da fala para crianças.', NULL, 1, 18, 18),
-(60.00, 'Dietista para planos alimentares personalizados.', NULL, 1, 19, 19),
-(40.00, 'Assistente pessoal para tarefas diárias.', NULL, 1, 20, 20);
+INSERT INTO PrestadorServico (Observacao, CNPJ, Ativo, Pessoa_Id) VALUES
+('Enfermeira com 5 anos de experiência.', NULL, 1, 1),
+('Fisioterapeuta especialista em reabilitação motora.', NULL, 1, 2),
+('Clínico geral com consultório próprio.', '00.000.000/0001-00', 1, 3),
+('Nutricionista esportiva.', NULL, 1, 4),
+('Psicóloga com foco em terapia cognitivo-comportamental.', NULL, 1, 5),
+('Terapeuta ocupacional para reabilitação de idosos.', NULL, 1, 6),
+('Cuidador com experiência em pacientes com Alzheimer.', NULL, 1, 7),
+('Motorista com carro adaptado para cadeirantes.', NULL, 1, 8),
+('Acompanhante para plantões hospitalares.', NULL, 1, 9),
+('Personal trainer com certificação em pilates.', NULL, 1, 10),
+('Fonoaudióloga para distúrbios da fala.', NULL, 1, 11),
+('Podólogo especializado em pés diabéticos.', NULL, 1, 12),
+('Massoterapeuta com diversas técnicas.', NULL, 1, 13),
+('Quiropraxia para problemas de coluna.', NULL, 1, 14),
+('Acupunturista para alívio da dor.', NULL, 1, 15),
+('Farmacêutico para orientações sobre medicamentos.', NULL, 1, 16),
+('Técnico em radiologia para exames domiciliares.', NULL, 1, 17),
+('Terapeuta da fala para crianças.', NULL, 1, 18),
+('Dietista para planos alimentares personalizados.', NULL, 1, 19),
+('Assistente pessoal para tarefas diárias.', NULL, 1, 20);
+
+-- -----------------------------------------------------
+-- Inserts para a tabela PrestadorServico_Especialidade
+-- -----------------------------------------------------
+INSERT INTO PrestadorServico_Especialidade (PrestadorServico_Id, Especialidade_Id, PrecoHora) VALUES
+(1, 1, 55.00),
+(2, 2, 80.00),
+(3, 3, 125.00),
+(4, 4, 65.00),
+(5, 5, 85.00),
+(6, 6, 75.00),
+(7, 7, 45.00),
+(8, 8, 40.00),
+(9, 9, 50.00),
+(10, 10, 95.00),
+(11, 11, 70.00),
+(12, 12, 60.00),
+(13, 13, 75.00),
+(14, 14, 90.00),
+(15, 15, 100.00),
+(16, 16, 55.00),
+(17, 17, 75.00),
+(18, 18, 85.00),
+(19, 19, 65.00),
+(20, 20, 45.00);
 
 -- -----------------------------------------------------
 -- Inserts para a tabela OrdemServico_PrestadorServico
 -- -----------------------------------------------------
-INSERT INTO OrdemServico_PrestadorServico (Preco, HorasTrabalhadas, DataInicio, DataFim, StatusOS, PrestadorServico_Id, OrdemServico_Id) VALUES
-(100.00, 2, '2025-06-20 10:00:00', '2025-06-20 12:00:00', 'Concluído', 1, 1),
-(150.00, 2, '2025-06-21 11:30:00', '2025-06-21 13:30:00', 'Em andamento', 2, 2),
-(240.00, 2, '2025-06-22 14:00:00', '2025-06-22 16:00:00', 'Cancelado', 3, 3),
-(120.00, 2, '2025-06-23 09:00:00', '2025-06-23 11:00:00', 'Concluído', 4, 4),
-(160.00, 2, '2025-06-24 16:00:00', '2025-06-24 18:00:00', 'Em andamento', 5, 5),
-(140.00, 2, '2025-06-25 08:00:00', '2025-06-25 10:00:00', 'Concluído', 6, 6),
-(80.00, 2, '2025-06-26 12:00:00', '2025-06-26 14:00:00', 'Em andamento', 7, 7),
-(70.00, 2, '2025-06-27 15:00:00', '2025-06-27 17:00:00', 'Cancelado', 8, 8),
-(90.00, 2, '2025-06-28 10:30:00', '2025-06-28 12:30:00', 'Concluído', 9, 9),
-(180.00, 2, '2025-06-29 13:00:00', '2025-06-29 15:00:00', 'Em andamento', 10, 10),
-(130.00, 2, '2025-07-01 09:00:00', '2025-07-01 11:00:00', 'Concluído', 11, 11),
-(110.00, 2, '2025-07-02 11:00:00', '2025-07-02 13:00:00', 'Em andamento', 12, 12),
-(140.00, 2, '2025-07-03 14:30:00', '2025-07-03 16:30:00', 'Cancelado', 13, 13),
-(170.00, 2, '2025-07-04 10:00:00', '2025-07-04 12:00:00', 'Concluído', 14, 14),
-(190.00, 2, '2025-07-05 16:00:00', '2025-07-05 18:00:00', 'Em andamento', 15, 15),
-(100.00, 2, '2025-07-06 08:30:00', '2025-07-06 10:30:00', 'Concluído', 16, 16),
-(140.00, 2, '2025-07-07 12:30:00', '2025-07-07 14:30:00', 'Em andamento', 17, 17),
-(160.00, 2, '2025-07-08 15:30:00', '2025-07-08 17:30:00', 'Cancelado', 18, 18),
-(120.00, 2, '2025-07-09 10:00:00', '2025-07-09 12:00:00', 'Concluído', 19, 19),
-(80.00, 2, '2025-07-10 13:00:00', '2025-07-10 15:00:00', 'Em andamento', 20, 20);
+INSERT INTO OrdemServico_PrestadorServico (Preco, HorasTrabalhadas, DataInicio, DataFim, StatusOS, PrestadorServico_Especialidade_PrestadorServico_Id, PrestadorServico_Especialidade_Especialidade_Id, OrdemServico_Id) VALUES
+(100.00, 2, '2025-06-20 10:00:00', '2025-06-20 12:00:00', 'Concluído', 1, 1, 1),
+(150.00, 2, '2025-06-21 11:30:00', '2025-06-21 13:30:00', 'Em andamento', 2, 2, 2),
+(240.00, 2, '2025-06-22 14:00:00', '2025-06-22 16:00:00', 'Cancelado', 3, 3, 3),
+(120.00, 2, '2025-06-23 09:00:00', '2025-06-23 11:00:00', 'Concluído', 4, 4, 4),
+(160.00, 2, '2025-06-24 16:00:00', '2025-06-24 18:00:00', 'Em andamento', 5, 5, 5),
+(140.00, 2, '2025-06-25 08:00:00', '2025-06-25 10:00:00', 'Concluído', 6, 6, 6),
+(80.00, 2, '2025-06-26 12:00:00', '2025-06-26 14:00:00', 'Em andamento', 7, 7, 7),
+(70.00, 2, '2025-06-27 15:00:00', '2025-06-27 17:00:00', 'Cancelado', 8, 8, 8),
+(90.00, 2, '2025-06-28 10:30:00', '2025-06-28 12:30:00', 'Concluído', 9, 9, 9),
+(180.00, 2, '2025-06-29 13:00:00', '2025-06-29 15:00:00', 'Em andamento', 10, 10, 10),
+(130.00, 2, '2025-07-01 09:00:00', '2025-07-01 11:00:00', 'Concluído', 11, 11, 11),
+(110.00, 2, '2025-07-02 11:00:00', '2025-07-02 13:00:00', 'Em andamento', 12, 12, 12),
+(140.00, 2, '2025-07-03 14:30:00', '2025-07-03 16:30:00', 'Cancelado', 13, 13, 13),
+(170.00, 2, '2025-07-04 10:00:00', '2025-07-04 12:00:00', 'Concluído', 14, 14, 14),
+(190.00, 2, '2025-07-05 16:00:00', '2025-07-05 18:00:00', 'Em andamento', 15, 15, 15),
+(100.00, 2, '2025-07-06 08:30:00', '2025-07-06 10:30:00', 'Concluído', 16, 16, 16),
+(140.00, 2, '2025-07-07 12:30:00', '2025-07-07 14:30:00', 'Em andamento', 17, 17, 17),
+(160.00, 2, '2025-07-08 15:30:00', '2025-07-08 17:30:00', 'Cancelado', 18, 18, 18),
+(120.00, 2, '2025-07-09 10:00:00', '2025-07-09 12:00:00', 'Concluído', 19, 19, 19),
+(80.00, 2, '2025-07-10 13:00:00', '2025-07-10 15:00:00', 'Em andamento', 20, 20, 20);
 
 -- -----------------------------------------------------
 -- Inserts para a tabela CamaQuarto
@@ -598,9 +738,3 @@ INSERT INTO Imagem_Hotel (Imagem_Id, Hotel_Id) VALUES
 (20, 19);
 
 SET FOREIGN_KEY_CHECKS = 1;
-
-
-INSERT INTO Lembrete (Titulo, Data, Tipo, Pessoa_Id) VALUES
-('Consulta Médica', '2025-07-10 10:00:00', 'Remédio', 23);
-
-select * from lembrete; 
