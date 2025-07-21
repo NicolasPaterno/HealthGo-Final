@@ -25,9 +25,11 @@ namespace API_HealthGo.Repositories
 
         public async Task<TokenRecuperacaoSenhaEntity?> GetByTokenAsync(string token)
         {
-            using var conn = _connection.GetConnection();
+            try
+            {
+                using var conn = _connection.GetConnection();
 
-            string sql = @$"
+                string sql = @$"
                              SELECT 
                                  ID AS {nameof(TokenRecuperacaoSenhaEntity.Id)},
                                  PESSOA_ID AS {nameof(TokenRecuperacaoSenhaEntity.Pessoa_Id)},
@@ -37,7 +39,17 @@ namespace API_HealthGo.Repositories
                               WHERE TOKEN = @Token AND DataExpiracao > UTC_TIMESTAMP()
                             ";
 
-            return await conn.QueryFirstOrDefaultAsync<TokenRecuperacaoSenhaEntity>(sql, new { Token = token });
+                var tokenEntity = await conn.QueryFirstOrDefaultAsync<TokenRecuperacaoSenhaEntity>(sql, new { Token = token });
+
+                if (tokenEntity == null)
+                    throw new Exception("Token inválido, expirado ou já utilizado.");
+
+                return tokenEntity;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Erro ao buscar o token de recuperação de senha. A causa do problema:{ex}");
+            }
         }
 
         public async Task DeleteToken(string token)
