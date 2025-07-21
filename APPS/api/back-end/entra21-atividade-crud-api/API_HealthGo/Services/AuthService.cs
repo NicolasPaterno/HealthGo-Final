@@ -32,7 +32,10 @@ namespace API_HealthGo.Services
                 Pessoa_Id = pessoa.Id
             };
 
-            // 3. Salva no banco || NÃO PRECISA MAIS, APENAS LOCALMENTE NA API É SUFICIENTE
+            // 3. Salva no banco || NÃO PRECISA MAIS?, APENAS LOCALMENTE NA API É SUFICIENTE, MAS TERIA QUE SER IMPLEMENTADO
+                                        //UM EXTRAIDOR DE TOKEN, PEGAR O PESSOA_ID E TEMPO DE EXPIRAÇÃO, PARA A VERIFICAÇÃO DE AMBOS
+                                        //E ATUALIZAR COM O UPDATE 
+
             await _tokenRecuperacaoSenhaRepository.SaveAsync(token);
 
             // 4. Aqui você pode chamar um serviço de e-mail
