@@ -1,3 +1,4 @@
+// APPS/web/src/components/hotel-register-form.tsx
 import { useState } from "react";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
@@ -19,6 +20,7 @@ import {
   SelectItem,
 } from "@/components/ui/select";
 import api from "@/services/api";
+import { useAuth } from "@/hooks/useAuth"; // Importar o hook useAuth
 
 // ⚠️ IMPORTANTE: Substitua estes valores pelas suas credenciais do Cloudinary
 const CLOUDINARY_CLOUD_NAME = "dkgrpzzkb"; // Ex: 'minhalojanuvens'
@@ -28,6 +30,8 @@ export function HotelRegisterForm({
   className,
   ...props
 }: React.ComponentProps<"div">) {
+  const { user } = useAuth(); // Usar o hook useAuth para obter os dados do usuário
+
   const [cnpj, setCnpj] = useState("");
   const [nome, setNome] = useState("");
   const [tipo, setTipo] = useState("");
@@ -77,9 +81,17 @@ export function HotelRegisterForm({
     event.preventDefault();
     setLoading(true);
 
-    // Pega o id do dono de hotel logado
-    const user = JSON.parse(localStorage.getItem("user") || "{}");
-    const contaGerenciaId = user.Id || user.id;
+    // Pega o id do dono de hotel logado usando o hook useAuth
+    // user.id corresponde ao nameid do JWT (verificado na interface DecodedToken em jwt.ts)
+    const contaGerenciaId = user?.id; 
+
+    if (!contaGerenciaId) {
+        toast.error("Erro de autenticação.", {
+            description: "Não foi possível obter o ID do usuário logado. Por favor, faça login novamente.",
+        });
+        setLoading(false);
+        return;
+    }
 
     let uploadedImageUrl: string | null = null;
     if (fotoPerfil) {
@@ -109,7 +121,7 @@ export function HotelRegisterForm({
       DataInicio: new Date().toISOString(),
       DataFim: new Date().toISOString(),
       Cidade_Id: 1, // Ajuste conforme a lógica real de cidade
-      ContaGerencia_Id: contaGerenciaId, // Agora pega do usuário logado
+      ContaGerencia_Id: parseInt(contaGerenciaId), // Agora pega do usuário logado e converte para número
     };
 
     console.log(hotelData);

@@ -72,6 +72,9 @@ function App() {
               <Route element={<RoleProtectedRoute allowedRoles={["Gerente"]} />}>
                 <Route path="/dashboard-gerente" element={<DashboardGerentePage />}>
                   <Route index element={<DashboardGerenteContent />} />
+                  <Route path="hotels" element={<HotelRegisterPage />} />
+
+                  <Route />
                 </Route>
                 <Route path="/settings" element={<DashboardGerentePage />}>
                   <Route index element={<SettingsPage />} />

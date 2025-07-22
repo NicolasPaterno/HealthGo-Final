@@ -198,33 +198,17 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         </SidebarMenu>
       </SidebarHeader>
       <SidebarContent>
-<<<<<<< HEAD
         {/* A LINHA ABAIXO FOI ALTERADA */}
         <NavMain items={data.navMain} pathname={location.pathname} />
         {/* A LINHA ABAIXO FOI ALTERADA */}
         <NavDocuments items={data.documents} pathname={location.pathname}/>
         {/* A LINHA ABAIXO FOI ALTERADA */}
         <NavSecondary items={data.navSecondary} pathname={location.pathname} className="mt-auto" />
-=======
-        <NavMain
-          items={
-            userType === "contagerencia" ? navMainHotelOwner : data.navMain
-          }
-        />
-        {userType !== "contagerencia" && (
-          <NavDocuments items={data.documents} />
-        )}
-        <NavSecondary items={data.navSecondary} className="mt-auto" />
->>>>>>> f020c72ff248e5ceee0884d496d899983b039e0e
       </SidebarContent>
       <SidebarFooter>
         {/* A LINHA ABAIXO FOI ALTERADA */}
         <NavUser />
       </SidebarFooter>
     </Sidebar>
-<<<<<<< HEAD
   )
-=======
-  );
->>>>>>> f020c72ff248e5ceee0884d496d899983b039e0e
 }
