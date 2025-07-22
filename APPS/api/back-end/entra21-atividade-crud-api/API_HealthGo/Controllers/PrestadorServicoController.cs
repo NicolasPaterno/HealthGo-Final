@@ -23,6 +23,12 @@ namespace API_HealthGo.Controllers
             return Ok(await _service.GetAll());
         }
 
+        [HttpGet("all_infos")]
+        public async Task<ActionResult<PrestadorServicoGetAllResponse>> GetAllInfos()
+        {
+            return Ok(await _service.GetPrestadorAllInfos());
+        }
+
         [HttpGet("{id}")]
         public async Task<ActionResult<PrestadorServicoEntity>> GetById(int id)
         {

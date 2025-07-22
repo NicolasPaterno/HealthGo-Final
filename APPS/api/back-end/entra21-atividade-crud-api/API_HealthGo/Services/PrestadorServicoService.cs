@@ -33,6 +33,14 @@ namespace API_HealthGo.Services
             };
         }
 
+        public async Task<PrestadorServico_All_Infos_DTOGetAllResponse> GetPrestadorAllInfos()
+        {
+            return new PrestadorServico_All_Infos_DTOGetAllResponse
+            {
+                Data = await _repository.GetPrestadorAllInfos()
+            };
+        }
+
         public async Task<PrestadorServicoEntity> GetById(int id)
         {
             return await _repository.GetById(id);

@@ -8,6 +8,8 @@ namespace API_HealthGo.Contracts.Service
     {
         Task<PrestadorServicoGetAllResponse> GetAll();
 
+        Task<PrestadorServico_All_Infos_DTOGetAllResponse> GetPrestadorAllInfos();
+
         Task<PrestadorServicoEntity> GetById(int id);
 
         Task<MessageResponse> Post(PrestadorServicoInsertDTO prestadorServico);

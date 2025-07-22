@@ -7,6 +7,8 @@ namespace API_HealthGo.Contracts.Repositories
     {
         Task<IEnumerable<PrestadorServicoEntity>> GetAll();
 
+        Task<IEnumerable<PrestadorServico_All_Infos_DTO>> GetPrestadorAllInfos();
+
         Task<PrestadorServicoEntity> GetById(int id);
 
         Task Insert(PrestadorServicoInsertDTO prestadorServico);
