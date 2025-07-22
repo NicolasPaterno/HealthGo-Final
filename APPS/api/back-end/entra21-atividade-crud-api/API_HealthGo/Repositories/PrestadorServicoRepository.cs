@@ -22,11 +22,8 @@ namespace API_HealthGo.Repository
             {
                 string sql = @$"
                     SELECT ID AS {nameof(PrestadorServicoEntity.Id)},
-                           PRECOHORA AS {nameof(PrestadorServicoEntity.PrecoHora)},
                            OBSERVACAO AS {nameof(PrestadorServicoEntity.Observacao)},
                            CNPJ AS {nameof(PrestadorServicoEntity.CNPJ)},
-                           ATIVO AS {nameof(PrestadorServicoEntity.Ativo)},
-                           ESPECIALIDADE_ID AS {nameof(PrestadorServicoEntity.Especialidade_Id)},
                            PESSOA_ID AS {nameof(PrestadorServicoEntity.Pessoa_Id)}
                       FROM PRESTADORSERVICO
                 ";
@@ -38,8 +35,8 @@ namespace API_HealthGo.Repository
         public async Task Insert(PrestadorServicoInsertDTO prestadorServico)
         {
             string sql = @$"
-                INSERT INTO PRESTADORSERVICO (PRECOHORA, OBSERVACAO, CNPJ, ATIVO, ESPECIALIDADE_ID, PESSOA_ID)
-                             VALUES (@PrecoHora, @Observacao, @CNPJ, @Ativo, @Especialidade_Id, @Pessoa_Id)
+                INSERT INTO PRESTADORSERVICO (OBSERVACAO, CNPJ, PESSOA_ID)
+                             VALUES (@Observacao, @CNPJ, @Pessoa_Id)
             ";
             await _connection.Execute(sql, prestadorServico);
         }
@@ -56,11 +53,8 @@ namespace API_HealthGo.Repository
             {
                 string sql = @$"
                     SELECT ID AS {nameof(PrestadorServicoEntity.Id)},
-                           PRECOHORA AS {nameof(PrestadorServicoEntity.PrecoHora)},
                            OBSERVACAO AS {nameof(PrestadorServicoEntity.Observacao)},
                            CNPJ AS {nameof(PrestadorServicoEntity.CNPJ)},
-                           ATIVO AS {nameof(PrestadorServicoEntity.Ativo)},
-                           ESPECIALIDADE_ID AS {nameof(PrestadorServicoEntity.Especialidade_Id)},
                            PESSOA_ID AS {nameof(PrestadorServicoEntity.Pessoa_Id)}
                       FROM PRESTADORSERVICO
                      WHERE ID = @id
@@ -74,11 +68,8 @@ namespace API_HealthGo.Repository
         {
             string sql = @$"
                 UPDATE PRESTADORSERVICO
-                   SET PRECOHORA = @PrecoHora,
-                       OBSERVACAO = @Observacao,
+                   SET OBSERVACAO = @Observacao,
                        CNPJ = @CNPJ,
-                       ATIVO = @Ativo,
-                       ESPECIALIDADE_ID = @Especialidade_Id,
                        PESSOA_ID = @Pessoa_Id
                  WHERE ID = @Id;
             ";
