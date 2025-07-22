@@ -126,16 +126,11 @@ namespace API_HealthGo
             builder.Services.AddScoped<IPassagemService, PassagemService>();
             builder.Services.AddScoped<IPassagemRepository, PassagemRepository>();
 
-            builder.Services.AddScoped<IPassagemService, PassagemService>();
-            builder.Services.AddScoped<IPassagemRepository, PassagemRepository>();
+            builder.Services.AddScoped<IPessoaService, PessoaService>();
+            builder.Services.AddScoped<IPessoaRepository, PessoaRepository>();
 
-            builder.Services.AddScoped<IPassagemService, PassagemService>();
-            builder.Services.AddScoped<IPassagemRepository, PassagemRepository>();
-
-            builder.Services.AddScoped<IPassagemService, PassagemService>();
-            builder.Services.AddScoped<IPassagemRepository, PassagemRepository>();
-
-
+            builder.Services.AddScoped<IQuartoService, QuartoService>();
+            builder.Services.AddScoped<IQuartoRepository, QuartoRepository>();
 
             builder.Services.AddScoped<IVooService, VooService>();
             builder.Services.AddScoped<IVooRepository, VooRepository>();
