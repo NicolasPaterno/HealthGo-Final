@@ -78,6 +78,7 @@ namespace API_HealthGo
             builder.Services.AddScoped<IPrestadorServicoRepository, PrestadorServicoRepository>();
             builder.Services.AddScoped<IPrestadorServicoService, PrestadorServicoService>();
 
+            //fazer as injeções de dependências
 
             builder.Services.AddHttpClient();
             builder.Services.AddScoped<IHospitalService, HospitalService>();
