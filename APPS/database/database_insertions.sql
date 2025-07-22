@@ -10,6 +10,7 @@ USE HealthGo;
 
 SET FOREIGN_KEY_CHECKS = 0;
 
+
 INSERT INTO Estado (Nome, Sigla) VALUES ('Santa Catarina', 'SC');
 INSERT INTO Estado (Nome, Sigla) VALUES ('São Paulo', 'SP');
 INSERT INTO Estado (Nome, Sigla) VALUES ('Rio de Janeiro', 'RJ');
@@ -45,6 +46,7 @@ INSERT INTO Cidade (Nome, Estado_Id) VALUES ('Goiânia', 10);
 INSERT INTO Cidade (Nome, Estado_Id) VALUES ('Los Angeles', 11);
 INSERT INTO Cidade (Nome, Estado_Id) VALUES ('Nova Iorque', 12);
 INSERT INTO Cidade (Nome, Estado_Id) VALUES ('Orlando', 13);
+
 
 -- -----------------------------------------------------
 -- Inserts para a tabela Pessoa
@@ -237,6 +239,10 @@ INSERT INTO Especialidade (Nome) VALUES ('Terapia da Fala');
 INSERT INTO Especialidade (Nome) VALUES ('Dietista');
 INSERT INTO Especialidade (Nome) VALUES ('Assistente Pessoal');
 
+
+-- -----------------------------------------------------
+-- Inserts para a tabela PrestadorServico
+-- -----------------------------------------------------
 INSERT INTO PrestadorServico (Observacao, CNPJ, Pessoa_Id) VALUES
 ('Enfermeira com 5 anos de experiência.', NULL, 1),
 ('Fisioterapeuta especialista em reabilitação motora.', NULL, 2),
@@ -293,7 +299,6 @@ INSERT INTO PrestadorServico_Especialidade (PrestadorServico_Id, Especialidade_I
 (10, 2, 85.00),  -- Personal trainer também fisioterapeuta
 (14, 5, 75.00),  -- Quiropraxista também psicóloga
 (18, 11, 70.00); -- Terapeuta da fala também fonoaudióloga
-
 
 -- -----------------------------------------------------
 -- Inserts para a tabela OrdemServico_PrestadorServico

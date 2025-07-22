@@ -142,6 +142,7 @@ CREATE TABLE IF NOT EXISTS `HealthGo`.`Lembrete` (
   CONSTRAINT `fk_Lembrete_Pessoa1`
     FOREIGN KEY (`Pessoa_Id`)
     REFERENCES `HealthGo`.`Pessoa` (`Id`)
+
     on delete CASCADE
     on UPDATE CASCADE)
 ENGINE = InnoDB;
@@ -228,8 +229,10 @@ CREATE TABLE IF NOT EXISTS `HealthGo`.`PrestadorServico` (
   CONSTRAINT `fk_PrestadorServico_has_Especialidade_Pessoa1`
     FOREIGN KEY (`Pessoa_Id`)
     REFERENCES `HealthGo`.`Pessoa` (`Id`)
+
     on delete CASCADE
     on UPDATE CASCADE)
+
 ENGINE = InnoDB;
 
 
@@ -327,6 +330,7 @@ CREATE TABLE IF NOT EXISTS `HealthGo`.`Aeroporto` (
     REFERENCES `HealthGo`.`Cidade` (`Id`)
     on delete CASCADE
     on UPDATE CASCADE)
+
 ENGINE = InnoDB;
 
 
@@ -558,6 +562,7 @@ CREATE TABLE IF NOT EXISTS `HealthGo`.`TokenRecuperacaoSenha` (
   CONSTRAINT `fk_TokenRecuperacaoSenha_Pessoa1`
     FOREIGN KEY (`Pessoa_Id`)
     REFERENCES `HealthGo`.`Pessoa` (`Id`)
+
     on delete CASCADE
     on UPDATE CASCADE)
 ENGINE = InnoDB;
@@ -565,4 +570,5 @@ ENGINE = InnoDB;
 
 SET SQL_MODE=@OLD_SQL_MODE;
 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
+
 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;
