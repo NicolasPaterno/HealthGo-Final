@@ -112,7 +112,7 @@ namespace API_HealthGo
             builder.Services.AddScoped<IEstadoRepository, EstadoRepository>();
 
             builder.Services.AddScoped<IHotelService, HotelService>();
-            builder.Services.AddScoped<IHotelRepository, HotelRepository>(); //falta fazer o Service e Repository
+            builder.Services.AddScoped<IHotelRepository, HotelRepository>();
 
             builder.Services.AddScoped<IImagemService, ImagemService>();
             builder.Services.AddScoped<IImagemRepository, ImagemRepository>();
