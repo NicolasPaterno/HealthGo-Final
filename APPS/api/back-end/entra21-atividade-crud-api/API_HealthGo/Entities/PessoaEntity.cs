@@ -29,5 +29,7 @@
         public string NumeroEndereco { get; set; }
         
         public int Cidade_Id { get; set; }
+
+        public UserRole Role { get; set; } 
     }
 }
