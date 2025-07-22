@@ -74,6 +74,11 @@ namespace API_HealthGo
             builder.Services.AddScoped<IAuthService, AuthService>();
             builder.Services.AddScoped<IEmailService, EmailService>();
 
+            //prestador serviço
+            builder.Services.AddScoped<IPrestadorServicoRepository, PrestadorServicoRepository>();
+            builder.Services.AddScoped<IPrestadorServicoService, PrestadorServicoService>();
+
+
             builder.Services.AddHttpClient();
             builder.Services.AddScoped<IHospitalService, HospitalService>();
 
