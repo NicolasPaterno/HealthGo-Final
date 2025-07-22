@@ -5,7 +5,7 @@ using API_HealthGo.Entities;
 using Dapper;
 using MySql.Data.MySqlClient;
 
-namespace API_HealthGo.Repository
+namespace API_HealthGo.Repository 
 {
     class OrdemServicoRepository : IOrdemServicoRepository
     {
@@ -24,6 +24,7 @@ namespace API_HealthGo.Repository
                     SELECT ID AS {nameof(OrdemServicoEntity.Id)},
                            DATACRIACAO AS {nameof(OrdemServicoEntity.DataCriacao)},
                            STATUSOS AS {nameof(OrdemServicoEntity.StatusOS)},
+                           FORMAPAGAMENTO AS {nameof(OrdemServicoEntity.FormaPagamento)},
                            PESSOA_ID AS {nameof(OrdemServicoEntity.Pessoa_Id)}
                       FROM ORDEMSERVICO
                 ";
@@ -35,8 +36,8 @@ namespace API_HealthGo.Repository
         public async Task Insert(OrdemServicoInsertDTO ordemServico)
         {
             string sql = @$"
-                INSERT INTO ORDEMSERVICO (DATACRIACAO, STATUSOS, PESSOA_ID)
-                             VALUES (@DataCriacao, @StatusOS, @Pessoa_Id)
+                INSERT INTO ORDEMSERVICO (DATACRIACAO, STATUSOS, FORMAPAGAMENTO, PESSOA_ID)
+                             VALUES (@DataCriacao, @StatusOS, @FormaPagamento, @Pessoa_Id)
             ";
             await _connection.Execute(sql, ordemServico);
         }
@@ -55,6 +56,7 @@ namespace API_HealthGo.Repository
                     SELECT ID AS {nameof(OrdemServicoEntity.Id)},
                            DATACRIACAO AS {nameof(OrdemServicoEntity.DataCriacao)},
                            STATUSOS AS {nameof(OrdemServicoEntity.StatusOS)},
+                           FORMAPAGAMENTO AS {nameof(OrdemServicoEntity.FormaPagamento)},
                            PESSOA_ID AS {nameof(OrdemServicoEntity.Pessoa_Id)}
                       FROM ORDEMSERVICO
                      WHERE ID = @id
@@ -70,6 +72,7 @@ namespace API_HealthGo.Repository
                 UPDATE ORDEMSERVICO
                    SET DATACRIACAO = @DataCriacao,
                        STATUSOS = @StatusOS,
+                       FORMAPAGAMENTO = @FormaPagamento,
                        PESSOA_ID = @Pessoa_Id
                  WHERE ID = @Id;
             ";

@@ -6,6 +6,8 @@
 
         public string StatusOS { get; set; }
 
+        public string FormaPagamento { get; set; }
+
         public int Pessoa_Id { get; set; }
     }
 }

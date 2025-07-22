@@ -8,6 +8,8 @@
 
         public string StatusOS { get; set; } // ENUM('Concluído', 'Em andamento', 'Cancelado')
 
+        public string FormaPagamento { get; set; }
+
         public int Pessoa_Id { get; set; }
     }
 }
