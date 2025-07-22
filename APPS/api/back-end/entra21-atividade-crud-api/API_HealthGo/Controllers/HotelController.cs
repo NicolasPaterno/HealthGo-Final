@@ -2,12 +2,14 @@
 using API_HealthGo.DTO;
 using API_HealthGo.Entities;
 using API_HealthGo.Responses;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace API_HealthGo.Controllers
 {
     [ApiController]
     [Route("[controller]")]
+    [AllowAnonymous]
     public class HotelController : ControllerBase
     {
         private IHotelService _service;
@@ -45,6 +47,12 @@ namespace API_HealthGo.Controllers
         public async Task<ActionResult<MessageResponse>> Update(HotelEntity hotel)
         {
             return Ok(await _service.Update(hotel));
+        }
+
+        [HttpGet("byContaGerencia/{contaGerenciaId}")]
+        public async Task<ActionResult<HotelGetAllResponse>> GetByContaGerenciaId(int contaGerenciaId)
+        {
+            return Ok(await _service.GetHotelsByContaGerenciaId(contaGerenciaId));
         }
     }
 }

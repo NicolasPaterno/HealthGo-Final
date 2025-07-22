@@ -1,6 +1,6 @@
 ﻿namespace API_HealthGo.DTO
 {
-    public class HotelInsertDTO
+    public class HotelCardDto
     {
         public string CNPJ { get; set; }
 

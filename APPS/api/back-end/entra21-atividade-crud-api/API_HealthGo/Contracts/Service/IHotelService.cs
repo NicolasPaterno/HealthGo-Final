@@ -15,5 +15,7 @@ namespace API_HealthGo.Contracts.Service
         Task<MessageResponse> Update(HotelEntity hotel);
 
         Task<MessageResponse> Delete(int id);
+
+        Task<IEnumerable<HotelEntity>> GetHotelsByContaGerenciaId(int contaGerenciaId);
     }
 }

@@ -1,5 +1,6 @@
 using API_HealthGo.Contracts.Infrastructure;
 using API_HealthGo.Contracts.Repositories;
+using API_HealthGo.Contracts.Repository;
 using API_HealthGo.Contracts.Service;
 using API_HealthGo.Infrastructure;
 using API_HealthGo.Repositories;
@@ -27,7 +28,12 @@ namespace API_HealthGo
                 options.AddPolicy(name: MyAllowAllOrigins,
                                   policy =>
                                   {
+<<<<<<< HEAD
                                       policy.AllowAnyOrigin()
+=======
+                                      // Adicione a URL do seu frontend React
+                                      policy.WithOrigins("http://localhost:5173", "https://localhost:5173")
+>>>>>>> f020c72ff248e5ceee0884d496d899983b039e0e
                                             .AllowAnyHeader()
                                             .AllowAnyMethod();
                                   });
@@ -80,6 +86,9 @@ namespace API_HealthGo
             builder.Services.AddScoped<IPessoaService, PessoaService>();
             builder.Services.AddTransient<IPessoaRepository, PessoaRepository>();
 
+            builder.Services.AddScoped<IPrestadorServicoService, PrestadorServicoService>();
+            builder.Services.AddTransient<IPrestadorServicoRepository, PrestadorServicoRepository>();
+
             builder.Services.AddScoped<ILembreteService, LembreteService>();
             builder.Services.AddTransient<ILembreteRepository, LembreteRepository>();
 
@@ -88,6 +97,12 @@ namespace API_HealthGo
 
             builder.Services.AddScoped<IAssentoService, AssentoService>();
             builder.Services.AddTransient<IAssentoRepository, AssentoRepository>();
+
+            builder.Services.AddScoped<IHotelService, HotelService>();
+            builder.Services.AddTransient<IHotelRepository, HotelRepository>();
+
+            builder.Services.AddScoped<IContaGerenciaService, ContaGerenciaService>();
+            builder.Services.AddTransient<IContaGerenciaRepository, ContaGerenciaRepository>();
 
             builder.Services.AddScoped<IAviaoService, AviaoService>();
             builder.Services.AddTransient<IAviaoRepository, AviaoRepository>();

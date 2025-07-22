@@ -9,6 +9,9 @@ import { CartProvider } from "./context/CartContext";
 import { CartSidebar } from "./components/cart-sidebar";
 import { ProtectedRoute } from "./components/protected-route"; // 1. Importe a rota protegida
 import { RoleProtectedRoute } from "./components/role-protected-route";
+import LandingPage from "./components/landing-page";
+import WorkWithUsPage from "./components/work-with-us-page";
+import HotelOwnerRegisterForm from "./components/hotel-owner-register-form";
 
 // Seus componentes lazy-loaded permanecem os mesmos
 const LoginPage = lazy(() => import("./app/login/LoginPage"));
@@ -20,13 +23,19 @@ const DashboardContent = lazy(() => import("./app/dashboard/DashboardContent"));
 const SettingsPage = lazy(() => import("./app/settings/SettingsPage"));
 const HotelsPage = lazy(() => import("./app/hotels/HotelsPage"));
 const TicketsPage = lazy(() => import("./app/tickets/TicketsPage"));
-const PsychologistPage = lazy(() => import("./app/psychologists/PsychologistPage"));
+const PsychologistPage = lazy(
+  () => import("./app/psychologists/PsychologistPage")
+);
 const CaregiversPage = lazy(() => import("./app/caregivers/CaregiversPage"));
 const CalendarPage = lazy(() => import("./app/calendar/CalendarPage"));
 const HospitalsPage = lazy(() => import("./app/hospitals/HospitalsPage"));
 const PurchaseHistoryPage = lazy(() => import("./app/history/PurchaseHistoryPage"));
 const DashboardGerentePage = lazy(() => import("./app/dashboard/DashboardGerentePage"));
 const DashboardGerenteContent = lazy(() => import("./app/dashboard/DashboardGerenteContent"));
+const HotelRegisterPage = lazy(() => import("./app/hotels/HotelRegisterPage"));
+const HotelsListPage = lazy(() => import("./app/hotels/HotelsListPage"));
+const HotelProfilePage = lazy(() => import("./app/hotels/HotelProfilePage"));
+const HotelEditPage = lazy(() => import("./app/hotels/HotelEditPage"));
 
 function App() {
   return (
@@ -34,11 +43,15 @@ function App() {
       <CartProvider>
         <Suspense fallback={<LoadingSpinner />}>
           <Routes>
-
             <Route path="/login" element={<LoginPage />} />
             <Route path="/esqueci-senha" element={<ForgotPasswordPage />} />
             <Route path="/redefinir-senha/:token" element={<ResetPasswordPage />} />
             <Route path="/register" element={<RegisterPage />} />
+            <Route path="/work-with-us" element={<WorkWithUsPage />} />
+            <Route
+              path="/work-with-us/hotel-register"
+              element={<HotelOwnerRegisterForm />}
+            />
 
             <Route element={<ProtectedRoute />}>
               <Route element={<RoleProtectedRoute allowedRoles={["Consumidor"]} />}>

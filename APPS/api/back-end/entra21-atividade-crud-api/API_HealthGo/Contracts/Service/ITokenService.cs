@@ -4,6 +4,6 @@ namespace API_HealthGo.Contracts.Service
 {
     public interface ITokenService
     {
-        string GenerateToken(PessoaEntity pessoa);
+        string GenerateToken(int userId, string userEmail, string userRole);
     }
 }

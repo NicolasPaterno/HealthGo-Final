@@ -1,4 +1,4 @@
-import * as React from "react"
+import * as React from "react";
 import {
   Building,
   CalendarClock,
@@ -14,12 +14,13 @@ import {
   Settings,
   Users,
   Hospital,
+  LayoutDashboardIcon,
 } from "lucide-react"
 
-import { NavDocuments } from "@/components/nav-documents"
-import { NavMain } from "@/components/nav-main"
-import { NavSecondary } from "@/components/nav-secondary"
-import { NavUser } from "@/components/nav-user"
+import { NavDocuments } from "@/components/nav-documents";
+import { NavMain } from "@/components/nav-main";
+import { NavSecondary } from "@/components/nav-secondary";
+import { NavUser } from "@/components/nav-user";
 import {
   Sidebar,
   SidebarContent,
@@ -156,7 +157,25 @@ const data = {
       icon: FileText,
     },
   ],
-}
+};
+
+const navMainHotelOwner = [
+  {
+    title: "Dashboard",
+    url: "/dashboard",
+    icon: LayoutDashboardIcon,
+  },
+  {
+    title: "Cadastrar Hotel",
+    url: "/dashboard/hotels/register",
+    icon: Building,
+  },
+  {
+    title: "Listar Hotéis",
+    url: "/dashboard/hotels/list",
+    icon: Building,
+  },
+];
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   const location = useLocation();
@@ -174,23 +193,38 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
                 <Heart className="!size-7" />
                 <span className="text-base font-semibold">HealthGo</span>
               </Link>
-
             </SidebarMenuButton>
           </SidebarMenuItem>
         </SidebarMenu>
       </SidebarHeader>
       <SidebarContent>
+<<<<<<< HEAD
         {/* A LINHA ABAIXO FOI ALTERADA */}
         <NavMain items={data.navMain} pathname={location.pathname} />
         {/* A LINHA ABAIXO FOI ALTERADA */}
         <NavDocuments items={data.documents} pathname={location.pathname}/>
         {/* A LINHA ABAIXO FOI ALTERADA */}
         <NavSecondary items={data.navSecondary} pathname={location.pathname} className="mt-auto" />
+=======
+        <NavMain
+          items={
+            userType === "contagerencia" ? navMainHotelOwner : data.navMain
+          }
+        />
+        {userType !== "contagerencia" && (
+          <NavDocuments items={data.documents} />
+        )}
+        <NavSecondary items={data.navSecondary} className="mt-auto" />
+>>>>>>> f020c72ff248e5ceee0884d496d899983b039e0e
       </SidebarContent>
       <SidebarFooter>
         {/* A LINHA ABAIXO FOI ALTERADA */}
         <NavUser />
       </SidebarFooter>
     </Sidebar>
+<<<<<<< HEAD
   )
+=======
+  );
+>>>>>>> f020c72ff248e5ceee0884d496d899983b039e0e
 }
