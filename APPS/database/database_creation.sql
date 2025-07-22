@@ -40,7 +40,7 @@ CREATE TABLE IF NOT EXISTS `HealthGo`.`Cidade` (
   CONSTRAINT `fk_Cidade_Estado1`
     FOREIGN KEY (`Estado_Id`)
     REFERENCES `HealthGo`.`Estado` (`Id`)
-    ON DELETE NO ACTION
+    ON DELETE CASCADE
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
@@ -62,6 +62,7 @@ CREATE TABLE IF NOT EXISTS `HealthGo`.`Pessoa` (
   `Bairro` VARCHAR(255) NOT NULL,
   `Rua` VARCHAR(255) NOT NULL,
   `NumeroEndereco` VARCHAR(255) NOT NULL,
+  `ROLE` VARCHAR(20) NOT NULL DEFAULT 'Consumidor',
   `Cidade_Id` INT NOT NULL,
   PRIMARY KEY (`Id`),
   INDEX `fk_Pessoa_Cidade1_idx` (`Cidade_Id` ASC) VISIBLE,
@@ -70,7 +71,7 @@ CREATE TABLE IF NOT EXISTS `HealthGo`.`Pessoa` (
   CONSTRAINT `fk_Pessoa_Cidade1`
     FOREIGN KEY (`Cidade_Id`)
     REFERENCES `HealthGo`.`Cidade` (`Id`)
-    ON DELETE NO ACTION
+    ON DELETE CASCADE
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
@@ -117,12 +118,12 @@ CREATE TABLE IF NOT EXISTS `HealthGo`.`Hotel` (
   CONSTRAINT `fk_Hotel_Cidade1`
     FOREIGN KEY (`Cidade_Id`)
     REFERENCES `HealthGo`.`Cidade` (`Id`)
-    ON DELETE NO ACTION
+    ON DELETE CASCADE
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_Hotel_ContaGerencia1`
     FOREIGN KEY (`ContaGerencia_Id`)
     REFERENCES `HealthGo`.`ContaGerencia` (`Id`)
-    ON DELETE NO ACTION
+    ON DELETE CASCADE
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
@@ -132,7 +133,7 @@ ENGINE = InnoDB;
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `HealthGo`.`Lembrete` (
   `Id` INT NOT NULL AUTO_INCREMENT,
-  `Titulo` VARCHAR(45) NOT NULL,
+  `Titulo` VARCHAR(80) NOT NULL,
   `Data` DATETIME NOT NULL,
   `Tipo` ENUM('Remédio', 'Consulta', 'Outro') NOT NULL,
   `Pessoa_Id` INT NOT NULL,
@@ -141,7 +142,7 @@ CREATE TABLE IF NOT EXISTS `HealthGo`.`Lembrete` (
   CONSTRAINT `fk_Lembrete_Pessoa1`
     FOREIGN KEY (`Pessoa_Id`)
     REFERENCES `HealthGo`.`Pessoa` (`Id`)
-    ON DELETE NO ACTION
+    ON DELETE CASCADE
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
@@ -163,7 +164,7 @@ CREATE TABLE IF NOT EXISTS `HealthGo`.`Quarto` (
   CONSTRAINT `fk_Quarto_Hotel1`
     FOREIGN KEY (`Hotel_Id`)
     REFERENCES `HealthGo`.`Hotel` (`Id`)
-    ON DELETE NO ACTION
+    ON DELETE CASCADE
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
@@ -182,7 +183,7 @@ CREATE TABLE IF NOT EXISTS `HealthGo`.`OrdemServico` (
   CONSTRAINT `fk_OrdemServico_Pessoa1`
     FOREIGN KEY (`Pessoa_Id`)
     REFERENCES `HealthGo`.`Pessoa` (`Id`)
-    ON DELETE NO ACTION
+    ON DELETE CASCADE
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
@@ -204,12 +205,12 @@ CREATE TABLE IF NOT EXISTS `HealthGo`.`OrdemServico_Hotel` (
   CONSTRAINT `fk_OrdemServico_Quarto1`
     FOREIGN KEY (`Quarto_Id`)
     REFERENCES `HealthGo`.`Quarto` (`Id`)
-    ON DELETE NO ACTION
+    ON DELETE CASCADE
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_OrdemServico_Hotel_OrdemServico1`
     FOREIGN KEY (`OrdemServico_Id`)
     REFERENCES `HealthGo`.`OrdemServico` (`Id`)
-    ON DELETE NO ACTION
+    ON DELETE CASCADE
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
@@ -228,7 +229,7 @@ CREATE TABLE IF NOT EXISTS `HealthGo`.`PrestadorServico` (
   CONSTRAINT `fk_PrestadorServico_has_Especialidade_Pessoa1`
     FOREIGN KEY (`Pessoa_Id`)
     REFERENCES `HealthGo`.`Pessoa` (`Id`)
-    ON DELETE NO ACTION
+    ON DELETE CASCADE
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
@@ -256,12 +257,12 @@ CREATE TABLE IF NOT EXISTS `HealthGo`.`PrestadorServico_Especialidade` (
   CONSTRAINT `fk_PrestadorServico_has_Especialidade_PrestadorServico1`
     FOREIGN KEY (`PrestadorServico_Id`)
     REFERENCES `HealthGo`.`PrestadorServico` (`Id`)
-    ON DELETE NO ACTION
+    ON DELETE CASCADE
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_PrestadorServico_has_Especialidade_Especialidade1`
     FOREIGN KEY (`Especialidade_Id`)
     REFERENCES `HealthGo`.`Especialidade` (`Id`)
-    ON DELETE NO ACTION
+    ON DELETE CASCADE
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
@@ -283,12 +284,12 @@ CREATE TABLE IF NOT EXISTS `HealthGo`.`OrdemServico_PrestadorServico` (
   CONSTRAINT `fk_OrdemServico_PrestadorServico_OrdemServico1`
     FOREIGN KEY (`OrdemServico_Id`)
     REFERENCES `HealthGo`.`OrdemServico` (`Id`)
-    ON DELETE NO ACTION
+    ON DELETE CASCADE
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_OrdemServico_PrestadorServico_PrestadorServico_Especialida1`
     FOREIGN KEY (`PrestadorServico_Especialidade_PrestadorServico_Id` , `PrestadorServico_Especialidade_Especialidade_Id`)
     REFERENCES `HealthGo`.`PrestadorServico_Especialidade` (`PrestadorServico_Id` , `Especialidade_Id`)
-    ON DELETE NO ACTION
+    ON DELETE CASCADE
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
@@ -306,7 +307,7 @@ CREATE TABLE IF NOT EXISTS `HealthGo`.`CamaQuarto` (
   CONSTRAINT `fk_Cama_has_Quarto_Quarto1`
     FOREIGN KEY (`Quarto_Id`)
     REFERENCES `HealthGo`.`Quarto` (`Id`)
-    ON DELETE NO ACTION
+    ON DELETE CASCADE
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
@@ -325,7 +326,7 @@ CREATE TABLE IF NOT EXISTS `HealthGo`.`Aeroporto` (
   CONSTRAINT `fk_Aeroporto_Cidade1`
     FOREIGN KEY (`Cidade_Id`)
     REFERENCES `HealthGo`.`Cidade` (`Id`)
-    ON DELETE NO ACTION
+    ON DELETE CASCADE
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
@@ -359,7 +360,7 @@ CREATE TABLE IF NOT EXISTS `HealthGo`.`Assento` (
   CONSTRAINT `fk_Assento_Aviao1`
     FOREIGN KEY (`Aviao_Id`)
     REFERENCES `HealthGo`.`Aviao` (`Id`)
-    ON DELETE NO ACTION
+    ON DELETE CASCADE
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
@@ -382,17 +383,17 @@ CREATE TABLE IF NOT EXISTS `HealthGo`.`Voo` (
   CONSTRAINT `fk_Voo_Aeroporto1`
     FOREIGN KEY (`Origem_Id`)
     REFERENCES `HealthGo`.`Aeroporto` (`Id`)
-    ON DELETE NO ACTION
+    ON DELETE CASCADE
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_Voo_Aeroporto2`
     FOREIGN KEY (`Destino_Id`)
     REFERENCES `HealthGo`.`Aeroporto` (`Id`)
-    ON DELETE NO ACTION
+    ON DELETE CASCADE
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_Voo_Aviao1`
     FOREIGN KEY (`Aviao_Id`)
     REFERENCES `HealthGo`.`Aviao` (`Id`)
-    ON DELETE NO ACTION
+    ON DELETE CASCADE
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
@@ -413,17 +414,17 @@ CREATE TABLE IF NOT EXISTS `HealthGo`.`Passagem` (
   CONSTRAINT `fk_Passagem_Assento1`
     FOREIGN KEY (`Assento_Id`)
     REFERENCES `HealthGo`.`Assento` (`Id`)
-    ON DELETE NO ACTION
+    ON DELETE CASCADE
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_Passagem_Voo1`
     FOREIGN KEY (`Voo_Id`)
     REFERENCES `HealthGo`.`Voo` (`Id`)
-    ON DELETE NO ACTION
+    ON DELETE CASCADE
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_Passagem_OrdemServico1`
     FOREIGN KEY (`OrdemServico_Id`)
     REFERENCES `HealthGo`.`OrdemServico` (`Id`)
-    ON DELETE NO ACTION
+    ON DELETE CASCADE
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
@@ -452,7 +453,7 @@ CREATE TABLE IF NOT EXISTS `HealthGo`.`Avaliacao` (
   CONSTRAINT `fk_Avaliacao_Pessoa1`
     FOREIGN KEY (`Pessoa_Id`)
     REFERENCES `HealthGo`.`Pessoa` (`Id`)
-    ON DELETE NO ACTION
+    ON DELETE CASCADE
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
@@ -469,12 +470,12 @@ CREATE TABLE IF NOT EXISTS `HealthGo`.`Avaliacao_Servico` (
   CONSTRAINT `fk_Avaliacao_has_PrestadorServico_Avaliacao1`
     FOREIGN KEY (`Avaliacao_Id`)
     REFERENCES `HealthGo`.`Avaliacao` (`Id`)
-    ON DELETE NO ACTION
+    ON DELETE CASCADE
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_Avaliacao_has_PrestadorServico_PrestadorServico1`
     FOREIGN KEY (`PrestadorServico_Id`)
     REFERENCES `HealthGo`.`PrestadorServico` (`Id`)
-    ON DELETE NO ACTION
+    ON DELETE CASCADE
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
@@ -491,12 +492,12 @@ CREATE TABLE IF NOT EXISTS `HealthGo`.`Hotel_Avaliacao` (
   CONSTRAINT `fk_Hotel_has_Avaliacao_Hotel1`
     FOREIGN KEY (`Hotel_Id`)
     REFERENCES `HealthGo`.`Hotel` (`Id`)
-    ON DELETE NO ACTION
+    ON DELETE CASCADE
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_Hotel_has_Avaliacao_Avaliacao1`
     FOREIGN KEY (`Avaliacao_Id`)
     REFERENCES `HealthGo`.`Avaliacao` (`Id`)
-    ON DELETE NO ACTION
+    ON DELETE CASCADE
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
@@ -513,12 +514,12 @@ CREATE TABLE IF NOT EXISTS `HealthGo`.`Imagem_Quarto` (
   CONSTRAINT `fk_Imagens_has_Quarto_Imagens1`
     FOREIGN KEY (`Imagem_Id`)
     REFERENCES `HealthGo`.`Imagem` (`Id`)
-    ON DELETE NO ACTION
+    ON DELETE CASCADE
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_Imagens_has_Quarto_Quarto1`
     FOREIGN KEY (`Quarto_Id`)
     REFERENCES `HealthGo`.`Quarto` (`Id`)
-    ON DELETE NO ACTION
+    ON DELETE CASCADE
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
@@ -535,12 +536,12 @@ CREATE TABLE IF NOT EXISTS `HealthGo`.`Imagem_Hotel` (
   CONSTRAINT `fk_Imagens_has_Hotel_Imagens1`
     FOREIGN KEY (`Imagem_Id`)
     REFERENCES `HealthGo`.`Imagem` (`Id`)
-    ON DELETE NO ACTION
+    ON DELETE CASCADE
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_Imagens_has_Hotel_Hotel1`
     FOREIGN KEY (`Hotel_Id`)
     REFERENCES `HealthGo`.`Hotel` (`Id`)
-    ON DELETE NO ACTION
+    ON DELETE CASCADE
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
@@ -552,14 +553,13 @@ CREATE TABLE IF NOT EXISTS `HealthGo`.`TokenRecuperacaoSenha` (
   `Id` INT NOT NULL AUTO_INCREMENT,
   `Token` VARCHAR(255) NOT NULL,
   `DataExpiracao` DATETIME NOT NULL,
-  `FoiUsado` TINYINT NOT NULL DEFAULT 0,
   `Pessoa_Id` INT NOT NULL,
   PRIMARY KEY (`Id`),
   INDEX `fk_TokenRecuperacaoSenha_Pessoa1_idx` (`Pessoa_Id` ASC) VISIBLE,
   CONSTRAINT `fk_TokenRecuperacaoSenha_Pessoa1`
     FOREIGN KEY (`Pessoa_Id`)
     REFERENCES `HealthGo`.`Pessoa` (`Id`)
-    ON DELETE NO ACTION
+    ON DELETE CASCADE
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
