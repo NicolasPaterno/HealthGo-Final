@@ -222,7 +222,6 @@ CREATE TABLE IF NOT EXISTS `HealthGo`.`PrestadorServico` (
   `Id` INT NOT NULL AUTO_INCREMENT,
   `Observacao` VARCHAR(255) NULL,
   `CNPJ` VARCHAR(45) NULL,
-  `Ativo` TINYINT(1) NULL DEFAULT 1,
   `Pessoa_Id` INT NOT NULL,
   PRIMARY KEY (`Id`),
   INDEX `fk_PrestadorServico_has_Especialidade_Pessoa1_idx` (`Pessoa_Id` ASC) VISIBLE,

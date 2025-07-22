@@ -10,53 +10,17 @@ USE HealthGo;
 
 SET FOREIGN_KEY_CHECKS = 0;
 
--- -----------------------------------------------------
--- Inserts para a tabela Nacao
--- -----------------------------------------------------
-INSERT INTO Nacao (Nome) VALUES ('Brasil');
-INSERT INTO Nacao (Nome) VALUES ('Estados Unidos');
-INSERT INTO Nacao (Nome) VALUES ('Canadá');
-INSERT INTO Nacao (Nome) VALUES ('Alemanha');
-INSERT INTO Nacao (Nome) VALUES ('França');
-INSERT INTO Nacao (Nome) VALUES ('Japão');
-INSERT INTO Nacao (Nome) VALUES ('Austrália');
-INSERT INTO Nacao (Nome) VALUES ('Reino Unido');
-INSERT INTO Nacao (Nome) VALUES ('Argentina');
-INSERT INTO Nacao (Nome) VALUES ('Portugal');
-INSERT INTO Nacao (Nome) VALUES ('Espanha');
-INSERT INTO Nacao (Nome) VALUES ('Itália');
-INSERT INTO Nacao (Nome) VALUES ('México');
-INSERT INTO Nacao (Nome) VALUES ('China');
-INSERT INTO Nacao (Nome) VALUES ('Índia');
-INSERT INTO Nacao (Nome) VALUES ('África do Sul');
-INSERT INTO Nacao (Nome) VALUES ('Nova Zelândia');
-INSERT INTO Nacao (Nome) VALUES ('Suécia');
-INSERT INTO Nacao (Nome) VALUES ('Noruega');
-INSERT INTO Nacao (Nome) VALUES ('Finlândia');
+INSERT INTO Estado (Nome, Sigla) VALUES ('Santa Catarina', 'SC');
+INSERT INTO Estado (Nome, Sigla) VALUES ('São Paulo', 'SP');
+INSERT INTO Estado (Nome, Sigla) VALUES ('Rio de Janeiro', 'RJ');
+INSERT INTO Estado (Nome, Sigla) VALUES ('Minas Gerais', 'MG');
+INSERT INTO Estado (Nome, Sigla) VALUES ('Paraná', 'PR');
+INSERT INTO Estado (Nome, Sigla) VALUES ('Rio Grande do Sul', 'RS');
+INSERT INTO Estado (Nome, Sigla) VALUES ('Bahia', 'BA');
+INSERT INTO Estado (Nome, Sigla) VALUES ('Pernambuco', 'PE');
+INSERT INTO Estado (Nome, Sigla) VALUES ('Ceará', 'CE');
+INSERT INTO Estado (Nome, Sigla) VALUES ('Goiás', 'GO');
 
--- -----------------------------------------------------
--- Inserts para a tabela Estado
--- -----------------------------------------------------
-INSERT INTO Estado (Nome, Sigla, Nacao_Id) VALUES ('Santa Catarina', 'SC', 1);
-INSERT INTO Estado (Nome, Sigla, Nacao_Id) VALUES ('São Paulo', 'SP', 1);
-INSERT INTO Estado (Nome, Sigla, Nacao_Id) VALUES ('Rio de Janeiro', 'RJ', 1);
-INSERT INTO Estado (Nome, Sigla, Nacao_Id) VALUES ('Minas Gerais', 'MG', 1);
-INSERT INTO Estado (Nome, Sigla, Nacao_Id) VALUES ('Paraná', 'PR', 1);
-INSERT INTO Estado (Nome, Sigla, Nacao_Id) VALUES ('Rio Grande do Sul', 'RS', 1);
-INSERT INTO Estado (Nome, Sigla, Nacao_Id) VALUES ('Bahia', 'BA', 1);
-INSERT INTO Estado (Nome, Sigla, Nacao_Id) VALUES ('Pernambuco', 'PE', 1);
-INSERT INTO Estado (Nome, Sigla, Nacao_Id) VALUES ('Ceará', 'CE', 1);
-INSERT INTO Estado (Nome, Sigla, Nacao_Id) VALUES ('Goiás', 'GO', 1);
-INSERT INTO Estado (Nome, Sigla, Nacao_Id) VALUES ('Califórnia', 'CA', 2);
-INSERT INTO Estado (Nome, Sigla, Nacao_Id) VALUES ('Nova Iorque', 'NY', 2);
-INSERT INTO Estado (Nome, Sigla, Nacao_Id) VALUES ('Flórida', 'FL', 2);
-INSERT INTO Estado (Nome, Sigla, Nacao_Id) VALUES ('Texas', 'TX', 2);
-INSERT INTO Estado (Nome, Sigla, Nacao_Id) VALUES ('Ontário', 'ON', 3);
-INSERT INTO Estado (Nome, Sigla, Nacao_Id) VALUES ('Quebec', 'QC', 3);
-INSERT INTO Estado (Nome, Sigla, Nacao_Id) VALUES ('Baviera', 'BY', 4);
-INSERT INTO Estado (Nome, Sigla, Nacao_Id) VALUES ('Brandemburgo', 'BB', 4);
-INSERT INTO Estado (Nome, Sigla, Nacao_Id) VALUES ('Île-de-France', 'IDF', 5);
-INSERT INTO Estado (Nome, Sigla, Nacao_Id) VALUES ('Occitânia', 'OCC', 5);
 
 -- -----------------------------------------------------
 -- Inserts para a tabela Cidade
@@ -108,29 +72,55 @@ INSERT INTO Pessoa (Nome, DataNascimento, CPF, Telefone, Email, Senha, EnderecoF
 ('Emily Brown', '1994-08-12', '012.345.678-90', '4072345678', 'emily.brown@email.com', 'senha1010', 'foto20.jpg', 1, '32801', 'Downtown', 'Church Street', '789', 20);
 
 -- -----------------------------------------------------
+-- Inserts para a tabela ContaGerencia
+-- -----------------------------------------------------
+INSERT INTO HealthGo.ContaGerencia (Id, Nome, Email, Senha, CNPJ) VALUES
+(1, 'Gestor Paradiso', 'gestor1@hotel.com', 'senha123', '00.000.000/0001-00'),
+(2, 'Gestor Encanto', 'gestor2@hotel.com', 'senha123', '01.000.000/0001-01'),
+(3, 'Gestor Aventura', 'gestor3@hotel.com', 'senha123', '02.000.000/0001-02'),
+(4, 'Gestor Moderno', 'gestor4@hotel.com', 'senha123', '03.000.000/0001-03'),
+(5, 'Gestor Conforto', 'gestor5@hotel.com', 'senha123', '04.000.000/0001-04'),
+(6, 'Gestor Colonial', 'gestor6@hotel.com', 'senha123', '05.000.000/0001-05'),
+(7, 'Gestor Vista Mar', 'gestor7@hotel.com', 'senha123', '06.000.000/0001-06'),
+(8, 'Gestor Verde', 'gestor8@hotel.com', 'senha123', '07.000.000/0001-07'),
+(9, 'Gestor Executivo', 'gestor9@hotel.com', 'senha123', '08.000.000/0001-08'),
+(10, 'Gestor Urbano', 'gestor10@hotel.com', 'senha123', '09.000.000/0001-09'),
+(11, 'Gestor Sol Nascente', 'gestor11@hotel.com', 'senha123', '10.000.000/0001-10'),
+(12, 'Gestor da Serra', 'gestor12@hotel.com', 'senha123', '11.000.000/0001-11'),
+(13, 'Gestor Charme', 'gestor13@hotel.com', 'senha123', '12.000.000/0001-12'),
+(14, 'Gestor Praia', 'gestor14@hotel.com', 'senha123', '13.000.000/0001-13'),
+(15, 'Gestor Central', 'gestor15@hotel.com', 'senha123', '14.000.000/0001-14'),
+(16, 'Gestor Doce Lar', 'gestor16@hotel.com', 'senha123', '15.000.000/0001-15'),
+(17, 'Gestor Conexão', 'gestor17@hotel.com', 'senha123', '16.000.000/0001-16'),
+(18, 'Gestor Luxury', 'gestor18@hotel.com', 'senha123', '17.000.000/0001-17'),
+(19, 'Gestor Times Square', 'gestor19@hotel.com', 'senha123', '18.000.000/0001-18'),
+(20, 'Gestor Magic Resort', 'gestor20@hotel.com', 'senha123', '19.000.000/0001-19');
+
+
+-- -----------------------------------------------------
 -- Inserts para a tabela Hotel
 -- -----------------------------------------------------
-INSERT INTO Hotel (CNPJ, Nome, Tipo, Email, Senha, Telefone, Site, Acessibilidade, CEP, Bairro, Rua, NumeroEndereco, Descricao, Ativo, Cidade_Id) VALUES
-('00.000.000/0001-00', 'Hotel Paradiso', 'Hotel', 'paradiso@email.com', '123', '4733331111', 'www.hotelparadiso.com', 'Rampas, Elevadores, Quartos adaptados', '89010-000', 'Centro', 'Rua Sete de Setembro', '100', 'Um hotel luxuoso com vista para o rio.', 1, 1),
-('01.000.000/0001-01', 'Pousada Encanto', 'Pousada', 'encanto@email.com', '123', '4734342222', 'www.pousadaencanto.com', 'Cadeiras de rodas disponíveis', '89020-000', 'Vila Nova', 'Rua XV de Outubro', '200', 'Aconchegante pousada familiar.', 1, 2),
-('02.000.000/0001-02', 'Hostel Aventura', 'Hostel', 'aventura@email.com', '123', '4832323333', 'www.hostelaventura.com', 'Banheiros adaptados', '88030-000', 'Lagoa', 'Rua das Flores', '300', 'Ideal para viajantes e mochileiros.', 1, 3),
-('03.000.000/0001-03', 'Hotel Moderno', 'Hotel', 'moderno@email.com', '123', '1130304444', 'www.hotelmoderno.com', 'Elevadores, Sinalização em Braille', '01300-000', 'Consolação', 'Rua Augusta', '400', 'Hotel com design arrojado e moderno.', 1, 4),
-('04.000.000/0001-04', 'Apartamento Conforto', 'Apartamento', 'conforto@email.com', '123', '1931315555', 'www.apartamentoconforto.com', 'Portas largas', '13050-000', 'Centro', 'Avenida Aquidabã', '500', 'Apartamentos completos para longa estadia.', 1, 5),
-('05.000.000/0001-05', 'Casa Colonial', 'Casa', 'colonial@email.com', '123', '2135356666', 'www.casacolonial.com', 'Acesso sem degraus', '20200-000', 'Santa Teresa', 'Rua Aprazível', '600', 'Casa histórica com charme colonial.', 1, 6),
-('06.000.000/0001-06', 'Hotel Vista Mar', 'Hotel', 'vistamar@email.com', '123', '2136367777', 'www.hotelvistamar.com', 'Corrimãos', '24200-000', 'Praia', 'Avenida Atlântica', '700', 'Quartos com vista deslumbrante para o mar.', 1, 7),
-('07.000.000/0001-07', 'Pousada Verde', 'Pousada', 'pousadaverde@email.com', '123', '3137378888', 'www.pousadaverde.com', 'Rampas de acesso', '30100-000', 'Funcionários', 'Rua Cláudio Manuel', '800', 'Ambiente tranquilo e arborizado.', 1, 8),
-('08.000.000/0001-08', 'Hotel Executivo', 'Hotel', 'executivo@email.com', '123', '3438389999', 'www.hotelexecutivo.com', 'Elevadores, Sinalização tátil', '38400-000', 'Centro', 'Avenida Afonso Pena', '900', 'Ideal para viagens a negócios.', 1, 9),
-('09.000.000/0001-09', 'Hostel Urbano', 'Hostel', 'urbano@email.com', '123', '4139390000', 'www.hostelurbano.com', 'Acesso fácil', '80000-000', 'Centro', 'Rua Cândido Lopes', '1000', 'Localização central e vibrante.', 1, 10),
-('10.000.000/0001-10', 'Hotel Sol Nascente', 'Hotel', 'solnascente@email.com', '123', '4330001111', 'www.hotelsolnascente.com', 'Quartos com barras de apoio', '86000-000', 'Aurora', 'Rua do Sol', '1100', 'Conforto e bom gosto para sua estadia.', 1, 11),
-('11.000.000/0001-11', 'Pousada da Serra', 'Pousada', 'serrana@email.com', '123', '5131112222', 'www.pousadaserra.com', 'Rampas, Vagas especiais', '90000-000', 'Centro Histórico', 'Rua da Praia', '1200', 'A tranquilidade da serra ao seu alcance.', 1, 12),
-('12.000.000/0001-12', 'Hotel Charme', 'Hotel', 'charme@email.com', '123', '5432223333', 'www.hotelcharme.com', 'Elevadores, Sinalização visual', '95000-000', 'Lourdes', 'Rua dos Plátanos', '1300', 'Com estilo único e atendimento impecável.', 1, 13),
-('13.000.000/0001-13', 'Hostel Praia', 'Hostel', 'hostelpraia@email.com', '123', '7133334444', 'www.hostelpraia.com', 'Áreas comuns acessíveis', '40100-000', 'Ondina', 'Avenida Oceânica', '1400', 'Próximo às melhores praias.', 1, 14),
-('14.000.000/0001-14', 'Hotel Central', 'Hotel', 'hotelcentral@email.com', '123', '8134445555', 'www.hotelcentral.com', 'Rampas, Portas automáticas', '50000-000', 'Boa Vista', 'Avenida Dantas Barreto', '1500', 'No coração da cidade, perto de tudo.', 1, 15),
-('15.000.000/0001-15', 'Pousada Doce Lar', 'Pousada', 'docelar@email.com', '123', '8535556666', 'www.pousadadocelar.com', 'Banheiros adaptados, Sinalização em Braille', '60100-000', 'Meireles', 'Avenida Abolição', '1600', 'Sua casa fora de casa.', 1, 16),
-('16.000.000/0001-16', 'Hotel Conexão', 'Hotel', 'conexao@email.com', '123', '6236667777', 'www.hotelconexao.com', 'Vagas de estacionamento especiais', '74000-000', 'Aeroporto', 'Avenida Anhanguera', '1700', 'Localização estratégica perto do aeroporto.', 1, 17),
-('17.000.000/0001-17', 'Luxury Suites', 'Hotel', 'luxurysuites@email.com', '123', '3101234567', 'www.luxurysuites.com', 'Wheelchair accessible rooms', '90210', 'Beverly Hills', 'Wilshire Blvd', '1800', 'Exclusive suites for discerning guests.', 1, 18),
-('18.000.000/0001-18', 'Times Square Inn', 'Hostel', 'tsinn@email.com', '123', '2129876543', 'www.timessquareinn.com', 'Elevator access', '10036', 'Midtown', 'Broadway', '1900', 'Affordable stay in the heart of NYC.', 1, 19),
-('19.000.000/0001-19', 'Magic Kingdom Resort', 'Hotel', 'mkresort@email.com', '123', '4078765432', 'www.magickingdomresort.com', 'Full accessibility features', '32830', 'Lake Buena Vista', 'World Dr', '2000', 'Family-friendly resort near attractions.', 1, 20);
+INSERT INTO Hotel (CNPJ, Nome, Tipo, Email, Telefone, Site, Acessibilidade, CEP, Bairro, Rua, NumeroEndereco, Descricao, Ativo, Cidade_Id, ContaGerencia_Id) VALUES
+('00.000.000/0001-00', 'Hotel Paradiso', 'Hotel', 'paradiso@email.com', '4733331111', 'www.hotelparadiso.com', 'Rampas, Elevadores, Quartos adaptados', '89010-000', 'Centro', 'Rua Sete de Setembro', '100', 'Um hotel luxuoso com vista para o rio.', 1, 1, 1),
+('01.000.000/0001-01', 'Pousada Encanto', 'Pousada', 'encanto@email.com', '4734342222', 'www.pousadaencanto.com', 'Cadeiras de rodas disponíveis', '89020-000', 'Vila Nova', 'Rua XV de Outubro', '200', 'Aconchegante pousada familiar.', 1, 2, 2),
+('02.000.000/0001-02', 'Hostel Aventura', 'Hostel', 'aventura@email.com', '4832323333', 'www.hostelaventura.com', 'Banheiros adaptados', '88030-000', 'Lagoa', 'Rua das Flores', '300', 'Ideal para viajantes e mochileiros.', 1, 3, 3),
+('03.000.000/0001-03', 'Hotel Moderno', 'Hotel', 'moderno@email.com', '1130304444', 'www.hotelmoderno.com', 'Elevadores, Sinalização em Braille', '01300-000', 'Consolação', 'Rua Augusta', '400', 'Hotel com design arrojado e moderno.', 1, 4, 4),
+('04.000.000/0001-04', 'Apartamento Conforto', 'Apartamento', 'conforto@email.com', '1931315555', 'www.apartamentoconforto.com', 'Portas largas', '13050-000', 'Centro', 'Avenida Aquidabã', '500', 'Apartamentos completos para longa estadia.', 1, 5, 5),
+('05.000.000/0001-05', 'Casa Colonial', 'Casa', 'colonial@email.com', '2135356666', 'www.casacolonial.com', 'Acesso sem degraus', '20200-000', 'Santa Teresa', 'Rua Aprazível', '600', 'Casa histórica com charme colonial.', 1, 6, 6),
+('06.000.000/0001-06', 'Hotel Vista Mar', 'Hotel', 'vistamar@email.com', '2136367777', 'www.hotelvistamar.com', 'Corrimãos', '24200-000', 'Praia', 'Avenida Atlântica', '700', 'Quartos com vista deslumbrante para o mar.', 1, 7, 7),
+('07.000.000/0001-07', 'Pousada Verde', 'Pousada', 'pousadaverde@email.com', '3137378888', 'www.pousadaverde.com', 'Rampas de acesso', '30100-000', 'Funcionários', 'Rua Cláudio Manuel', '800', 'Ambiente tranquilo e arborizado.', 1, 8, 8),
+('08.000.000/0001-08', 'Hotel Executivo', 'Hotel', 'executivo@email.com', '3438389999', 'www.hotelexecutivo.com', 'Elevadores, Sinalização tátil', '38400-000', 'Centro', 'Avenida Afonso Pena', '900', 'Ideal para viagens a negócios.', 1, 9, 9),
+('09.000.000/0001-09', 'Hostel Urbano', 'Hostel', 'urbano@email.com', '4139390000', 'www.hostelurbano.com', 'Acesso fácil', '80000-000', 'Centro', 'Rua Cândido Lopes', '1000', 'Localização central e vibrante.', 1, 10, 10),
+('10.000.000/0001-10', 'Hotel Sol Nascente', 'Hotel', 'solnascente@email.com', '4330001111', 'www.hotelsolnascente.com', 'Quartos com barras de apoio', '86000-000', 'Aurora', 'Rua do Sol', '1100', 'Conforto e bom gosto para sua estadia.', 1, 11, 11),
+('11.000.000/0001-11', 'Pousada da Serra', 'Pousada', 'serrana@email.com', '5131112222', 'www.pousadaserra.com', 'Rampas, Vagas especiais', '90000-000', 'Centro Histórico', 'Rua da Praia', '1200', 'A tranquilidade da serra ao seu alcance.', 1, 12, 12),
+('12.000.000/0001-12', 'Hotel Charme', 'Hotel', 'charme@email.com', '5432223333', 'www.hotelcharme.com', 'Elevadores, Sinalização visual', '95000-000', 'Lourdes', 'Rua dos Plátanos', '1300', 'Com estilo único e atendimento impecável.', 1, 13, 13),
+('13.000.000/0001-13', 'Hostel Praia', 'Hostel', 'hostelpraia@email.com', '7133334444', 'www.hostelpraia.com', 'Áreas comuns acessíveis', '40100-000', 'Ondina', 'Avenida Oceânica', '1400', 'Próximo às melhores praias.', 1, 14, 14),
+('14.000.000/0001-14', 'Hotel Central', 'Hotel', 'hotelcentral@email.com', '8134445555', 'www.hotelcentral.com', 'Rampas, Portas automáticas', '50000-000', 'Boa Vista', 'Avenida Dantas Barreto', '1500', 'No coração da cidade, perto de tudo.', 1, 15, 15),
+('15.000.000/0001-15', 'Pousada Doce Lar', 'Pousada', 'docelar@email.com', '8535556666', 'www.pousadadocelar.com', 'Banheiros adaptados, Sinalização em Braille', '60100-000', 'Meireles', 'Avenida Abolição', '1600', 'Sua casa fora de casa.', 1, 16, 16),
+('16.000.000/0001-16', 'Hotel Conexão', 'Hotel', 'conexao@email.com', '6236667777', 'www.hotelconexao.com', 'Vagas de estacionamento especiais', '74000-000', 'Aeroporto', 'Avenida Anhanguera', '1700', 'Localização estratégica perto do aeroporto.', 1, 17, 17),
+('17.000.000/0001-17', 'Luxury Suites', 'Hotel', 'luxurysuites@email.com', '3101234567', 'www.luxurysuites.com', 'Wheelchair accessible rooms', '90210', 'Beverly Hills', 'Wilshire Blvd', '1800', 'Exclusive suites for discerning guests.', 1, 18, 18),
+('18.000.000/0001-18', 'Times Square Inn', 'Hostel', 'tsinn@email.com', '2129876543', 'www.timessquareinn.com', 'Elevator access', '10036', 'Midtown', 'Broadway', '1900', 'Affordable stay in the heart of NYC.', 1, 19, 19),
+('19.000.000/0001-19', 'Magic Kingdom Resort', 'Hotel', 'mkresort@email.com', '4078765432', 'www.magickingdomresort.com', 'Full accessibility features', '32830', 'Lake Buena Vista', 'World Dr', '2000', 'Family-friendly resort near attractions.', 1, 20, 20);
 
 -- -----------------------------------------------------
 -- Inserts para a tabela Lembrete
@@ -247,55 +237,91 @@ INSERT INTO Especialidade (Nome) VALUES ('Terapia da Fala');
 INSERT INTO Especialidade (Nome) VALUES ('Dietista');
 INSERT INTO Especialidade (Nome) VALUES ('Assistente Pessoal');
 
+INSERT INTO PrestadorServico (Observacao, CNPJ, Pessoa_Id) VALUES
+('Enfermeira com 5 anos de experiência.', NULL, 1),
+('Fisioterapeuta especialista em reabilitação motora.', NULL, 2),
+('Clínico geral com consultório próprio.', '00.000.000/0001-00', 3),
+('Nutricionista esportiva.', NULL, 4),
+('Psicóloga com foco em terapia cognitivo-comportamental.', NULL, 5),
+('Terapeuta ocupacional para reabilitação de idosos.', NULL, 6),
+('Cuidador com experiência em pacientes com Alzheimer.', NULL, 7),
+('Motorista com carro adaptado para cadeirantes.', NULL, 8),
+('Acompanhante para plantões hospitalares.', NULL, 9),
+('Personal trainer com certificação em pilates.', NULL, 10),
+('Fonoaudióloga para distúrbios da fala.', NULL, 11),
+('Podólogo especializado em pés diabéticos.', NULL, 12),
+('Massoterapeuta com diversas técnicas.', NULL, 13),
+('Quiropraxia para problemas de coluna.', NULL, 14),
+('Acupunturista para alívio da dor.', NULL, 15),
+('Farmacêutico para orientações sobre medicamentos.', NULL, 16),
+('Técnico em radiologia para exames domiciliares.', NULL, 17),
+('Terapeuta da fala para crianças.', NULL, 18),
+('Dietista para planos alimentares personalizados.', NULL, 19),
+('Assistente pessoal para tarefas diárias.', NULL, 20);
+
+
 -- -----------------------------------------------------
--- Inserts para a tabela PrestadorServico
+-- Inserts para a tabela PrestadorServiço_Especilidade (NxN)
 -- -----------------------------------------------------
-INSERT INTO PrestadorServico (PrecoHora, Observacao, CNPJ, Ativo, Especialidade_Id, Pessoa_Id) VALUES
-(50.00, 'Enfermeira com 5 anos de experiência.', NULL, 1, 1, 1),
-(75.00, 'Fisioterapeuta especialista em reabilitação motora.', NULL, 1, 2, 2),
-(120.00, 'Clínico geral com consultório próprio.', '00.000.000/0001-00', 1, 3, 3),
-(60.00, 'Nutricionista esportiva.', NULL, 1, 4, 4),
-(80.00, 'Psicóloga com foco em terapia cognitivo-comportamental.', NULL, 1, 5, 5),
-(70.00, 'Terapeuta ocupacional para reabilitação de idosos.', NULL, 1, 6, 6),
-(40.00, 'Cuidador com experiência em pacientes com Alzheimer.', NULL, 1, 7, 7),
-(35.00, 'Motorista com carro adaptado para cadeirantes.', NULL, 1, 8, 8),
-(45.00, 'Acompanhante para plantões hospitalares.', NULL, 1, 9, 9),
-(90.00, 'Personal trainer com certificação em pilates.', NULL, 1, 10, 10),
-(65.00, 'Fonoaudióloga para distúrbios da fala.', NULL, 1, 11, 11),
-(55.00, 'Podólogo especializado em pés diabéticos.', NULL, 1, 12, 12),
-(70.00, 'Massoterapeuta com diversas técnicas.', NULL, 1, 13, 13),
-(85.00, 'Quiropraxia para problemas de coluna.', NULL, 1, 14, 14),
-(95.00, 'Acupunturista para alívio da dor.', NULL, 1, 15, 15),
-(50.00, 'Farmacêutico para orientações sobre medicamentos.', NULL, 1, 16, 16),
-(70.00, 'Técnico em radiologia para exames domiciliares.', NULL, 1, 17, 17),
-(80.00, 'Terapeuta da fala para crianças.', NULL, 1, 18, 18),
-(60.00, 'Dietista para planos alimentares personalizados.', NULL, 1, 19, 19),
-(40.00, 'Assistente pessoal para tarefas diárias.', NULL, 1, 20, 20);
+INSERT INTO PrestadorServico_Especialidade (PrestadorServico_Id, Especialidade_Id, PrecoHora) VALUES
+(1, 1, 50.00),
+(2, 2, 75.00),
+(3, 3, 120.00),
+(4, 4, 60.00),
+(5, 5, 80.00),
+(6, 6, 70.00),
+(7, 7, 40.00),
+(8, 8, 35.00),
+(9, 9, 45.00),
+(10, 10, 90.00),
+(11, 11, 65.00),
+(12, 12, 55.00),
+(13, 13, 70.00),
+(14, 14, 85.00),
+(15, 15, 95.00),
+(16, 16, 50.00),
+(17, 17, 70.00),
+(18, 18, 80.00),
+(19, 19, 60.00),
+(20, 20, 40.00),
+
+-- Adicionando especialidades extras para alguns prestadores:
+(1, 5, 55.00),   -- Enfermeira também psicóloga
+(2, 10, 70.00),  -- Fisioterapeuta também personal trainer
+(3, 16, 100.00), -- Clínico geral também farmacêutico
+(5, 14, 90.00),  -- Psicóloga também quiropraxista
+(10, 2, 85.00),  -- Personal trainer também fisioterapeuta
+(14, 5, 75.00),  -- Quiropraxista também psicóloga
+(18, 11, 70.00); -- Terapeuta da fala também fonoaudióloga
+
 
 -- -----------------------------------------------------
 -- Inserts para a tabela OrdemServico_PrestadorServico
 -- -----------------------------------------------------
-INSERT INTO OrdemServico_PrestadorServico (Preco, HorasTrabalhadas, DataInicio, DataFim, StatusOS, PrestadorServico_Id, OrdemServico_Id) VALUES
-(100.00, 2, '2025-06-20 10:00:00', '2025-06-20 12:00:00', 'Concluído', 1, 1),
-(150.00, 2, '2025-06-21 11:30:00', '2025-06-21 13:30:00', 'Em andamento', 2, 2),
-(240.00, 2, '2025-06-22 14:00:00', '2025-06-22 16:00:00', 'Cancelado', 3, 3),
-(120.00, 2, '2025-06-23 09:00:00', '2025-06-23 11:00:00', 'Concluído', 4, 4),
-(160.00, 2, '2025-06-24 16:00:00', '2025-06-24 18:00:00', 'Em andamento', 5, 5),
-(140.00, 2, '2025-06-25 08:00:00', '2025-06-25 10:00:00', 'Concluído', 6, 6),
-(80.00, 2, '2025-06-26 12:00:00', '2025-06-26 14:00:00', 'Em andamento', 7, 7),
-(70.00, 2, '2025-06-27 15:00:00', '2025-06-27 17:00:00', 'Cancelado', 8, 8),
-(90.00, 2, '2025-06-28 10:30:00', '2025-06-28 12:30:00', 'Concluído', 9, 9),
-(180.00, 2, '2025-06-29 13:00:00', '2025-06-29 15:00:00', 'Em andamento', 10, 10),
-(130.00, 2, '2025-07-01 09:00:00', '2025-07-01 11:00:00', 'Concluído', 11, 11),
-(110.00, 2, '2025-07-02 11:00:00', '2025-07-02 13:00:00', 'Em andamento', 12, 12),
-(140.00, 2, '2025-07-03 14:30:00', '2025-07-03 16:30:00', 'Cancelado', 13, 13),
-(170.00, 2, '2025-07-04 10:00:00', '2025-07-04 12:00:00', 'Concluído', 14, 14),
-(190.00, 2, '2025-07-05 16:00:00', '2025-07-05 18:00:00', 'Em andamento', 15, 15),
-(100.00, 2, '2025-07-06 08:30:00', '2025-07-06 10:30:00', 'Concluído', 16, 16),
-(140.00, 2, '2025-07-07 12:30:00', '2025-07-07 14:30:00', 'Em andamento', 17, 17),
-(160.00, 2, '2025-07-08 15:30:00', '2025-07-08 17:30:00', 'Cancelado', 18, 18),
-(120.00, 2, '2025-07-09 10:00:00', '2025-07-09 12:00:00', 'Concluído', 19, 19),
-(80.00, 2, '2025-07-10 13:00:00', '2025-07-10 15:00:00', 'Em andamento', 20, 20);
+INSERT INTO OrdemServico_PrestadorServico (Preco, HorasTrabalhadas, DataInicio, DataFim, StatusOS, 
+  OrdemServico_Id, PrestadorServico_Especialidade_PrestadorServico_Id, PrestadorServico_Especialidade_Especialidade_Id
+) VALUES
+(100.00, 2, '2025-06-20 10:00:00', '2025-06-20 12:00:00', 'Concluído', 1, 1, 1),
+(150.00, 2, '2025-06-21 11:30:00', '2025-06-21 13:30:00', 'Em andamento', 2, 2, 2),
+(240.00, 2, '2025-06-22 14:00:00', '2025-06-22 16:00:00', 'Cancelado', 3, 3, 3),
+(120.00, 2, '2025-06-23 09:00:00', '2025-06-23 11:00:00', 'Concluído', 4, 4, 4),
+(160.00, 2, '2025-06-24 16:00:00', '2025-06-24 18:00:00', 'Em andamento', 5, 5, 5),
+(140.00, 2, '2025-06-25 08:00:00', '2025-06-25 10:00:00', 'Concluído', 6, 6, 6),
+(80.00, 2, '2025-06-26 12:00:00', '2025-06-26 14:00:00', 'Em andamento', 7, 7, 7),
+(70.00, 2, '2025-06-27 15:00:00', '2025-06-27 17:00:00', 'Cancelado', 8, 8, 8),
+(90.00, 2, '2025-06-28 10:30:00', '2025-06-28 12:30:00', 'Concluído', 9, 9, 9),
+(180.00, 2, '2025-06-29 13:00:00', '2025-06-29 15:00:00', 'Em andamento', 10, 10, 10),
+(130.00, 2, '2025-07-01 09:00:00', '2025-07-01 11:00:00', 'Concluído', 11, 11, 11),
+(110.00, 2, '2025-07-02 11:00:00', '2025-07-02 13:00:00', 'Em andamento', 12, 12, 12),
+(140.00, 2, '2025-07-03 14:30:00', '2025-07-03 16:30:00', 'Cancelado', 13, 13, 13),
+(170.00, 2, '2025-07-04 10:00:00', '2025-07-04 12:00:00', 'Concluído', 14, 14, 14),
+(190.00, 2, '2025-07-05 16:00:00', '2025-07-05 18:00:00', 'Em andamento', 15, 15, 15),
+(100.00, 2, '2025-07-06 08:30:00', '2025-07-06 10:30:00', 'Concluído', 16, 16, 16),
+(140.00, 2, '2025-07-07 12:30:00', '2025-07-07 14:30:00', 'Em andamento', 17, 17, 17),
+(160.00, 2, '2025-07-08 15:30:00', '2025-07-08 17:30:00', 'Cancelado', 18, 18, 18),
+(120.00, 2, '2025-07-09 10:00:00', '2025-07-09 12:00:00', 'Concluído', 19, 19, 19),
+(80.00, 2, '2025-07-10 13:00:00', '2025-07-10 15:00:00', 'Em andamento', 20, 20, 20);
+
 
 -- -----------------------------------------------------
 -- Inserts para a tabela CamaQuarto
