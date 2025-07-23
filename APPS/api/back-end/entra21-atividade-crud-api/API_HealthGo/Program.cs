@@ -63,9 +63,11 @@ namespace API_HealthGo
             builder.Services.AddEndpointsApiExplorer();
 
 
-            //Depencendcyes
+            //INJEÇÕES DE DEPENDÊNCIAS
+
             //connection to database
             builder.Services.AddSingleton<IConnection, Connection>();
+
             //service for token generation
             builder.Services.AddScoped<ITokenService, TokenService>();
 
@@ -74,28 +76,58 @@ namespace API_HealthGo
             builder.Services.AddScoped<IAuthService, AuthService>();
             builder.Services.AddScoped<IEmailService, EmailService>();
 
+
             //prestador serviço
             builder.Services.AddScoped<IPrestadorServicoRepository, PrestadorServicoRepository>();
             builder.Services.AddScoped<IPrestadorServicoService, PrestadorServicoService>();
 
+            //fazer as injeções de dependências
 
             builder.Services.AddHttpClient();
             builder.Services.AddScoped<IHospitalService, HospitalService>();
 
-            builder.Services.AddScoped<IPessoaService, PessoaService>();
-            builder.Services.AddTransient<IPessoaRepository, PessoaRepository>();
 
-            builder.Services.AddScoped<ILembreteService, LembreteService>();
-            builder.Services.AddTransient<ILembreteRepository, LembreteRepository>();
-
-            builder.Services.AddScoped<IEspecialidadeService, EspecialidadeService>();
-            builder.Services.AddTransient<IEspecialidadeRepository, EspecialidadeRepository>();
+            builder.Services.AddScoped<IAeroportoService, AeroportoService>();
+            builder.Services.AddScoped<IAeroportoRepository, AeroportoRepository>();
 
             builder.Services.AddScoped<IAssentoService, AssentoService>();
-            builder.Services.AddTransient<IAssentoRepository, AssentoRepository>();
+            builder.Services.AddScoped<IAssentoRepository, AssentoRepository>();
+
+            builder.Services.AddScoped<IAvaliacaoService, AvaliacaoService>();
+            builder.Services.AddScoped<IAvaliacaoRepository, AvaliacaoRepository>();
 
             builder.Services.AddScoped<IAviaoService, AviaoService>();
-            builder.Services.AddTransient<IAviaoRepository, AviaoRepository>();
+            builder.Services.AddScoped<IAviaoRepository, AviaoRepository>();
+
+            builder.Services.AddScoped<ICamaQuartoService, CamaQuartoService>();
+            builder.Services.AddScoped<ICamaQuartoRepository, CamaQuartoRepository>();
+
+            builder.Services.AddScoped<ICidadeService, CidadeService>();
+            builder.Services.AddScoped<ICidadeRepository, CidadeRepository>();
+
+            builder.Services.AddScoped<IEspecialidadeService, EspecialidadeService>();
+            builder.Services.AddScoped<IEspecialidadeRepository, EspecialidadeRepository>();
+
+            builder.Services.AddScoped<IEstadoService, EstadoService>();
+            builder.Services.AddScoped<IEstadoRepository, EstadoRepository>();
+
+            builder.Services.AddScoped<IImagemService, ImagemService>();
+            builder.Services.AddScoped<IImagemRepository, ImagemRepository>();
+
+            builder.Services.AddScoped<ILembreteService, LembreteService>();
+            builder.Services.AddScoped<ILembreteRepository, LembreteRepository>();
+
+            builder.Services.AddScoped<IOrdemServicoService, OrdemServicoService>();
+            builder.Services.AddScoped<IOrdemServicoRepository, OrdemServicoRepository>();
+
+            builder.Services.AddScoped<IPassagemService, PassagemService>();
+            builder.Services.AddScoped<IPassagemRepository, PassagemRepository>();
+
+            builder.Services.AddScoped<IPessoaService, PessoaService>();
+            builder.Services.AddScoped<IPessoaRepository, PessoaRepository>();
+
+            builder.Services.AddScoped<IQuartoService, QuartoService>();
+            builder.Services.AddScoped<IQuartoRepository, QuartoRepository>();
 
             builder.Services.AddScoped<IAeroportoService, AeroportoService>();
             builder.Services.AddTransient<IAeroportoRepository, AeroportoRepository>();
@@ -104,7 +136,7 @@ namespace API_HealthGo
             builder.Services.AddTransient<IPrestadorServicoRepository, PrestadorServicoRepository>();
 
             builder.Services.AddScoped<IVooService, VooService>();
-            builder.Services.AddTransient<IVooRepository, VooRepository>();
+            builder.Services.AddScoped<IVooRepository, VooRepository>();
 
             // Config swagger  to use JWT authentication
             builder.Services.AddSwaggerGen(c =>
