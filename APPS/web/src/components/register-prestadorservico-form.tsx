@@ -36,6 +36,8 @@ export default function RegisterPrestadorServicoForm({
   const [caoGuia, setCaoGuia] = useState(false);
   const [isCepLoading, setIsCepLoading] = useState(false);
   const [cidadeId, setCidadeId] = useState<number | null>(null);
+  const [cnpj, setCnpj] = useState("");
+  const [observacao, setObservacao] = useState("");
 
   const handleCepBlur = useCallback(async (event: React.FocusEvent<HTMLInputElement>) => {
     const currentCep = event.target.value.replace(/\D/g, "");
@@ -93,6 +95,8 @@ export default function RegisterPrestadorServicoForm({
       Rua: rua,
       NumeroEndereco: numeroEndereco,
       Cidade_Id: 1,
+      CNPJ: cnpj || null,
+      Observacao: observacao || null,
     };
 
     try {
@@ -183,10 +187,42 @@ export default function RegisterPrestadorServicoForm({
                 <Input id="addressNumber" type="text" placeholder="Número" value={numeroEndereco} onChange={(e) => setNumeroEndereco(e.target.value)} />
               </div>
             </div>
+            {/* Checkbox de cão guia */}
             <div className="flex items-center gap-2">
-              <Checkbox id="guideDog" checked={caoGuia} onCheckedChange={(checked) => setCaoGuia(Boolean(checked))} />
+              <Checkbox
+                id="guideDog"
+                checked={caoGuia}
+                onCheckedChange={(checked) => setCaoGuia(Boolean(checked))}
+              />
               <Label htmlFor="guideDog" className="font-normal">Possui cão guia</Label>
             </div>
+
+            {/* Linha divisória */}
+            <div className="h-px my-[2px] bg-gray-400 w-full mx-auto" />
+
+            {/* Campos extras do Prestador de Serviço */}
+            <div className="grid gap-2">
+              <Label htmlFor="cnpj">CNPJ</Label>
+              <Input
+                id="cnpj"
+                type="text"
+                placeholder="00.000.000/0000-00"
+                value={cnpj}
+                onChange={(e) => setCnpj(e.target.value)}
+              />
+            </div>
+            <div className="grid gap-2">
+              <Label htmlFor="observacao">Observação</Label>
+              <Input
+                id="observacao"
+                type="text"
+                placeholder="Informações adicionais (opcional)"
+                value={observacao}
+                onChange={(e) => setObservacao(e.target.value)}
+              />
+            </div>
+
+            {/* Botão de envio */}
             <Button type="submit" className="w-full" disabled={isCepLoading}>
               {isCepLoading ? "Buscando CEP..." : "Criar conta"}
             </Button>
