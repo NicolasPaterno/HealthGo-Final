@@ -8,10 +8,8 @@ namespace API_HealthGo.Entities
         public int Pessoa_Id { get; set; } // Relacionamento via ID
 
         public string Token { get; set; } = string.Empty;
-        
-        public DateTime DataExpiracao { get; set; }
 
-        public bool FoiUsado { get; set; } = false;
+        public DateTime DataExpiracao { get; set; }
 
         public TokenRecuperacaoSenhaEntity()
         {

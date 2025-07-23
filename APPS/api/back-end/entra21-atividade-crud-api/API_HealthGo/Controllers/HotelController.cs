@@ -24,9 +24,9 @@ namespace API_HealthGo.Controllers
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<HotelEntity>> GetById(int id)
+        public async Task<ActionResult<HotelEntity>> GetHotelById(int id)
         {
-            return Ok(await _service.GetById(id));
+            return Ok(await _service.GetHotelById(id));
         }
 
         [HttpPost]
