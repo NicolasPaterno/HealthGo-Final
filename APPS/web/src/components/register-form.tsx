@@ -200,16 +200,23 @@ export function RegisterForm({
         </div>
       </CardContent>
     </Card> 
-    <div className="text-muted-foreground *:[a]:hover:text-primary text-center text-xs text-balance *:[a]:underline *:[a]:underline-offset-4">
-    <a href="/register-prestadorservico">Clique aqui para se registrar como Prestador de Serviço</a>{" "} 
-    {/* fazer espaçamento entre os dois */}
-        <div className="text-muted-foreground *:[a]:hover:text-primary text-center text-xs text-balance *:[a]:underline *:[a]:underline-offset-4">
-        Ao clicar em continuar, você concorda com nossos{" "}
-        <a href="#">Termos de Serviço</a> e{" "}
-        <a href="#">Política de Privacidade</a>.
+    <div className="text-center mt-2 text-xs text-muted-foreground flex flex-col items-center gap-4">
+      <div className="hover:[&>a]:text-primary [&>a]:underline [&>a]:underline-offset-4">
+          <a href="/register-prestadorservico">
+            Clique aqui para se registrar como Prestador de Serviço
+          </a>
       </div>
+      <div className="text-center max-w-xs">
+        Ao clicar em continuar, você concorda com nossos{" "}
+          <a href="#" className="text-muted-foreground underline underline-offset-4 hover:text-primary">
+          Termos de Serviço
+          </a>{" "}
+        e{" "}
+          <a href="#" className="text-muted-foreground underline underline-offset-4 hover:text-primary">
+          Política de Privacidade
+          </a>.
       </div>
     </div>
-    
+  </div>
   );
 }
