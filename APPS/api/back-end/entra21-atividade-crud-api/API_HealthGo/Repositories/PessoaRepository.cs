@@ -20,7 +20,25 @@ namespace API_HealthGo.Repository
         {
             using (MySqlConnection con = _connection.GetConnection())
             {
-                string sql = @$"SELECT * FROM PESSOA";
+                string sql = @$"
+                                SELECT 
+                                    ID AS {nameof(PessoaEntity.Id)},
+                                    NOME AS {nameof(PessoaEntity.Nome)},
+                                    DATANASCIMENTO AS {nameof(PessoaEntity.DataNascimento)},
+                                    CPF AS {nameof(PessoaEntity.CPF)},
+                                    TELEFONE AS {nameof(PessoaEntity.Telefone)},
+                                    EMAIL AS {nameof(PessoaEntity.Email)},
+                                    SENHA AS {nameof(PessoaEntity.Senha)},
+                                    ENDERECOFOTO AS {nameof(PessoaEntity.EnderecoFoto)},
+                                    CAOGUIA AS {nameof(PessoaEntity.CaoGuia)},
+                                    CEP AS {nameof(PessoaEntity.CEP)},
+                                    BAIRRO AS {nameof(PessoaEntity.Bairro)},
+                                    RUA AS {nameof(PessoaEntity.Rua)},
+                                    NUMEROENDERECO AS {nameof(PessoaEntity.NumeroEndereco)},
+                                    CIDADE_ID AS {nameof(PessoaEntity.Cidade_Id)},
+                                    ROLE AS {nameof(PessoaEntity.Role)}
+                                FROM PESSOA
+                            ";
 
                 IEnumerable<PessoaEntity> pessoaList = await con.QueryAsync<PessoaEntity>(sql);
                 return pessoaList;
@@ -32,8 +50,25 @@ namespace API_HealthGo.Repository
             using (MySqlConnection con = _connection.GetConnection())
             {
                 string sql = @$"
-                        SELECT * FROM PESSOA WHERE ID = @id
-                ";
+                                SELECT 
+                                    ID AS {nameof(PessoaEntity.Id)},
+                                    NOME AS {nameof(PessoaEntity.Nome)},
+                                    DATANASCIMENTO AS {nameof(PessoaEntity.DataNascimento)},
+                                    CPF AS {nameof(PessoaEntity.CPF)},
+                                    TELEFONE AS {nameof(PessoaEntity.Telefone)},
+                                    EMAIL AS {nameof(PessoaEntity.Email)},
+                                    SENHA AS {nameof(PessoaEntity.Senha)},
+                                    ENDERECOFOTO AS {nameof(PessoaEntity.EnderecoFoto)},
+                                    CAOGUIA AS {nameof(PessoaEntity.CaoGuia)},
+                                    CEP AS {nameof(PessoaEntity.CEP)},
+                                    BAIRRO AS {nameof(PessoaEntity.Bairro)},
+                                    RUA AS {nameof(PessoaEntity.Rua)},
+                                    NUMEROENDERECO AS {nameof(PessoaEntity.NumeroEndereco)},
+                                    CIDADE_ID AS {nameof(PessoaEntity.Cidade_Id)},
+                                    ROLE AS {nameof(PessoaEntity.Role)}
+                                FROM PESSOA
+                                WHERE ID = @id
+                            ";
 
                 PessoaEntity pessoa = await con.QueryFirstAsync<PessoaEntity>(sql, new { id });
                 return pessoa;
@@ -44,9 +79,9 @@ namespace API_HealthGo.Repository
         {
             string sql = @$"
                         INSERT INTO PESSOA (NOME, DATANASCIMENTO, CPF, TELEFONE, EMAIL,
-                        SENHA, ENDERECOFOTO, CAOGUIA, CEP, BAIRRO, RUA, NUMEROENDERECO, CIDADE_ID)
+                        SENHA, ENDERECOFOTO, CAOGUIA, CEP, BAIRRO, RUA, NUMEROENDERECO, CIDADE_ID, ROLE)
                         VALUES (@Nome, @DataNascimento, @CPF, @Telefone, @Email, @Senha,
-                        @EnderecoFoto, @CaoGuia, @CEP, @Bairro, @Rua, @NumeroEndereco, @Cidade_Id)
+                        @EnderecoFoto, @CaoGuia, @CEP, @Bairro, @Rua, @NumeroEndereco, @Cidade_Id, @Role)
             ";
 
             await _connection.Execute(sql, pessoa);
@@ -85,7 +120,26 @@ namespace API_HealthGo.Repository
         {
             using (MySqlConnection con = _connection.GetConnection())
             {
-                string sql = "SELECT * FROM PESSOA WHERE EMAIL = @Email";
+                string sql = @$"
+                                SELECT 
+                                    ID AS {nameof(PessoaEntity.Id)},
+                                    NOME AS {nameof(PessoaEntity.Nome)},
+                                    DATANASCIMENTO AS {nameof(PessoaEntity.DataNascimento)},
+                                    CPF AS {nameof(PessoaEntity.CPF)},
+                                    TELEFONE AS {nameof(PessoaEntity.Telefone)},
+                                    EMAIL AS {nameof(PessoaEntity.Email)},
+                                    SENHA AS {nameof(PessoaEntity.Senha)},
+                                    ENDERECOFOTO AS {nameof(PessoaEntity.EnderecoFoto)},
+                                    CAOGUIA AS {nameof(PessoaEntity.CaoGuia)},
+                                    CEP AS {nameof(PessoaEntity.CEP)},
+                                    BAIRRO AS {nameof(PessoaEntity.Bairro)},
+                                    RUA AS {nameof(PessoaEntity.Rua)},
+                                    NUMEROENDERECO AS {nameof(PessoaEntity.NumeroEndereco)},
+                                    CIDADE_ID AS {nameof(PessoaEntity.Cidade_Id)},
+                                    ROLE AS {nameof(PessoaEntity.Role)}
+                                FROM PESSOA
+                                WHERE EMAIL = @Email
+                            ";
                 return await con.QueryFirstOrDefaultAsync<PessoaEntity>(sql, new { email });
             }
         }

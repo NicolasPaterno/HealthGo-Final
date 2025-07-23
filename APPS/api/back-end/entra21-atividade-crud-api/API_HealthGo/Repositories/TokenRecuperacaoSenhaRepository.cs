@@ -18,25 +18,46 @@ namespace API_HealthGo.Repositories
         {
             using var conn = _connection.GetConnection();
 
-            var sql = @"INSERT INTO TokenRecuperacaoSenha (PESSOA_ID, TOKEN, DATAEXPIRACAO, FOIUSADO)
-                    VALUES (@Pessoa_Id, @Token, @DataExpiracao, 0)";
+            var sql = @"INSERT INTO TokenRecuperacaoSenha (PESSOA_ID, TOKEN, DATAEXPIRACAO)
+                    VALUES (@Pessoa_Id, @Token, @DataExpiracao)";
             await conn.ExecuteAsync(sql, token);
         }
 
         public async Task<TokenRecuperacaoSenhaEntity?> GetByTokenAsync(string token)
         {
-            using var conn = _connection.GetConnection();
+            try
+            {
+                using var conn = _connection.GetConnection();
 
-            var sql = @"SELECT * FROM TokenRecuperacaoSenha 
-                    WHERE TOKEN = @Token AND FoiUsado = 0 AND DataExpiracao > GETUTCDATE()";
-            return await conn.QueryFirstOrDefaultAsync<TokenRecuperacaoSenhaEntity>(sql, new { Token = token });
+                string sql = @$"
+                             SELECT 
+                                 ID AS {nameof(TokenRecuperacaoSenhaEntity.Id)},
+                                 PESSOA_ID AS {nameof(TokenRecuperacaoSenhaEntity.Pessoa_Id)},
+                                 TOKEN AS {nameof(TokenRecuperacaoSenhaEntity.Token)},
+                                 DATAEXPIRACAO AS {nameof(TokenRecuperacaoSenhaEntity.DataExpiracao)}
+                              FROM TokenRecuperacaoSenha
+                              WHERE TOKEN = @Token AND DataExpiracao > UTC_TIMESTAMP()
+                            ";
+
+                var tokenEntity = await conn.QueryFirstOrDefaultAsync<TokenRecuperacaoSenhaEntity>(sql, new { Token = token });
+
+                if (tokenEntity == null)
+                    throw new Exception("Token inválido, expirado ou já utilizado.");
+
+                return tokenEntity;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Erro ao buscar o token de recuperação de senha. A causa do problema:{ex}");
+            }
         }
 
-        public async Task MarkAsUsedAsync(string token)
+        public async Task DeleteToken(string token)
         {
             using var conn = _connection.GetConnection();
 
-            var sql = @"UPDATE TokenRecuperacaoSenha SET FOIUSADO = 1 WHERE TOKEN = @Token";
+            var sql = @"DELETE FROM TokenRecuperacaoSenha
+                                    WHERE TOKEN = @token;";
             await conn.ExecuteAsync(sql, new { Token = token });
         }
     }

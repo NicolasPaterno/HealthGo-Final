@@ -11,8 +11,6 @@ namespace API_HealthGo.Entities
         
         public DateTime DataExpiracao { get; set; }
 
-        public bool FoiUsado { get; set; } = false;
-
         public TokenRecuperacaoSenhaEntity()
         {
             DataExpiracao = DateTime.UtcNow.AddMinutes(15);

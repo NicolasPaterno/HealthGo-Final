@@ -32,17 +32,22 @@ namespace API_HealthGo.Services
                 Pessoa_Id = pessoa.Id
             };
 
-            // 3. Salva no banco
+            // 3. Salva no banco || NÃO PRECISA MAIS?, APENAS LOCALMENTE NA API É SUFICIENTE, MAS TERIA QUE SER IMPLEMENTADO
+            //UM EXTRAIDOR DE TOKEN, PEGAR O PESSOA_ID E TEMPO DE EXPIRAÇÃO, PARA A VERIFICAÇÃO DE AMBOS
+            //E ATUALIZAR COM O UPDATE 
+            //ISSO SERIA APENAS FEITO POSTERIORMENTE, SE SOBRAR TEMPO, POIS É UM EXTRA, NÃO É O FOCO PRINCIPAL DO PROJETO
+
             await _tokenRecuperacaoSenhaRepository.SaveAsync(token);
 
             // 4. Aqui você pode chamar um serviço de e-mail
-            string link = $"http://localhost:3000/redefinir-senha?token={token.Token}";
+            string link = $"http://localhost:5173/redefinir-senha/{token.Token}";
 
             string corpo = $@"
-                <p>Olá,</p>
-                <p>Recebemos uma solicitação para redefinir sua senha.</p>
-                <p><a href='{link}'>Clique aqui para redefinir sua senha</a></p>
-                <p>Se você não fez essa solicitação, ignore este e-mail.</p>
+                <p>Olá {pessoa.Nome}!</p>
+                <p>Use o código abaixo para redefinir sua senha. Você tem 15 minutos para redefinir sua senha.</p>
+
+                <p><a href='{link}'>Clique aqui para redefinir sua senha</a></p> 
+                <p>Se você não fez essa solicitação, ignore este e-mail, e nunca compartilhe para ninguém este link.</p>
             ";
 
             await _emailService.EnviarEmailAsync(pessoa.Email, "Redefinição de Senha - HealthGo", corpo);
@@ -50,11 +55,10 @@ namespace API_HealthGo.Services
 
         public async Task RedefinirSenhaAsync(RedefinirSenhaDTO dto)
         {
+            ValidarSenha(dto.NovaSenha);
+
             // 1. Buscar o token no banco
             var tokenEntity = await _tokenRecuperacaoSenhaRepository.GetByTokenAsync(dto.Token);
-
-            if (tokenEntity == null)
-                throw new Exception("Token inválido, expirado ou já utilizado.");
 
             // 2. Buscar a pessoa
             var pessoa = await _pessoaRepository.GetPessoaById(tokenEntity.Pessoa_Id);
@@ -68,8 +72,27 @@ namespace API_HealthGo.Services
             // 4. Atualizar a senha da pessoa
             await _pessoaRepository.AtualizarSenhaAsync(pessoa.Id, novaSenhaCriptografada);
 
-            // 5. Marcar token como usado
-            await _tokenRecuperacaoSenhaRepository.MarkAsUsedAsync(dto.Token);
+            // 5. Deletar o token no Banco de Dados
+            await _tokenRecuperacaoSenhaRepository.DeleteToken(dto.Token);
+        }
+
+        private void ValidarSenha(string password)
+        {
+            if (string.IsNullOrWhiteSpace(password) || password.Length < 8)
+            {
+                throw new ArgumentException("A senha deve ter no mínimo 8 caracteres.");
+            }
+
+            if (!password.Any(char.IsUpper))
+            {
+                throw new ArgumentException("A senha deve conter pelo menos uma letra maiúscula.");
+            }
+
+            // Verify if the password contains at least one lowercase letter
+            if (!password.Any(c => !char.IsLetterOrDigit(c)))
+            {
+                throw new ArgumentException("A senha deve conter pelo menos um caractere especial (ex: !@#$&*).");
+            }
         }
     }
 }
