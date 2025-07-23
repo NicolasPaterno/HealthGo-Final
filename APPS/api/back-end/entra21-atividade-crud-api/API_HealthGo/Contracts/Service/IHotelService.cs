@@ -8,7 +8,7 @@ namespace API_HealthGo.Contracts.Service
     {
         Task<HotelGetAllResponse> GetAll();
 
-        Task<HotelEntity> GetById(int id);
+        Task<HotelEntity> GetHotelById(int id);
 
         Task<MessageResponse> Post(HotelInsertDTO hotel);
 

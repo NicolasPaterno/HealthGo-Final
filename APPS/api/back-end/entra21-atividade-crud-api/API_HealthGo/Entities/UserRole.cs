@@ -1,3 +1,4 @@
+
 namespace API_HealthGo.Entities
 {
     public enum UserRole

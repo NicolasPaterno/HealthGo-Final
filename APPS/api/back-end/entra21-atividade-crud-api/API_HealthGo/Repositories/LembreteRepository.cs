@@ -64,7 +64,7 @@ namespace API_HealthGo.Repository
                                 WHERE Pessoa_ID = @pessoaId
                             ";
 
-                IEnumerable<LembreteEntity> lembreteList = await con.QueryAsync<LembreteEntity>(sql, new {pessoaId});
+                IEnumerable<LembreteEntity> lembreteList = await con.QueryAsync<LembreteEntity>(sql, new { pessoaId });
                 return lembreteList;
             }
         }

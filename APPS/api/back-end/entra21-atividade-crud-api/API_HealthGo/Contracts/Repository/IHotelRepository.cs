@@ -7,7 +7,7 @@ namespace API_HealthGo.Contracts.Repositories
     {
         Task<IEnumerable<HotelEntity>> GetAll();
 
-        Task<HotelEntity> GetById(int id);
+        Task<HotelEntity> GetHotelById(int id);
 
         Task Insert(HotelInsertDTO hotel);
 
