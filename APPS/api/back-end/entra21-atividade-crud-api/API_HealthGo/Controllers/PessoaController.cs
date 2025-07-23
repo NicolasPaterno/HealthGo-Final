@@ -107,7 +107,7 @@ namespace API_HealthGo.Controllers
             return Ok(await _service.Delete(id));
         }
         [HttpGet("me")]
-        [Authorize(Roles = "Consumidor")]
+        [Authorize]
 
         public async Task<IActionResult> GetCurrentUserProfile()
         {

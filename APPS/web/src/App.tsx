@@ -27,6 +27,8 @@ const HospitalsPage = lazy(() => import("./app/hospitals/HospitalsPage"));
 const PurchaseHistoryPage = lazy(() => import("./app/history/PurchaseHistoryPage"));
 const DashboardGerentePage = lazy(() => import("./app/dashboard/DashboardGerentePage"));
 const DashboardGerenteContent = lazy(() => import("./app/dashboard/DashboardGerenteContent"));
+const CadastrarHotelPage = lazy(() => import("./app/hotels/CadastrarHotelPage"));
+
 
 function App() {
   return (
@@ -59,6 +61,7 @@ function App() {
               <Route element={<RoleProtectedRoute allowedRoles={["Gerente"]} />}>
                 <Route path="/dashboard-gerente" element={<DashboardGerentePage />}>
                   <Route index element={<DashboardGerenteContent />} />
+                  <Route path="add-hotel" element={<CadastrarHotelPage />} />
                 </Route>
                 <Route path="/settings" element={<DashboardGerentePage />}>
                   <Route index element={<SettingsPage />} />

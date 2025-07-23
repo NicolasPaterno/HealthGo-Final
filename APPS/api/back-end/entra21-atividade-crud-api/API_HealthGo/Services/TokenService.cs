@@ -30,7 +30,7 @@ namespace API_HealthGo.Services
                     new Claim(ClaimTypes.NameIdentifier, pessoa.Id.ToString()),
                     new Claim(ClaimTypes.Role, pessoa.Role.ToString())
                 }),
-                Expires = DateTime.UtcNow.AddMinutes(int.Parse(_configuration["Jwt:TokenValidityInMinutes"])),
+                Expires = DateTime.UtcNow.AddMinutes(int.Parse(_configuration["Jwt:TokenVali    dityInMinutes"])),
                 Issuer = _configuration["Jwt:Issuer"],
                 Audience = _configuration["Jwt:Audience"],
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
