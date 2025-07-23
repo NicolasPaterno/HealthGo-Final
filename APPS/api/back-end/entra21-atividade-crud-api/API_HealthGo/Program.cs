@@ -97,6 +97,12 @@ namespace API_HealthGo
             builder.Services.AddScoped<IAviaoService, AviaoService>();
             builder.Services.AddTransient<IAviaoRepository, AviaoRepository>();
 
+            builder.Services.AddScoped<IAeroportoService, AeroportoService>();
+            builder.Services.AddTransient<IAeroportoRepository, AeroportoRepository>();
+
+            builder.Services.AddScoped<IPrestadorServicoService, PrestadorServicoService>();
+            builder.Services.AddTransient<IPrestadorServicoRepository, PrestadorServicoRepository>();
+
             builder.Services.AddScoped<IVooService, VooService>();
             builder.Services.AddTransient<IVooRepository, VooRepository>();
 
