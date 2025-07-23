@@ -106,9 +106,9 @@ namespace API_HealthGo.Controllers
         {
             return Ok(await _service.Delete(id));
         }
-        [HttpGet("me")]
-        [Authorize]
 
+        [HttpGet("me")]
+        [Authorize(Roles = "Gerente")]
         public async Task<IActionResult> GetCurrentUserProfile()
         {
             // Get the user ID from the JWT claims

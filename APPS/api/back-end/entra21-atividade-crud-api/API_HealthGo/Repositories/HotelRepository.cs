@@ -80,14 +80,21 @@ namespace API_HealthGo.Repositories
 
         public async Task Insert(HotelInsertDTO hotel)
         {
-            string sql = @"
-                INSERT INTO HOTEL (CNPJ, Nome, Tipo, Email, Telefone, Site, Acessibilidade, CEP, Bairro, Rua, NumeroEndereco, 
-                                   Descricao, Ativo, Cidade_Id, ContaGerencia_Id) 
-                VALUES (@CNPJ, @Nome, @Tipo, @Email, @Telefone, @Site, @Acessibilidade, @CEP, @Bairro, @Rua, @NumeroEndereco, 
-                                   @Descricao, @Ativo, @Cidade_Id, @ContaGerencia_Id) 
-            ";
+            try
+            {
+                string sql = @"
+            INSERT INTO HOTEL (CNPJ, Nome, Tipo, Email, Telefone, Site, Acessibilidade, CEP, Bairro, Rua, NumeroEndereco, 
+                       Descricao, Ativo, DataInicio, Cidade_Id, Pessoa_Id) 
+            VALUES (@CNPJ, @Nome, @Tipo, @Email, @Telefone, @Site, @Acessibilidade, @CEP, @Bairro, @Rua, @NumeroEndereco, 
+                       @Descricao, @Ativo, @DataInicio, @Cidade_Id, @Pessoa_Id) 
+        ";
 
-            await _connection.Execute(sql, hotel);
+                await _connection.Execute(sql, hotel);
+            }
+            catch (MySqlException ex)
+            {
+                throw new Exception($"Erro na base de dados ao inserir hotel: {ex.Message}", ex);
+            }
         }
 
         public async Task Update(HotelEntity hotel)

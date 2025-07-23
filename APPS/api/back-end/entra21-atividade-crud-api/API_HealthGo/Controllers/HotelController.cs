@@ -2,6 +2,7 @@
 using API_HealthGo.DTO;
 using API_HealthGo.Entities;
 using API_HealthGo.Responses;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace API_HealthGo.Controllers
@@ -30,6 +31,7 @@ namespace API_HealthGo.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "Gerente")]
         public async Task<ActionResult<MessageResponse>> Post(HotelInsertDTO hotel)
         {
             return Ok(await _service.Post(hotel));

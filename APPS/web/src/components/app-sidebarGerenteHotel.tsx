@@ -24,7 +24,7 @@ export function AppSidebarGerenteHotel({ ...props }: React.ComponentProps<typeof
       },
       {
         title: "Reservas",
-        url: "/dashboard-gerente/reservas",
+        url: "/dashboard-gerente/add-hotel",
         icon: CalendarClock,
       },
       {

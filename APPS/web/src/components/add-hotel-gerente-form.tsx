@@ -70,7 +70,6 @@ if (!decodedUser) {
   const [descricao, setDescricao] = useState("");
   const [cidadeId, setCidadeId] = useState<number | string>(""); // State for Cidade_Id
   const [loading, setLoading] = useState(false);
-  console.log("Loading state:", loading); // Adicione esta linha
 
 
   const handleFotoChange = (event: React.ChangeEvent<HTMLInputElement>) => {
