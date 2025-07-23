@@ -225,27 +225,27 @@ INSERT INTO ContaGerencia (Nome, CNPJ, Email, Senha) VALUES
 -- -----------------------------------------------------
 -- Inserts para a tabela Hotel
 -- -----------------------------------------------------
-INSERT INTO Hotel (CNPJ, Nome, Tipo, Email, Telefone, Site, Acessibilidade, CEP, Bairro, Rua, NumeroEndereco, Descricao, Cidade_Id, ContaGerencia_Id) VALUES
-('00.000.000/0001-00', 'Hotel Paradiso', 'Hotel', 'paradiso@email.com', '4733331111', 'www.hotelparadiso.com', 'Rampas, Elevadores, Quartos adaptados', '89010-000', 'Centro', 'Rua Sete de Setembro', '100', 'Um hotel luxuoso com vista para o rio.', 1, 1),
-('01.000.000/0001-01', 'Pousada Encanto', 'Pousada', 'encanto@email.com', '4734342222', 'www.pousadaencanto.com', 'Cadeiras de rodas disponíveis', '89020-000', 'Vila Nova', 'Rua XV de Outubro', '200', 'Aconchegante pousada familiar.', 2, 2),
-('02.000.000/0001-02', 'Hostel Aventura', 'Hostel', 'aventura@email.com', '4832323333', 'www.hostelaventura.com', 'Banheiros adaptados', '88030-000', 'Lagoa', 'Rua das Flores', '300', 'Ideal para viajantes e mochileiros.', 3, 3),
-('03.000.000/0001-03', 'Hotel Moderno', 'Hotel', 'moderno@email.com', '1130304444', 'www.hotelmoderno.com', 'Elevadores, Sinalização em Braille', '01300-000', 'Consolação', 'Rua Augusta', '400', 'Hotel com design arrojado e moderno.', 4, 4),
-('04.000.000/0001-04', 'Apartamento Conforto', 'Apartamento', 'conforto@email.com', '1931315555', 'www.apartamentoconforto.com', 'Portas largas', '13050-000', 'Centro', 'Avenida Aquidabã', '500', 'Apartamentos completos para longa estadia.', 5, 5),
-('05.000.000/0001-05', 'Casa Colonial', 'Casa', 'colonial@email.com', '2135356666', 'www.casacolonial.com', 'Acesso sem degraus', '20200-000', 'Santa Teresa', 'Rua Aprazível', '600', 'Casa histórica com charme colonial.', 6, 6),
-('06.000.000/0001-06', 'Hotel Vista Mar', 'Hotel', 'vistamar@email.com', '2136367777', 'www.hotelvistamar.com', 'Corrimãos', '24200-000', 'Praia', 'Avenida Atlântica', '700', 'Quartos com vista deslumbrante para o mar.', 7, 7),
-('07.000.000/0001-07', 'Pousada Verde', 'Pousada', 'pousadaverde@email.com', '3137378888', 'www.pousadaverde.com', 'Rampas de acesso', '30100-000', 'Funcionários', 'Rua Cláudio Manuel', '800', 'Ambiente tranquilo e arborizado.', 8, 8),
-('08.000.000/0001-08', 'Hotel Executivo', 'Hotel', 'executivo@email.com', '3438389999', 'www.hotelexecutivo.com', 'Elevadores, Sinalização tátil', '38400-000', 'Centro', 'Avenida Afonso Pena', '900', 'Ideal para viagens a negócios.', 9, 9),
-('09.000.000/0001-09', 'Hostel Urbano', 'Hostel', 'urbano@email.com', '4139390000', 'www.hostelurbano.com', 'Acesso fácil', '80000-000', 'Centro', 'Rua Cândido Lopes', '1000', 'Localização central e vibrante.', 10, 10),
-('10.000.000/0001-10', 'Hotel Sol Nascente', 'Hotel', 'solnascente@email.com', '4330001111', 'www.hotelsolnascente.com', 'Quartos com barras de apoio', '86000-000', 'Aurora', 'Rua do Sol', '1100', 'Conforto e bom gosto para sua estadia.', 11, 11),
-('11.000.000/0001-11', 'Pousada da Serra', 'Pousada', 'serrana@email.com', '5131112222', 'www.pousadaserra.com', 'Rampas, Vagas especiais', '90000-000', 'Centro Histórico', 'Rua da Praia', '1200', 'A tranquilidade da serra ao seu alcance.', 12, 12),
-('12.000.000/0001-12', 'Hotel Charme', 'Hotel', 'charme@email.com', '5432223333', 'www.hotelcharme.com', 'Elevadores, Sinalização visual', '95000-000', 'Lourdes', 'Rua dos Plátanos', '1300', 'Com estilo único e atendimento impecável.', 13, 13),
-('13.000.000/0001-13', 'Hostel Praia', 'Hostel', 'hostelpraia@email.com', '7133334444', 'www.hostelpraia.com', 'Áreas comuns acessíveis', '40100-000', 'Ondina', 'Avenida Oceânica', '1400', 'Próximo às melhores praias.', 14, 14),
-('14.000.000/0001-14', 'Hotel Central', 'Hotel', 'hotelcentral@email.com', '8134445555', 'www.hotelcentral.com', 'Rampas, Portas automáticas', '50000-000', 'Boa Vista', 'Avenida Dantas Barreto', '1500', 'No coração da cidade, perto de tudo.', 15, 15),
-('15.000.000/0001-15', 'Pousada Doce Lar', 'Pousada', 'docelar@email.com', '8535556666', 'www.pousadadocelar.com', 'Banheiros adaptados, Sinalização em Braille', '60100-000', 'Meireles', 'Avenida Abolição', '1600', 'Sua casa fora de casa.', 16, 16),
-('16.000.000/0001-16', 'Hotel Conexão', 'Hotel', 'conexao@email.com', '6236667777', 'www.hotelconexao.com', 'Vagas de estacionamento especiais', '74000-000', 'Aeroporto', 'Avenida Anhanguera', '1700', 'Localização estratégica perto do aeroporto.', 17, 17),
-('17.000.000/0001-17', 'Luxury Suites', 'Hotel', 'luxurysuites@email.com', '3101234567', 'www.luxurysuites.com', 'Wheelchair accessible rooms', '90210', 'Beverly Hills', 'Wilshire Blvd', '1800', 'Exclusive suites for discerning guests.', 18, 18),
-('18.000.000/0001-18', 'Times Square Inn', 'Hostel', 'tsinn@email.com', '2129876543', 'www.timessquareinn.com', 'Elevator access', '10036', 'Midtown', 'Broadway', '1900', 'Affordable stay in the heart of NYC.', 19, 19),
-('19.000.000/0001-19', 'Magic Kingdom Resort', 'Hotel', 'mkresort@email.com', '4078765432', 'www.magickingdomresort.com', 'Full accessibility features', '32830', 'Lake Buena Vista', 'World Dr', '2000', 'Family-friendly resort near attractions.', 20, 20);
+INSERT INTO Hotel (CNPJ, Nome, Tipo, Email, Telefone, Site, Acessibilidade, CEP, Bairro, Rua, NumeroEndereco, Descricao, Ativo, Cidade_Id, ContaGerencia_Id) VALUES
+('00.000.000/0001-00', 'Hotel Paradiso', 'Hotel', 'paradiso@email.com', '4733331111', 'www.hotelparadiso.com', 'Rampas, Elevadores, Quartos adaptados', '89010-000', 'Centro', 'Rua Sete de Setembro', '100', 'Um hotel luxuoso com vista para o rio.', 1, 1, 1),
+('01.000.000/0001-01', 'Pousada Encanto', 'Pousada', 'encanto@email.com', '4734342222', 'www.pousadaencanto.com', 'Cadeiras de rodas disponíveis', '89020-000', 'Vila Nova', 'Rua XV de Outubro', '200', 'Aconchegante pousada familiar.', 1, 2, 2),
+('02.000.000/0001-02', 'Hostel Aventura', 'Hostel', 'aventura@email.com', '4832323333', 'www.hostelaventura.com', 'Banheiros adaptados', '88030-000', 'Lagoa', 'Rua das Flores', '300', 'Ideal para viajantes e mochileiros.', 1, 3, 3),
+('03.000.000/0001-03', 'Hotel Moderno', 'Hotel', 'moderno@email.com', '1130304444', 'www.hotelmoderno.com', 'Elevadores, Sinalização em Braille', '01300-000', 'Consolação', 'Rua Augusta', '400', 'Hotel com design arrojado e moderno.', 1, 4, 4),
+('04.000.000/0001-04', 'Apartamento Conforto', 'Apartamento', 'conforto@email.com', '1931315555', 'www.apartamentoconforto.com', 'Portas largas', '13050-000', 'Centro', 'Avenida Aquidabã', '500', 'Apartamentos completos para longa estadia.', 1, 5, 5),
+('05.000.000/0001-05', 'Casa Colonial', 'Casa', 'colonial@email.com', '2135356666', 'www.casacolonial.com', 'Acesso sem degraus', '20200-000', 'Santa Teresa', 'Rua Aprazível', '600', 'Casa histórica com charme colonial.', 1, 6, 6),
+('06.000.000/0001-06', 'Hotel Vista Mar', 'Hotel', 'vistamar@email.com', '2136367777', 'www.hotelvistamar.com', 'Corrimãos', '24200-000', 'Praia', 'Avenida Atlântica', '700', 'Quartos com vista deslumbrante para o mar.', 1, 7, 7),
+('07.000.000/0001-07', 'Pousada Verde', 'Pousada', 'pousadaverde@email.com', '3137378888', 'www.pousadaverde.com', 'Rampas de acesso', '30100-000', 'Funcionários', 'Rua Cláudio Manuel', '800', 'Ambiente tranquilo e arborizado.', 1, 8, 8),
+('08.000.000/0001-08', 'Hotel Executivo', 'Hotel', 'executivo@email.com', '3438389999', 'www.hotelexecutivo.com', 'Elevadores, Sinalização tátil', '38400-000', 'Centro', 'Avenida Afonso Pena', '900', 'Ideal para viagens a negócios.', 1, 9, 9),
+('09.000.000/0001-09', 'Hostel Urbano', 'Hostel', 'urbano@email.com', '4139390000', 'www.hostelurbano.com', 'Acesso fácil', '80000-000', 'Centro', 'Rua Cândido Lopes', '1000', 'Localização central e vibrante.', 1, 10, 10),
+('10.000.000/0001-10', 'Hotel Sol Nascente', 'Hotel', 'solnascente@email.com', '4330001111', 'www.hotelsolnascente.com', 'Quartos com barras de apoio', '86000-000', 'Aurora', 'Rua do Sol', '1100', 'Conforto e bom gosto para sua estadia.', 1, 11, 11),
+('11.000.000/0001-11', 'Pousada da Serra', 'Pousada', 'serrana@email.com', '5131112222', 'www.pousadaserra.com', 'Rampas, Vagas especiais', '90000-000', 'Centro Histórico', 'Rua da Praia', '1200', 'A tranquilidade da serra ao seu alcance.', 1, 12, 12),
+('12.000.000/0001-12', 'Hotel Charme', 'Hotel', 'charme@email.com', '5432223333', 'www.hotelcharme.com', 'Elevadores, Sinalização visual', '95000-000', 'Lourdes', 'Rua dos Plátanos', '1300', 'Com estilo único e atendimento impecável.', 1, 13, 13),
+('13.000.000/0001-13', 'Hostel Praia', 'Hostel', 'hostelpraia@email.com', '7133334444', 'www.hostelpraia.com', 'Áreas comuns acessíveis', '40100-000', 'Ondina', 'Avenida Oceânica', '1400', 'Próximo às melhores praias.', 1, 14, 14),
+('14.000.000/0001-14', 'Hotel Central', 'Hotel', 'hotelcentral@email.com', '8134445555', 'www.hotelcentral.com', 'Rampas, Portas automáticas', '50000-000', 'Boa Vista', 'Avenida Dantas Barreto', '1500', 'No coração da cidade, perto de tudo.', 1, 15, 15),
+('15.000.000/0001-15', 'Pousada Doce Lar', 'Pousada', 'docelar@email.com', '8535556666', 'www.pousadadocelar.com', 'Banheiros adaptados, Sinalização em Braille', '60100-000', 'Meireles', 'Avenida Abolição', '1600', 'Sua casa fora de casa.', 1, 16, 16),
+('16.000.000/0001-16', 'Hotel Conexão', 'Hotel', 'conexao@email.com', '6236667777', 'www.hotelconexao.com', 'Vagas de estacionamento especiais', '74000-000', 'Aeroporto', 'Avenida Anhanguera', '1700', 'Localização estratégica perto do aeroporto.', 1, 17, 17),
+('17.000.000/0001-17', 'Luxury Suites', 'Hotel', 'luxurysuites@email.com', '3101234567', 'www.luxurysuites.com', 'Wheelchair accessible rooms', '90210', 'Beverly Hills', 'Wilshire Blvd', '1800', 'Exclusive suites for discerning guests.', 1, 18, 18),
+('18.000.000/0001-18', 'Times Square Inn', 'Hostel', 'tsinn@email.com', '2129876543', 'www.timessquareinn.com', 'Elevator access', '10036', 'Midtown', 'Broadway', '1900', 'Affordable stay in the heart of NYC.', 1, 19, 19),
+('19.000.000/0001-19', 'Magic Kingdom Resort', 'Hotel', 'mkresort@email.com', '4078765432', 'www.magickingdomresort.com', 'Full accessibility features', '32830', 'Lake Buena Vista', 'World Dr', '2000', 'Family-friendly resort near attractions.', 1, 20, 20);
 
 -- -----------------------------------------------------
 -- Inserts para a tabela Lembrete
@@ -365,27 +365,27 @@ INSERT INTO Especialidade (Nome) VALUES ('Assistente Pessoal');
 -- -----------------------------------------------------
 -- Inserts para a tabela PrestadorServico
 -- -----------------------------------------------------
-INSERT INTO PrestadorServico (Observacao, CNPJ, Pessoa_Id) VALUES
-('Enfermeira com 5 anos de experiência.', NULL, 1),
-('Fisioterapeuta especialista em reabilitação motora.', NULL, 2),
-('Clínico geral com consultório próprio.', '00.000.000/0001-00', 3),
-('Nutricionista esportiva.', NULL, 4),
-('Psicóloga com foco em terapia cognitivo-comportamental.', NULL, 5),
-('Terapeuta ocupacional para reabilitação de idosos.', NULL, 6),
-('Cuidador com experiência em pacientes com Alzheimer.', NULL, 7),
-('Motorista com carro adaptado para cadeirantes.', NULL, 8),
-('Acompanhante para plantões hospitalares.', NULL, 9),
-('Personal trainer com certificação em pilates.', NULL, 10),
-('Fonoaudióloga para distúrbios da fala.', NULL, 11),
-('Podólogo especializado em pés diabéticos.', NULL, 12),
-('Massoterapeuta com diversas técnicas.', NULL, 13),
-('Quiropraxia para problemas de coluna.', NULL, 14),
-('Acupunturista para alívio da dor.', NULL, 15),
-('Farmacêutico para orientações sobre medicamentos.', NULL, 16),
-('Técnico em radiologia para exames domiciliares.', NULL, 17),
-('Terapeuta da fala para crianças.', NULL, 18),
-('Dietista para planos alimentares personalizados.', NULL, 19),
-('Assistente pessoal para tarefas diárias.', NULL, 20);
+INSERT INTO PrestadorServico (Observacao, CNPJ, Ativo, Pessoa_Id) VALUES
+('Enfermeira com 5 anos de experiência.', NULL, 1, 1),
+('Fisioterapeuta especialista em reabilitação motora.', NULL, 1, 2),
+('Clínico geral com consultório próprio.', '00.000.000/0001-00', 1, 3),
+('Nutricionista esportiva.', NULL, 1, 4),
+('Psicóloga com foco em terapia cognitivo-comportamental.', NULL, 1, 5),
+('Terapeuta ocupacional para reabilitação de idosos.', NULL, 1, 6),
+('Cuidador com experiência em pacientes com Alzheimer.', NULL, 1, 7),
+('Motorista com carro adaptado para cadeirantes.', NULL, 1, 8),
+('Acompanhante para plantões hospitalares.', NULL, 1, 9),
+('Personal trainer com certificação em pilates.', NULL, 1, 10),
+('Fonoaudióloga para distúrbios da fala.', NULL, 1, 11),
+('Podólogo especializado em pés diabéticos.', NULL, 1, 12),
+('Massoterapeuta com diversas técnicas.', NULL, 1, 13),
+('Quiropraxia para problemas de coluna.', NULL, 1, 14),
+('Acupunturista para alívio da dor.', NULL, 1, 15),
+('Farmacêutico para orientações sobre medicamentos.', NULL, 1, 16),
+('Técnico em radiologia para exames domiciliares.', NULL, 1, 17),
+('Terapeuta da fala para crianças.', NULL, 1, 18),
+('Dietista para planos alimentares personalizados.', NULL, 1, 19),
+('Assistente pessoal para tarefas diárias.', NULL, 1, 20);
 
 -- -----------------------------------------------------
 -- Inserts para a tabela PrestadorServico_Especialidade

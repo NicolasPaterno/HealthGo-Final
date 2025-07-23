@@ -1,6 +1,7 @@
 ﻿using API_HealthGo.Contracts.Repositories;
 using API_HealthGo.Contracts.Service;
 using API_HealthGo.DTO;
+using API_HealthGo.Responses;
 using Microsoft.AspNetCore.Mvc;
 
 namespace API_HealthGo.Controllers
@@ -29,7 +30,7 @@ namespace API_HealthGo.Controllers
                 return Unauthorized(new { message = "Email ou senha inválidos." });
             }
 
-            if (string.IsNullOrWhiteSpace(pessoa.Senha) || !pessoa.Senha.StartsWith("$2"))
+            if (string.IsNullOrWhiteSpace(loginDto.Password) || !pessoa.Senha.StartsWith("$2"))
             {
                 return StatusCode(500, new { message = "Hash de senha inválido no banco de dados." });
             }
@@ -64,17 +65,28 @@ namespace API_HealthGo.Controllers
             }
         }
 
-        [HttpPost("{redefinir-senha}")]
+        [HttpPost("redefinir-senha")]
         public async Task<IActionResult> RedefinirSenha([FromBody] RedefinirSenhaDTO dto)
         {
+            if (!ModelState.IsValid) // para verificar se o DTO é válido
+            {
+                return BadRequest("DTO inválido.");
+            }
             try
             {
                 await _authService.RedefinirSenhaAsync(dto);
                 return Ok("Senha redefinida com sucesso.");
             }
+            catch (ArgumentException ex)
+            {
+                // Retorna 400 Bad Request se a senha for inválida
+                return BadRequest(new MessageResponse { Message = ex.Message });
+            }
             catch (Exception ex)
             {
-                return BadRequest(ex.Message);
+                // Retorna 500 para outros erros
+                var response = new MessageResponse { Message = $"Ocorreu um erro interno: {ex.Message}" };
+                return StatusCode(500, response);
             }
         }
     }

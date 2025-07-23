@@ -129,7 +129,7 @@ const data = {
       icon: Settings,
     },
     {
-      title: "Get Help",
+      title: "Ajuda",
       url: "/dashboard/help",
       icon: HelpCircle,
     },

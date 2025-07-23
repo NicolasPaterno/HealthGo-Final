@@ -108,6 +108,7 @@ namespace API_HealthGo.Controllers
         }
         [HttpGet("me")]
         [Authorize(Roles = "Consumidor")]
+
         public async Task<IActionResult> GetCurrentUserProfile()
         {
             // Get the user ID from the JWT claims
