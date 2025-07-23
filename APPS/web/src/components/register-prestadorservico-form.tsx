@@ -16,7 +16,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import api from "@/services/api";
 import axios from "axios"; // Import axios for the API call
 
-export function RegisterForm({
+export default function RegisterPrestadorServicoForm({
   className,
   ...props
 }: React.ComponentProps<"div">) {
@@ -199,17 +199,12 @@ export function RegisterForm({
           </Link>
         </div>
       </CardContent>
-    </Card> 
+    </Card>
     <div className="text-muted-foreground *:[a]:hover:text-primary text-center text-xs text-balance *:[a]:underline *:[a]:underline-offset-4">
-    <a href="/register-prestadorservico">Clique aqui para se registrar como Prestador de Serviço</a>{" "} 
-    {/* fazer espaçamento entre os dois */}
-        <div className="text-muted-foreground *:[a]:hover:text-primary text-center text-xs text-balance *:[a]:underline *:[a]:underline-offset-4">
         Ao clicar em continuar, você concorda com nossos{" "}
         <a href="#">Termos de Serviço</a> e{" "}
         <a href="#">Política de Privacidade</a>.
       </div>
-      </div>
     </div>
-    
   );
 }
