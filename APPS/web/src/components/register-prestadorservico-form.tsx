@@ -95,12 +95,12 @@ export default function RegisterPrestadorServicoForm({
       Rua: rua,
       NumeroEndereco: numeroEndereco,
       Cidade_Id: 1,
-      CNPJ: cnpj || null,
-      Observacao: observacao || null,
+      CNPJ: cnpj.trim() === "" ? null : cnpj,
+      Observacao: observacao.trim() === "" ? null : observacao,
     };
 
     try {
-      const response = await api.post("/Pessoa", userData);
+      const response = await api.post("/PrestadorServico", userData);
 
       toast.success("Conta criada com sucesso!", {
         description: "Você será redirecionado para a página de login em instantes.",
