@@ -40,6 +40,11 @@ interface ApiReminder {
     tipo: 'Consulta' | 'Remédio' | 'Outro';
     pessoa_Id: number;
 }
+const typeBadgeVariant = {
+  Consulta: "default",
+  Remédio: "destructive",
+  Outro: "secondary",
+} as const;
 
 interface User {
   id: number;
@@ -228,7 +233,7 @@ export default function CalendarPage() {
           </CardHeader>
           <CardContent className="flex flex-col lg:flex-row gap-8">
             {/* Calendário */}
-            <div className="flex-grow flex justify-center">
+            <div className="flex-grow flex justify-center w-full">
               <Calendar
                 mode="single"
                 selected={date}
@@ -270,7 +275,7 @@ export default function CalendarPage() {
                             </Badge>
                             <p className="text-sm ">{reminder.text}</p>
                         </div>
-                        <Badge variant="outline" className="shrink-0">{reminder.type}</Badge>
+                        <Badge variant={typeBadgeVariant[reminder.type] || "secondary"} className="capitalize">{reminder.type}</Badge>
                       </div>
                     ))}
                   </div>
@@ -341,7 +346,7 @@ export default function CalendarPage() {
                                 {new Date(reminder.dateTime).toLocaleTimeString("pt-BR", { hour: '2-digit', minute: '2-digit' })}
                               </Badge>
                               <p className="text-sm ">{reminder.text}</p>
-                              <Badge variant="outline" className="shrink-0">{reminder.type}</Badge>
+                              <Badge variant={typeBadgeVariant[reminder.type] || "secondary"} className="capitalize">{reminder.type}</Badge>
                             </div>
                             <Button
                               variant="ghost"
