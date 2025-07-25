@@ -15,6 +15,7 @@ const LoginPage = lazy(() => import("./app/login/LoginPage"));
 const ForgotPasswordPage = lazy(() => import("./app/forgot-password/ForgotPasswordPage"));
 const ResetPasswordPage = lazy(() => import("./app/forgot-password/ResetPasswordPage"));
 const RegisterPage = lazy(() => import("./app/register/RegisterPage"));
+const RegisterManagerPage = lazy(() => import("./app/register/RegisterManagerPage"));
 const DashboardPage = lazy(() => import("./app/dashboard/DashboardPage"));
 const DashboardContent = lazy(() => import("./app/dashboard/DashboardContent"));
 const SettingsPage = lazy(() => import("./app/settings/SettingsPage"));
@@ -41,6 +42,7 @@ function App() {
             <Route path="/esqueci-senha" element={<ForgotPasswordPage />} />
             <Route path="/redefinir-senha/:token" element={<ResetPasswordPage />} />
             <Route path="/register" element={<RegisterPage />} />
+            <Route path="/register-manager" element={<RegisterManagerPage />} />
 
             <Route element={<ProtectedRoute />}>
               <Route element={<RoleProtectedRoute allowedRoles={["Consumidor"]} />}>
