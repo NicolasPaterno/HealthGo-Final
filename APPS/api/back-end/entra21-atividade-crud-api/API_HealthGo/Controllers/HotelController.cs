@@ -4,6 +4,7 @@ using API_HealthGo.Entities;
 using API_HealthGo.Responses;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 namespace API_HealthGo.Controllers
 {
@@ -34,6 +35,14 @@ namespace API_HealthGo.Controllers
         [Authorize(Roles = "Gerente")]
         public async Task<ActionResult<MessageResponse>> Post(HotelInsertDTO hotel)
         {
+            var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier);
+            if (userIdClaim == null || !int.TryParse(userIdClaim.Value, out int userId))
+            {
+                return Unauthorized("ID do usuário não encontrado no token.");
+            }
+
+            hotel.Pessoa_Id = userId;
+
             return Ok(await _service.Post(hotel));
         }
 

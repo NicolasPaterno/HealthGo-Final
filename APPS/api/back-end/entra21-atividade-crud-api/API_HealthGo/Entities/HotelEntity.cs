@@ -34,6 +34,6 @@
 
         public int Cidade_Id { get; set; }
 
-        public int ContaGerencia_Id { get; set; }
+        public int Pessoa_Id { get; set; }
     }
 }

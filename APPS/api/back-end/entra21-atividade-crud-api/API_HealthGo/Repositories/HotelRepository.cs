@@ -38,7 +38,7 @@ namespace API_HealthGo.Repositories
                                 ATIVO AS {nameof(HotelEntity.Ativo)},
                                 DATAINICIO AS {nameof(HotelEntity.DataInicio)},
                                 CIDADE_ID AS {nameof(HotelEntity.Cidade_Id)},
-                                CONTAGERENCIA_ID AS {nameof(HotelEntity.ContaGerencia_Id)}
+                                PESSOA_ID AS {nameof(HotelEntity.Pessoa_Id)}
                          FROM HOTEL
                 ";
 
@@ -68,7 +68,7 @@ namespace API_HealthGo.Repositories
                                 ATIVO AS {nameof(HotelEntity.Ativo)},
                                 DATAINICIO AS {nameof(HotelEntity.DataInicio)},
                                 CIDADE_ID AS {nameof(HotelEntity.Cidade_Id)},
-                                CONTAGERENCIA_ID AS {nameof(HotelEntity.ContaGerencia_Id)}
+                                PESSOA_ID AS {nameof(HotelEntity.Pessoa_Id)}
                          FROM HOTEL
                          WHERE ID = @id
                 ";
@@ -117,7 +117,7 @@ namespace API_HealthGo.Repositories
                             ATIVO = @Ativo,
                             DATAINICIO = @DataInicio,
                             CIDADE_ID = @Cidade_Id,
-                            CONTAGERENCIA_ID = @ContaGerencia_Id
+                            PESSOA_ID = @Pessoa_Id
                        WHERE ID = @Id
                 ";
 

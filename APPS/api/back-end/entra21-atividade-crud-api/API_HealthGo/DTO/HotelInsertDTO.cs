@@ -17,6 +17,6 @@
         public bool Ativo { get; set; }
         public DateTime DataInicio { get; set; }
         public int Cidade_Id { get; set; }
-        public int Pessoa_Id { get; set; }
+        
     }
 }
