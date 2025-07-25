@@ -9,10 +9,12 @@ namespace API_HealthGo.Services
     public class HotelService : IHotelService
     {
         private IHotelRepository _repository;
+        private readonly IHttpContextAccessor _httpContextAccessor;
 
-        public HotelService(IHotelRepository repository)
+        public HotelService(IHotelRepository repository, IHttpContextAccessor httpContextAccessor)
         {
             _repository = repository;
+            _httpContextAccessor = httpContextAccessor;
         }
 
         public async Task<HotelGetAllResponse> GetAll()
@@ -28,8 +30,9 @@ namespace API_HealthGo.Services
             return await _repository.GetHotelById(id);
         }
 
-        public async Task<MessageResponse> Post(HotelInsertDTO hotel)
+        public async Task<MessageResponse> Post(HotelInsertDTO hotel, int pessoaId)
         {
+            hotel.Pessoa_Id = pessoaId;
             await _repository.Insert(hotel);
             return new MessageResponse
             {

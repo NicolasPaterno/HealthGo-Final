@@ -10,7 +10,7 @@ namespace API_HealthGo.Contracts.Service
 
         Task<HotelEntity> GetHotelById(int id);
 
-        Task<MessageResponse> Post(HotelInsertDTO hotel);
+        Task<MessageResponse> Post(HotelInsertDTO hotel, int pessoaId);
 
         Task<MessageResponse> Update(HotelEntity hotel);
 

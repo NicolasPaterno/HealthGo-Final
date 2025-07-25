@@ -12,10 +12,12 @@ namespace API_HealthGo.Controllers
     public class HotelController : ControllerBase
     {
         private IHotelService _service;
+        private readonly IHttpContextAccessor _httpContextAccessor;
 
-        public HotelController(IHotelService hotelService)
+        public HotelController(IHotelService hotelService, IHttpContextAccessor httpContextAccessor)
         {
             _service = hotelService;
+            _httpContextAccessor = httpContextAccessor;
         }
 
         [HttpGet]
@@ -34,7 +36,12 @@ namespace API_HealthGo.Controllers
         [Authorize(Roles = "Gerente")]
         public async Task<ActionResult<MessageResponse>> Post(HotelInsertDTO hotel)
         {
-            return Ok(await _service.Post(hotel));
+            var userIdClaim = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier);
+            if (userIdClaim == null || !int.TryParse(userIdClaim.Value, out int pessoaId))
+            {
+                return Unauthorized(new MessageResponse { Message = "ID do usuário não encontrado no token." });
+            }
+            return Ok(await _service.Post(hotel, pessoaId));
         }
 
         [HttpDelete("{id}")]
