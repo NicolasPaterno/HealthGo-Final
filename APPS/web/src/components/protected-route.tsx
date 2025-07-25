@@ -1,11 +1,13 @@
 import { Navigate, Outlet } from "react-router-dom";
-
-const useAuth = () => {
-  const token = localStorage.getItem("authToken");
-  return !!token;
-};
+import { useAuth } from "@/hooks/useAuth";
+import { LoadingSpinner } from "@/components/loading-spinner";
 
 export function ProtectedRoute() {
-  const isAuth = useAuth();
-  return isAuth ? <Outlet /> : <Navigate to="/login" replace />;
+  const { isAuthenticated, isLoading } = useAuth();
+
+  if (isLoading) {
+    return <LoadingSpinner />;
+  }
+
+  return isAuthenticated ? <Outlet /> : <Navigate to="/login" replace />;
 }

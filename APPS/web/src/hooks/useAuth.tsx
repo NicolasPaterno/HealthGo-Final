@@ -1,34 +1,24 @@
 import { useState, useEffect } from 'react';
-
-interface User {
-  id: number;
-  name: string;
-  email: string;
-}
+import { getAuthUser, type DecodedToken } from '@/lib/jwt';
 
 export const useAuth = () => {
-  const [user, setUser] = useState<User | null>(null);
+  const [user, setUser] = useState<DecodedToken | null>(null);
   const [token, setToken] = useState<string | null>(null);
+  const [isLoading, setIsLoading] = useState(true); // Adicionado estado de loading
 
   useEffect(() => {
     const storedToken = localStorage.getItem('authToken');
-    const storedUser = localStorage.getItem('user');
-
     if (storedToken) {
       setToken(storedToken);
+      setUser(getAuthUser());
+    } else {
+      setToken(null);
+      setUser(null);
     }
-
-    if (storedUser) {
-      try {
-        setUser(JSON.parse(storedUser));
-      } catch (error) {
-        console.error("Failed to parse user data from localStorage", error);
-        setUser(null);
-      }
-    }
+    setIsLoading(false); // Finaliza o loading após a verificação
   }, []);
 
-  const isAuthenticated = !!token;
+  const isAuthenticated = !!token && !!user;
 
-  return { user, token, isAuthenticated };
+  return { user, token, isAuthenticated, isLoading }; // Retorna o estado de loading
 };

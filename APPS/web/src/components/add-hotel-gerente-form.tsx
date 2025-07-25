@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
@@ -21,7 +21,7 @@ import {
 } from "@/components/ui/select";
 import { useAuth } from "@/hooks/useAuth";
 import api from "@/services/api";
-import { getAuthUser } from "@/lib/jwt";
+import { LoadingSpinner } from "@/components/loading-spinner"; // Importe o LoadingSpinner
 
 // Interface para o DTO de inserção de Hotel
 interface HotelInsertDTO {
@@ -45,14 +45,14 @@ interface HotelInsertDTO {
 
 export function AddHotelGerenteForm({ className, ...props }: React.ComponentProps<typeof Card>) {
   const navigate = useNavigate();
-  const { user } = useAuth();
-  const decodedUser = getAuthUser();
+  const { isAuthenticated, isLoading } = useAuth(); // Obtenha isLoading
 
-  if (!decodedUser) {
-    toast.error("Sessão expirada", { description: "Por favor, faça login novamente." });
-    window.location.href = '/login';
-    return null; // Retorna nulo para não renderizar o formulário
-  }
+  useEffect(() => {
+    if (!isLoading && !isAuthenticated) {
+      toast.error("Sessão expirada", { description: "Por favor, faça login novamente." });
+      navigate('/login');
+    }
+  }, [isAuthenticated, isLoading, navigate]);
 
   const [fotoPreview, setFotoPreview] = useState<string | null>(null);
   const [cnpj, setCnpj] = useState("");
@@ -87,7 +87,7 @@ export function AddHotelGerenteForm({ className, ...props }: React.ComponentProp
     event.preventDefault();
     setLoading(true);
 
-    if (!user || !user.token) {
+    if (!isAuthenticated) {
       toast.error("Erro: Usuário não autenticado.");
       setLoading(false);
       return;
@@ -127,6 +127,16 @@ export function AddHotelGerenteForm({ className, ...props }: React.ComponentProp
       setLoading(false);
     }
   };
+  
+  // Renderiza um spinner de carregamento enquanto a autenticação está sendo verificada
+  if (isLoading) {
+    return <LoadingSpinner />;
+  }
+
+  // Se não estiver autenticado após o carregamento, não renderiza o formulário
+  if (!isAuthenticated) {
+    return null;
+  }
 
   return (
     <Card className={cn("mx-auto max-w-4xl w-full", className)} {...props}>
@@ -311,7 +321,7 @@ export function AddHotelGerenteForm({ className, ...props }: React.ComponentProp
           <Button
             type="submit"
             className="w-full md:col-span-2"
-            disabled={loading || !user}
+            disabled={loading || !isAuthenticated}
           >
             {loading ? "Cadastrando..." : "Cadastrar Hotel"}
           </Button>
