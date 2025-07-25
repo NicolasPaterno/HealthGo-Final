@@ -16,12 +16,12 @@ namespace API_HealthGo
         {
             var builder = WebApplication.CreateBuilder(args);
 
-            // NOVO: Defina um nome para a sua polï¿½tica de CORS
+            // NOVO: Defina um nome para a sua política de CORS
             var MyAllowAllOrigins = "_myAllowAllOrigins";
 
             // Add services to the container.
 
-            // NOVO: Adicione o serviï¿½o de CORS
+            // NOVO: Adicione o serviço de CORS
             builder.Services.AddCors(options =>
             {
                 options.AddPolicy(name: MyAllowAllOrigins,
@@ -63,7 +63,7 @@ namespace API_HealthGo
             builder.Services.AddEndpointsApiExplorer();
 
 
-            //INJEï¿½ï¿½ES DE DEPENDï¿½NCIAS
+            //INJEÇÕES DE DEPENDÊNCIAS
 
             //connection to database
             builder.Services.AddSingleton<IConnection, Connection>();
@@ -71,19 +71,19 @@ namespace API_HealthGo
             //service for token generation
             builder.Services.AddScoped<ITokenService, TokenService>();
 
-            //recuperaï¿½ï¿½o de senha por email
+            //recuperação de senha por email
             builder.Services.AddScoped<ITokenRecuperacaoSenhaRepository, TokenRecuperacaoSenhaRepository>();
             builder.Services.AddScoped<IAuthService, AuthService>();
             builder.Services.AddScoped<IEmailService, EmailService>();
 
 
-            //prestador serviï¿½o
+            //prestador serviço
             builder.Services.AddScoped<IPrestadorServicoRepository, PrestadorServicoRepository>();
             builder.Services.AddScoped<IPrestadorServicoService, PrestadorServicoService>();
 
-            //fazer as injeï¿½ï¿½es de dependï¿½ncias
+            //fazer as injeções de dependências
 
-            builder.Services.AddHttpContextAccessor();
+            builder.Services.AddHttpClient();
             builder.Services.AddScoped<IHospitalService, HospitalService>();
 
 
