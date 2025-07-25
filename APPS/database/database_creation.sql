@@ -76,17 +76,7 @@ CREATE TABLE IF NOT EXISTS `HealthGo`.`Pessoa` (
 ENGINE = InnoDB;
 
 
--- -----------------------------------------------------
--- Table `HealthGo`.`ContaGerencia`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `HealthGo`.`ContaGerencia` (
-  `Id` INT NOT NULL AUTO_INCREMENT,
-  `Nome` VARCHAR(255) NOT NULL,
-  `Email` VARCHAR(255) NOT NULL,
-  `Senha` VARCHAR(255) NOT NULL,
-  `CNPJ` VARCHAR(18) NOT NULL,
-  PRIMARY KEY (`Id`))
-ENGINE = InnoDB;
+
 
 
 -- -----------------------------------------------------
@@ -108,7 +98,7 @@ CREATE TABLE IF NOT EXISTS `HealthGo`.`Hotel` (
   `Descricao` VARCHAR(255) NULL,
   `DataInicio` DATETIME NULL,
   `Cidade_Id` INT NOT NULL,
-  `ContaGerencia_Id` INT NOT NULL,
+  `Pessoa_Id` INT NOT NULL,
   PRIMARY KEY (`Id`),
   INDEX `fk_Hotel_Cidade1_idx` (`Cidade_Id` ASC) VISIBLE,
   UNIQUE INDEX `CNPJ_UNIQUE` (`CNPJ` ASC) VISIBLE,
@@ -119,9 +109,9 @@ CREATE TABLE IF NOT EXISTS `HealthGo`.`Hotel` (
     REFERENCES `HealthGo`.`Cidade` (`Id`)
     ON DELETE CASCADE
     ON UPDATE NO ACTION,
-  CONSTRAINT `fk_Hotel_ContaGerencia1`
-    FOREIGN KEY (`ContaGerencia_Id`)
-    REFERENCES `HealthGo`.`ContaGerencia` (`Id`)
+  CONSTRAINT `fk_Hotel_Pessoa1`
+    FOREIGN KEY (`Pessoa_Id`)
+    REFERENCES `HealthGo`.`Pessoa` (`Id`)
     ON DELETE CASCADE
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
