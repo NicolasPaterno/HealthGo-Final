@@ -1,7 +1,7 @@
 ﻿using API_HealthGo.Contracts.Repositories;
 using API_HealthGo.Contracts.Service;
 using API_HealthGo.DTO;
-using API_HealthGo.Responses;
+using API_HealthGo.Responses.MessageResponse;
 using Microsoft.AspNetCore.Mvc;
 
 namespace API_HealthGo.Controllers
