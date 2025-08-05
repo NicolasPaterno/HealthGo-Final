@@ -144,6 +144,22 @@ namespace API_HealthGo.Repository
             }
         }
 
+        public async Task<int> GetIdByEmail(string email)
+        {
+            using (MySqlConnection con = _connection.GetConnection())
+            {
+                string sql = @$"
+                                SELECT 
+                                    ID AS {nameof(PessoaEntity.Id)}                                    
+                                FROM PESSOA
+                                WHERE EMAIL = @Email
+                            ";
+
+                int id = await con.QueryFirstOrDefaultAsync<int>(sql, new { email });
+                return id;
+            }
+        }
+
         public async Task AtualizarSenhaAsync(int pessoa_Id, string novaSenhaDoUsuario)
         {
             using var conn = _connection.GetConnection();
