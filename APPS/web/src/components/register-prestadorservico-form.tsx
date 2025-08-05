@@ -81,7 +81,7 @@ export default function RegisterPrestadorServicoForm({
       return;
     }
 
-    const userData = {
+    const pessoaData = {
       Nome: nome,
       DataNascimento: dataNascimento,
       CPF: cpf,
@@ -95,12 +95,21 @@ export default function RegisterPrestadorServicoForm({
       Rua: rua,
       NumeroEndereco: numeroEndereco,
       Cidade_Id: 1,
-      CNPJ: cnpj.trim() === "" ? null : cnpj,
-      Observacao: observacao.trim() === "" ? null : observacao,
     };
 
     try {
-      const response = await api.post("/PrestadorServico", userData);
+      // Criando a pessoa primeiro
+      const pessoaResponse = await api.post("/Pessoa/return-id", pessoaData);
+      const pessoaId = pessoaResponse.data.id;
+
+      // Depois, criando o prestador de serviço com o ID da pessoa
+      const prestadorServicoData = {
+        CNPJ: cnpj.trim() === "" ? null : cnpj,
+        Observacao: observacao.trim() === "" ? null : observacao,
+        Pessoa_Id: pessoaId,
+      };
+
+      await api.post("/PrestadorServico", prestadorServicoData);
 
       toast.success("Conta criada com sucesso!", {
         description: "Você será redirecionado para a página de login em instantes.",
@@ -111,10 +120,10 @@ export default function RegisterPrestadorServicoForm({
         navigate("/login");
       }, 3000);
 
-      console.log("Resposta da API:", response.data);
+      console.log("Resposta da API:", pessoaResponse.data);
 
     } catch (error: any) {
-      const errorMessage = error.response?.data?.message || "Por favor, verifique seus dados e tente novamente.";
+      const errorMessage = error.pessoaResponse?.data?.message || "Por favor, verifique seus dados e tente novamente.";
       toast.error("Erro ao criar a conta.", {
         description: errorMessage,
       });
