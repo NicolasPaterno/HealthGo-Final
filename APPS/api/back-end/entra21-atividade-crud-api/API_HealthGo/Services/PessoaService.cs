@@ -24,6 +24,7 @@ namespace API_HealthGo.Services
                 Data = await _repository.GetAllPessoa()
             };
         }
+
         public async Task<PessoaEntity> GetPessoaById(int id)
         {
             return await _repository.GetPessoaById(id);
@@ -63,6 +64,29 @@ namespace API_HealthGo.Services
             };
         }
 
+        public async Task<MessageWithIdResponse> PostAndReturnId(PessoaInsertDTO pessoaDto)
+        {
+            ValidatePassword(pessoaDto.Senha);
+
+            string passwordHash = BCrypt.Net.BCrypt.HashPassword(pessoaDto.Senha);
+            pessoaDto.Senha = passwordHash;
+
+            await _repository.InsertPessoa(pessoaDto); // Chama o repositório para inserir os dados
+
+            var id = await _repository.GetIdByEmail(pessoaDto.Email);
+
+            if (id == 0)
+            {
+                throw new ArgumentException("Erro ao inserir a pessoa. ID não encontrado.");
+            }
+
+            return new MessageWithIdResponse
+            {
+                Message = "Pessoa inserida com sucesso!",
+                Id = id
+            };
+        }
+
         public async Task<MessageResponse> Update(PessoaEntity pessoa)
         {
             await _repository.UpdatePessoa(pessoa);
@@ -71,6 +95,7 @@ namespace API_HealthGo.Services
                 Message = "Pessoa atualizada com sucesso!"
             };
         }
+
         public async Task<MessageResponse> ChangePassword(ChangePasswordDTO changePasswordDto)
         {
             var pessoa = await _repository.GetPessoaById(changePasswordDto.UserId);
@@ -119,6 +144,5 @@ namespace API_HealthGo.Services
                 Message = "Pessoa Excluída com sucesso"
             };
         }
-
     }
 }
