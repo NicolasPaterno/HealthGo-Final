@@ -13,6 +13,8 @@ namespace API_HealthGo.Contracts.Service
 
         Task<MessageResponse> Post(PessoaInsertDTO pessoa);
 
+        Task<MessageWithIdResponse> PostAndReturnId(PessoaInsertDTO pessoa);
+
         Task<MessageResponse> Delete(int id);
 
         Task<MessageResponse> Update(PessoaEntity pessoa);
