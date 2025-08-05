@@ -56,6 +56,34 @@ namespace API_HealthGo.Controllers
             }
         }
 
+        [AllowAnonymous]
+        [HttpPost("return-id")]
+        public async Task<IActionResult> PostAndReturnId([FromBody] PessoaInsertDTO pessoa)
+        {
+            try
+            {
+                var response = await _service.PostAndReturnId(pessoa); // <- agora retorna um objeto com Id e Message
+
+                if (response.Id <= 0)
+                {
+                    return BadRequest(new MessageResponse { Message = "Falha ao inserir pessoa." });
+                }
+
+                return Ok(response); // retorna { id: ..., message: ... }
+            }
+            catch (ArgumentException ex)
+            {
+                // Retorna 400 Bad Request se a senha for inválida
+                return BadRequest(new MessageResponse { Message = ex.Message });
+            }
+            catch (Exception ex)
+            {
+                // Retorna 500 para outros erros
+                var response = new MessageResponse { Message = $"Ocorreu um erro interno: {ex.Message}" };
+                return StatusCode(500, response);
+            }
+        }
+
         [HttpPut]
         public async Task<ActionResult<MessageResponse>> Update(PessoaEntity pessoa)
         {
