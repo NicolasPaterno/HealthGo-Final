@@ -57,5 +57,15 @@ namespace API_HealthGo.Services
                 Message = "Hotel deletado com sucesso!!"
             };
         }
+
+        public async Task<HotelGetAllResponse> GetHotelsByPessoaId(int pessoaId)
+        {
+            var hotels = await _repository.GetHotelsByPessoaId(pessoaId);
+            return new HotelGetAllResponse
+            {
+                Data = hotels
+            };
+        }
+    }
     }
 }

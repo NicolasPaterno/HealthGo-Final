@@ -117,7 +117,7 @@ namespace API_HealthGo.Repositories
                             ATIVO = @Ativo,
                             DATAINICIO = @DataInicio,
                             CIDADE_ID = @Cidade_Id,
-                            CONTAGERENCIA_ID = @ContaGerencia_Id
+                            PESSOA_ID = @Pessoa_id
                        WHERE ID = @Id
                 ";
 
