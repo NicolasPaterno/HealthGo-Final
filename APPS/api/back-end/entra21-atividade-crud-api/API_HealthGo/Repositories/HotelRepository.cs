@@ -68,7 +68,7 @@ namespace API_HealthGo.Repositories
                                 ATIVO AS {nameof(HotelEntity.Ativo)},
                                 DATAINICIO AS {nameof(HotelEntity.DataInicio)},
                                 CIDADE_ID AS {nameof(HotelEntity.Cidade_Id)},
-                                CONTAGERENCIA_ID AS {nameof(HotelEntity.Pessoa_id)}
+                                PESSOA_ID AS {nameof(HotelEntity.Pessoa_id)}
                          FROM HOTEL
                          WHERE ID = @id
                 ";
@@ -128,6 +128,37 @@ namespace API_HealthGo.Repositories
         {
             string sql = "DELETE FROM HOTEL WHERE ID = @id";
             await _connection.Execute(sql, new { id });
+        }
+
+        public async Task<IEnumerable<HotelEntity>> GetHotelsByPessoaId(int pessoaId)
+        {
+            using (MySqlConnection con = _connection.GetConnection())
+            {
+                string sql = $@"
+                         SELECT ID AS {nameof(HotelEntity.Id)},
+                                CNPJ AS {nameof(HotelEntity.CNPJ)},
+                                NOME AS {nameof(HotelEntity.Nome)},
+                                TIPO AS {nameof(HotelEntity.Tipo)},
+                                EMAIL AS {nameof(HotelEntity.Email)},
+                                TELEFONE AS {nameof(HotelEntity.Telefone)},
+                                SITE AS {nameof(HotelEntity.Site)},
+                                ACESSIBILIDADE AS {nameof(HotelEntity.Acessibilidade)},
+                                CEP AS {nameof(HotelEntity.CEP)},
+                                BAIRRO AS {nameof(HotelEntity.Bairro)},
+                                RUA AS {nameof(HotelEntity.Rua)},
+                                NUMEROENDERECO AS {nameof(HotelEntity.NumeroEndereco)},
+                                DESCRICAO AS {nameof(HotelEntity.Descricao)},
+                                ATIVO AS {nameof(HotelEntity.Ativo)},
+                                DATAINICIO AS {nameof(HotelEntity.DataInicio)},
+                                CIDADE_ID AS {nameof(HotelEntity.Cidade_Id)},
+                                PESSOA_ID AS {nameof(HotelEntity.Pessoa_id)}
+                         FROM HOTEL
+                         WHERE PESSOA_ID = @pessoaId
+                ";
+
+                IEnumerable<HotelEntity> hotelList = await con.QueryAsync<HotelEntity>(sql, new { pessoaId });
+                return hotelList;
+            }
         }
     }
 }
