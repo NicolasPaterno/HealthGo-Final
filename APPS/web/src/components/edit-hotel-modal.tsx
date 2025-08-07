@@ -11,8 +11,12 @@ import {
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { Textarea } from '@/components/ui/textarea';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Switch } from '@/components/ui/switch';
 import { toast } from 'sonner';
 import api from '@/services/api';
+import { LoadingSpinner } from '@/components/loading-spinner';
 
 interface Hotel {
   id: number;
@@ -21,7 +25,6 @@ interface Hotel {
   email: string;
   telefone: string;
   enderecoFoto: string;
-  // Add all other hotel properties to be edited
   tipo: string;
   site: string;
   acessibilidade: string;
@@ -45,15 +48,28 @@ interface EditHotelModalProps {
 
 const EditHotelModal: React.FC<EditHotelModalProps> = ({ hotel, isOpen, onClose, onHotelUpdated }) => {
   const [formData, setFormData] = useState<Hotel | null>(hotel);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     setFormData(hotel);
   }, [hotel]);
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     if (formData) {
       const { name, value } = e.target;
       setFormData({ ...formData, [name]: value });
+    }
+  };
+
+  const handleSelectChange = (name: string, value: string) => {
+    if (formData) {
+      setFormData({ ...formData, [name]: value });
+    }
+  };
+
+  const handleSwitchChange = (checked: boolean) => {
+    if (formData) {
+      setFormData({ ...formData, ativo: checked });
     }
   };
 
@@ -62,13 +78,16 @@ const EditHotelModal: React.FC<EditHotelModalProps> = ({ hotel, isOpen, onClose,
     if (!formData) return;
 
     try {
+      setLoading(true);
       await api.put(`/Hotel`, formData);
-      toast.success('Hotel updated successfully!');
+      toast.success('Hotel atualizado com sucesso!');
       onHotelUpdated(formData);
       onClose();
     } catch (error) {
       console.error('Failed to update hotel:', error);
-      toast.error('Failed to update hotel.');
+      toast.error('Erro ao atualizar hotel. Tente novamente.');
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -78,51 +97,198 @@ const EditHotelModal: React.FC<EditHotelModalProps> = ({ hotel, isOpen, onClose,
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="sm:max-w-[425px]">
+      <DialogContent className="sm:max-w-[600px] max-h-[90vh] overflow-y-auto">
         <DialogHeader>
-          <DialogTitle>Edit Hotel</DialogTitle>
+          <DialogTitle>Editar Hotel</DialogTitle>
           <DialogDescription>
-            Make changes to your hotel here. Click save when you're done.
+            Faça as alterações necessárias no hotel. Clique em salvar quando terminar.
           </DialogDescription>
         </DialogHeader>
-        <form onSubmit={handleSubmit} className="grid gap-4 py-4">
-          <div className="grid grid-cols-4 items-center gap-4">
-            <Label htmlFor="nome" className="text-right">
-              Name
-            </Label>
-            <Input id="nome" name="nome" value={formData.nome} onChange={handleChange} className="col-span-3" />
+
+        <form onSubmit={handleSubmit} className="space-y-4">
+          <div className="grid grid-cols-2 gap-4">
+            <div className="space-y-2">
+              <Label htmlFor="nome">Nome do Hotel *</Label>
+              <Input
+                id="nome"
+                name="nome"
+                value={formData.nome}
+                onChange={handleChange}
+                required
+              />
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="cnpj">CNPJ *</Label>
+              <Input
+                id="cnpj"
+                name="cnpj"
+                value={formData.cnpj}
+                onChange={handleChange}
+                required
+              />
+            </div>
           </div>
-          <div className="grid grid-cols-4 items-center gap-4">
-            <Label htmlFor="cnpj" className="text-right">
-              CNPJ
-            </Label>
-            <Input id="cnpj" name="cnpj" value={formData.cnpj} onChange={handleChange} className="col-span-3" />
+
+          <div className="grid grid-cols-2 gap-4">
+            <div className="space-y-2">
+              <Label htmlFor="email">Email *</Label>
+              <Input
+                id="email"
+                name="email"
+                type="email"
+                value={formData.email}
+                onChange={handleChange}
+                required
+              />
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="telefone">Telefone *</Label>
+              <Input
+                id="telefone"
+                name="telefone"
+                value={formData.telefone}
+                onChange={handleChange}
+                required
+              />
+            </div>
           </div>
-           <div className="grid grid-cols-4 items-center gap-4">
-            <Label htmlFor="email" className="text-right">
-              Email
-            </Label>
-            <Input id="email" name="email" value={formData.email} onChange={handleChange} className="col-span-3" />
+
+          <div className="grid grid-cols-2 gap-4">
+            <div className="space-y-2">
+              <Label htmlFor="tipo">Tipo de Estabelecimento *</Label>
+              <Select value={formData.tipo} onValueChange={(value) => handleSelectChange('tipo', value)}>
+                <SelectTrigger>
+                  <SelectValue placeholder="Selecione o tipo" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="Hotel">Hotel</SelectItem>
+                  <SelectItem value="Pousada">Pousada</SelectItem>
+                  <SelectItem value="Hostel">Hostel</SelectItem>
+                  <SelectItem value="Apartamento">Apartamento</SelectItem>
+                  <SelectItem value="Casa">Casa</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="site">Site</Label>
+              <Input
+                id="site"
+                name="site"
+                value={formData.site}
+                onChange={handleChange}
+                placeholder="https://www.exemplo.com"
+              />
+            </div>
           </div>
-           <div className="grid grid-cols-4 items-center gap-4">
-            <Label htmlFor="telefone" className="text-right">
-              Telefone
-            </Label>
-            <Input id="telefone" name="telefone" value={formData.telefone} onChange={handleChange} className="col-span-3" />
+
+          <div className="space-y-2">
+            <Label htmlFor="acessibilidade">Acessibilidade</Label>
+            <Input
+              id="acessibilidade"
+              name="acessibilidade"
+              value={formData.acessibilidade}
+              onChange={handleChange}
+              placeholder="Ex: Rampas, elevadores, quartos adaptados"
+            />
           </div>
-          <div className="grid grid-cols-4 items-center gap-4">
-            <Label htmlFor="enderecoFoto" className="text-right">
-              Photo URL
-            </Label>
-            <Input id="enderecoFoto" name="enderecoFoto" value={formData.enderecoFoto} onChange={handleChange} className="col-span-3" />
+
+          <div className="grid grid-cols-3 gap-4">
+            <div className="space-y-2">
+              <Label htmlFor="cep">CEP *</Label>
+              <Input
+                id="cep"
+                name="cep"
+                value={formData.cep}
+                onChange={handleChange}
+                required
+              />
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="bairro">Bairro *</Label>
+              <Input
+                id="bairro"
+                name="bairro"
+                value={formData.bairro}
+                onChange={handleChange}
+                required
+              />
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="numeroEndereco">Número *</Label>
+              <Input
+                id="numeroEndereco"
+                name="numeroEndereco"
+                value={formData.numeroEndereco}
+                onChange={handleChange}
+                required
+              />
+            </div>
           </div>
-          <DialogFooter>
+
+          <div className="space-y-2">
+            <Label htmlFor="rua">Rua *</Label>
+            <Input
+              id="rua"
+              name="rua"
+              value={formData.rua}
+              onChange={handleChange}
+              required
+            />
+          </div>
+
+          <div className="space-y-2">
+            <Label htmlFor="descricao">Descrição</Label>
+            <Textarea
+              id="descricao"
+              name="descricao"
+              value={formData.descricao}
+              onChange={handleChange}
+              placeholder="Descreva as características e diferenciais do hotel"
+              rows={3}
+            />
+          </div>
+
+          <div className="space-y-2">
+            <Label htmlFor="enderecoFoto">URL da Foto</Label>
+            <Input
+              id="enderecoFoto"
+              name="enderecoFoto"
+              value={formData.enderecoFoto}
+              onChange={handleChange}
+              placeholder="https://exemplo.com/foto.jpg"
+            />
+          </div>
+
+          <div className="flex items-center space-x-2">
+            <Switch
+              id="ativo"
+              checked={formData.ativo}
+              onCheckedChange={handleSwitchChange}
+            />
+            <Label htmlFor="ativo">Hotel Ativo</Label>
+          </div>
+
+          <DialogFooter className="pt-4">
             <DialogClose asChild>
-              <Button type="button" variant="secondary">
-                Cancel
+              <Button type="button" variant="secondary" disabled={loading}>
+                Cancelar
               </Button>
             </DialogClose>
-            <Button type="submit">Save changes</Button>
+            <Button type="submit" disabled={loading}>
+              {loading ? (
+                <>
+                  <LoadingSpinner size="sm" className="mr-2" />
+                  Salvando...
+                </>
+              ) : (
+                'Salvar Alterações'
+              )}
+            </Button>
           </DialogFooter>
         </form>
       </DialogContent>

@@ -38,6 +38,14 @@ namespace API_HealthGo.Services
             return await _repository.GetById(id);
         }
 
+        public async Task<QuartoGetAllResponse> GetByHotelId(int hotelId)
+        {
+            return new QuartoGetAllResponse
+            {
+                Data = await _repository.GetByHotelId(hotelId)
+            };
+        }
+
         public async Task<MessageResponse> Post(QuartoInsertDTO quarto)
         {
             await _repository.Insert(quarto);
