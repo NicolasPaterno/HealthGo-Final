@@ -190,7 +190,7 @@ const ViewHotelsPage = () => {
                       </p>
                     </div>
                   </div>
-                  
+
                   <div className="flex items-center space-x-2">
                     <Button
                       variant="outline"
@@ -206,7 +206,7 @@ const ViewHotelsPage = () => {
                         <ChevronDown className="h-4 w-4" />
                       )}
                     </Button>
-                    
+
                     <Button
                       variant="outline"
                       size="sm"
@@ -249,9 +249,9 @@ const ViewHotelsPage = () => {
               {expandedHotels.has(hotel.id) && (
                 <div className="border-t border-gray-200 dark:border-gray-700">
                   <div className="p-6">
-                    <HotelRoomsSection 
-                      hotelId={hotel.id} 
-                      hotelName={hotel.nome} 
+                    <HotelRoomsSection
+                      hotelId={hotel.id}
+                      hotelName={hotel.nome}
                     />
                   </div>
                 </div>

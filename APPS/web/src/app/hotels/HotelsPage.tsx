@@ -72,7 +72,7 @@ export default function HotelsPage() {
             </CardContent>
             <CardFooter>
               <Button onClick={() => handleAddToCart(hotel)} className="w-full">
-                 <ShoppingCart className="mr-2 h-4 w-4" />
+                <ShoppingCart className="mr-2 h-4 w-4" />
                 Adicionar ao Carrinho
               </Button>
             </CardFooter>

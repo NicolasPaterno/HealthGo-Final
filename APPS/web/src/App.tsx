@@ -30,6 +30,7 @@ const DashboardGerentePage = lazy(() => import("./app/dashboard/DashboardGerente
 const DashboardGerenteContent = lazy(() => import("./app/dashboard/DashboardGerenteContent"));
 const CadastrarHotelPage = lazy(() => import("./app/hotels/CadastrarHotelPage"));
 const ViewHotelsPage = lazy(() => import("./app/hotels/ViewHotelsPage"));
+const QuartosPage = lazy(() => import("./app/dashboard/QuartosPage"));
 
 
 function App() {
@@ -66,6 +67,7 @@ function App() {
                   <Route index element={<DashboardGerenteContent />} />
                   <Route path="add-hotel" element={<CadastrarHotelPage />} />
                   <Route path="view-hotels" element={<ViewHotelsPage />} />
+                  <Route path="quartos" element={<QuartosPage />} />
                 </Route>
                 <Route path="/settings" element={<DashboardGerentePage />}>
                   <Route index element={<SettingsPage />} />

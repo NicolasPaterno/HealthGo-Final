@@ -16,7 +16,7 @@ interface Room {
   observacao: string;
   preco: number;
   limitePessoa: number;
-  hotel_Id: number;
+  Hotel_Id: number;
 }
 
 interface EditRoomModalProps {
@@ -61,9 +61,9 @@ export default function EditRoomModal({ room, isOpen, onClose, onRoomUpdated }: 
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     if (!room) return;
-    
+
     if (!formData.numero.trim()) {
       toast.error('Número do quarto é obrigatório');
       return;
@@ -84,9 +84,9 @@ export default function EditRoomModal({ room, isOpen, onClose, onRoomUpdated }: 
       await api.put('/Quarto', {
         id: room.id,
         ...formData,
-        hotel_Id: room.hotel_Id
+        Hotel_Id: room.Hotel_Id
       });
-      
+
       toast.success('Quarto atualizado com sucesso!');
       onRoomUpdated();
       onClose();
@@ -113,7 +113,7 @@ export default function EditRoomModal({ room, isOpen, onClose, onRoomUpdated }: 
         <DialogHeader>
           <DialogTitle>Editar Quarto {room.numero}</DialogTitle>
         </DialogHeader>
-        
+
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="grid grid-cols-2 gap-4">
             <div className="space-y-2">
@@ -126,7 +126,7 @@ export default function EditRoomModal({ room, isOpen, onClose, onRoomUpdated }: 
                 required
               />
             </div>
-            
+
             <div className="space-y-2">
               <Label htmlFor="andar">Andar</Label>
               <Input
@@ -154,7 +154,7 @@ export default function EditRoomModal({ room, isOpen, onClose, onRoomUpdated }: 
                 required
               />
             </div>
-            
+
             <div className="space-y-2">
               <Label htmlFor="limitePessoa">Limite de Pessoas *</Label>
               <Input

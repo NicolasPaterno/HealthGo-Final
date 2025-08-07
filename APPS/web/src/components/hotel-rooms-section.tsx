@@ -18,7 +18,7 @@ interface Room {
   observacao: string;
   preco: number;
   limitePessoa: number;
-  hotel_Id: number;
+  Hotel_Id: number;
 }
 
 interface HotelRoomsSectionProps {

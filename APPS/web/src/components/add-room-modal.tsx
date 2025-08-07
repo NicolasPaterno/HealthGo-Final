@@ -37,7 +37,7 @@ export default function AddRoomModal({ isOpen, onClose, hotelId, onRoomAdded }: 
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     if (!formData.numero.trim()) {
       toast.error('Número do quarto é obrigatório');
       return;
@@ -57,9 +57,9 @@ export default function AddRoomModal({ isOpen, onClose, hotelId, onRoomAdded }: 
       setLoading(true);
       await api.post('/Quarto', {
         ...formData,
-        hotel: hotelId
+        Hotel_Id: hotelId
       });
-      
+
       toast.success('Quarto adicionado com sucesso!');
       setFormData({
         numero: '',
@@ -92,7 +92,7 @@ export default function AddRoomModal({ isOpen, onClose, hotelId, onRoomAdded }: 
         <DialogHeader>
           <DialogTitle>Adicionar Novo Quarto</DialogTitle>
         </DialogHeader>
-        
+
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="grid grid-cols-2 gap-4">
             <div className="space-y-2">
@@ -105,7 +105,7 @@ export default function AddRoomModal({ isOpen, onClose, hotelId, onRoomAdded }: 
                 required
               />
             </div>
-            
+
             <div className="space-y-2">
               <Label htmlFor="andar">Andar</Label>
               <Input
@@ -133,7 +133,7 @@ export default function AddRoomModal({ isOpen, onClose, hotelId, onRoomAdded }: 
                 required
               />
             </div>
-            
+
             <div className="space-y-2">
               <Label htmlFor="limitePessoa">Limite de Pessoas *</Label>
               <Input
