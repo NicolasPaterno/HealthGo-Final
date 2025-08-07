@@ -1,0 +1,84 @@
+# Regras e configurações para o projeto HealthGo no Cursor
+
+## Estrutura do Projeto
+- Frontend: React + TypeScript + Vite (pasta APPS/web)
+- Backend: .NET 7.0 Web API (pasta APPS/api/back-end/entra21-atividade-crud-api/API_HealthGo)
+- Banco de dados: MySQL (scripts em APPS/database)
+
+## Comandos Úteis
+
+### Para executar o projeto completo:
+```bash
+npm run dev
+```
+
+### Para executar apenas o frontend:
+```bash
+npm run dev:frontend
+```
+
+### Para executar apenas o backend:
+```bash
+npm run dev:backend
+```
+
+### Para instalar todas as dependências:
+```bash
+npm run setup
+```
+
+## Atalhos do Cursor/VS Code
+
+1. **F5** - Debug completo (frontend + backend)
+2. **Ctrl+Shift+P** → "Tasks: Run Task" → "start-fullstack"
+3. **Ctrl+Shift+P** → "Tasks: Run Task" → "install-dependencies"
+
+## Portas Utilizadas
+- Frontend: http://localhost:5173
+- Backend: https://localhost:7243 ou http://localhost:5204
+- Swagger: https://localhost:7243/swagger (abre automaticamente)
+
+## Dicas de Desenvolvimento
+
+1. **Hot Reload**: O frontend atualiza automaticamente quando você salva arquivos
+2. **Watch Mode**: O backend reinicia automaticamente quando há mudanças
+3. **Debug**: Use F5 para debugar ambos os projetos simultaneamente
+4. **Terminal**: Use Ctrl+` para abrir o terminal integrado
+
+## Estrutura de Arquivos Importantes
+
+### Frontend (APPS/web/)
+- `src/App.tsx` - Componente principal
+- `src/components/` - Componentes React
+- `src/services/api.ts` - Configuração da API
+- `src/app/` - Páginas da aplicação
+
+### Backend (APPS/api/back-end/entra21-atividade-crud-api/API_HealthGo/)
+- `Controllers/` - Controladores da API
+- `Services/` - Lógica de negócio
+- `Repositories/` - Acesso a dados
+- `Entities/` - Modelos de dados
+- `DTO/` - Objetos de transferência de dados
+
+## Banco de Dados
+- Scripts de criação: `APPS/database/database_creation.sql`
+- Dados iniciais: `APPS/database/database_insertions.sql`
+- Modelo ER: `APPS/database/relationships_entity.mwb`
+
+## Troubleshooting
+
+### Erro de dependências:
+```bash
+npm run install:all
+```
+
+### Erro de compilação .NET (só execute se necessário):
+```bash
+npm run clean:backend
+npm run install:backend
+```
+
+**Nota:** O `dotnet run` compila automaticamente quando necessário.
+
+### Porta em uso:
+Verifique se não há outros processos nas portas 5000, 7000 ou 5173 
