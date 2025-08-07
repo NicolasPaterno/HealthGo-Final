@@ -1,35 +1,50 @@
 {
-    "version": "0.2.0",
-    "configurations": [
-        {
-            // Use IntelliSense to find out which attributes exist for C# debugging
-            // Use hover for the description of the existing attributes
-            // For further information visit https://github.com/dotnet/vscode-csharp/blob/main/debugger-launchjson.md.
-            "name": ".NET Core Launch (web)",
-            "type": "coreclr",
-            "request": "launch",
-            "preLaunchTask": "build",
-            // If you have changed target frameworks, make sure to update the program path.
-            "program": "${workspaceFolder}/APPS/api/back-end/entra21-atividade-crud-api/API_HealthGo/bin/Debug/net7.0/API_HealthGo.dll",
-            "args": [],
-            "cwd": "${workspaceFolder}/APPS/api/back-end/entra21-atividade-crud-api/API_HealthGo",
-            "stopAtEntry": false,
-            // Enable launching a web browser when ASP.NET Core starts. For more information: https://aka.ms/VSCode-CS-LaunchJson-WebBrowser
-            "serverReadyAction": {
-                "action": "openExternally",
-                "pattern": "\\bNow listening on:\\s+(https?://\\S+)"
-            },
-            "env": {
-                "ASPNETCORE_ENVIRONMENT": "Development"
-            },
-            "sourceFileMap": {
-                "/Views": "${workspaceFolder}/Views"
-            }
-        },
-        {
-            "name": ".NET Core Attach",
-            "type": "coreclr",
-            "request": "attach"
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Launch Backend (.NET)",
+      "type": "coreclr",
+      "request": "launch",
+      "program": "${workspaceFolder}/APPS/api/back-end/entra21-atividade-crud-api/API_HealthGo/bin/Debug/net7.0/API_HealthGo.dll",
+      "args": [],
+      "cwd": "${workspaceFolder}/APPS/api/back-end/entra21-atividade-crud-api/API_HealthGo",
+      "console": "internalConsole",
+      "stopAtEntry": false,
+      "env": {
+        "ASPNETCORE_ENVIRONMENT": "Development"
+      },
+      "launchBrowser": {
+        "enabled": true,
+        "args": "https://localhost:7243/swagger",
+        "windows": {
+          "command": "cmd.exe",
+          "args": "/C start https://localhost:7243/swagger"
         }
-    ]
+      }
+    },
+    {
+      "name": "Launch Frontend (Vite)",
+      "type": "node",
+      "request": "launch",
+      "program": "${workspaceFolder}/APPS/web/node_modules/.bin/vite",
+      "args": [
+        "--port",
+        "3000"
+      ],
+      "cwd": "${workspaceFolder}/APPS/web",
+      "console": "integratedTerminal",
+      "env": {
+        "NODE_ENV": "development"
+      }
+    }
+  ],
+  "compounds": [
+    {
+      "name": "Launch Full Stack",
+      "configurations": [
+        "Launch Backend (.NET)",
+        "Launch Frontend (Vite)"
+      ]
+    }
+  ]
 }
