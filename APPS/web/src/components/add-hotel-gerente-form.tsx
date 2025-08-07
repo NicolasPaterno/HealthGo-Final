@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
@@ -21,7 +21,8 @@ import {
 } from "@/components/ui/select";
 import { useAuth } from "@/hooks/useAuth";
 import api from "@/services/api";
-import { LoadingSpinner } from "@/components/loading-spinner"; // Importe o LoadingSpinner
+import { LoadingSpinner } from "@/components/loading-spinner";
+import axios from "axios";
 
 // Interface para o DTO de inserção de Hotel
 interface HotelInsertDTO {
@@ -68,7 +69,9 @@ export function AddHotelGerenteForm({ className, ...props }: React.ComponentProp
   const [numeroEndereco, setNumeroEndereco] = useState("");
   const [descricao, setDescricao] = useState("");
   const [cidadeId, setCidadeId] = useState<number | string>("");
+  const [cidade, setCidade] = useState("");
   const [loading, setLoading] = useState(false);
+  const [isCepLoading, setIsCepLoading] = useState(false);
 
   const handleFotoChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
@@ -83,12 +86,61 @@ export function AddHotelGerenteForm({ className, ...props }: React.ComponentProp
     }
   };
 
+  const handleCepBlur = useCallback(async (event: React.FocusEvent<HTMLInputElement>) => {
+    const currentCep = event.target.value.replace(/\D/g, "");
+
+    if (currentCep.length !== 8) {
+      return;
+    }
+
+    setIsCepLoading(true);
+    try {
+      const { data } = await axios.get(`https://viacep.com.br/ws/${currentCep}/json/`);
+
+      if (data.erro) {
+        toast.error("CEP não encontrado.");
+        return;
+      }
+
+      setRua(data.logradouro);
+      setBairro(data.bairro);
+      setCidade(data.localidade);
+
+      // Mapear cidade para ID baseado no nome
+      if (data.localidade) {
+        const cidadeLower = data.localidade.toLowerCase();
+        if (cidadeLower.includes('blumenau')) {
+          setCidadeId(1);
+        } else if (cidadeLower.includes('joinville')) {
+          setCidadeId(2);
+        } else {
+          // Para outras cidades, usar um valor padrão ou deixar o usuário selecionar
+          setCidadeId(1); // Default para Blumenau
+        }
+      }
+
+    } catch (error) {
+      toast.error("Não foi possível buscar o CEP.");
+      console.error("CEP fetch error:", error);
+    } finally {
+      setIsCepLoading(false);
+    }
+  }, []);
+
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
     setLoading(true);
 
     if (!isAuthenticated) {
       toast.error("Erro: Usuário não autenticado.");
+      setLoading(false);
+      return;
+    }
+
+    if (!cidadeId || cidadeId === "") {
+      toast.error("Cidade inválida", {
+        description: "Por favor, insira um CEP válido para buscar a cidade.",
+      });
       setLoading(false);
       return;
     }
@@ -127,7 +179,7 @@ export function AddHotelGerenteForm({ className, ...props }: React.ComponentProp
       setLoading(false);
     }
   };
-  
+
   // Renderiza um spinner de carregamento enquanto a autenticação está sendo verificada
   if (isLoading) {
     return <LoadingSpinner />;
@@ -262,7 +314,14 @@ export function AddHotelGerenteForm({ className, ...props }: React.ComponentProp
                 placeholder="00000-000"
                 value={cep}
                 onChange={(e) => setCep(e.target.value)}
+                onBlur={handleCepBlur}
+                disabled={isCepLoading}
               />
+              {isCepLoading && (
+                <div className="text-sm text-muted-foreground">
+                  Buscando endereço...
+                </div>
+              )}
             </div>
             <div className="grid gap-2 w-full">
               <Label htmlFor="bairro">Bairro</Label>
@@ -298,14 +357,25 @@ export function AddHotelGerenteForm({ className, ...props }: React.ComponentProp
             </div>
           </div>
           <div className="grid gap-2 w-full">
+            <Label htmlFor="cidade">Cidade</Label>
+            <Input
+              id="cidade"
+              type="text"
+              placeholder="Cidade será preenchida automaticamente"
+              value={cidade}
+              disabled
+            />
+          </div>
+          <div className="grid gap-2 w-full">
             <Label htmlFor="cidadeId">ID da Cidade</Label>
             <Input
               id="cidadeId"
               type="number"
-              placeholder="Ex: 1"
+              placeholder="Será preenchido automaticamente"
               required
               value={cidadeId}
               onChange={(e) => setCidadeId(e.target.value)}
+              disabled
             />
           </div>
           <div className="grid gap-2 w-full md:col-span-2">

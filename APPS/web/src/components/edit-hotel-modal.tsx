@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import {
   Dialog,
   DialogContent,
@@ -17,6 +17,7 @@ import { Switch } from '@/components/ui/switch';
 import { toast } from 'sonner';
 import api from '@/services/api';
 import { LoadingSpinner } from '@/components/loading-spinner';
+import axios from 'axios';
 
 interface Hotel {
   id: number;
@@ -49,6 +50,7 @@ interface EditHotelModalProps {
 const EditHotelModal: React.FC<EditHotelModalProps> = ({ hotel, isOpen, onClose, onHotelUpdated }) => {
   const [formData, setFormData] = useState<Hotel | null>(hotel);
   const [loading, setLoading] = useState(false);
+  const [isCepLoading, setIsCepLoading] = useState(false);
 
   useEffect(() => {
     setFormData(hotel);
@@ -72,6 +74,39 @@ const EditHotelModal: React.FC<EditHotelModalProps> = ({ hotel, isOpen, onClose,
       setFormData({ ...formData, ativo: checked });
     }
   };
+
+  const handleCepBlur = useCallback(async (event: React.FocusEvent<HTMLInputElement>) => {
+    if (!formData) return;
+
+    const currentCep = event.target.value.replace(/\D/g, "");
+
+    if (currentCep.length !== 8) {
+      return;
+    }
+
+    setIsCepLoading(true);
+    try {
+      const { data } = await axios.get(`https://viacep.com.br/ws/${currentCep}/json/`);
+
+      if (data.erro) {
+        toast.error("CEP não encontrado.");
+        return;
+      }
+
+      setFormData({
+        ...formData,
+        rua: data.logradouro,
+        bairro: data.bairro,
+        cep: event.target.value
+      });
+
+    } catch (error) {
+      toast.error("Não foi possível buscar o CEP.");
+      console.error("CEP fetch error:", error);
+    } finally {
+      setIsCepLoading(false);
+    }
+  }, [formData]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -203,8 +238,15 @@ const EditHotelModal: React.FC<EditHotelModalProps> = ({ hotel, isOpen, onClose,
                 name="cep"
                 value={formData.cep}
                 onChange={handleChange}
+                onBlur={handleCepBlur}
+                disabled={isCepLoading}
                 required
               />
+              {isCepLoading && (
+                <div className="text-sm text-muted-foreground">
+                  Buscando endereço...
+                </div>
+              )}
             </div>
 
             <div className="space-y-2">

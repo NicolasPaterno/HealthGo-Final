@@ -44,11 +44,11 @@ const data = {
       icon: LayoutDashboard,
     },
     {
-      title: "Hoteis",
+      title: "Hotéis",
       url: "/dashboard/hotels",
       icon: Building,
     },
-     {
+    {
       title: "Hospitais", // Novo item
       url: "/dashboard/hospitals",
       icon: Hospital,
@@ -183,7 +183,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         {/* A LINHA ABAIXO FOI ALTERADA */}
         <NavMain items={data.navMain} pathname={location.pathname} />
         {/* A LINHA ABAIXO FOI ALTERADA */}
-        <NavDocuments items={data.documents} pathname={location.pathname}/>
+        <NavDocuments items={data.documents} pathname={location.pathname} />
         {/* A LINHA ABAIXO FOI ALTERADA */}
         <NavSecondary items={data.navSecondary} pathname={location.pathname} className="mt-auto" />
       </SidebarContent>

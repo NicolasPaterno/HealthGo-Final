@@ -20,6 +20,8 @@ const DashboardPage = lazy(() => import("./app/dashboard/DashboardPage"));
 const DashboardContent = lazy(() => import("./app/dashboard/DashboardContent"));
 const SettingsPage = lazy(() => import("./app/settings/SettingsPage"));
 const HotelsPage = lazy(() => import("./app/hotels/HotelsPage"));
+const HotelsBrowsePage = lazy(() => import("./app/hotels/HotelsBrowsePage"));
+const HotelDetailPage = lazy(() => import("./app/hotels/HotelDetailPage"));
 const TicketsPage = lazy(() => import("./app/tickets/TicketsPage"));
 const PsychologistPage = lazy(() => import("./app/psychologists/PsychologistPage"));
 const CaregiversPage = lazy(() => import("./app/caregivers/CaregiversPage"));
@@ -50,7 +52,8 @@ function App() {
               <Route element={<RoleProtectedRoute allowedRoles={["Consumidor"]} />}>
                 <Route path="/dashboard" element={<DashboardPage />}>
                   <Route index element={<DashboardContent />} />
-                  <Route path="hotels" element={<HotelsPage />} />
+                  <Route path="hotels" element={<HotelsBrowsePage />} />
+                  <Route path="hotels-management" element={<HotelsPage />} />
                   <Route path="tickets" element={<TicketsPage />} />
                   <Route path="psychologist" element={<PsychologistPage />} />
                   <Route path="caregivers" element={<CaregiversPage />} />
@@ -77,6 +80,9 @@ function App() {
               <Route path="/purchase" element={<DashboardPage />}>
                 <Route path="history" index element={<PurchaseHistoryPage />} />
               </Route>
+
+              {/* Rotas públicas para visualização de hotéis */}
+              <Route path="/hotel/:id" element={<HotelDetailPage />} />
 
             </Route>
 

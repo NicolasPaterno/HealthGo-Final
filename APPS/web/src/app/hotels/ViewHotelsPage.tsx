@@ -30,6 +30,16 @@ interface Hotel {
   pessoa_id: number;
   ativo: boolean;
   dataInicio: string;
+  cidade?: {
+    id: number;
+    nome: string;
+    estado_Id: number;
+    estado?: {
+      id: number;
+      nome: string;
+      sigla: string;
+    };
+  };
 }
 
 const ViewHotelsPage = () => {
@@ -187,6 +197,12 @@ const ViewHotelsPage = () => {
                       </div>
                       <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">
                         {hotel.rua}, {hotel.numeroEndereco} - {hotel.bairro}
+                        {hotel.cidade && (
+                          <span> - {hotel.cidade.nome}{hotel.cidade.estado && `, ${hotel.cidade.estado.sigla}`}</span>
+                        )}
+                      </p>
+                      <p className="text-sm text-gray-500 dark:text-gray-500 mt-1">
+                        CEP: {hotel.cep}
                       </p>
                     </div>
                   </div>
@@ -243,6 +259,26 @@ const ViewHotelsPage = () => {
                   <div>
                     <span className="font-medium">Site:</span> {hotel.site || 'Não informado'}
                   </div>
+                  <div>
+                    <span className="font-medium">Endereço:</span> {hotel.rua}, {hotel.numeroEndereco}
+                  </div>
+                  <div>
+                    <span className="font-medium">Bairro:</span> {hotel.bairro}
+                  </div>
+                  <div>
+                    <span className="font-medium">Cidade:</span> {hotel.cidade?.nome || 'Não informado'}
+                  </div>
+                  <div>
+                    <span className="font-medium">Estado:</span> {hotel.cidade?.estado?.sigla || 'Não informado'}
+                  </div>
+                  <div>
+                    <span className="font-medium">CEP:</span> {hotel.cep}
+                  </div>
+                  {hotel.acessibilidade && (
+                    <div>
+                      <span className="font-medium">Acessibilidade:</span> {hotel.acessibilidade}
+                    </div>
+                  )}
                 </div>
               </div>
 
