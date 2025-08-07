@@ -35,5 +35,8 @@
         public int Cidade_Id { get; set; }
 
         public int Pessoa_id { get; set; }
+
+        // Propriedades de navegação para cidade e estado
+        public CidadeEntity Cidade { get; set; }
     }
 }

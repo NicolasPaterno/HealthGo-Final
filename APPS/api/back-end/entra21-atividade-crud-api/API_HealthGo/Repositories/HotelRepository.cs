@@ -21,60 +21,132 @@ namespace API_HealthGo.Repositories
         {
             using (MySqlConnection con = _connection.GetConnection())
             {
-                string sql = $@"
-                         SELECT ID AS {nameof(HotelEntity.Id)},
-                                CNPJ AS {nameof(HotelEntity.CNPJ)},
-                                NOME AS {nameof(HotelEntity.Nome)},
-                                TIPO AS {nameof(HotelEntity.Tipo)},
-                                EMAIL AS {nameof(HotelEntity.Email)},
-                                TELEFONE AS {nameof(HotelEntity.Telefone)},
-                                SITE AS {nameof(HotelEntity.Site)},
-                                ACESSIBILIDADE AS {nameof(HotelEntity.Acessibilidade)},
-                                CEP AS {nameof(HotelEntity.CEP)},
-                                BAIRRO AS {nameof(HotelEntity.Bairro)},
-                                RUA AS {nameof(HotelEntity.Rua)},
-                                NUMEROENDERECO AS {nameof(HotelEntity.NumeroEndereco)},
-                                DESCRICAO AS {nameof(HotelEntity.Descricao)},
-                                ATIVO AS {nameof(HotelEntity.Ativo)},
-                                DATAINICIO AS {nameof(HotelEntity.DataInicio)},
-                                CIDADE_ID AS {nameof(HotelEntity.Cidade_Id)},
-                                PESSOA_ID AS {nameof(HotelEntity.Pessoa_id)}
-                         FROM HOTEL
+                string sql = @"
+                    SELECT 
+                        h.ID AS Id,
+                        h.CNPJ,
+                        h.NOME AS Nome,
+                        h.TIPO AS Tipo,
+                        h.EMAIL AS Email,
+                        h.TELEFONE AS Telefone,
+                        h.SITE AS Site,
+                        h.ACESSIBILIDADE AS Acessibilidade,
+                        h.CEP,
+                        h.BAIRRO AS Bairro,
+                        h.RUA AS Rua,
+                        h.NUMEROENDERECO AS NumeroEndereco,
+                        h.DESCRICAO AS Descricao,
+                        h.ATIVO AS Ativo,
+                        h.DATAINICIO AS DataInicio,
+                        h.CIDADE_ID AS Cidade_Id,
+                        h.PESSOA_ID AS Pessoa_id,
+                        c.ID AS Cidade_Id,
+                        c.NOME AS Cidade_Nome,
+                        c.ESTADO_ID AS Cidade_Estado_Id,
+                        e.ID AS Estado_Id,
+                        e.NOME AS Estado_Nome,
+                        e.SIGLA AS Estado_Sigla
+                    FROM HOTEL h
+                    LEFT JOIN CIDADE c ON h.CIDADE_ID = c.ID
+                    LEFT JOIN ESTADO e ON c.ESTADO_ID = e.ID
+                    WHERE h.ATIVO = 1
                 ";
 
-                IEnumerable<HotelEntity> hotelList = await con.QueryAsync<HotelEntity>(sql);
-                return hotelList;
+                var hotelDictionary = new Dictionary<int, HotelEntity>();
+
+                await con.QueryAsync<HotelEntity, CidadeEntity, EstadoEntity, HotelEntity>(
+                    sql,
+                    (hotel, cidade, estado) =>
+                    {
+                        if (!hotelDictionary.TryGetValue(hotel.Id, out var hotelEntry))
+                        {
+                            hotelEntry = hotel;
+                            hotelDictionary.Add(hotel.Id, hotelEntry);
+                        }
+
+                        if (cidade != null)
+                        {
+                            hotelEntry.Cidade = cidade;
+                            if (estado != null)
+                            {
+                                hotelEntry.Cidade.Estado = estado;
+                            }
+                        }
+
+                        return hotelEntry;
+                    },
+                    splitOn: "Cidade_Id,Estado_Id"
+                );
+
+                return hotelDictionary.Values;
             }
         }
+
+
 
         public async Task<HotelEntity> GetHotelById(int id)
         {
             using (MySqlConnection con = _connection.GetConnection())
             {
-                string sql = $@"
-                         SELECT ID AS {nameof(HotelEntity.Id)},
-                                CNPJ AS {nameof(HotelEntity.CNPJ)},
-                                NOME AS {nameof(HotelEntity.Nome)},
-                                TIPO AS {nameof(HotelEntity.Tipo)},
-                                EMAIL AS {nameof(HotelEntity.Email)},
-                                TELEFONE AS {nameof(HotelEntity.Telefone)},
-                                SITE AS {nameof(HotelEntity.Site)},
-                                ACESSIBILIDADE AS {nameof(HotelEntity.Acessibilidade)},
-                                CEP AS {nameof(HotelEntity.CEP)},
-                                BAIRRO AS {nameof(HotelEntity.Bairro)},
-                                RUA AS {nameof(HotelEntity.Rua)},
-                                NUMEROENDERECO AS {nameof(HotelEntity.NumeroEndereco)},
-                                DESCRICAO AS {nameof(HotelEntity.Descricao)},
-                                ATIVO AS {nameof(HotelEntity.Ativo)},
-                                DATAINICIO AS {nameof(HotelEntity.DataInicio)},
-                                CIDADE_ID AS {nameof(HotelEntity.Cidade_Id)},
-                                PESSOA_ID AS {nameof(HotelEntity.Pessoa_id)}
-                         FROM HOTEL
-                         WHERE ID = @id
+                string sql = @"
+                    SELECT 
+                        h.ID AS Id,
+                        h.CNPJ,
+                        h.NOME AS Nome,
+                        h.TIPO AS Tipo,
+                        h.EMAIL AS Email,
+                        h.TELEFONE AS Telefone,
+                        h.SITE AS Site,
+                        h.ACESSIBILIDADE AS Acessibilidade,
+                        h.CEP,
+                        h.BAIRRO AS Bairro,
+                        h.RUA AS Rua,
+                        h.NUMEROENDERECO AS NumeroEndereco,
+                        h.DESCRICAO AS Descricao,
+                        h.ATIVO AS Ativo,
+                        h.DATAINICIO AS DataInicio,
+                        h.CIDADE_ID AS Cidade_Id,
+                        h.PESSOA_ID AS Pessoa_id,
+                        c.ID AS Cidade_Id,
+                        c.NOME AS Cidade_Nome,
+                        c.ESTADO_ID AS Cidade_Estado_Id,
+                        e.ID AS Estado_Id,
+                        e.NOME AS Estado_Nome,
+                        e.SIGLA AS Estado_Sigla
+                    FROM HOTEL h
+                    LEFT JOIN CIDADE c ON h.CIDADE_ID = c.ID
+                    LEFT JOIN ESTADO e ON c.ESTADO_ID = e.ID
+                    WHERE h.ID = @id
                 ";
 
-                HotelEntity hotel = await con.QueryFirstAsync<HotelEntity>(sql, new { id });
-                return hotel;
+                var hotelDictionary = new Dictionary<int, HotelEntity>();
+
+                await con.QueryAsync<HotelEntity, CidadeEntity, EstadoEntity, HotelEntity>(
+                    sql,
+                    (hotel, cidade, estado) =>
+                    {
+                        if (!hotelDictionary.TryGetValue(hotel.Id, out var hotelEntry))
+                        {
+                            hotelEntry = hotel;
+                            hotelDictionary.Add(hotel.Id, hotelEntry);
+                        }
+
+                        if (cidade != null)
+                        {
+                            hotelEntry.Cidade = cidade;
+                            if (estado != null)
+                            {
+                                hotelEntry.Cidade.Estado = estado;
+                            }
+                        }
+
+                        return hotelEntry;
+                    },
+                    new { id },
+                    splitOn: "Cidade_Id,Estado_Id"
+                );
+
+                return hotelDictionary.Values.FirstOrDefault();
             }
         }
 
@@ -134,30 +206,65 @@ namespace API_HealthGo.Repositories
         {
             using (MySqlConnection con = _connection.GetConnection())
             {
-                string sql = $@"
-                         SELECT ID AS {nameof(HotelEntity.Id)},
-                                CNPJ AS {nameof(HotelEntity.CNPJ)},
-                                NOME AS {nameof(HotelEntity.Nome)},
-                                TIPO AS {nameof(HotelEntity.Tipo)},
-                                EMAIL AS {nameof(HotelEntity.Email)},
-                                TELEFONE AS {nameof(HotelEntity.Telefone)},
-                                SITE AS {nameof(HotelEntity.Site)},
-                                ACESSIBILIDADE AS {nameof(HotelEntity.Acessibilidade)},
-                                CEP AS {nameof(HotelEntity.CEP)},
-                                BAIRRO AS {nameof(HotelEntity.Bairro)},
-                                RUA AS {nameof(HotelEntity.Rua)},
-                                NUMEROENDERECO AS {nameof(HotelEntity.NumeroEndereco)},
-                                DESCRICAO AS {nameof(HotelEntity.Descricao)},
-                                ATIVO AS {nameof(HotelEntity.Ativo)},
-                                DATAINICIO AS {nameof(HotelEntity.DataInicio)},
-                                CIDADE_ID AS {nameof(HotelEntity.Cidade_Id)},
-                                PESSOA_ID AS {nameof(HotelEntity.Pessoa_id)}
-                         FROM HOTEL
-                         WHERE PESSOA_ID = @pessoaId
+                string sql = @"
+                    SELECT 
+                        h.ID AS Id,
+                        h.CNPJ,
+                        h.NOME AS Nome,
+                        h.TIPO AS Tipo,
+                        h.EMAIL AS Email,
+                        h.TELEFONE AS Telefone,
+                        h.SITE AS Site,
+                        h.ACESSIBILIDADE AS Acessibilidade,
+                        h.CEP,
+                        h.BAIRRO AS Bairro,
+                        h.RUA AS Rua,
+                        h.NUMEROENDERECO AS NumeroEndereco,
+                        h.DESCRICAO AS Descricao,
+                        h.ATIVO AS Ativo,
+                        h.DATAINICIO AS DataInicio,
+                        h.CIDADE_ID AS Cidade_Id,
+                        h.PESSOA_ID AS Pessoa_id,
+                        c.ID AS Cidade_Id,
+                        c.NOME AS Cidade_Nome,
+                        c.ESTADO_ID AS Cidade_Estado_Id,
+                        e.ID AS Estado_Id,
+                        e.NOME AS Estado_Nome,
+                        e.SIGLA AS Estado_Sigla
+                    FROM HOTEL h
+                    LEFT JOIN CIDADE c ON h.CIDADE_ID = c.ID
+                    LEFT JOIN ESTADO e ON c.ESTADO_ID = e.ID
+                    WHERE h.PESSOA_ID = @pessoaId
                 ";
 
-                IEnumerable<HotelEntity> hotelList = await con.QueryAsync<HotelEntity>(sql, new { pessoaId });
-                return hotelList;
+                var hotelDictionary = new Dictionary<int, HotelEntity>();
+
+                await con.QueryAsync<HotelEntity, CidadeEntity, EstadoEntity, HotelEntity>(
+                    sql,
+                    (hotel, cidade, estado) =>
+                    {
+                        if (!hotelDictionary.TryGetValue(hotel.Id, out var hotelEntry))
+                        {
+                            hotelEntry = hotel;
+                            hotelDictionary.Add(hotel.Id, hotelEntry);
+                        }
+
+                        if (cidade != null)
+                        {
+                            hotelEntry.Cidade = cidade;
+                            if (estado != null)
+                            {
+                                hotelEntry.Cidade.Estado = estado;
+                            }
+                        }
+
+                        return hotelEntry;
+                    },
+                    new { pessoaId },
+                    splitOn: "Cidade_Id,Estado_Id"
+                );
+
+                return hotelDictionary.Values;
             }
         }
     }
