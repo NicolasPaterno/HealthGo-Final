@@ -42,7 +42,7 @@
   --font-mono: Poppins, monospace;
 
   --radius: 0.375rem;
-  
+
   --shadow-2xs: 0 1px 3px 0px oklch(0.00 0 0 / 0.05);
   --shadow-xs: 0 1px 3px 0px oklch(0.00 0 0 / 0.05);
   --shadow-sm: 0 1px 3px 0px oklch(0.00 0 0 / 0.10), 0 1px 2px -1px oklch(0.00 0 0 / 0.10);
@@ -51,7 +51,7 @@
   --shadow-lg: 0 1px 3px 0px oklch(0.00 0 0 / 0.10), 0 4px 6px -1px oklch(0.00 0 0 / 0.10);
   --shadow-xl: 0 1px 3px 0px oklch(0.00 0 0 / 0.10), 0 8px 10px -1px oklch(0.00 0 0 / 0.10);
   --shadow-2xl: 0 1px 3px 0px oklch(0.00 0 0 / 0.25);
-  
+
 }
 
 .dark {
@@ -86,7 +86,7 @@
   --sidebar-accent-foreground: oklch(0.93 0.01 261.82);
   --sidebar-border: oklch(0.35 0.04 261.40);
   --sidebar-ring: oklch(0.56 0.24 260.92);
-  
+
   --shadow-2xs: 0 1px 3px 0px oklch(0.00 0 0 / 0.05);
   --shadow-xs: 0 1px 3px 0px oklch(0.00 0 0 / 0.05);
   --shadow-sm: 0 1px 3px 0px oklch(0.00 0 0 / 0.10), 0 1px 2px -1px oklch(0.00 0 0 / 0.10);
@@ -153,13 +153,16 @@
   * {
     @apply border-border outline-ring/50;
   }
+
   body {
     @apply bg-background text-foreground;
     letter-spacing: var(--tracking-normal);
   }
+
   button {
     @apply cursor-pointer;
   }
+
   input,
   textarea {
     @apply cursor-text;
@@ -170,6 +173,358 @@
   }
 }
 
+/* Estilos responsivos para o calendário */
+.rdp {
+  --rdp-cell-size: 50px;
+  --rdp-accent-color: hsl(var(--primary));
+  --rdp-background-color: hsl(var(--accent));
+  --rdp-accent-color-dark: hsl(var(--primary));
+  --rdp-background-color-dark: hsl(var(--accent));
+  --rdp-outline: 2px solid var(--rdp-accent-color);
+  --rdp-outline-selected: 2px solid rgba(0, 0, 0, 0.75);
+}
+
+/* Tamanhos responsivos para diferentes telas */
+@media (min-width: 640px) {
+  .rdp {
+    --rdp-cell-size: 55px;
+  }
+}
+
+@media (min-width: 768px) {
+  .rdp {
+    --rdp-cell-size: 60px;
+  }
+}
+
+@media (min-width: 1024px) {
+  .rdp {
+    --rdp-cell-size: 65px;
+  }
+}
+
+@media (min-width: 1280px) {
+  .rdp {
+    --rdp-cell-size: 70px;
+  }
+}
+
+@media (min-width: 1536px) {
+  .rdp {
+    --rdp-cell-size: 75px;
+  }
+}
+
+/* Garantir que o calendário ocupe o espaço disponível */
+.rdp-root {
+  width: 100% !important;
+  max-width: none !important;
+}
+
+.rdp-months {
+  width: 100% !important;
+  justify-content: center !important;
+}
+
+.rdp-month {
+  width: 100% !important;
+  max-width: 450px !important;
+}
+
+.rdp-table {
+  width: 100% !important;
+  border-collapse: separate !important;
+  border-spacing: 4px !important;
+}
+
+.rdp-week {
+  width: 100% !important;
+  display: flex !important;
+  justify-content: space-between !important;
+}
+
+.rdp-day {
+  width: var(--rdp-cell-size) !important;
+  height: var(--rdp-cell-size) !important;
+  min-width: var(--rdp-cell-size) !important;
+  min-height: var(--rdp-cell-size) !important;
+  padding: 18px !important;
+  text-align: center !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+
+/* Alinhar cabeçalhos dos dias da semana */
+.rdp-weekdays {
+  display: flex !important;
+  width: 100% !important;
+  justify-content: space-between !important;
+  margin-bottom: 8px !important;
+  padding: 0 5px !important;
+}
+
+.rdp-weekday {
+  width: var(--rdp-cell-size) !important;
+  min-width: var(--rdp-cell-size) !important;
+  text-align: center !important;
+  font-weight: 600 !important;
+  font-size: 14px !important;
+  color: hsl(var(--muted-foreground)) !important;
+  padding: 8px 0 !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+
+/* Melhorar o tamanho e interação dos botões dos dias */
+.rdp-button {
+  width: var(--rdp-cell-size) !important;
+  height: var(--rdp-cell-size) !important;
+  min-width: var(--rdp-cell-size) !important;
+  min-height: var(--rdp-cell-size) !important;
+  border-radius: 12px !important;
+  transition: all 0.2s ease-in-out !important;
+  font-size: 16px !important;
+  font-weight: 500 !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  position: relative !important;
+}
+
+/* Hover e focus states melhorados */
+.rdp-button:hover {
+  background-color: hsl(var(--accent)) !important;
+  transform: scale(1.05) !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15) !important;
+}
+
+.rdp-button:focus {
+  outline: 3px solid hsl(var(--ring)) !important;
+  outline-offset: 2px !important;
+  transform: scale(1.05) !important;
+}
+
+/* Estado selecionado */
+.rdp-button[aria-selected="true"] {
+  background-color: hsl(var(--primary)) !important;
+  color: hsl(var(--primary-foreground)) !important;
+  font-weight: 600 !important;
+  transform: scale(1.1) !important;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2) !important;
+}
+
+/* Estado hoje */
+.rdp-button[aria-selected="false"][data-today="true"] {
+  background-color: hsl(var(--accent)) !important;
+  color: hsl(var(--accent-foreground)) !important;
+  font-weight: 600 !important;
+  border: 3px solid hsl(var(--primary)) !important;
+}
+
+/* Estados desabilitados */
+.rdp-button[aria-disabled="true"] {
+  opacity: 0.5 !important;
+  cursor: not-allowed !important;
+  transform: none !important;
+}
+
+.rdp-button[aria-disabled="true"]:hover {
+  transform: none !important;
+  box-shadow: none !important;
+}
+
+/* Ajustar tamanho do texto nos botões para diferentes telas */
+@media (min-width: 640px) {
+  .rdp-button {
+    font-size: 17px !important;
+  }
+
+  .rdp-weekday {
+    font-size: 15px !important;
+  }
+}
+
+@media (min-width: 768px) {
+  .rdp-button {
+    font-size: 18px !important;
+  }
+
+  .rdp-weekday {
+    font-size: 16px !important;
+  }
+}
+
+@media (min-width: 1024px) {
+  .rdp-button {
+    font-size: 19px !important;
+  }
+
+  .rdp-weekday {
+    font-size: 17px !important;
+  }
+}
+
+@media (min-width: 1280px) {
+  .rdp-button {
+    font-size: 20px !important;
+  }
+
+  .rdp-weekday {
+    font-size: 18px !important;
+  }
+}
+
+@media (min-width: 1536px) {
+  .rdp-button {
+    font-size: 21px !important;
+  }
+
+  .rdp-weekday {
+    font-size: 19px !important;
+  }
+}
+
+/* Forçar alinhamento dos botões */
+.rdp-day button {
+  width: var(--rdp-cell-size) !important;
+  height: var(--rdp-cell-size) !important;
+  min-width: var(--rdp-cell-size) !important;
+  min-height: var(--rdp-cell-size) !important;
+  border-radius: 12px !important;
+  transition: all 0.2s ease-in-out !important;
+  font-size: 16px !important;
+  font-weight: 500 !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  position: relative !important;
+}
+
+/* Forçar alinhamento dos cabeçalhos */
+.rdp-weekdays div {
+  width: var(--rdp-cell-size) !important;
+  min-width: var(--rdp-cell-size) !important;
+  text-align: center !important;
+  font-weight: 600 !important;
+  font-size: 14px !important;
+  color: hsl(var(--muted-foreground)) !important;
+  padding: 8px 0 !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+
+/* Ajustar tamanho do texto nos botões para diferentes telas */
+@media (min-width: 640px) {
+  .rdp-day button {
+    font-size: 17px !important;
+  }
+
+  .rdp-weekdays div {
+    font-size: 15px !important;
+  }
+}
+
+@media (min-width: 768px) {
+  .rdp-day button {
+    font-size: 18px !important;
+  }
+
+  .rdp-weekdays div {
+    font-size: 16px !important;
+  }
+}
+
+@media (min-width: 1024px) {
+  .rdp-day button {
+    font-size: 19px !important;
+  }
+
+  .rdp-weekdays div {
+    font-size: 17px !important;
+  }
+}
+
+@media (min-width: 1280px) {
+  .rdp-day button {
+    font-size: 20px !important;
+  }
+
+  .rdp-weekdays div {
+    font-size: 18px !important;
+  }
+}
+
+@media (min-width: 1536px) {
+  .rdp-day button {
+    font-size: 21px !important;
+  }
+
+  .rdp-weekdays div {
+    font-size: 19px !important;
+  }
+}
+
+/* Estilos específicos para garantir alinhamento perfeito */
+.rdp-day button[data-selected-single="true"] {
+  background-color: hsl(var(--primary)) !important;
+  color: hsl(var(--primary-foreground)) !important;
+  font-weight: 600 !important;
+  transform: scale(1.1) !important;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2) !important;
+}
+
+.rdp-day button:hover {
+  background-color: hsl(var(--accent)) !important;
+  transform: scale(1.05) !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15) !important;
+}
+
+.rdp-day button:focus {
+  outline: 3px solid hsl(var(--ring)) !important;
+  outline-offset: 2px !important;
+  transform: scale(1.05) !important;
+}
+
+/* Garantir que os números dos dias sejam centralizados */
+.rdp-day button span {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  width: 100% !important;
+  height: 100% !important;
+  font-size: inherit !important;
+  font-weight: inherit !important;
+}
+
+/* Ajustar o espaçamento das semanas para alinhar com os cabeçalhos */
+.rdp-week {
+  width: 100% !important;
+  display: flex !important;
+  justify-content: space-between !important;
+  padding: 0 4px !important;
+}
+
+/* Ajustar o container dos meses para garantir alinhamento */
+.rdp-months {
+  width: 100% !important;
+  justify-content: center !important;
+  padding: 0 4px !important;
+}
+
+/* Ajustar o container do mês para garantir alinhamento */
+.rdp-month {
+  width: 100% !important;
+  max-width: 450px !important;
+  padding: 0 4px !important;
+}
+
 /* Estilo final e robusto para o indicador de lembrete */
 .day-with-reminder {
   font-weight: 800 !important;
@@ -178,6 +533,7 @@
   text-decoration-thickness: 2px !important;
   text-underline-offset: 3px !important;
 }
+
 .day-with-reminder::after {
   content: '' !important;
   display: block !important;
@@ -192,5 +548,5 @@
 }
 
 .rdp-day_selected.day-with-reminder::after {
-    display: none !important;
+  display: none !important;
 }

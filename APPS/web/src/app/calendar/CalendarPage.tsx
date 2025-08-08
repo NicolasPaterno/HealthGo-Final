@@ -34,11 +34,11 @@ interface Reminder {
 }
 
 interface ApiReminder {
-    id: number;
-    titulo: string;
-    data: string;
-    tipo: 'Consulta' | 'Remédio' | 'Outro';
-    pessoa_Id: number;
+  id: number;
+  titulo: string;
+  data: string;
+  tipo: 'Consulta' | 'Remédio' | 'Outro';
+  pessoa_Id: number;
 }
 const typeBadgeVariant = {
   Consulta: "default",
@@ -83,8 +83,8 @@ export default function CalendarPage() {
   useEffect(() => {
     const fetchReminders = async () => {
       if (!currentUser?.id) { // Ensure currentUser and its ID exist
-          setIsLoading(false);
-          return;
+        setIsLoading(false);
+        return;
       }
       setIsLoading(true);
       try {
@@ -98,7 +98,7 @@ export default function CalendarPage() {
           }));
           setReminders(formattedReminders);
         } else {
-            setReminders([]);
+          setReminders([]);
         }
       } catch (error) {
         console.error("Erro ao buscar lembretes:", error);
@@ -110,7 +110,7 @@ export default function CalendarPage() {
     };
 
     if (currentUser) { // Only fetch reminders if currentUser is available
-        fetchReminders();
+      fetchReminders();
     }
   }, [currentUser]); // Re-fetch when currentUser changes
 
@@ -132,8 +132,8 @@ export default function CalendarPage() {
 
   const handleAddReminder = async () => {
     if (!currentUser) {
-        toast.error("Você precisa estar logado para criar um lembrete.");
-        return;
+      toast.error("Você precisa estar logado para criar um lembrete.");
+      return;
     }
     if (isPastTime) {
       toast.error("Não é possível agendar lembretes para uma data ou hora passada.");
@@ -153,10 +153,10 @@ export default function CalendarPage() {
     }
 
     const newReminderPayload = {
-        Titulo: newReminderText,
-        Data: reminderDateTime.toISOString(),
-        Tipo: newReminderType,
-        Pessoa_Id: currentUser.id,
+      Titulo: newReminderText,
+      Data: reminderDateTime.toISOString(),
+      Tipo: newReminderType,
+      Pessoa_Id: currentUser.id,
     };
 
     try {
@@ -165,11 +165,11 @@ export default function CalendarPage() {
       const updatedRemindersResponse = await api.get(`/Lembrete/Pessoa/${currentUser.id}`);
       if (updatedRemindersResponse.data && Array.isArray(updatedRemindersResponse.data.data)) {
         const formattedReminders = updatedRemindersResponse.data.data.map((r: ApiReminder) => ({
-            id: r.id,
-            text: r.titulo,
-            dateTime: r.data,
-            type: r.tipo,
-          }));
+          id: r.id,
+          text: r.titulo,
+          dateTime: r.data,
+          type: r.tipo,
+        }));
         setReminders(formattedReminders);
       }
 
@@ -184,12 +184,12 @@ export default function CalendarPage() {
 
   const handleDeleteReminder = async (idToDelete: number) => {
     try {
-        await api.delete(`/Lembrete/${idToDelete}`);
-        setReminders(reminders.filter((r) => r.id !== idToDelete));
-        toast.info("Lembrete removido.");
+      await api.delete(`/Lembrete/${idToDelete}`);
+      setReminders(reminders.filter((r) => r.id !== idToDelete));
+      toast.info("Lembrete removido.");
     } catch (error) {
-        console.error("Erro ao deletar lembrete:", error);
-        toast.error("Erro ao remover o lembrete. Tente novamente.");
+      console.error("Erro ao deletar lembrete:", error);
+      toast.error("Erro ao remover o lembrete. Tente novamente.");
     }
   };
 
@@ -231,28 +231,38 @@ export default function CalendarPage() {
               Marque e gerencie seus compromissos e lembretes de saúde.
             </CardDescription>
           </CardHeader>
-          <CardContent className="flex flex-col lg:flex-row gap-8">
-            {/* Calendário */}
+          <CardContent className="flex flex-col xl:flex-row gap-8">
+            {/* Calendário - Ajustado para ser responsivo */}
             <div className="flex-grow flex justify-center w-full">
-              <Calendar
-                mode="single"
-                selected={date}
-                onSelect={setDate}
-                numberOfMonths={isMobile ? 1 : 2}
-                className="p-0"
-                disabled={{ before: new Date(new Date().setDate(new Date().getDate() - 1)) }}
-                footer={
-                  <Button variant="outline" className="w-full mt-4" onClick={() => setDate(new Date())}>
-                    Hoje
-                  </Button>
-                }
-                modifiers={{ hasReminder: daysWithReminders }}
-                modifiersClassNames={{ hasReminder: "day-with-reminder" }}
-              />
+              <div className="w-full max-w-4xl mx-auto">
+                <Calendar
+                  mode="single"
+                  selected={date}
+                  onSelect={setDate}
+                  numberOfMonths={isMobile ? 1 : 2}
+                  className="p-0 w-full"
+                  disabled={{ before: new Date(new Date().setDate(new Date().getDate() - 1)) }}
+                  footer={
+                    <Button variant="outline" className="w-full mt-4" onClick={() => setDate(new Date())}>
+                      Hoje
+                    </Button>
+                  }
+                  modifiers={{ hasReminder: daysWithReminders }}
+                  modifiersClassNames={{ hasReminder: "day-with-reminder" }}
+                  classNames={{
+                    root: "w-full",
+                    months: "flex gap-4 flex-col lg:flex-row relative w-full",
+                    month: "flex flex-col w-full gap-4",
+                    table: "w-full border-collapse",
+                    week: "flex w-full mt-2",
+                    day: "relative w-full h-full p-0 text-center aspect-square select-none",
+                  }}
+                />
+              </div>
             </div>
-            
-            {/* Lembretes do Dia */}
-            <div className="lg:border-l lg:pl-6 lg:basis-1/3">
+
+            {/* Lembretes do Dia - Ajustado para ser responsivo */}
+            <div className="xl:border-l xl:pl-6 xl:basis-1/3 min-w-0">
               <h3 className="text-lg font-semibold mb-2">Lembretes para</h3>
               <p className="text-sm text-muted-foreground mb-4 font-medium">
                 {date?.toLocaleDateString("pt-BR", {
@@ -264,18 +274,18 @@ export default function CalendarPage() {
               <Separator />
               <ScrollArea className="h-60 mt-4 pr-3">
                 {isLoading ? (
-                    <p className="text-sm text-muted-foreground text-center pt-8">Carregando...</p>
+                  <p className="text-sm text-muted-foreground text-center pt-8">Carregando...</p>
                 ) : remindersForSelectedDay.length > 0 ? (
                   <div className="space-y-3">
                     {remindersForSelectedDay.map((reminder) => (
                       <div key={reminder.id} className="flex items-center justify-between gap-2">
                         <div className="flex items-center gap-2 flex-grow min-w-0">
-                            <Badge className="h-fit">
-                              {new Date(reminder.dateTime).toLocaleTimeString("pt-BR", { hour: '2-digit', minute: '2-digit' })}
-                            </Badge>
-                            <p className="text-sm ">{reminder.text}</p>
+                          <Badge className="h-fit shrink-0">
+                            {new Date(reminder.dateTime).toLocaleTimeString("pt-BR", { hour: '2-digit', minute: '2-digit' })}
+                          </Badge>
+                          <p className="text-sm truncate">{reminder.text}</p>
                         </div>
-                        <Badge variant={typeBadgeVariant[reminder.type] || "secondary"} className="capitalize">{reminder.type}</Badge>
+                        <Badge variant={typeBadgeVariant[reminder.type] || "secondary"} className="capitalize shrink-0">{reminder.type}</Badge>
                       </div>
                     ))}
                   </div>
@@ -297,7 +307,7 @@ export default function CalendarPage() {
             </CardDescription>
           </CardHeader>
           <CardContent>
-            <div className="flex flex-wrap gap-2">
+            <div className="flex flex-col sm:flex-row gap-2">
               <Select value={newReminderType} onValueChange={(value) => setNewReminderType(value as 'Consulta' | 'Remédio' | 'Outro')}>
                 <SelectTrigger className="w-full sm:w-auto">
                   <SelectValue placeholder="Tipo" />
@@ -328,9 +338,9 @@ export default function CalendarPage() {
             <Separator className="my-6" />
             <h3 className="text-lg font-semibold mb-4">Próximos Lembretes</h3>
             <ScrollArea className="h-72">
-             {isLoading ? (
-                  <p className="text-sm text-muted-foreground text-center pt-10">Carregando...</p>
-             ) : Object.keys(groupedReminders).length > 0 ? (
+              {isLoading ? (
+                <p className="text-sm text-muted-foreground text-center pt-10">Carregando...</p>
+              ) : Object.keys(groupedReminders).length > 0 ? (
                 <div className="space-y-4">
                   {Object.entries(groupedReminders).map(([day, list]) => (
                     <div key={day}>
@@ -341,12 +351,12 @@ export default function CalendarPage() {
                             key={reminder.id}
                             className="flex items-center justify-between group p-2 rounded-md hover:bg-muted"
                           >
-                            <div className="flex items-center gap-2 overflow-hidden">
+                            <div className="flex items-center gap-2 overflow-hidden min-w-0">
                               <Badge variant="secondary" className="shrink-0">
                                 {new Date(reminder.dateTime).toLocaleTimeString("pt-BR", { hour: '2-digit', minute: '2-digit' })}
                               </Badge>
-                              <p className="text-sm ">{reminder.text}</p>
-                              <Badge variant={typeBadgeVariant[reminder.type] || "secondary"} className="capitalize">{reminder.type}</Badge>
+                              <p className="text-sm truncate">{reminder.text}</p>
+                              <Badge variant={typeBadgeVariant[reminder.type] || "secondary"} className="capitalize shrink-0">{reminder.type}</Badge>
                             </div>
                             <Button
                               variant="ghost"
