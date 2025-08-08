@@ -23,8 +23,7 @@ namespace API_HealthGo.Repository
                 string sql = @$"
                     SELECT ID AS {nameof(EstadoEntity.Id)},
                            NOME AS {nameof(EstadoEntity.Nome)},
-                           SIGLA AS {nameof(EstadoEntity.Sigla)},
-                           NACAO_ID AS {nameof(EstadoEntity.Nacao_Id)}
+                           SIGLA AS {nameof(EstadoEntity.Sigla)}
                       FROM ESTADO
                 ";
                 IEnumerable<EstadoEntity> estadoList = await con.QueryAsync<EstadoEntity>(sql);
@@ -35,8 +34,8 @@ namespace API_HealthGo.Repository
         public async Task Insert(EstadoInsertDTO estado)
         {
             string sql = @$"
-                INSERT INTO ESTADO (NOME, SIGLA, NACAO_ID)
-                             VALUES (@Nome, @Sigla, @Nacao_Id)
+                INSERT INTO ESTADO (NOME, SIGLA)
+                             VALUES (@Nome, @Sigla)
             ";
             await _connection.Execute(sql, estado);
         }
@@ -54,8 +53,7 @@ namespace API_HealthGo.Repository
                 string sql = @$"
                     SELECT ID AS {nameof(EstadoEntity.Id)},
                            NOME AS {nameof(EstadoEntity.Nome)},
-                           SIGLA AS {nameof(EstadoEntity.Sigla)},
-                           NACAO_ID AS {nameof(EstadoEntity.Nacao_Id)}
+                           SIGLA AS {nameof(EstadoEntity.Sigla)}
                       FROM ESTADO
                      WHERE ID = @id
                 ";
@@ -68,9 +66,8 @@ namespace API_HealthGo.Repository
         {
             string sql = @$"
                 UPDATE ESTADO
-                   SET NOTA = @Nome,
-                       SIGLA = @Sigla,
-                       NACAO_ID = @Nacao_Id
+                   SET NOME = @Nome,
+                       SIGLA = @Sigla
                  WHERE ID = @Id;
             ";
             await _connection.Execute(sql, estado);
