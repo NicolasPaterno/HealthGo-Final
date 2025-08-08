@@ -17,28 +17,8 @@ import { Switch } from '@/components/ui/switch';
 import { toast } from 'sonner';
 import api from '@/services/api';
 import { LoadingSpinner } from '@/components/loading-spinner';
+import type { Hotel } from '@/types/hotel';
 import axios from 'axios';
-
-interface Hotel {
-  id: number;
-  nome: string;
-  cnpj: string;
-  email: string;
-  telefone: string;
-  enderecoFoto: string;
-  tipo: string;
-  site: string;
-  acessibilidade: string;
-  cep: string;
-  bairro: string;
-  rua: string;
-  numeroEndereco: string;
-  descricao: string;
-  cidade_Id: number;
-  pessoa_id: number;
-  ativo: boolean;
-  dataInicio: string;
-}
 
 interface EditHotelModalProps {
   hotel: Hotel | null;
@@ -101,7 +81,7 @@ const EditHotelModal: React.FC<EditHotelModalProps> = ({ hotel, isOpen, onClose,
       });
 
     } catch (error) {
-      toast.error("Não foi possível buscar o CEP.");
+      toast.error("Erro ao buscar CEP.");
       console.error("CEP fetch error:", error);
     } finally {
       setIsCepLoading(false);
@@ -112,12 +92,14 @@ const EditHotelModal: React.FC<EditHotelModalProps> = ({ hotel, isOpen, onClose,
     e.preventDefault();
     if (!formData) return;
 
+    setLoading(true);
     try {
-      setLoading(true);
-      await api.put(`/Hotel`, formData);
-      toast.success('Hotel atualizado com sucesso!');
-      onHotelUpdated(formData);
-      onClose();
+      const response = await api.put('/Hotel', formData);
+      if (response.status === 200) {
+        onHotelUpdated(formData);
+        onClose();
+        toast.success('Hotel atualizado com sucesso!');
+      }
     } catch (error) {
       console.error('Failed to update hotel:', error);
       toast.error('Erro ao atualizar hotel. Tente novamente.');
@@ -126,80 +108,52 @@ const EditHotelModal: React.FC<EditHotelModalProps> = ({ hotel, isOpen, onClose,
     }
   };
 
-  if (!isOpen || !formData) {
-    return null;
-  }
+  if (!hotel) return null;
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="sm:max-w-[600px] max-h-[90vh] overflow-y-auto">
+      <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle>Editar Hotel</DialogTitle>
           <DialogDescription>
-            Faça as alterações necessárias no hotel. Clique em salvar quando terminar.
+            Atualize as informações do hotel {hotel.nome}
           </DialogDescription>
         </DialogHeader>
 
         <form onSubmit={handleSubmit} className="space-y-4">
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="space-y-2">
-              <Label htmlFor="nome">Nome do Hotel *</Label>
+              <Label htmlFor="nome">Nome do Hotel</Label>
               <Input
                 id="nome"
                 name="nome"
-                value={formData.nome}
+                value={formData?.nome || ''}
                 onChange={handleChange}
                 required
               />
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="cnpj">CNPJ *</Label>
+              <Label htmlFor="cnpj">CNPJ</Label>
               <Input
                 id="cnpj"
                 name="cnpj"
-                value={formData.cnpj}
-                onChange={handleChange}
-                required
-              />
-            </div>
-          </div>
-
-          <div className="grid grid-cols-2 gap-4">
-            <div className="space-y-2">
-              <Label htmlFor="email">Email *</Label>
-              <Input
-                id="email"
-                name="email"
-                type="email"
-                value={formData.email}
+                value={formData?.cnpj || ''}
                 onChange={handleChange}
                 required
               />
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="telefone">Telefone *</Label>
-              <Input
-                id="telefone"
-                name="telefone"
-                value={formData.telefone}
-                onChange={handleChange}
-                required
-              />
-            </div>
-          </div>
-
-          <div className="grid grid-cols-2 gap-4">
-            <div className="space-y-2">
-              <Label htmlFor="tipo">Tipo de Estabelecimento *</Label>
-              <Select value={formData.tipo} onValueChange={(value) => handleSelectChange('tipo', value)}>
+              <Label htmlFor="tipo">Tipo</Label>
+              <Select value={formData?.tipo || ''} onValueChange={(value) => handleSelectChange('tipo', value)}>
                 <SelectTrigger>
                   <SelectValue placeholder="Selecione o tipo" />
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="Hotel">Hotel</SelectItem>
                   <SelectItem value="Pousada">Pousada</SelectItem>
+                  <SelectItem value="Resort">Resort</SelectItem>
                   <SelectItem value="Hostel">Hostel</SelectItem>
                   <SelectItem value="Apartamento">Apartamento</SelectItem>
                   <SelectItem value="Casa">Casa</SelectItem>
@@ -208,39 +162,46 @@ const EditHotelModal: React.FC<EditHotelModalProps> = ({ hotel, isOpen, onClose,
             </div>
 
             <div className="space-y-2">
+              <Label htmlFor="email">Email</Label>
+              <Input
+                id="email"
+                name="email"
+                type="email"
+                value={formData?.email || ''}
+                onChange={handleChange}
+                required
+              />
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="telefone">Telefone</Label>
+              <Input
+                id="telefone"
+                name="telefone"
+                value={formData?.telefone || ''}
+                onChange={handleChange}
+              />
+            </div>
+
+            <div className="space-y-2">
               <Label htmlFor="site">Site</Label>
               <Input
                 id="site"
                 name="site"
-                value={formData.site}
+                value={formData?.site || ''}
                 onChange={handleChange}
-                placeholder="https://www.exemplo.com"
               />
             </div>
-          </div>
 
-          <div className="space-y-2">
-            <Label htmlFor="acessibilidade">Acessibilidade</Label>
-            <Input
-              id="acessibilidade"
-              name="acessibilidade"
-              value={formData.acessibilidade}
-              onChange={handleChange}
-              placeholder="Ex: Rampas, elevadores, quartos adaptados"
-            />
-          </div>
-
-          <div className="grid grid-cols-3 gap-4">
             <div className="space-y-2">
-              <Label htmlFor="cep">CEP *</Label>
+              <Label htmlFor="cep">CEP</Label>
               <Input
                 id="cep"
                 name="cep"
-                value={formData.cep}
+                value={formData?.cep || ''}
                 onChange={handleChange}
                 onBlur={handleCepBlur}
                 disabled={isCepLoading}
-                required
               />
               {isCepLoading && (
                 <div className="text-sm text-muted-foreground">
@@ -250,37 +211,47 @@ const EditHotelModal: React.FC<EditHotelModalProps> = ({ hotel, isOpen, onClose,
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="bairro">Bairro *</Label>
+              <Label htmlFor="rua">Rua</Label>
               <Input
-                id="bairro"
-                name="bairro"
-                value={formData.bairro}
+                id="rua"
+                name="rua"
+                value={formData?.rua || ''}
                 onChange={handleChange}
                 required
               />
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="numeroEndereco">Número *</Label>
+              <Label htmlFor="numeroEndereco">Número</Label>
               <Input
                 id="numeroEndereco"
                 name="numeroEndereco"
-                value={formData.numeroEndereco}
+                value={formData?.numeroEndereco || ''}
                 onChange={handleChange}
                 required
               />
             </div>
-          </div>
 
-          <div className="space-y-2">
-            <Label htmlFor="rua">Rua *</Label>
-            <Input
-              id="rua"
-              name="rua"
-              value={formData.rua}
-              onChange={handleChange}
-              required
-            />
+            <div className="space-y-2">
+              <Label htmlFor="bairro">Bairro</Label>
+              <Input
+                id="bairro"
+                name="bairro"
+                value={formData?.bairro || ''}
+                onChange={handleChange}
+                required
+              />
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="acessibilidade">Acessibilidade</Label>
+              <Input
+                id="acessibilidade"
+                name="acessibilidade"
+                value={formData?.acessibilidade || ''}
+                onChange={handleChange}
+              />
+            </div>
           </div>
 
           <div className="space-y-2">
@@ -288,47 +259,35 @@ const EditHotelModal: React.FC<EditHotelModalProps> = ({ hotel, isOpen, onClose,
             <Textarea
               id="descricao"
               name="descricao"
-              value={formData.descricao}
+              value={formData?.descricao || ''}
               onChange={handleChange}
-              placeholder="Descreva as características e diferenciais do hotel"
               rows={3}
-            />
-          </div>
-
-          <div className="space-y-2">
-            <Label htmlFor="enderecoFoto">URL da Foto</Label>
-            <Input
-              id="enderecoFoto"
-              name="enderecoFoto"
-              value={formData.enderecoFoto}
-              onChange={handleChange}
-              placeholder="https://exemplo.com/foto.jpg"
             />
           </div>
 
           <div className="flex items-center space-x-2">
             <Switch
               id="ativo"
-              checked={formData.ativo}
+              checked={formData?.ativo || false}
               onCheckedChange={handleSwitchChange}
             />
             <Label htmlFor="ativo">Hotel Ativo</Label>
           </div>
 
-          <DialogFooter className="pt-4">
+          <DialogFooter>
             <DialogClose asChild>
-              <Button type="button" variant="secondary" disabled={loading}>
+              <Button type="button" variant="outline">
                 Cancelar
               </Button>
             </DialogClose>
             <Button type="submit" disabled={loading}>
               {loading ? (
-                <>
-                  <LoadingSpinner size="sm" className="mr-2" />
-                  Salvando...
-                </>
+                <div className="flex items-center gap-2">
+                  <LoadingSpinner size="sm" />
+                  Atualizando...
+                </div>
               ) : (
-                'Salvar Alterações'
+                'Atualizar Hotel'
               )}
             </Button>
           </DialogFooter>

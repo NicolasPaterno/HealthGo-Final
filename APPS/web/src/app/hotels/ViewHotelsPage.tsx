@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import api from '@/services/api';
+import type { Hotel } from '@/types/hotel';
 
 import { Button } from '@/components/ui/button';
 import { toast } from 'sonner';
@@ -10,37 +11,6 @@ import { LoadingSpinner } from '@/components/loading-spinner';
 import { Badge } from '@/components/ui/badge';
 import { Edit, Trash2, Building, Plus, Bed, ChevronDown, ChevronUp } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
-
-interface Hotel {
-  id: number;
-  nome: string;
-  cnpj: string;
-  email: string;
-  telefone: string;
-  enderecoFoto: string;
-  tipo: string;
-  site: string;
-  acessibilidade: string;
-  cep: string;
-  bairro: string;
-  rua: string;
-  numeroEndereco: string;
-  descricao: string;
-  cidade_Id: number;
-  pessoa_id: number;
-  ativo: boolean;
-  dataInicio: string;
-  cidade?: {
-    id: number;
-    nome: string;
-    estado_Id: number;
-    estado?: {
-      id: number;
-      nome: string;
-      sigla: string;
-    };
-  };
-}
 
 const ViewHotelsPage = () => {
   const [hotels, setHotels] = useState<Hotel[]>([]);
@@ -54,11 +24,21 @@ const ViewHotelsPage = () => {
   const fetchHotels = async () => {
     try {
       setLoading(true);
+      console.log('Buscando hotéis do usuário...');
       const response = await api.get('/Hotel/my-hotels');
-      setHotels(response.data.data || []);
+      console.log('Resposta da API:', response.data);
+
+      if (response.data && response.data.data) {
+        console.log('Hotéis encontrados:', response.data.data);
+        setHotels(response.data.data);
+      } else {
+        console.log('Nenhum hotel encontrado ou estrutura de resposta inesperada');
+        setHotels([]);
+      }
     } catch (error) {
       console.error('Error fetching hotels:', error);
       toast.error('Erro ao carregar hotéis. Tente novamente.');
+      setHotels([]);
     } finally {
       setLoading(false);
     }

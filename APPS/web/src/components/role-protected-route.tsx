@@ -10,7 +10,13 @@ export function RoleProtectedRoute({ allowedRoles }: { allowedRoles: string[] })
     return <LoadingSpinner />;
   }
 
-  if (!isAuthenticated || !user || !allowedRoles.includes(user.role)) {
+  if (!isAuthenticated || !user) {
+    console.log("User not authenticated or user data missing");
+    return <Navigate to="/login" replace />;
+  }
+
+  if (!allowedRoles.includes(user.role)) {
+    console.log(`User role ${user.role} not in allowed roles: ${allowedRoles.join(', ')}`);
     return <Navigate to="/login" replace />;
   }
 

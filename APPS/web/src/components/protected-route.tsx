@@ -9,5 +9,10 @@ export function ProtectedRoute() {
     return <LoadingSpinner />;
   }
 
-  return isAuthenticated ? <Outlet /> : <Navigate to="/login" replace />;
+  if (!isAuthenticated) {
+    console.log("User not authenticated, redirecting to login");
+    return <Navigate to="/login" replace />;
+  }
+
+  return <Outlet />;
 }

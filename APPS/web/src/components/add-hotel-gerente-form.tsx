@@ -19,34 +19,32 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { Textarea } from "@/components/ui/textarea";
+import { Badge } from "@/components/ui/badge";
 import { useAuth } from "@/hooks/useAuth";
 import api from "@/services/api";
 import { LoadingSpinner } from "@/components/loading-spinner";
+import { MapPin, Search, Edit3, Check, X, Building2, Phone, Mail, Globe, Accessibility } from "lucide-react";
+import type { HotelInsertDTO } from "@/types/hotel";
 import axios from "axios";
 
-// Interface para o DTO de inserção de Hotel
-interface HotelInsertDTO {
-  CNPJ: string;
-  Nome: string;
-  Tipo: string;
-  Email: string;
-  Telefone: string;
-  Site: string;
-  Acessibilidade: string;
-  CEP: string;
-  Bairro: string;
-  Rua: string;
-  NumeroEndereco: string;
-  Descricao: string;
-  Ativo: boolean;
-  DataInicio: string;
-  Cidade_Id: number;
-  // O Pessoa_Id será extraído do token no backend, não enviado pelo front-end
+interface ViaCepResponse {
+  cep: string;
+  logradouro: string;
+  complemento: string;
+  bairro: string;
+  localidade: string;
+  uf: string;
+  ibge: string;
+  gia: string;
+  ddd: string;
+  siafi: string;
+  erro?: boolean;
 }
 
 export function AddHotelGerenteForm({ className, ...props }: React.ComponentProps<typeof Card>) {
   const navigate = useNavigate();
-  const { isAuthenticated, isLoading } = useAuth(); // Obtenha isLoading
+  const { isAuthenticated, isLoading, user } = useAuth();
 
   useEffect(() => {
     if (!isLoading && !isAuthenticated) {
@@ -55,6 +53,7 @@ export function AddHotelGerenteForm({ className, ...props }: React.ComponentProp
     }
   }, [isAuthenticated, isLoading, navigate]);
 
+  // Estados do formulário
   const [fotoPreview, setFotoPreview] = useState<string | null>(null);
   const [cnpj, setCnpj] = useState("");
   const [nome, setNome] = useState("");
@@ -67,11 +66,16 @@ export function AddHotelGerenteForm({ className, ...props }: React.ComponentProp
   const [bairro, setBairro] = useState("");
   const [rua, setRua] = useState("");
   const [numeroEndereco, setNumeroEndereco] = useState("");
+  const [complemento, setComplemento] = useState("");
   const [descricao, setDescricao] = useState("");
-  const [cidadeId, setCidadeId] = useState<number | string>("");
   const [cidade, setCidade] = useState("");
+  const [estado, setEstado] = useState("");
+
+  // Estados de controle
   const [loading, setLoading] = useState(false);
   const [isCepLoading, setIsCepLoading] = useState(false);
+  const [enderecoPreenchido, setEnderecoPreenchido] = useState(false);
+  const [editandoEndereco, setEditandoEndereco] = useState(false);
 
   const handleFotoChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
@@ -86,46 +90,141 @@ export function AddHotelGerenteForm({ className, ...props }: React.ComponentProp
     }
   };
 
-  const handleCepBlur = useCallback(async (event: React.FocusEvent<HTMLInputElement>) => {
-    const currentCep = event.target.value.replace(/\D/g, "");
+  const buscarCep = useCallback(async (cepValue: string) => {
+    const cepLimpo = cepValue.replace(/\D/g, "");
 
-    if (currentCep.length !== 8) {
+    if (cepLimpo.length !== 8) {
+      toast.error("CEP inválido", {
+        description: "O CEP deve ter 8 dígitos."
+      });
       return;
     }
 
     setIsCepLoading(true);
     try {
-      const { data } = await axios.get(`https://viacep.com.br/ws/${currentCep}/json/`);
+      const { data } = await axios.get<ViaCepResponse>(`https://viacep.com.br/ws/${cepLimpo}/json/`);
 
       if (data.erro) {
-        toast.error("CEP não encontrado.");
+        toast.error("CEP não encontrado", {
+          description: "Verifique se o CEP está correto."
+        });
         return;
       }
 
-      setRua(data.logradouro);
-      setBairro(data.bairro);
-      setCidade(data.localidade);
+      // Preenche automaticamente os campos
+      setRua(data.logradouro || "");
+      setBairro(data.bairro || "");
+      setCidade(data.localidade || "");
+      setEstado(data.uf || "");
+      setEnderecoPreenchido(true);
+      setEditandoEndereco(false);
 
-      // Mapear cidade para ID baseado no nome
-      if (data.localidade) {
-        const cidadeLower = data.localidade.toLowerCase();
-        if (cidadeLower.includes('blumenau')) {
-          setCidadeId(1);
-        } else if (cidadeLower.includes('joinville')) {
-          setCidadeId(2);
-        } else {
-          // Para outras cidades, usar um valor padrão ou deixar o usuário selecionar
-          setCidadeId(1); // Default para Blumenau
-        }
-      }
+      toast.success("Endereço encontrado!", {
+        description: `${data.logradouro}, ${data.bairro}, ${data.localidade} - ${data.uf}`
+      });
 
     } catch (error) {
-      toast.error("Não foi possível buscar o CEP.");
+      toast.error("Erro ao buscar CEP", {
+        description: "Verifique sua conexão com a internet."
+      });
       console.error("CEP fetch error:", error);
     } finally {
       setIsCepLoading(false);
     }
   }, []);
+
+  const handleCepBlur = (event: React.FocusEvent<HTMLInputElement>) => {
+    const currentCep = event.target.value.replace(/\D/g, "");
+    if (currentCep.length === 8) {
+      buscarCep(currentCep);
+    }
+  };
+
+  const handleCepKeyPress = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    if (event.key === 'Enter') {
+      event.preventDefault();
+      const currentCep = event.currentTarget.value.replace(/\D/g, "");
+      if (currentCep.length === 8) {
+        buscarCep(currentCep);
+      }
+    }
+  };
+
+  const editarEndereco = () => {
+    setEditandoEndereco(true);
+    setEnderecoPreenchido(false);
+  };
+
+  const confirmarEdicao = () => {
+    setEditandoEndereco(false);
+    setEnderecoPreenchido(true);
+    toast.success("Endereço atualizado!");
+  };
+
+  const cancelarEdicao = () => {
+    setEditandoEndereco(false);
+    setEnderecoPreenchido(false);
+    // Limpa os campos se não foram preenchidos manualmente
+    if (!rua && !bairro && !cidade && !estado) {
+      setRua("");
+      setBairro("");
+      setCidade("");
+      setEstado("");
+    }
+  };
+
+  const formatarCNPJ = (value: string) => {
+    const cnpjLimpo = value.replace(/\D/g, "");
+    return cnpjLimpo.replace(/^(\d{2})(\d{3})(\d{3})(\d{4})(\d{2})$/, "$1.$2.$3/$4-$5");
+  };
+
+  const formatarTelefone = (value: string) => {
+    const telefoneLimpo = value.replace(/\D/g, "");
+    if (telefoneLimpo.length === 11) {
+      return telefoneLimpo.replace(/^(\d{2})(\d{5})(\d{4})$/, "($1) $2-$3");
+    } else if (telefoneLimpo.length === 10) {
+      return telefoneLimpo.replace(/^(\d{2})(\d{4})(\d{4})$/, "($1) $2-$3");
+    }
+    return telefoneLimpo;
+  };
+
+  const formatarCEP = (value: string) => {
+    const cepLimpo = value.replace(/\D/g, "");
+    return cepLimpo.replace(/^(\d{5})(\d{3})$/, "$1-$2");
+  };
+
+  const validarFormulario = () => {
+    const erros: string[] = [];
+
+    // Validações obrigatórias
+    if (!cnpj.replace(/\D/g, "")) erros.push("CNPJ é obrigatório");
+    if (!nome.trim()) erros.push("Nome do hotel é obrigatório");
+    if (!tipo) erros.push("Tipo de estabelecimento é obrigatório");
+    if (!email.trim()) erros.push("Email é obrigatório");
+    if (!telefone.replace(/\D/g, "")) erros.push("Telefone é obrigatório");
+    if (!cep.replace(/\D/g, "")) erros.push("CEP é obrigatório");
+    if (!rua.trim()) erros.push("Rua é obrigatória");
+    if (!numeroEndereco.trim()) erros.push("Número do endereço é obrigatório");
+    if (!bairro.trim()) erros.push("Bairro é obrigatório");
+    if (!cidade.trim()) erros.push("Cidade é obrigatória");
+    if (!estado.trim()) erros.push("Estado é obrigatório");
+
+    // Validações de formato
+    const cepLimpo = cep.replace(/\D/g, "");
+    if (cepLimpo.length !== 8) erros.push("CEP deve ter 8 dígitos");
+
+    const cnpjLimpo = cnpj.replace(/\D/g, "");
+    if (cnpjLimpo.length !== 14) erros.push("CNPJ deve ter 14 dígitos");
+
+    const telefoneLimpo = telefone.replace(/\D/g, "");
+    if (telefoneLimpo.length < 10) erros.push("Telefone deve ter pelo menos 10 dígitos");
+
+    // Validação de email
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (email.trim() && !emailRegex.test(email)) erros.push("Email inválido");
+
+    return erros;
+  };
 
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
@@ -137,69 +236,87 @@ export function AddHotelGerenteForm({ className, ...props }: React.ComponentProp
       return;
     }
 
-    if (!cidadeId || cidadeId === "") {
-      toast.error("Cidade inválida", {
-        description: "Por favor, insira um CEP válido para buscar a cidade.",
+    // Validação do formulário
+    const erros = validarFormulario();
+    if (erros.length > 0) {
+      toast.error("Dados inválidos", {
+        description: erros.join(", ")
       });
       setLoading(false);
       return;
     }
 
-    const hotelData = {
-      CNPJ: cnpj,
-      Nome: nome,
-      Tipo: tipo,
-      Email: email,
-      Telefone: telefone,
-      Site: site,
-      Acessibilidade: acessibilidade,
-      CEP: cep,
-      Bairro: bairro,
-      Rua: rua,
-      NumeroEndereco: numeroEndereco,
-      Descricao: descricao,
-      Ativo: true,
-      DataInicio: new Date().toISOString(),
-      Cidade_Id: Number(cidadeId),
-      // O ID do gerente (Pessoa_Id) será adicionado pelo backend
+    const pessoaId = parseInt(user?.nameid || "0");
+
+    const hotelData: HotelInsertDTO = {
+      cnpj: cnpj.replace(/\D/g, ""),
+      nome: nome.trim(),
+      tipo: tipo,
+      email: email.trim(),
+      telefone: telefone.replace(/\D/g, ""),
+      site: site.trim() || undefined,
+      acessibilidade: acessibilidade.trim() || undefined,
+      cep: cep.replace(/\D/g, ""),
+      bairro: bairro.trim(),
+      rua: rua.trim(),
+      numeroEndereco: numeroEndereco.trim(),
+      descricao: descricao.trim() || undefined,
+      ativo: true,
+      dataInicio: new Date().toISOString(),
+      cidadeNome: cidade.trim(),
+      estadoSigla: estado.trim(),
+      pessoa_Id: pessoaId
     };
 
     try {
       const response = await api.post("/Hotel", hotelData);
+
       if (response.status === 201 || response.status === 200) {
         toast.success("Hotel cadastrado com sucesso!");
-        navigate("/dashboard-gerente"); // Redireciona para a dashboard do gerente
+        navigate("/dashboard-gerente");
       } else {
         toast.error("Erro ao cadastrar hotel. Tente novamente.");
       }
-    } catch (error) {
+    } catch (error: any) {
       console.error("Erro ao cadastrar hotel:", error);
-      toast.error("Erro ao cadastrar hotel. Verifique os dados e tente novamente.");
+
+      // Tratar erros de validação do backend
+      if (error.response?.data?.errors) {
+        const errosBackend = error.response.data.errors;
+        toast.error("Dados inválidos", {
+          description: Array.isArray(errosBackend) ? errosBackend.join(", ") : errosBackend
+        });
+      } else {
+        toast.error("Erro ao cadastrar hotel. Verifique os dados e tente novamente.");
+      }
     } finally {
       setLoading(false);
     }
   };
 
-  // Renderiza um spinner de carregamento enquanto a autenticação está sendo verificada
   if (isLoading) {
     return <LoadingSpinner />;
   }
 
-  // Se não estiver autenticado após o carregamento, não renderiza o formulário
   if (!isAuthenticated) {
     return null;
   }
 
   return (
     <Card className={cn("mx-auto max-w-4xl w-full", className)} {...props}>
-      <CardHeader>
-        <CardTitle className="text-2xl">Cadastrar Hotel</CardTitle>
-        <CardDescription>Preencha os dados do hotel abaixo</CardDescription>
+      <CardHeader className="text-center">
+        <CardTitle className="text-3xl font-bold flex items-center justify-center gap-2">
+          <Building2 className="h-8 w-8 text-primary" />
+          Cadastrar Hotel
+        </CardTitle>
+        <CardDescription className="text-lg">
+          Preencha os dados do seu estabelecimento
+        </CardDescription>
       </CardHeader>
       <CardContent>
-        <form onSubmit={handleSubmit} className="grid gap-8 grid-cols-1 md:grid-cols-2">
-          {/* ... o restante do seu formulário permanece o mesmo ... */}
-          <div className="w-full flex flex-col items-center md:col-span-2 mb-4">
+        <form onSubmit={handleSubmit} className="space-y-8">
+          {/* Seção de Foto */}
+          <div className="flex flex-col items-center space-y-4">
             <input
               id="fotoPerfil"
               type="file"
@@ -209,192 +326,337 @@ export function AddHotelGerenteForm({ className, ...props }: React.ComponentProp
             />
             <label
               htmlFor="fotoPerfil"
-              className="cursor-pointer flex flex-col items-center"
+              className="cursor-pointer flex flex-col items-center group"
             >
               {fotoPreview ? (
-                <img
-                  src={fotoPreview}
-                  alt="Prévia da foto de perfil"
-                  className="rounded-full w-32 h-32 object-cover border-2 border-primary shadow mb-2 transition-all hover:opacity-80"
-                />
+                <div className="relative">
+                  <img
+                    src={fotoPreview}
+                    alt="Prévia da foto do hotel"
+                    className="rounded-xl w-40 h-40 object-cover border-4 border-primary shadow-lg transition-all group-hover:opacity-80"
+                  />
+                  <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-20 rounded-xl transition-all flex items-center justify-center">
+                    <Edit3 className="h-8 w-8 text-white opacity-0 group-hover:opacity-100 transition-opacity" />
+                  </div>
+                </div>
               ) : (
-                <div className="rounded-full w-32 h-32 bg-muted flex items-center justify-center border-2 border-dashed border-primary text-muted-foreground text-4xl mb-2">
-                  +
+                <div className="rounded-xl w-40 h-40 bg-gradient-to-br from-primary/10 to-primary/5 flex items-center justify-center border-4 border-dashed border-primary/30 text-primary/50 text-6xl group-hover:border-primary group-hover:text-primary transition-all">
+                  <Building2 />
                 </div>
               )}
-              <span className="text-sm text-primary font-medium">
-                Adicionar Foto do Hotel
+              <span className="text-sm text-primary font-medium mt-2">
+                {fotoPreview ? "Alterar Foto" : "Adicionar Foto do Hotel"}
               </span>
             </label>
           </div>
-          <div className="grid gap-2 w-full">
-            <Label htmlFor="cnpj">CNPJ</Label>
-            <Input
-              id="cnpj"
-              type="text"
-              placeholder="00.000.000/0000-00"
-              required
-              value={cnpj}
-              onChange={(e) => setCnpj(e.target.value)}
-            />
+
+          {/* Seção de Informações Básicas */}
+          <div className="space-y-6">
+            <h3 className="text-xl font-semibold flex items-center gap-2">
+              <Building2 className="h-5 w-5" />
+              Informações Básicas
+            </h3>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div className="space-y-2">
+                <Label htmlFor="cnpj">CNPJ *</Label>
+                <Input
+                  id="cnpj"
+                  type="text"
+                  placeholder="00.000.000/0000-00"
+                  required
+                  value={cnpj}
+                  onChange={(e) => setCnpj(formatarCNPJ(e.target.value))}
+                  maxLength={18}
+                />
+              </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="nome">Nome do Hotel *</Label>
+                <Input
+                  id="nome"
+                  type="text"
+                  placeholder="Digite o nome do hotel"
+                  required
+                  value={nome}
+                  onChange={(e) => setNome(e.target.value)}
+                />
+              </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="tipo">Tipo de Estabelecimento *</Label>
+                <Select value={tipo} onValueChange={setTipo}>
+                  <SelectTrigger>
+                    <SelectValue placeholder="Selecione o tipo" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="Hotel">Hotel</SelectItem>
+                    <SelectItem value="Pousada">Pousada</SelectItem>
+                    <SelectItem value="Resort">Resort</SelectItem>
+                    <SelectItem value="Hostel">Hostel</SelectItem>
+                    <SelectItem value="Apartamento">Apartamento</SelectItem>
+                    <SelectItem value="Casa">Casa</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="descricao">Descrição</Label>
+                <Textarea
+                  id="descricao"
+                  placeholder="Descreva seu estabelecimento..."
+                  value={descricao}
+                  onChange={(e) => setDescricao(e.target.value)}
+                  rows={3}
+                />
+              </div>
+            </div>
           </div>
-          <div className="grid gap-2 w-full">
-            <Label htmlFor="nome">Nome</Label>
-            <Input
-              id="nome"
-              type="text"
-              placeholder="Nome do hotel"
-              required
-              value={nome}
-              onChange={(e) => setNome(e.target.value)}
-            />
-          </div>
-          <div className="grid gap-2 w-full">
-            <Label htmlFor="tipo">Tipo</Label>
-            <Select value={tipo} onValueChange={setTipo}>
-              <SelectTrigger className="w-full">
-                <SelectValue placeholder="Selecione o tipo" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="Apartamento">Apartamento</SelectItem>
-                <SelectItem value="Pousada">Pousada</SelectItem>
-                <SelectItem value="Hotel">Hotel</SelectItem>
-                <SelectItem value="Casa">Casa</SelectItem>
-                <SelectItem value="Hostel">Hostel</SelectItem>
-              </SelectContent>
-            </Select>
-          </div>
-          <div className="grid gap-2 w-full">
-            <Label htmlFor="email">Email</Label>
-            <Input
-              id="email"
-              type="email"
-              placeholder="hotel@exemplo.com"
-              required
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-            />
-          </div>
-          <div className="grid gap-2 w-full">
-            <Label htmlFor="telefone">Telefone</Label>
-            <Input
-              id="telefone"
-              type="tel"
-              placeholder="(00) 00000-0000"
-              value={telefone}
-              onChange={(e) => setTelefone(e.target.value)}
-            />
-          </div>
-          <div className="grid gap-2 w-full">
-            <Label htmlFor="site">Site</Label>
-            <Input
-              id="site"
-              type="url"
-              placeholder="https://"
-              value={site}
-              onChange={(e) => setSite(e.target.value)}
-            />
-          </div>
-          <div className="grid gap-2 w-full">
-            <Label htmlFor="acessibilidade">Acessibilidade</Label>
-            <Input
-              id="acessibilidade"
-              type="text"
-              placeholder="Descreva a acessibilidade"
-              value={acessibilidade}
-              onChange={(e) => setAcessibilidade(e.target.value)}
-            />
-          </div>
-          <div className="grid grid-cols-2 gap-4 w-full">
-            <div className="grid gap-2 w-full">
-              <Label htmlFor="cep">CEP</Label>
-              <Input
-                id="cep"
-                type="text"
-                placeholder="00000-000"
-                value={cep}
-                onChange={(e) => setCep(e.target.value)}
-                onBlur={handleCepBlur}
-                disabled={isCepLoading}
-              />
-              {isCepLoading && (
-                <div className="text-sm text-muted-foreground">
-                  Buscando endereço...
+
+          {/* Seção de Contato */}
+          <div className="space-y-6">
+            <h3 className="text-xl font-semibold flex items-center gap-2">
+              <Phone className="h-5 w-5" />
+              Informações de Contato
+            </h3>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div className="space-y-2">
+                <Label htmlFor="email">Email *</Label>
+                <div className="relative">
+                  <Mail className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
+                  <Input
+                    id="email"
+                    type="email"
+                    placeholder="hotel@exemplo.com"
+                    required
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    className="pl-10"
+                  />
                 </div>
+              </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="telefone">Telefone *</Label>
+                <div className="relative">
+                  <Phone className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
+                  <Input
+                    id="telefone"
+                    type="tel"
+                    placeholder="(00) 00000-0000"
+                    required
+                    value={telefone}
+                    onChange={(e) => setTelefone(formatarTelefone(e.target.value))}
+                    className="pl-10"
+                    maxLength={15}
+                  />
+                </div>
+              </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="site">Site</Label>
+                <div className="relative">
+                  <Globe className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
+                  <Input
+                    id="site"
+                    type="url"
+                    placeholder="https://www.exemplo.com"
+                    value={site}
+                    onChange={(e) => setSite(e.target.value)}
+                    className="pl-10"
+                  />
+                </div>
+              </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="acessibilidade">Acessibilidade</Label>
+                <div className="relative">
+                  <Accessibility className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
+                  <Input
+                    id="acessibilidade"
+                    type="text"
+                    placeholder="Descreva as facilidades de acessibilidade"
+                    value={acessibilidade}
+                    onChange={(e) => setAcessibilidade(e.target.value)}
+                    className="pl-10"
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Seção de Endereço */}
+          <div className="space-y-6">
+            <h3 className="text-xl font-semibold flex items-center gap-2">
+              <MapPin className="h-5 w-5" />
+              Endereço
+            </h3>
+
+            {/* Status do endereço */}
+            {enderecoPreenchido && (
+              <div className="flex items-center gap-2 p-3 bg-green-50 border border-green-200 rounded-lg">
+                <Check className="h-4 w-4 text-green-600" />
+                <span className="text-sm text-green-700">Endereço preenchido automaticamente via ViaCEP</span>
+                <Button
+                  type="button"
+                  variant="outline"
+                  size="sm"
+                  onClick={editarEndereco}
+                  className="ml-auto"
+                >
+                  <Edit3 className="h-3 w-3 mr-1" />
+                  Editar
+                </Button>
+              </div>
+            )}
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div className="space-y-2">
+                <Label htmlFor="cep">CEP *</Label>
+                <div className="relative">
+                  <Search className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
+                  <Input
+                    id="cep"
+                    type="text"
+                    placeholder="00000-000"
+                    required
+                    value={cep}
+                    onChange={(e) => setCep(formatarCEP(e.target.value))}
+                    onBlur={handleCepBlur}
+                    onKeyPress={handleCepKeyPress}
+                    disabled={isCepLoading}
+                    className="pl-10"
+                    maxLength={9}
+                  />
+                  {isCepLoading && (
+                    <div className="absolute right-3 top-3">
+                      <LoadingSpinner size="sm" />
+                    </div>
+                  )}
+                </div>
+                <p className="text-xs text-muted-foreground">
+                  Digite o CEP e pressione Enter ou clique fora para buscar o endereço
+                </p>
+              </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="numeroEndereco">Número *</Label>
+                <Input
+                  id="numeroEndereco"
+                  type="text"
+                  placeholder="123"
+                  required
+                  value={numeroEndereco}
+                  onChange={(e) => setNumeroEndereco(e.target.value)}
+                />
+              </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="rua">Rua *</Label>
+                <Input
+                  id="rua"
+                  type="text"
+                  placeholder="Rua será preenchida automaticamente"
+                  required
+                  value={rua}
+                  onChange={(e) => setRua(e.target.value)}
+                  disabled={!editandoEndereco && enderecoPreenchido}
+                />
+              </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="bairro">Bairro *</Label>
+                <Input
+                  id="bairro"
+                  type="text"
+                  placeholder="Bairro será preenchido automaticamente"
+                  required
+                  value={bairro}
+                  onChange={(e) => setBairro(e.target.value)}
+                  disabled={!editandoEndereco && enderecoPreenchido}
+                />
+              </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="complemento">Complemento</Label>
+                <Input
+                  id="complemento"
+                  type="text"
+                  placeholder="Apartamento, sala, etc."
+                  value={complemento}
+                  onChange={(e) => setComplemento(e.target.value)}
+                />
+              </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="cidade">Cidade *</Label>
+                <Input
+                  id="cidade"
+                  type="text"
+                  placeholder="Cidade será preenchida automaticamente"
+                  required
+                  value={cidade}
+                  onChange={(e) => setCidade(e.target.value)}
+                  disabled={!editandoEndereco && enderecoPreenchido}
+                />
+              </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="estado">Estado *</Label>
+                <Input
+                  id="estado"
+                  type="text"
+                  placeholder="Estado será preenchido automaticamente"
+                  required
+                  value={estado}
+                  onChange={(e) => setEstado(e.target.value)}
+                  disabled={!editandoEndereco && enderecoPreenchido}
+                />
+              </div>
+            </div>
+
+            {/* Botões de edição do endereço */}
+            {editandoEndereco && (
+              <div className="flex gap-2">
+                <Button
+                  type="button"
+                  onClick={confirmarEdicao}
+                  className="flex items-center gap-2"
+                >
+                  <Check className="h-4 w-4" />
+                  Confirmar Edição
+                </Button>
+                <Button
+                  type="button"
+                  variant="outline"
+                  onClick={cancelarEdicao}
+                  className="flex items-center gap-2"
+                >
+                  <X className="h-4 w-4" />
+                  Cancelar
+                </Button>
+              </div>
+            )}
+          </div>
+
+          {/* Botão de Submit */}
+          <div className="pt-6">
+            <Button
+              type="submit"
+              className="w-full h-12 text-lg font-semibold"
+              disabled={loading || !isAuthenticated}
+            >
+              {loading ? (
+                <div className="flex items-center gap-2">
+                  <LoadingSpinner size="sm" />
+                  Cadastrando Hotel...
+                </div>
+              ) : (
+                "Cadastrar Hotel"
               )}
-            </div>
-            <div className="grid gap-2 w-full">
-              <Label htmlFor="bairro">Bairro</Label>
-              <Input
-                id="bairro"
-                type="text"
-                placeholder="Bairro"
-                value={bairro}
-                onChange={(e) => setBairro(e.target.value)}
-              />
-            </div>
+            </Button>
           </div>
-          <div className="grid grid-cols-2 gap-4 w-full">
-            <div className="grid gap-2 w-full">
-              <Label htmlFor="rua">Rua</Label>
-              <Input
-                id="rua"
-                type="text"
-                placeholder="Rua"
-                value={rua}
-                onChange={(e) => setRua(e.target.value)}
-              />
-            </div>
-            <div className="grid gap-2 w-full">
-              <Label htmlFor="numeroEndereco">Número</Label>
-              <Input
-                id="numeroEndereco"
-                type="text"
-                placeholder="Número"
-                value={numeroEndereco}
-                onChange={(e) => setNumeroEndereco(e.target.value)}
-              />
-            </div>
-          </div>
-          <div className="grid gap-2 w-full">
-            <Label htmlFor="cidade">Cidade</Label>
-            <Input
-              id="cidade"
-              type="text"
-              placeholder="Cidade será preenchida automaticamente"
-              value={cidade}
-              disabled
-            />
-          </div>
-          <div className="grid gap-2 w-full">
-            <Label htmlFor="cidadeId">ID da Cidade</Label>
-            <Input
-              id="cidadeId"
-              type="number"
-              placeholder="Será preenchido automaticamente"
-              required
-              value={cidadeId}
-              onChange={(e) => setCidadeId(e.target.value)}
-              disabled
-            />
-          </div>
-          <div className="grid gap-2 w-full md:col-span-2">
-            <Label htmlFor="descricao">Descrição</Label>
-            <Input
-              id="descricao"
-              type="text"
-              placeholder="Descrição do hotel"
-              value={descricao}
-              onChange={(e) => setDescricao(e.target.value)}
-            />
-          </div>
-          <Button
-            type="submit"
-            className="w-full md:col-span-2"
-            disabled={loading || !isAuthenticated}
-          >
-            {loading ? "Cadastrando..." : "Cadastrar Hotel"}
-          </Button>
         </form>
       </CardContent>
     </Card>

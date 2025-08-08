@@ -182,9 +182,10 @@ export function SettingsForm() {
         // Get userId from decoded token
         const decodedUser = getAuthUser();
         if (!decodedUser) {
-          toast.error("Sessão expirada", { description: "Por favor, faça login novamente." });
-          // Redirect to login if no valid token
-          window.location.href = '/login';
+          console.warn("Token não encontrado ou inválido");
+          toast.error("Erro de autenticação", {
+            description: "Não foi possível verificar sua autenticação. Tente recarregar a página."
+          });
           return;
         }
         const userId = parseInt(decodedUser.nameid); // 'nameid' claim contains the user ID
