@@ -60,9 +60,6 @@ function App() {
                   <Route path="calendar" element={<CalendarPage />} />
                   <Route path="hospitals" element={<HospitalsPage />} />
                 </Route>
-                <Route path="/settings" element={<DashboardPage />}>
-                  <Route index element={<SettingsPage />} />
-                </Route>
               </Route>
 
               <Route element={<RoleProtectedRoute allowedRoles={["Gerente"]} />}>
@@ -72,10 +69,10 @@ function App() {
                   <Route path="view-hotels" element={<ViewHotelsPage />} />
                   <Route path="quartos" element={<QuartosPage />} />
                 </Route>
-                <Route path="/settings" element={<DashboardGerentePage />}>
-                  <Route index element={<SettingsPage />} />
-                </Route>
               </Route>
+
+              {/* Rota de configurações acessível para todos os usuários autenticados */}
+              <Route path="/settings" element={<SettingsPage />} />
 
               <Route path="/purchase" element={<DashboardPage />}>
                 <Route path="history" index element={<PurchaseHistoryPage />} />
