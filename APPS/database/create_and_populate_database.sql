@@ -431,12 +431,12 @@ INSERT INTO Cidade (Id, Nome, Estado_Id) VALUES
 -- Usuário Admin (Role = Gerente = 1)
 -- Senha: Admin123. (criptografada com bcrypt)
 INSERT INTO Pessoa (Id, Nome, DataNascimento, CPF, Telefone, Email, Senha, EnderecoFoto, CaoGuia, CEP, Bairro, Rua, NumeroEndereco, ROLE, Cidade_Id) VALUES
-(1, 'Administrador', '1980-01-01', '000.000.000-00', '(47) 99999-9999', 'admin@gmail.com', '$2a$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'https://via.placeholder.com/150', 0, '89010-000', 'Centro', 'Rua das Palmeiras', '123', 'Gerente', 61);
+(1, 'Administrador', '1980-01-01', '000.000.000-00', '(47) 99999-9999', 'admin@gmail.com', '$2a$10$5lfCjiHjvjbYuja8vZqG4e2BIA1M2oPF3KWPi1YPdW9a3VvnX7sNu', 'https://via.placeholder.com/150', 0, '89010-000', 'Centro', 'Rua das Palmeiras', '123', 'Gerente', 61);
 
 -- Usuário User (Role = Consumidor = 0)
 -- Senha: User123. (criptografada com bcrypt)
 INSERT INTO Pessoa (Id, Nome, DataNascimento, CPF, Telefone, Email, Senha, EnderecoFoto, CaoGuia, CEP, Bairro, Rua, NumeroEndereco, ROLE, Cidade_Id) VALUES
-(2, 'Usuário Teste', '1990-01-01', '111.111.111-11', '(47) 88888-8888', 'user@gmail.com', '$2a$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'https://via.placeholder.com/150', 0, '89020-000', 'Vila Nova', 'Rua das Flores', '456', 'Consumidor', 61);
+(2, 'Usuário Teste', '1990-01-01', '111.111.111-11', '(47) 88888-8888', 'user@gmail.com', '$2a$10$/Xja513hl0RPjToTVpxeNeVhpOITrWB6qwZ5xMDuh.FOfbssSO5FO', 'https://via.placeholder.com/150', 0, '89020-000', 'Vila Nova', 'Rua das Flores', '456', 'Consumidor', 61);
 
 -- =====================================================
 -- 5. INSERÇÃO DE HOTÉIS DE TESTE
