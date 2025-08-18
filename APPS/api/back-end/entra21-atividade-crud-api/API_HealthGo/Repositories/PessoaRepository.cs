@@ -35,8 +35,7 @@ namespace API_HealthGo.Repository
                                     BAIRRO AS {nameof(PessoaEntity.Bairro)},
                                     RUA AS {nameof(PessoaEntity.Rua)},
                                     NUMEROENDERECO AS {nameof(PessoaEntity.NumeroEndereco)},
-                                    CIDADE_ID AS {nameof(PessoaEntity.Cidade_Id)},
-                                    ROLE AS {nameof(PessoaEntity.Role)}
+                                    CIDADE_ID AS {nameof(PessoaEntity.Cidade_Id)}
                                 FROM PESSOA
                             ";
 
@@ -64,8 +63,7 @@ namespace API_HealthGo.Repository
                                     BAIRRO AS {nameof(PessoaEntity.Bairro)},
                                     RUA AS {nameof(PessoaEntity.Rua)},
                                     NUMEROENDERECO AS {nameof(PessoaEntity.NumeroEndereco)},
-                                    CIDADE_ID AS {nameof(PessoaEntity.Cidade_Id)},
-                                    ROLE AS {nameof(PessoaEntity.Role)}
+                                    CIDADE_ID AS {nameof(PessoaEntity.Cidade_Id)}
                                 FROM PESSOA
                                 WHERE ID = @id
                             ";
@@ -79,9 +77,9 @@ namespace API_HealthGo.Repository
         {
             string sql = @$"
                         INSERT INTO PESSOA (NOME, DATANASCIMENTO, CPF, TELEFONE, EMAIL,
-                        SENHA, ENDERECOFOTO, CAOGUIA, CEP, BAIRRO, RUA, NUMEROENDERECO, CIDADE_ID, ROLE)
+                        SENHA, ENDERECOFOTO, CAOGUIA, CEP, BAIRRO, RUA, NUMEROENDERECO, CIDADE_ID)
                         VALUES (@Nome, @DataNascimento, @CPF, @Telefone, @Email, @Senha,
-                        @EnderecoFoto, @CaoGuia, @CEP, @Bairro, @Rua, @NumeroEndereco, @Cidade_Id, @Role)
+                        @EnderecoFoto, @CaoGuia, @CEP, @Bairro, @Rua, @NumeroEndereco, @Cidade_Id)
             ";
 
             await _connection.Execute(sql, pessoa);
@@ -135,8 +133,7 @@ namespace API_HealthGo.Repository
                                     BAIRRO AS {nameof(PessoaEntity.Bairro)},
                                     RUA AS {nameof(PessoaEntity.Rua)},
                                     NUMEROENDERECO AS {nameof(PessoaEntity.NumeroEndereco)},
-                                    CIDADE_ID AS {nameof(PessoaEntity.Cidade_Id)},
-                                    ROLE AS {nameof(PessoaEntity.Role)}
+                                    CIDADE_ID AS {nameof(PessoaEntity.Cidade_Id)}
                                 FROM PESSOA
                                 WHERE EMAIL = @Email
                             ";

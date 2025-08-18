@@ -55,8 +55,7 @@ namespace API_HealthGo.Repository
                                     p.CEP AS {nameof(PessoaEntity.CEP)},
                                     p.BAIRRO AS {nameof(PessoaEntity.Bairro)},
                                     p.RUA AS {nameof(PessoaEntity.Rua)},
-                                    p.NUMEROENDERECO AS {nameof(PessoaEntity.NumeroEndereco)},
-                                    p.ROLE AS {nameof(PessoaEntity.Role)},
+                                    p.NUMEROENDERECO AS {nameof(PessoaEntity.NumeroEndereco)}
                                     p.CIDADE_ID AS {nameof(PessoaEntity.Cidade_Id)},
 
                                     e.ID AS {nameof(EspecialidadeComPrecoDTO.Id)},

@@ -27,7 +27,5 @@
         public string NumeroEndereco { get; set; }
 
         public int Cidade_Id { get; set; }
-
-        public API_HealthGo.Entities.UserRole Role { get; set; }
     }
 }

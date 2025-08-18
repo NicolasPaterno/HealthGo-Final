@@ -29,10 +29,5 @@
         public string NumeroEndereco { get; set; }
         
         public int Cidade_Id { get; set; }
-
-        /// <summary>
-        /// Papel do usuário para autorização (Consumidor, Gerente)
-        /// </summary>
-        public UserRole Role { get; set; }
     }
 }
