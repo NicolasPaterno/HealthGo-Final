@@ -4,11 +4,100 @@
 
 @custom-variant dark (&:is(.dark *));
 
+:root {
+  --background: oklch(0.98 0 0);
+  --foreground: oklch(0.21 0.03 263.61);
+  --card: oklch(1.00 0 0);
+  --card-foreground: oklch(0.21 0.03 263.61);
+  --popover: oklch(1.00 0 0);
+  --popover-foreground: oklch(0.21 0.03 263.61);
+  --primary: oklch(0.48 0.20 260.47);
+  --primary-foreground: oklch(1.00 0 0);
+  --secondary: oklch(0.97 0 0);
+  --secondary-foreground: oklch(0.37 0.03 259.73);
+  --muted: oklch(0.97 0 0);
+  --muted-foreground: oklch(0.55 0.02 264.41);
+  --accent: oklch(0.95 0.02 260.18);
+  --accent-foreground: oklch(0.48 0.20 260.47);
+  --destructive: oklch(0.58 0.22 27.29);
+  --border: oklch(0.93 0.01 261.82);
+  --input: oklch(0.93 0.01 261.82);
+  --ring: oklch(0.48 0.20 260.47);
+  --chart-1: oklch(0.48 0.20 260.47);
+  --chart-2: oklch(0.56 0.24 260.92);
+  --chart-3: oklch(0.40 0.16 259.61);
+  --chart-4: oklch(0.43 0.16 259.82);
+  --chart-5: oklch(0.29 0.07 261.20);
+  --sidebar: oklch(0.97 0 0);
+  --sidebar-foreground: oklch(0.21 0.03 263.61);
+  --sidebar-primary: oklch(0.48 0.20 260.47);
+  --sidebar-primary-foreground: oklch(1.00 0 0);
+  --sidebar-accent: oklch(0.95 0.02 260.18);
+  --sidebar-accent-foreground: oklch(0.48 0.20 260.47);
+  --sidebar-border: oklch(0.93 0.01 261.82);
+  --sidebar-ring: oklch(0.48 0.20 260.47);
+
+  --font-sans: Poppins, sans-serif;
+  --font-serif: Source Serif 4, serif;
+  --font-mono: Poppins, monospace;
+
+  --radius: 0.375rem;
+
+  --shadow-2xs: 0 1px 3px 0px oklch(0.00 0 0 / 0.05);
+  --shadow-xs: 0 1px 3px 0px oklch(0.00 0 0 / 0.05);
+  --shadow-sm: 0 1px 3px 0px oklch(0.00 0 0 / 0.10), 0 1px 2px -1px oklch(0.00 0 0 / 0.10);
+  --shadow: 0 1px 3px 0px oklch(0.00 0 0 / 0.10), 0 1px 2px -1px oklch(0.00 0 0 / 0.10);
+  --shadow-md: 0 1px 3px 0px oklch(0.00 0 0 / 0.10), 0 2px 4px -1px oklch(0.00 0 0 / 0.10);
+  --shadow-lg: 0 1px 3px 0px oklch(0.00 0 0 / 0.10), 0 4px 6px -1px oklch(0.00 0 0 / 0.10);
+  --shadow-xl: 0 1px 3px 0px oklch(0.00 0 0 / 0.10), 0 8px 10px -1px oklch(0.00 0 0 / 0.10);
+  --shadow-2xl: 0 1px 3px 0px oklch(0.00 0 0 / 0.25);
+
+}
+
+.dark {
+  --background: oklch(0.26 0.03 262.67);
+  --foreground: oklch(0.93 0.01 261.82);
+  --card: oklch(0.30 0.03 260.51);
+  --card-foreground: oklch(0.93 0.01 261.82);
+  --popover: oklch(0.30 0.03 260.51);
+  --popover-foreground: oklch(0.93 0.01 261.82);
+  --primary: oklch(0.56 0.24 260.92);
+  --primary-foreground: oklch(1.00 0 0);
+  --secondary: oklch(0.35 0.04 261.40);
+  --secondary-foreground: oklch(0.93 0.01 261.82);
+  --muted: oklch(0.30 0.03 260.51);
+  --muted-foreground: oklch(0.71 0.02 261.33);
+  --accent: oklch(0.33 0.04 264.63);
+  --accent-foreground: oklch(0.93 0.01 261.82);
+  --destructive: oklch(0.64 0.21 25.39);
+  --border: oklch(0.35 0.04 261.40);
+  --input: oklch(0.35 0.04 261.40);
+  --ring: oklch(0.56 0.24 260.92);
+  --chart-1: oklch(0.56 0.24 260.92);
+  --chart-2: oklch(0.48 0.20 260.47);
+  --chart-3: oklch(0.69 0.17 255.59);
+  --chart-4: oklch(0.43 0.16 259.82);
+  --chart-5: oklch(0.29 0.07 261.20);
+  --sidebar: oklch(0.26 0.03 262.67);
+  --sidebar-foreground: oklch(0.93 0.01 261.82);
+  --sidebar-primary: oklch(0.56 0.24 260.92);
+  --sidebar-primary-foreground: oklch(1.00 0 0);
+  --sidebar-accent: oklch(0.33 0.04 264.63);
+  --sidebar-accent-foreground: oklch(0.93 0.01 261.82);
+  --sidebar-border: oklch(0.35 0.04 261.40);
+  --sidebar-ring: oklch(0.56 0.24 260.92);
+
+  --shadow-2xs: 0 1px 3px 0px oklch(0.00 0 0 / 0.05);
+  --shadow-xs: 0 1px 3px 0px oklch(0.00 0 0 / 0.05);
+  --shadow-sm: 0 1px 3px 0px oklch(0.00 0 0 / 0.10), 0 1px 2px -1px oklch(0.00 0 0 / 0.10);
+  --shadow: 0 1px 3px 0px oklch(0.00 0 0 / 0.10), 0 1px 2px -1px oklch(0.00 0 0 / 0.10);
+  --shadow-md: 0 1px 3px 0px oklch(0.00 0 0 / 0.10), 0 2px 4px -1px oklch(0.00 0 0 / 0.10);
+  --shadow-lg: 0 1px 3px 0px oklch(0.00 0 0 / 0.10), 0 4px 6px -1px oklch(0.00 0 0 / 0.10);
+  --shadow-xl: 0 1px 3px 0px oklch(0.00 0 0 / 0.10), 0 8px 10px -1px oklch(0.00 0 0 / 0.10);
+  --shadow-2xl: 0 1px 3px 0px oklch(0.00 0 0 / 0.25);
+}
+
 @theme inline {
-  --radius-sm: calc(var(--radius) - 4px);
-  --radius-md: calc(var(--radius) - 2px);
-  --radius-lg: var(--radius);
-  --radius-xl: calc(var(--radius) + 4px);
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --color-card: var(--card);
@@ -40,157 +129,40 @@
   --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-ring: var(--sidebar-ring);
-  --font-sans: Poppins, sans-serif;
-  --font-mono: JetBrains Mono, monospace;
-  --font-serif: Merriweather, serif;
-  --radius: 0.5rem;
-  --tracking-tighter: calc(var(--tracking-normal) - 0.05em);
-  --tracking-tight: calc(var(--tracking-normal) - 0.025em);
-  --tracking-wide: calc(var(--tracking-normal) + 0.025em);
-  --tracking-wider: calc(var(--tracking-normal) + 0.05em);
-  --tracking-widest: calc(var(--tracking-normal) + 0.1em);
-  --tracking-normal: var(--tracking-normal);
-  --shadow-2xl: var(--shadow-2xl);
-  --shadow-xl: var(--shadow-xl);
-  --shadow-lg: var(--shadow-lg);
-  --shadow-md: var(--shadow-md);
-  --shadow: var(--shadow);
-  --shadow-sm: var(--shadow-sm);
-  --shadow-xs: var(--shadow-xs);
+
+  --font-sans: var(--font-sans);
+  --font-mono: var(--font-mono);
+  --font-serif: var(--font-serif);
+
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+
   --shadow-2xs: var(--shadow-2xs);
-  --spacing: var(--spacing);
-  --letter-spacing: var(--letter-spacing);
-  --shadow-offset-y: var(--shadow-offset-y);
-  --shadow-offset-x: var(--shadow-offset-x);
-  --shadow-spread: var(--shadow-spread);
-  --shadow-blur: var(--shadow-blur);
-  --shadow-opacity: var(--shadow-opacity);
-  --color-shadow-color: var(--shadow-color);
-  --color-destructive-foreground: var(--destructive-foreground);
-}
-
-:root {
-  --radius: 0.5rem;
-  --background: oklch(0.9842 0.0034 247.8575);
-  --foreground: oklch(0.2795 0.0368 260.0310);
-  --card: oklch(1.0000 0 0);
-  --card-foreground: oklch(0.2795 0.0368 260.0310);
-  --popover: oklch(1.0000 0 0);
-  --popover-foreground: oklch(0.2795 0.0368 260.0310);
-  --primary: oklch(0.5854 0.2041 277.1173);
-  --primary-foreground: oklch(1.0000 0 0);
-  --secondary: oklch(0.9276 0.0058 264.5313);
-  --secondary-foreground: oklch(0.3729 0.0306 259.7328);
-  --muted: oklch(0.9670 0.0029 264.5419);
-  --muted-foreground: oklch(0.5510 0.0234 264.3637);
-  --accent: oklch(0.9299 0.0334 272.7879);
-  --accent-foreground: oklch(0.3729 0.0306 259.7328);
-  --destructive: oklch(0.6368 0.2078 25.3313);
-  --border: oklch(0.8717 0.0093 258.3382);
-  --input: oklch(0.8717 0.0093 258.3382);
-  --ring: oklch(0.5854 0.2041 277.1173);
-  --chart-1: oklch(0.5854 0.2041 277.1173);
-  --chart-2: oklch(0.5106 0.2301 276.9656);
-  --chart-3: oklch(0.4568 0.2146 277.0229);
-  --chart-4: oklch(0.3984 0.1773 277.3662);
-  --chart-5: oklch(0.3588 0.1354 278.6973);
-  --sidebar: oklch(0.9670 0.0029 264.5419);
-  --sidebar-foreground: oklch(0.2795 0.0368 260.0310);
-  --sidebar-primary: oklch(0.5854 0.2041 277.1173);
-  --sidebar-primary-foreground: oklch(1.0000 0 0);
-  --sidebar-accent: oklch(0.9299 0.0334 272.7879);
-  --sidebar-accent-foreground: oklch(0.3729 0.0306 259.7328);
-  --sidebar-border: oklch(0.8717 0.0093 258.3382);
-  --sidebar-ring: oklch(0.5854 0.2041 277.1173);
-  --destructive-foreground: oklch(1.0000 0 0);
-  --font-sans: Poppins, sans-serif;
-  --font-serif: Merriweather, serif;
-  --font-mono: JetBrains Mono, monospace;
-  --shadow-color: hsl(0 0% 0%);
-  --shadow-opacity: 0.1;
-  --shadow-blur: 8px;
-  --shadow-spread: -1px;
-  --shadow-offset-x: 0px;
-  --shadow-offset-y: 4px;
-  --letter-spacing: 0em;
-  --spacing: 0.25rem;
-  --shadow-2xs: 0px 4px 8px -1px hsl(0 0% 0% / 0.05);
-  --shadow-xs: 0px 4px 8px -1px hsl(0 0% 0% / 0.05);
-  --shadow-sm: 0px 4px 8px -1px hsl(0 0% 0% / 0.10), 0px 1px 2px -2px hsl(0 0% 0% / 0.10);
-  --shadow: 0px 4px 8px -1px hsl(0 0% 0% / 0.10), 0px 1px 2px -2px hsl(0 0% 0% / 0.10);
-  --shadow-md: 0px 4px 8px -1px hsl(0 0% 0% / 0.10), 0px 2px 4px -2px hsl(0 0% 0% / 0.10);
-  --shadow-lg: 0px 4px 8px -1px hsl(0 0% 0% / 0.10), 0px 4px 6px -2px hsl(0 0% 0% / 0.10);
-  --shadow-xl: 0px 4px 8px -1px hsl(0 0% 0% / 0.10), 0px 8px 10px -2px hsl(0 0% 0% / 0.10);
-  --shadow-2xl: 0px 4px 8px -1px hsl(0 0% 0% / 0.25);
-  --tracking-normal: 0em;
-}
-
-.dark {
-  --background: oklch(0.2077 0.0398 265.7549);
-  --foreground: oklch(0.9288 0.0126 255.5078);
-  --card: oklch(0.2795 0.0368 260.0310);
-  --card-foreground: oklch(0.9288 0.0126 255.5078);
-  --popover: oklch(0.2795 0.0368 260.0310);
-  --popover-foreground: oklch(0.9288 0.0126 255.5078);
-  --primary: oklch(0.6801 0.1583 276.9349);
-  --primary-foreground: oklch(0.2077 0.0398 265.7549);
-  --secondary: oklch(0.3351 0.0331 260.9120);
-  --secondary-foreground: oklch(0.8717 0.0093 258.3382);
-  --muted: oklch(0.2795 0.0368 260.0310);
-  --muted-foreground: oklch(0.7137 0.0192 261.3246);
-  --accent: oklch(0.3729 0.0306 259.7328);
-  --accent-foreground: oklch(0.8717 0.0093 258.3382);
-  --destructive: oklch(0.6368 0.2078 25.3313);
-  --border: oklch(0.4461 0.0263 256.8018);
-  --input: oklch(0.4461 0.0263 256.8018);
-  --ring: oklch(0.6801 0.1583 276.9349);
-  --chart-1: oklch(0.6801 0.1583 276.9349);
-  --chart-2: oklch(0.5854 0.2041 277.1173);
-  --chart-3: oklch(0.5106 0.2301 276.9656);
-  --chart-4: oklch(0.4568 0.2146 277.0229);
-  --chart-5: oklch(0.3984 0.1773 277.3662);
-  --sidebar: oklch(0.2795 0.0368 260.0310);
-  --sidebar-foreground: oklch(0.9288 0.0126 255.5078);
-  --sidebar-primary: oklch(0.6801 0.1583 276.9349);
-  --sidebar-primary-foreground: oklch(0.2077 0.0398 265.7549);
-  --sidebar-accent: oklch(0.3729 0.0306 259.7328);
-  --sidebar-accent-foreground: oklch(0.8717 0.0093 258.3382);
-  --sidebar-border: oklch(0.4461 0.0263 256.8018);
-  --sidebar-ring: oklch(0.6801 0.1583 276.9349);
-  --destructive-foreground: oklch(0.2077 0.0398 265.7549);
-  --radius: 0.5rem;
-  --font-sans: Poppins, sans-serif;
-  --font-serif: Merriweather, serif;
-  --font-mono: JetBrains Mono, monospace;
-  --shadow-color: hsl(0 0% 0%);
-  --shadow-opacity: 0.1;
-  --shadow-blur: 8px;
-  --shadow-spread: -1px;
-  --shadow-offset-x: 0px;
-  --shadow-offset-y: 4px;
-  --letter-spacing: 0em;
-  --spacing: 0.25rem;
-  --shadow-2xs: 0px 4px 8px -1px hsl(0 0% 0% / 0.05);
-  --shadow-xs: 0px 4px 8px -1px hsl(0 0% 0% / 0.05);
-  --shadow-sm: 0px 4px 8px -1px hsl(0 0% 0% / 0.10), 0px 1px 2px -2px hsl(0 0% 0% / 0.10);
-  --shadow: 0px 4px 8px -1px hsl(0 0% 0% / 0.10), 0px 1px 2px -2px hsl(0 0% 0% / 0.10);
-  --shadow-md: 0px 4px 8px -1px hsl(0 0% 0% / 0.10), 0px 2px 4px -2px hsl(0 0% 0% / 0.10);
-  --shadow-lg: 0px 4px 8px -1px hsl(0 0% 0% / 0.10), 0px 4px 6px -2px hsl(0 0% 0% / 0.10);
-  --shadow-xl: 0px 4px 8px -1px hsl(0 0% 0% / 0.10), 0px 8px 10px -2px hsl(0 0% 0% / 0.10);
-  --shadow-2xl: 0px 4px 8px -1px hsl(0 0% 0% / 0.25);
+  --shadow-xs: var(--shadow-xs);
+  --shadow-sm: var(--shadow-sm);
+  --shadow: var(--shadow);
+  --shadow-md: var(--shadow-md);
+  --shadow-lg: var(--shadow-lg);
+  --shadow-xl: var(--shadow-xl);
+  --shadow-2xl: var(--shadow-2xl);
 }
 
 @layer base {
   * {
     @apply border-border outline-ring/50;
   }
+
   body {
     @apply bg-background text-foreground;
     letter-spacing: var(--tracking-normal);
   }
+
   button {
     @apply cursor-pointer;
   }
+
   input,
   textarea {
     @apply cursor-text;
@@ -201,6 +173,358 @@
   }
 }
 
+/* Estilos responsivos para o calendário */
+.rdp {
+  --rdp-cell-size: 50px;
+  --rdp-accent-color: hsl(var(--primary));
+  --rdp-background-color: hsl(var(--accent));
+  --rdp-accent-color-dark: hsl(var(--primary));
+  --rdp-background-color-dark: hsl(var(--accent));
+  --rdp-outline: 2px solid var(--rdp-accent-color);
+  --rdp-outline-selected: 2px solid rgba(0, 0, 0, 0.75);
+}
+
+/* Tamanhos responsivos para diferentes telas */
+@media (min-width: 640px) {
+  .rdp {
+    --rdp-cell-size: 55px;
+  }
+}
+
+@media (min-width: 768px) {
+  .rdp {
+    --rdp-cell-size: 60px;
+  }
+}
+
+@media (min-width: 1024px) {
+  .rdp {
+    --rdp-cell-size: 65px;
+  }
+}
+
+@media (min-width: 1280px) {
+  .rdp {
+    --rdp-cell-size: 70px;
+  }
+}
+
+@media (min-width: 1536px) {
+  .rdp {
+    --rdp-cell-size: 75px;
+  }
+}
+
+/* Garantir que o calendário ocupe o espaço disponível */
+.rdp-root {
+  width: 100% !important;
+  max-width: none !important;
+}
+
+.rdp-months {
+  width: 100% !important;
+  justify-content: center !important;
+}
+
+.rdp-month {
+  width: 100% !important;
+  max-width: 450px !important;
+}
+
+.rdp-table {
+  width: 100% !important;
+  border-collapse: separate !important;
+  border-spacing: 4px !important;
+}
+
+.rdp-week {
+  width: 100% !important;
+  display: flex !important;
+  justify-content: space-between !important;
+}
+
+.rdp-day {
+  width: var(--rdp-cell-size) !important;
+  height: var(--rdp-cell-size) !important;
+  min-width: var(--rdp-cell-size) !important;
+  min-height: var(--rdp-cell-size) !important;
+  padding: 18px !important;
+  text-align: center !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+
+/* Alinhar cabeçalhos dos dias da semana */
+.rdp-weekdays {
+  display: flex !important;
+  width: 100% !important;
+  justify-content: space-between !important;
+  margin-bottom: 8px !important;
+  padding: 0 5px !important;
+}
+
+.rdp-weekday {
+  width: var(--rdp-cell-size) !important;
+  min-width: var(--rdp-cell-size) !important;
+  text-align: center !important;
+  font-weight: 600 !important;
+  font-size: 14px !important;
+  color: hsl(var(--muted-foreground)) !important;
+  padding: 8px 0 !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+
+/* Melhorar o tamanho e interação dos botões dos dias */
+.rdp-button {
+  width: var(--rdp-cell-size) !important;
+  height: var(--rdp-cell-size) !important;
+  min-width: var(--rdp-cell-size) !important;
+  min-height: var(--rdp-cell-size) !important;
+  border-radius: 12px !important;
+  transition: all 0.2s ease-in-out !important;
+  font-size: 16px !important;
+  font-weight: 500 !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  position: relative !important;
+}
+
+/* Hover e focus states melhorados */
+.rdp-button:hover {
+  background-color: hsl(var(--accent)) !important;
+  transform: scale(1.05) !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15) !important;
+}
+
+.rdp-button:focus {
+  outline: 3px solid hsl(var(--ring)) !important;
+  outline-offset: 2px !important;
+  transform: scale(1.05) !important;
+}
+
+/* Estado selecionado */
+.rdp-button[aria-selected="true"] {
+  background-color: hsl(var(--primary)) !important;
+  color: hsl(var(--primary-foreground)) !important;
+  font-weight: 600 !important;
+  transform: scale(1.1) !important;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2) !important;
+}
+
+/* Estado hoje */
+.rdp-button[aria-selected="false"][data-today="true"] {
+  background-color: hsl(var(--accent)) !important;
+  color: hsl(var(--accent-foreground)) !important;
+  font-weight: 600 !important;
+  border: 3px solid hsl(var(--primary)) !important;
+}
+
+/* Estados desabilitados */
+.rdp-button[aria-disabled="true"] {
+  opacity: 0.5 !important;
+  cursor: not-allowed !important;
+  transform: none !important;
+}
+
+.rdp-button[aria-disabled="true"]:hover {
+  transform: none !important;
+  box-shadow: none !important;
+}
+
+/* Ajustar tamanho do texto nos botões para diferentes telas */
+@media (min-width: 640px) {
+  .rdp-button {
+    font-size: 17px !important;
+  }
+
+  .rdp-weekday {
+    font-size: 15px !important;
+  }
+}
+
+@media (min-width: 768px) {
+  .rdp-button {
+    font-size: 18px !important;
+  }
+
+  .rdp-weekday {
+    font-size: 16px !important;
+  }
+}
+
+@media (min-width: 1024px) {
+  .rdp-button {
+    font-size: 19px !important;
+  }
+
+  .rdp-weekday {
+    font-size: 17px !important;
+  }
+}
+
+@media (min-width: 1280px) {
+  .rdp-button {
+    font-size: 20px !important;
+  }
+
+  .rdp-weekday {
+    font-size: 18px !important;
+  }
+}
+
+@media (min-width: 1536px) {
+  .rdp-button {
+    font-size: 21px !important;
+  }
+
+  .rdp-weekday {
+    font-size: 19px !important;
+  }
+}
+
+/* Forçar alinhamento dos botões */
+.rdp-day button {
+  width: var(--rdp-cell-size) !important;
+  height: var(--rdp-cell-size) !important;
+  min-width: var(--rdp-cell-size) !important;
+  min-height: var(--rdp-cell-size) !important;
+  border-radius: 12px !important;
+  transition: all 0.2s ease-in-out !important;
+  font-size: 16px !important;
+  font-weight: 500 !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  position: relative !important;
+}
+
+/* Forçar alinhamento dos cabeçalhos */
+.rdp-weekdays div {
+  width: var(--rdp-cell-size) !important;
+  min-width: var(--rdp-cell-size) !important;
+  text-align: center !important;
+  font-weight: 600 !important;
+  font-size: 14px !important;
+  color: hsl(var(--muted-foreground)) !important;
+  padding: 8px 0 !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+
+/* Ajustar tamanho do texto nos botões para diferentes telas */
+@media (min-width: 640px) {
+  .rdp-day button {
+    font-size: 17px !important;
+  }
+
+  .rdp-weekdays div {
+    font-size: 15px !important;
+  }
+}
+
+@media (min-width: 768px) {
+  .rdp-day button {
+    font-size: 18px !important;
+  }
+
+  .rdp-weekdays div {
+    font-size: 16px !important;
+  }
+}
+
+@media (min-width: 1024px) {
+  .rdp-day button {
+    font-size: 19px !important;
+  }
+
+  .rdp-weekdays div {
+    font-size: 17px !important;
+  }
+}
+
+@media (min-width: 1280px) {
+  .rdp-day button {
+    font-size: 20px !important;
+  }
+
+  .rdp-weekdays div {
+    font-size: 18px !important;
+  }
+}
+
+@media (min-width: 1536px) {
+  .rdp-day button {
+    font-size: 21px !important;
+  }
+
+  .rdp-weekdays div {
+    font-size: 19px !important;
+  }
+}
+
+/* Estilos específicos para garantir alinhamento perfeito */
+.rdp-day button[data-selected-single="true"] {
+  background-color: hsl(var(--primary)) !important;
+  color: hsl(var(--primary-foreground)) !important;
+  font-weight: 600 !important;
+  transform: scale(1.1) !important;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2) !important;
+}
+
+.rdp-day button:hover {
+  background-color: hsl(var(--accent)) !important;
+  transform: scale(1.05) !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15) !important;
+}
+
+.rdp-day button:focus {
+  outline: 3px solid hsl(var(--ring)) !important;
+  outline-offset: 2px !important;
+  transform: scale(1.05) !important;
+}
+
+/* Garantir que os números dos dias sejam centralizados */
+.rdp-day button span {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  width: 100% !important;
+  height: 100% !important;
+  font-size: inherit !important;
+  font-weight: inherit !important;
+}
+
+/* Ajustar o espaçamento das semanas para alinhar com os cabeçalhos */
+.rdp-week {
+  width: 100% !important;
+  display: flex !important;
+  justify-content: space-between !important;
+  padding: 0 4px !important;
+}
+
+/* Ajustar o container dos meses para garantir alinhamento */
+.rdp-months {
+  width: 100% !important;
+  justify-content: center !important;
+  padding: 0 4px !important;
+}
+
+/* Ajustar o container do mês para garantir alinhamento */
+.rdp-month {
+  width: 100% !important;
+  max-width: 450px !important;
+  padding: 0 4px !important;
+}
+
 /* Estilo final e robusto para o indicador de lembrete */
 .day-with-reminder {
   font-weight: 800 !important;
@@ -209,6 +533,7 @@
   text-decoration-thickness: 2px !important;
   text-underline-offset: 3px !important;
 }
+
 .day-with-reminder::after {
   content: '' !important;
   display: block !important;
@@ -223,5 +548,5 @@
 }
 
 .rdp-day_selected.day-with-reminder::after {
-    display: none !important;
+  display: none !important;
 }

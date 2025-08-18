@@ -16,10 +16,13 @@ const ForgotPasswordPage = lazy(() => import("./app/forgot-password/ForgotPasswo
 const ResetPasswordPage = lazy(() => import("./app/forgot-password/ResetPasswordPage"));
 const RegisterPage = lazy(() => import("./app/register/RegisterPage"));
 const RegisterPrestadorServicoPage = lazy(() => import("./app/register/RegisterPrestadorServicoPage"));
+const RegisterManagerPage = lazy(() => import("./app/register/RegisterManagerPage"));
 const DashboardPage = lazy(() => import("./app/dashboard/DashboardPage"));
 const DashboardContent = lazy(() => import("./app/dashboard/DashboardContent"));
 const SettingsPage = lazy(() => import("./app/settings/SettingsPage"));
 const HotelsPage = lazy(() => import("./app/hotels/HotelsPage"));
+const HotelsBrowsePage = lazy(() => import("./app/hotels/HotelsBrowsePage"));
+const HotelDetailPage = lazy(() => import("./app/hotels/HotelDetailPage"));
 const TicketsPage = lazy(() => import("./app/tickets/TicketsPage"));
 const PsychologistPage = lazy(() => import("./app/psychologists/PsychologistPage"));
 const CaregiversPage = lazy(() => import("./app/caregivers/CaregiversPage"));
@@ -28,6 +31,10 @@ const HospitalsPage = lazy(() => import("./app/hospitals/HospitalsPage"));
 const PurchaseHistoryPage = lazy(() => import("./app/history/PurchaseHistoryPage"));
 const DashboardGerentePage = lazy(() => import("./app/dashboard/DashboardGerentePage"));
 const DashboardGerenteContent = lazy(() => import("./app/dashboard/DashboardGerenteContent"));
+const CadastrarHotelPage = lazy(() => import("./app/hotels/CadastrarHotelPage"));
+const ViewHotelsPage = lazy(() => import("./app/hotels/ViewHotelsPage"));
+const QuartosPage = lazy(() => import("./app/dashboard/QuartosPage"));
+
 
 function App() {
   return (
@@ -41,35 +48,40 @@ function App() {
             <Route path="/redefinir-senha/:token" element={<ResetPasswordPage />} />
             <Route path="/register" element={<RegisterPage />} />
             <Route path="/register-prestadorservico" element={<RegisterPrestadorServicoPage />} />
+            <Route path="/register-manager" element={<RegisterManagerPage />} />
 
             <Route element={<ProtectedRoute />}>
               <Route element={<RoleProtectedRoute allowedRoles={["Consumidor"]} />}>
                 <Route path="/dashboard" element={<DashboardPage />}>
                   <Route index element={<DashboardContent />} />
-                  <Route path="hotels" element={<HotelsPage />} />
+                  <Route path="hotels" element={<HotelsBrowsePage />} />
+                  <Route path="hotels-management" element={<HotelsPage />} />
                   <Route path="tickets" element={<TicketsPage />} />
                   <Route path="psychologist" element={<PsychologistPage />} />
                   <Route path="caregivers" element={<CaregiversPage />} />
                   <Route path="calendar" element={<CalendarPage />} />
                   <Route path="hospitals" element={<HospitalsPage />} />
                 </Route>
-                <Route path="/settings" element={<DashboardPage />}>
-                  <Route index element={<SettingsPage />} />
-                </Route>
               </Route>
 
               <Route element={<RoleProtectedRoute allowedRoles={["Gerente"]} />}>
                 <Route path="/dashboard-gerente" element={<DashboardGerentePage />}>
                   <Route index element={<DashboardGerenteContent />} />
-                </Route>
-                <Route path="/settings" element={<DashboardGerentePage />}>
-                  <Route index element={<SettingsPage />} />
+                  <Route path="add-hotel" element={<CadastrarHotelPage />} />
+                  <Route path="view-hotels" element={<ViewHotelsPage />} />
+                  <Route path="quartos" element={<QuartosPage />} />
                 </Route>
               </Route>
+
+              {/* Rota de configurações acessível para todos os usuários autenticados */}
+              <Route path="/settings" element={<SettingsPage />} />
 
               <Route path="/purchase" element={<DashboardPage />}>
                 <Route path="history" index element={<PurchaseHistoryPage />} />
               </Route>
+
+              {/* Rotas públicas para visualização de hotéis */}
+              <Route path="/hotel/:id" element={<HotelDetailPage />} />
 
             </Route>
 

@@ -11,10 +11,10 @@ export interface CartItem {
 }
 
 export interface Order {
-    orderId: string;
-    date: Date;
-    items: CartItem[];
-    total: number;
+  orderId: string;
+  date: Date;
+  items: CartItem[];
+  total: number;
 }
 
 interface ICartContext {
@@ -88,17 +88,17 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
   };
 
   const completePurchase = () => {
-      if (cartItems.length === 0) return;
-      const newOrder: Order = {
-          orderId: `order-${Date.now()}`,
-          date: new Date(),
-          items: [...cartItems],
-          total: cartTotal,
-      };
-      setPurchaseHistory(prevHistory => [newOrder, ...prevHistory]);
-      setCartItems([]);
-      closeCart();
-      toast.success("Compra finalizada com sucesso!");
+    if (cartItems.length === 0) return;
+    const newOrder: Order = {
+      orderId: `order-${Date.now()}`,
+      date: new Date(),
+      items: [...cartItems],
+      total: cartTotal,
+    };
+    setPurchaseHistory(prevHistory => [newOrder, ...prevHistory]);
+    setCartItems([]);
+    closeCart();
+    toast.success("Compra finalizada com sucesso!");
   };
 
   const value = {

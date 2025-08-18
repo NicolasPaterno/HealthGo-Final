@@ -3,6 +3,7 @@ using API_HealthGo.DTO;
 using API_HealthGo.Entities;
 using API_HealthGo.Responses;
 using API_HealthGo.Responses.MessageResponse;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
 
@@ -57,7 +58,7 @@ namespace API_HealthGo.Controllers
             return Ok(await _service.Post(hotel, pessoaId));
         }
 
-        [HttpDelete("{id}")]
+                [HttpDelete("{id}")]
         [Authorize(Roles = "Gerente")]
         public async Task<ActionResult<MessageResponse>> Delete(int id)
         {

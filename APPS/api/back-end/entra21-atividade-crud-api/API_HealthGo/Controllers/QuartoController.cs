@@ -30,6 +30,12 @@ namespace API_HealthGo.Controllers
             return Ok(await _service.GetById(id));
         }
 
+        [HttpGet("hotel/{hotelId}")]
+        public async Task<ActionResult<QuartoGetAllResponse>> GetByHotelId(int hotelId)
+        {
+            return Ok(await _service.GetByHotelId(hotelId));
+        }
+
         [HttpPost]
         public async Task<ActionResult<MessageResponse>> Post(QuartoInsertDTO quarto)
         {

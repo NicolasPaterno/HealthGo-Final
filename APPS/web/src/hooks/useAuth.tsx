@@ -1,34 +1,43 @@
 import { useState, useEffect } from 'react';
-
-interface User {
-  id: number;
-  name: string;
-  email: string;
-}
+import { getAuthUser, type DecodedToken } from '@/lib/jwt';
 
 export const useAuth = () => {
-  const [user, setUser] = useState<User | null>(null);
+  const [user, setUser] = useState<DecodedToken | null>(null);
   const [token, setToken] = useState<string | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    const storedToken = localStorage.getItem('authToken');
-    const storedUser = localStorage.getItem('user');
-
-    if (storedToken) {
-      setToken(storedToken);
-    }
-
-    if (storedUser) {
+    const checkAuth = () => {
       try {
-        setUser(JSON.parse(storedUser));
+        const storedToken = localStorage.getItem('authToken');
+        if (storedToken) {
+          const decodedUser = getAuthUser();
+          if (decodedUser) {
+            setToken(storedToken);
+            setUser(decodedUser);
+          } else {
+            // Token inválido ou expirado
+            setToken(null);
+            setUser(null);
+            localStorage.removeItem('authToken');
+          }
+        } else {
+          setToken(null);
+          setUser(null);
+        }
       } catch (error) {
-        console.error("Failed to parse user data from localStorage", error);
+        console.error('Error checking auth:', error);
+        setToken(null);
         setUser(null);
+      } finally {
+        setIsLoading(false);
       }
-    }
+    };
+
+    checkAuth();
   }, []);
 
-  const isAuthenticated = !!token;
+  const isAuthenticated = !!token && !!user;
 
-  return { user, token, isAuthenticated };
+  return { user, token, isAuthenticated, isLoading };
 };

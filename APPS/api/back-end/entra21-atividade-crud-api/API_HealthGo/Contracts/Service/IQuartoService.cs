@@ -11,6 +11,8 @@ namespace API_HealthGo.Contracts.Service
 
         Task<QuartoEntity> GetById(int id);
 
+        Task<QuartoGetAllResponse> GetByHotelId(int hotelId);
+
         Task<MessageResponse> Post(QuartoInsertDTO quarto);
 
         Task<MessageResponse> Update(QuartoEntity quarto);

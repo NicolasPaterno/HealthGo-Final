@@ -12,8 +12,6 @@
 
         public string Email { get; set; }
 
-        public string Senha { get; set; }
-
         public string Telefone { get; set; }
 
         public string Site { get; set; }
@@ -34,8 +32,11 @@
 
         public DateTime DataInicio { get; set; }
 
-        public DateTime DataFim { get; set; }
-
         public int Cidade_Id { get; set; }
+
+        public int Pessoa_id { get; set; }
+
+        // Propriedades de navegação para cidade e estado
+        public CidadeEntity Cidade { get; set; }
     }
 }

@@ -12,7 +12,7 @@ namespace API_HealthGo.Controllers
     public class PrestadorServicoController : ControllerBase
     {
         private IPrestadorServicoService _service;
-        
+
         public PrestadorServicoController(IPrestadorServicoService prestadorServicoService)
         {
             _service = prestadorServicoService;

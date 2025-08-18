@@ -1,9 +1,10 @@
 // APPS/web/src/app/hospitals/HospitalsPage.tsx
 import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import api from '@/services/api';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Hospital, MapPin, Building } from 'lucide-react';
+import { Hospital, MapPin, Building, Hotel } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
@@ -23,6 +24,7 @@ interface HospitalData {
 }
 
 export default function HospitalsPage() {
+  const navigate = useNavigate();
   const [hospitals, setHospitals] = useState<HospitalData[]>([]);
   const [uf, setUf] = useState('SC');
   const [loading, setLoading] = useState(false);
@@ -67,6 +69,29 @@ export default function HospitalsPage() {
     setCurrentPage(newPage);
   };
 
+  const handleFindHotels = (hospital: HospitalData) => {
+    // Criar parâmetros de busca para hotéis próximos ao hospital
+    const searchParams = new URLSearchParams();
+
+    // Adicionar cidade como filtro principal
+    if (hospital.municipio) {
+      searchParams.set('city', hospital.municipio);
+    }
+
+    // Adicionar bairro como termo de busca
+    if (hospital.bairro) {
+      searchParams.set('search', hospital.bairro);
+    }
+
+    // Adicionar estado como contexto adicional
+    if (hospital.uf) {
+      searchParams.set('state', hospital.uf);
+    }
+
+    // Navegar para a página de hotéis com os filtros aplicados
+    navigate(`/dashboard/hotels?${searchParams.toString()}`);
+  };
+
   return (
     <main className="flex-1 p-6">
       <header className="mb-6">
@@ -109,23 +134,34 @@ export default function HospitalsPage() {
                 <CardHeader>
                   <CardTitle className="text-lg">{hospital.nome || "Nome não informado"}</CardTitle>
                   <CardDescription className="flex items-center gap-1.5 pt-1 text-xs">
-                     <Building size={12}/> {hospital.razaoSocial || "Não informado"}
+                    <Building size={12} /> {hospital.razaoSocial || "Não informado"}
                   </CardDescription>
                 </CardHeader>
                 <CardContent className="flex-grow space-y-3">
                   <div className="flex justify-between items-center text-xs">
-                      <Badge variant="secondary">{hospital.tipoUnidade || "Não informado"}</Badge>
-                      <Badge variant="outline" className="capitalize">
-                        {hospital.naturezaJuridica?.replace(/_/g, ' ').toLowerCase() || 'Não informado'}
-                      </Badge>
+                    <Badge variant="secondary">{hospital.tipoUnidade || "Não informado"}</Badge>
+                    <Badge variant="outline" className="capitalize">
+                      {hospital.naturezaJuridica?.replace(/_/g, ' ').toLowerCase() || 'Não informado'}
+                    </Badge>
                   </div>
                   <div className="text-sm text-muted-foreground space-y-1 pt-2 border-t">
-                      <p className="flex items-center gap-2">
-                          <MapPin size={14}/> 
-                          {`${hospital.logradouro || "Rua não informada"}, ${hospital.numeroEndereco || 'S/N'}`}
-                      </p>
-                      <p className="pl-6">{`${hospital.bairro || "Bairro não informado"}, ${hospital.municipio || "Cidade não informada"} - ${hospital.uf}`}</p>
-                      <p className="pl-6">{`CEP: ${hospital.cep || 'Não informado'}`}</p>
+                    <p className="flex items-center gap-2">
+                      <MapPin size={14} />
+                      {`${hospital.logradouro || "Rua não informada"}, ${hospital.numeroEndereco || 'S/N'}`}
+                    </p>
+                    <p className="pl-6">{`${hospital.bairro || "Bairro não informado"}, ${hospital.municipio || "Cidade não informada"} - ${hospital.uf}`}</p>
+                    <p className="pl-6">{`CEP: ${hospital.cep || 'Não informado'}`}</p>
+                  </div>
+                  <div className="pt-3">
+                    <Button
+                      onClick={() => handleFindHotels(hospital)}
+                      variant="outline"
+                      size="sm"
+                      className="w-full"
+                    >
+                      <Hotel className="h-4 w-4 mr-2" />
+                      Encontrar Hotéis Próximos
+                    </Button>
                   </div>
                 </CardContent>
               </Card>

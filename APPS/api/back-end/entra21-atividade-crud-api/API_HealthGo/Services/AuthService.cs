@@ -32,7 +32,11 @@ namespace API_HealthGo.Services
                 Pessoa_Id = pessoa.Id
             };
 
-            // 3. Salva no banco
+            // 3. Salva no banco || NÃO PRECISA MAIS?, APENAS LOCALMENTE NA API É SUFICIENTE, MAS TERIA QUE SER IMPLEMENTADO
+            //UM EXTRAIDOR DE TOKEN, PEGAR O PESSOA_ID E TEMPO DE EXPIRAÇÃO, PARA A VERIFICAÇÃO DE AMBOS
+            //E ATUALIZAR COM O UPDATE 
+            //ISSO SERIA APENAS FEITO POSTERIORMENTE, SE SOBRAR TEMPO, POIS É UM EXTRA, NÃO É O FOCO PRINCIPAL DO PROJETO
+
             await _tokenRecuperacaoSenhaRepository.SaveAsync(token);
 
             // 4. Aqui você pode chamar um serviço de e-mail
@@ -40,7 +44,8 @@ namespace API_HealthGo.Services
 
             string corpo = $@"
                 <p>Olá {pessoa.Nome}!</p>
-                <p>Use o código abaixo para redefinir sua senha.</p>
+
+                <p>Use o código abaixo para redefinir sua senha. Você tem 15 minutos para redefinir sua senha.</p>
 
                 <p><a href='{link}'>Clique aqui para redefinir sua senha</a></p> 
                 <p>Se você não fez essa solicitação, ignore este e-mail, e nunca compartilhe para ninguém este link.</p>
@@ -55,9 +60,6 @@ namespace API_HealthGo.Services
 
             // 1. Buscar o token no banco
             var tokenEntity = await _tokenRecuperacaoSenhaRepository.GetByTokenAsync(dto.Token);
-
-            if (tokenEntity == null)
-                throw new Exception("Token inválido, expirado ou já utilizado.");
 
             // 2. Buscar a pessoa
             var pessoa = await _pessoaRepository.GetPessoaById(tokenEntity.Pessoa_Id);

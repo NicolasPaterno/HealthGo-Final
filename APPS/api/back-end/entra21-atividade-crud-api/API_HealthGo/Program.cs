@@ -16,12 +16,12 @@ namespace API_HealthGo
         {
             var builder = WebApplication.CreateBuilder(args);
 
-            // NOVO: Defina um nome para a sua política de CORS
+            // NOVO: Defina um nome para a sua polï¿½tica de CORS
             var MyAllowAllOrigins = "_myAllowAllOrigins";
 
             // Add services to the container.
 
-            // NOVO: Adicione o serviço de CORS
+            // NOVO: Adicione o serviï¿½o de CORS
             builder.Services.AddCors(options =>
             {
                 options.AddPolicy(name: MyAllowAllOrigins,
@@ -63,7 +63,8 @@ namespace API_HealthGo
             builder.Services.AddEndpointsApiExplorer();
 
 
-            //INJEÇÕES DE DEPENDÊNCIAS
+
+            //INJEï¿½ï¿½ES DE DEPENDï¿½NCIAS
 
             //connection to database
             builder.Services.AddSingleton<IConnection, Connection>();
@@ -71,17 +72,16 @@ namespace API_HealthGo
             //service for token generation
             builder.Services.AddScoped<ITokenService, TokenService>();
 
-            //recuperação de senha por email
+            //recuperaï¿½ï¿½o de senha por email
             builder.Services.AddScoped<ITokenRecuperacaoSenhaRepository, TokenRecuperacaoSenhaRepository>();
             builder.Services.AddScoped<IAuthService, AuthService>();
             builder.Services.AddScoped<IEmailService, EmailService>();
 
-
-            //prestador serviço
+            //prestador serviï¿½o
             builder.Services.AddScoped<IPrestadorServicoRepository, PrestadorServicoRepository>();
             builder.Services.AddScoped<IPrestadorServicoService, PrestadorServicoService>();
 
-            //fazer as injeções de dependências
+            //fazer as injeï¿½ï¿½es de dependï¿½ncias
 
             builder.Services.AddHttpClient();
             builder.Services.AddScoped<IHospitalService, HospitalService>();
@@ -111,7 +111,13 @@ namespace API_HealthGo
             builder.Services.AddScoped<IEstadoService, EstadoService>();
             builder.Services.AddScoped<IEstadoRepository, EstadoRepository>();
 
-            builder.Services.AddScoped<IImagemService, ImagemService>();
+          
+            builder.Services.AddHttpContextAccessor();
+            builder.Services.AddScoped<IHotelService, HotelService>();
+            builder.Services.AddScoped<IHotelRepository, HotelRepository>();
+
+
+          builder.Services.AddScoped<IImagemService, ImagemService>();
             builder.Services.AddScoped<IImagemRepository, ImagemRepository>();
 
             builder.Services.AddScoped<ILembreteService, LembreteService>();
@@ -128,12 +134,14 @@ namespace API_HealthGo
 
             builder.Services.AddScoped<IQuartoService, QuartoService>();
             builder.Services.AddScoped<IQuartoRepository, QuartoRepository>();
+          
 
             builder.Services.AddScoped<IAeroportoService, AeroportoService>();
             builder.Services.AddTransient<IAeroportoRepository, AeroportoRepository>();
 
             builder.Services.AddScoped<IPrestadorServicoService, PrestadorServicoService>();
             builder.Services.AddTransient<IPrestadorServicoRepository, PrestadorServicoRepository>();
+
 
             builder.Services.AddScoped<IVooService, VooService>();
             builder.Services.AddScoped<IVooRepository, VooRepository>();

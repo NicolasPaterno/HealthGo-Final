@@ -1,0 +1,32 @@
+{
+  "name": "healthgo-fullstack",
+  "version": "1.0.0",
+  "description": "Projeto HealthGo - Frontend e Backend",
+  "scripts": {
+    "dev": "concurrently \"npm run dev:frontend\" \"npm run dev:backend\"",
+    "dev:frontend": "cd APPS/web && npm run dev",
+    "dev:backend": "cd APPS/api/back-end/entra21-atividade-crud-api/API_HealthGo && dotnet run --launch-profile https",
+    "install:frontend": "cd APPS/web && npm install",
+    "install:backend": "cd APPS/api/back-end/entra21-atividade-crud-api/API_HealthGo && dotnet restore",
+    "install:all": "npm run install:frontend && npm run install:backend",
+    "build:frontend": "cd APPS/web && npm run build",
+    "build:backend": "cd APPS/api/back-end/entra21-atividade-crud-api/API_HealthGo && dotnet build",
+    "build:all": "npm run build:frontend && npm run build:backend",
+    "clean:backend": "cd APPS/api/back-end/entra21-atividade-crud-api/API_HealthGo && dotnet clean",
+    "setup": "powershell -ExecutionPolicy Bypass -File install-dependencies.ps1",
+    "setup:db": "powershell -ExecutionPolicy Bypass -File setup-database.ps1",
+    "setup:env": "powershell -ExecutionPolicy Bypass -File setup-environment.ps1",
+    "start": "npm run dev"
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.2"
+  },
+  "keywords": [
+    "healthgo",
+    "fullstack",
+    "react",
+    "dotnet"
+  ],
+  "author": "HealthGo Team",
+  "license": "MIT"
+}
