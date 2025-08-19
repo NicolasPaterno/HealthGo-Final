@@ -68,7 +68,7 @@ namespace API_HealthGo.Controllers
 
             var hotel = await _service.GetHotelById(id);
             if (hotel == null) return NotFound();
-            if (hotel.Pessoa_id != pessoaId)
+            if (hotel.Pessoa_Id != pessoaId)
             {
                 return Forbid();
             }
@@ -88,7 +88,7 @@ namespace API_HealthGo.Controllers
 
             var existingHotel = await _service.GetHotelById(hotel.Id);
             if (existingHotel == null) return NotFound();
-            if (existingHotel.Pessoa_id != pessoaId)
+            if (existingHotel.Pessoa_Id != pessoaId)
             {
                 return Forbid();
             }

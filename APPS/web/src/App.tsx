@@ -37,7 +37,7 @@ const QuartosPage = lazy(() => import("./app/dashboard/QuartosPage"));
 
 function App() {
   return (
-    <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
+    <ThemeProvider defaultTheme="system" storageKey="vite-ui-theme">
       <CartProvider>
         <Suspense fallback={<LoadingSpinner />}>
           <Routes>

@@ -10,11 +10,16 @@ namespace API_HealthGo.Services
     {
         private IHotelRepository _repository;
         private readonly IHttpContextAccessor _httpContextAccessor;
+        private readonly ICidadeRepository _cidadeRepository;
+        private readonly IEstadoRepository _estadoRepository;
 
-        public HotelService(IHotelRepository repository, IHttpContextAccessor httpContextAccessor)
+        public HotelService(IHotelRepository repository, IHttpContextAccessor httpContextAccessor, 
+                          ICidadeRepository cidadeRepository, IEstadoRepository estadoRepository)
         {
             _repository = repository;
             _httpContextAccessor = httpContextAccessor;
+            _cidadeRepository = cidadeRepository;
+            _estadoRepository = estadoRepository;
         }
 
         public async Task<HotelGetAllResponse> GetAll()
@@ -65,6 +70,14 @@ namespace API_HealthGo.Services
                 };
             }
 
+            if (string.IsNullOrWhiteSpace(hotel.Telefone))
+            {
+                return new MessageResponse
+                {
+                    Message = "Telefone é obrigatório!"
+                };
+            }
+
             if (string.IsNullOrWhiteSpace(hotel.CEP))
             {
                 return new MessageResponse
@@ -97,19 +110,73 @@ namespace API_HealthGo.Services
                 };
             }
 
-            if (hotel.Cidade_Id <= 0)
+            if (string.IsNullOrWhiteSpace(hotel.CidadeNome))
             {
                 return new MessageResponse
                 {
-                    Message = "ID da cidade é obrigatório!"
+                    Message = "Nome da cidade é obrigatório!"
                 };
             }
 
-            hotel.Pessoa_Id = pessoaId;
-            await _repository.Insert(hotel);
+            if (string.IsNullOrWhiteSpace(hotel.EstadoSigla))
+            {
+                return new MessageResponse
+                {
+                    Message = "Sigla do estado é obrigatória!"
+                };
+            }
+
+            // Buscar estado pela sigla
+            var estados = await _estadoRepository.GetAll();
+            var estado = estados.FirstOrDefault(e => e.Sigla.Equals(hotel.EstadoSigla, StringComparison.OrdinalIgnoreCase));
+            
+            if (estado == null)
+            {
+                return new MessageResponse
+                {
+                    Message = $"Estado com sigla '{hotel.EstadoSigla}' não encontrado!"
+                };
+            }
+
+            // Buscar cidade pelo nome e estado
+            var cidades = await _cidadeRepository.GetAll();
+            var cidade = cidades.FirstOrDefault(c => 
+                c.Nome.Equals(hotel.CidadeNome, StringComparison.OrdinalIgnoreCase) && 
+                c.Estado_Id == estado.Id);
+            
+            if (cidade == null)
+            {
+                return new MessageResponse
+                {
+                    Message = $"Cidade '{hotel.CidadeNome}' não encontrada no estado '{estado.Nome}'!"
+                };
+            }
+
+            // Criar o DTO para inserção no repositório
+            var hotelInsert = new HotelInsertDTO
+            {
+                CNPJ = hotel.CNPJ,
+                Nome = hotel.Nome,
+                Tipo = hotel.Tipo,
+                Email = hotel.Email,
+                Telefone = hotel.Telefone,
+                Site = hotel.Site,
+                Acessibilidade = hotel.Acessibilidade,
+                CEP = hotel.CEP,
+                Bairro = hotel.Bairro,
+                Rua = hotel.Rua,
+                NumeroEndereco = hotel.NumeroEndereco,
+                Descricao = hotel.Descricao,
+                Ativo = hotel.Ativo,
+                DataInicio = hotel.DataInicio,
+                Cidade_Id = cidade.Id,
+                Pessoa_Id = pessoaId
+            };
+
+            await _repository.Insert(hotelInsert);
             return new MessageResponse
             {
-                Message = "Hotel inserido com sucesso!!"
+                Message = "Hotel inserido com sucesso!"
             };
         }
 
@@ -118,7 +185,7 @@ namespace API_HealthGo.Services
             await _repository.Update(hotel);
             return new MessageResponse
             {
-                Message = "Hotel atualizado com sucesso!!"
+                Message = "Hotel atualizado com sucesso!"
             };
         }
 
@@ -127,7 +194,7 @@ namespace API_HealthGo.Services
             await _repository.Delete(id);
             return new MessageResponse
             {
-                Message = "Hotel deletado com sucesso!!"
+                Message = "Hotel deletado com sucesso!"
             };
         }
 
@@ -140,4 +207,4 @@ namespace API_HealthGo.Services
             };
         }
     }
-    }
+}

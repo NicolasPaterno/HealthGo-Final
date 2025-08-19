@@ -199,29 +199,46 @@ export function AddHotelGerenteForm({ className, ...props }: React.ComponentProp
     // Validações obrigatórias
     if (!cnpj.replace(/\D/g, "")) erros.push("CNPJ é obrigatório");
     if (!nome.trim()) erros.push("Nome do hotel é obrigatório");
-    if (!tipo) erros.push("Tipo de estabelecimento é obrigatório");
+    if (nome.trim() && nome.length > 255) erros.push("Nome deve ter no máximo 255 caracteres");
+    if (!tipo.trim()) erros.push("Tipo de estabelecimento é obrigatório");
     if (!email.trim()) erros.push("Email é obrigatório");
     if (!telefone.replace(/\D/g, "")) erros.push("Telefone é obrigatório");
     if (!cep.replace(/\D/g, "")) erros.push("CEP é obrigatório");
     if (!rua.trim()) erros.push("Rua é obrigatória");
+    if (rua.trim() && rua.length > 255) erros.push("Rua deve ter no máximo 255 caracteres");
     if (!numeroEndereco.trim()) erros.push("Número do endereço é obrigatório");
+    if (numeroEndereco.trim() && numeroEndereco.length > 255) erros.push("Número do endereço deve ter no máximo 255 caracteres");
     if (!bairro.trim()) erros.push("Bairro é obrigatório");
+    if (bairro.trim() && bairro.length > 255) erros.push("Bairro deve ter no máximo 255 caracteres");
     if (!cidade.trim()) erros.push("Cidade é obrigatória");
+    if (cidade.trim() && cidade.length > 255) erros.push("Cidade deve ter no máximo 255 caracteres");
     if (!estado.trim()) erros.push("Estado é obrigatório");
+    if (estado.trim() && estado.length > 4) erros.push("Estado deve ter no máximo 4 caracteres");
 
     // Validações de formato
     const cepLimpo = cep.replace(/\D/g, "");
     if (cepLimpo.length !== 8) erros.push("CEP deve ter 8 dígitos");
+    if (cepLimpo.length > 0 && cepLimpo.length < 8) erros.push("CEP deve ter 8 dígitos");
+    if (cepLimpo.length > 20) erros.push("CEP deve ter no máximo 20 caracteres");
 
     const cnpjLimpo = cnpj.replace(/\D/g, "");
     if (cnpjLimpo.length !== 14) erros.push("CNPJ deve ter 14 dígitos");
+    if (cnpjLimpo.length > 0 && cnpjLimpo.length < 14) erros.push("CNPJ deve ter 14 dígitos");
 
     const telefoneLimpo = telefone.replace(/\D/g, "");
     if (telefoneLimpo.length < 10) erros.push("Telefone deve ter pelo menos 10 dígitos");
+    if (telefoneLimpo.length > 0 && telefoneLimpo.length < 10) erros.push("Telefone deve ter pelo menos 10 dígitos");
+    if (telefoneLimpo.length > 45) erros.push("Telefone deve ter no máximo 45 caracteres");
 
     // Validação de email
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (email.trim() && !emailRegex.test(email)) erros.push("Email inválido");
+    if (email.trim() && email.length > 150) erros.push("Email deve ter no máximo 150 caracteres");
+
+    // Validações de campos opcionais
+    if (site && site.length > 255) erros.push("Site deve ter no máximo 255 caracteres");
+    if (acessibilidade && acessibilidade.length > 255) erros.push("Acessibilidade deve ter no máximo 255 caracteres");
+    if (descricao && descricao.length > 255) erros.push("Descrição deve ter no máximo 255 caracteres");
 
     return erros;
   };
@@ -249,23 +266,23 @@ export function AddHotelGerenteForm({ className, ...props }: React.ComponentProp
     const pessoaId = parseInt(user?.nameid || "0");
 
     const hotelData: HotelInsertDTO = {
-      cnpj: cnpj.replace(/\D/g, ""),
-      nome: nome.trim(),
-      tipo: tipo,
-      email: email.trim(),
-      telefone: telefone.replace(/\D/g, ""),
-      site: site.trim() || undefined,
-      acessibilidade: acessibilidade.trim() || undefined,
-      cep: cep.replace(/\D/g, ""),
-      bairro: bairro.trim(),
-      rua: rua.trim(),
-      numeroEndereco: numeroEndereco.trim(),
-      descricao: descricao.trim() || undefined,
-      ativo: true,
-      dataInicio: new Date().toISOString(),
-      cidadeNome: cidade.trim(),
-      estadoSigla: estado.trim(),
-      pessoa_Id: pessoaId
+      CNPJ: cnpj.replace(/\D/g, ""),
+      Nome: nome.trim(),
+      Tipo: tipo,
+      Email: email.trim(),
+      Telefone: telefone.replace(/\D/g, ""),
+      Site: site.trim() || null,
+      Acessibilidade: acessibilidade.trim() || null,
+      CEP: cep.replace(/\D/g, ""),
+      Bairro: bairro.trim(),
+      Rua: rua.trim(),
+      NumeroEndereco: numeroEndereco.trim(),
+      Descricao: descricao.trim() || null,
+      Ativo: true,
+      DataInicio: new Date().toISOString(), // Formato ISO que o ASP.NET Core aceita automaticamente
+      CidadeNome: cidade.trim(),
+      EstadoSigla: estado.trim(),
+      Pessoa_Id: pessoaId
     };
 
     try {
@@ -386,7 +403,7 @@ export function AddHotelGerenteForm({ className, ...props }: React.ComponentProp
               <div className="space-y-2">
                 <Label htmlFor="tipo">Tipo de Estabelecimento *</Label>
                 <Select value={tipo} onValueChange={setTipo}>
-                  <SelectTrigger>
+                  <SelectTrigger className={!tipo ? "border-red-500" : ""}>
                     <SelectValue placeholder="Selecione o tipo" />
                   </SelectTrigger>
                   <SelectContent>
@@ -398,6 +415,9 @@ export function AddHotelGerenteForm({ className, ...props }: React.ComponentProp
                     <SelectItem value="Casa">Casa</SelectItem>
                   </SelectContent>
                 </Select>
+                {!tipo && (
+                  <p className="text-sm text-red-500">Tipo de estabelecimento é obrigatório</p>
+                )}
               </div>
 
               <div className="space-y-2">

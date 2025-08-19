@@ -32,11 +32,11 @@
 
         public DateTime DataInicio { get; set; }
 
+        public int Pessoa_Id { get; set; }
+
         public int Cidade_Id { get; set; }
 
-        public int Pessoa_id { get; set; }
-
-        // Propriedades de navegação para cidade e estado
-        public CidadeEntity Cidade { get; set; }
+        // Propriedades de navegação
+        public virtual CidadeEntity Cidade { get; set; }
     }
 }

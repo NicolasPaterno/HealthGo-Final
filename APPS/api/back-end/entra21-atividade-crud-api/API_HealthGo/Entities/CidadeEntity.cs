@@ -8,7 +8,7 @@
 
         public int Estado_Id { get; set; }
 
-        // Propriedade de navegação para estado
-        public EstadoEntity Estado { get; set; }
+        // Propriedades de navegação
+        public virtual EstadoEntity Estado { get; set; }
     }
 }
