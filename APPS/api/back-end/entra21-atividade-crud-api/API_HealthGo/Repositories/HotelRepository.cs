@@ -2,6 +2,7 @@
 using API_HealthGo.Contracts.Repositories;
 using API_HealthGo.DTO;
 using API_HealthGo.Entities;
+using API_HealthGo.Responses;
 using Dapper;
 using MySql.Data.MySqlClient;
 using static System.Net.Mime.MediaTypeNames;
@@ -40,45 +41,59 @@ namespace API_HealthGo.Repositories
                         h.DATAINICIO AS DataInicio,
                         h.CIDADE_ID AS Cidade_Id,
                         h.PESSOA_ID AS Pessoa_id,
-                        c.ID AS Cidade_Id,
-                        c.NOME AS Cidade_Nome,
-                        c.ESTADO_ID AS Cidade_Estado_Id,
-                        e.ID AS Estado_Id,
-                        e.NOME AS Estado_Nome,
-                        e.SIGLA AS Estado_Sigla
+                        c.ID AS CidadeId,
+                        c.NOME AS CidadeNome,
+                        c.ESTADO_ID AS CidadeEstadoId,
+                        e.ID AS EstadoId,
+                        e.NOME AS EstadoNome,
+                        e.SIGLA AS EstadoSigla
                     FROM HOTEL h
                     LEFT JOIN CIDADE c ON h.CIDADE_ID = c.ID
                     LEFT JOIN ESTADO e ON c.ESTADO_ID = e.ID
                     WHERE h.ATIVO = 1
                 ";
 
-                var hotelDictionary = new Dictionary<int, HotelEntity>();
+                var hotels = await con.QueryAsync<HotelWithLocationDTO>(sql);
+                var result = new List<HotelEntity>();
 
-                await con.QueryAsync<HotelEntity, CidadeEntity, EstadoEntity, HotelEntity>(
-                    sql,
-                    (hotel, cidade, estado) =>
+                foreach (var hotelDto in hotels)
+                {
+                    var hotel = new HotelEntity
                     {
-                        if (!hotelDictionary.TryGetValue(hotel.Id, out var hotelEntry))
+                        Id = hotelDto.Id,
+                        CNPJ = hotelDto.CNPJ,
+                        Nome = hotelDto.Nome,
+                        Tipo = hotelDto.Tipo,
+                        Email = hotelDto.Email,
+                        Telefone = hotelDto.Telefone,
+                        Site = hotelDto.Site,
+                        Acessibilidade = hotelDto.Acessibilidade,
+                        CEP = hotelDto.CEP,
+                        Bairro = hotelDto.Bairro,
+                        Rua = hotelDto.Rua,
+                        NumeroEndereco = hotelDto.NumeroEndereco,
+                        Descricao = hotelDto.Descricao,
+                        Ativo = hotelDto.Ativo,
+                        DataInicio = hotelDto.DataInicio,
+                        Cidade_Id = hotelDto.Cidade_Id,
+                        Pessoa_Id = hotelDto.Pessoa_Id,
+                        Cidade = new CidadeEntity
                         {
-                            hotelEntry = hotel;
-                            hotelDictionary.Add(hotel.Id, hotelEntry);
-                        }
-
-                        if (cidade != null)
-                        {
-                            hotelEntry.Cidade = cidade;
-                            if (estado != null)
+                            Id = hotelDto.CidadeId,
+                            Nome = hotelDto.CidadeNome,
+                            Estado_Id = hotelDto.CidadeEstadoId,
+                            Estado = new EstadoEntity
                             {
-                                hotelEntry.Cidade.Estado = estado;
+                                Id = hotelDto.EstadoId,
+                                Nome = hotelDto.EstadoNome,
+                                Sigla = hotelDto.EstadoSigla
                             }
                         }
+                    };
+                    result.Add(hotel);
+                }
 
-                        return hotelEntry;
-                    },
-                    splitOn: "Cidade_Id,Estado_Id"
-                );
-
-                return hotelDictionary.Values;
+                return result;
             }
         }
 
@@ -107,46 +122,56 @@ namespace API_HealthGo.Repositories
                         h.DATAINICIO AS DataInicio,
                         h.CIDADE_ID AS Cidade_Id,
                         h.PESSOA_ID AS Pessoa_id,
-                        c.ID AS Cidade_Id,
-                        c.NOME AS Cidade_Nome,
-                        c.ESTADO_ID AS Cidade_Estado_Id,
-                        e.ID AS Estado_Id,
-                        e.NOME AS Estado_Nome,
-                        e.SIGLA AS Estado_Sigla
+                        c.ID AS CidadeId,
+                        c.NOME AS CidadeNome,
+                        c.ESTADO_ID AS CidadeEstadoId,
+                        e.ID AS EstadoId,
+                        e.NOME AS EstadoNome,
+                        e.SIGLA AS EstadoSigla
                     FROM HOTEL h
                     LEFT JOIN CIDADE c ON h.CIDADE_ID = c.ID
                     LEFT JOIN ESTADO e ON c.ESTADO_ID = e.ID
                     WHERE h.ID = @id
                 ";
 
-                var hotelDictionary = new Dictionary<int, HotelEntity>();
+                var hotelDto = await con.QueryFirstOrDefaultAsync<HotelWithLocationDTO>(sql, new { id });
+                
+                if (hotelDto == null) return null;
 
-                await con.QueryAsync<HotelEntity, CidadeEntity, EstadoEntity, HotelEntity>(
-                    sql,
-                    (hotel, cidade, estado) =>
+                var hotel = new HotelEntity
+                {
+                    Id = hotelDto.Id,
+                    CNPJ = hotelDto.CNPJ,
+                    Nome = hotelDto.Nome,
+                    Tipo = hotelDto.Tipo,
+                    Email = hotelDto.Email,
+                    Telefone = hotelDto.Telefone,
+                    Site = hotelDto.Site,
+                    Acessibilidade = hotelDto.Acessibilidade,
+                    CEP = hotelDto.CEP,
+                    Bairro = hotelDto.Bairro,
+                    Rua = hotelDto.Rua,
+                    NumeroEndereco = hotelDto.NumeroEndereco,
+                    Descricao = hotelDto.Descricao,
+                    Ativo = hotelDto.Ativo,
+                    DataInicio = hotelDto.DataInicio,
+                    Cidade_Id = hotelDto.Cidade_Id,
+                    Pessoa_Id = hotelDto.Pessoa_Id,
+                    Cidade = new CidadeEntity
                     {
-                        if (!hotelDictionary.TryGetValue(hotel.Id, out var hotelEntry))
+                        Id = hotelDto.CidadeId,
+                        Nome = hotelDto.CidadeNome,
+                        Estado_Id = hotelDto.CidadeEstadoId,
+                        Estado = new EstadoEntity
                         {
-                            hotelEntry = hotel;
-                            hotelDictionary.Add(hotel.Id, hotelEntry);
+                            Id = hotelDto.EstadoId,
+                            Nome = hotelDto.EstadoNome,
+                            Sigla = hotelDto.EstadoSigla
                         }
+                    }
+                };
 
-                        if (cidade != null)
-                        {
-                            hotelEntry.Cidade = cidade;
-                            if (estado != null)
-                            {
-                                hotelEntry.Cidade.Estado = estado;
-                            }
-                        }
-
-                        return hotelEntry;
-                    },
-                    new { id },
-                    splitOn: "Cidade_Id,Estado_Id"
-                );
-
-                return hotelDictionary.Values.FirstOrDefault();
+                return hotel;
             }
         }
 
@@ -225,46 +250,59 @@ namespace API_HealthGo.Repositories
                         h.DATAINICIO AS DataInicio,
                         h.CIDADE_ID AS Cidade_Id,
                         h.PESSOA_ID AS Pessoa_id,
-                        c.ID AS Cidade_Id,
-                        c.NOME AS Cidade_Nome,
-                        c.ESTADO_ID AS Cidade_Estado_Id,
-                        e.ID AS Estado_Id,
-                        e.NOME AS Estado_Nome,
-                        e.SIGLA AS Estado_Sigla
+                        c.ID AS CidadeId,
+                        c.NOME AS CidadeNome,
+                        c.ESTADO_ID AS CidadeEstadoId,
+                        e.ID AS EstadoId,
+                        e.NOME AS EstadoNome,
+                        e.SIGLA AS EstadoSigla
                     FROM HOTEL h
                     LEFT JOIN CIDADE c ON h.CIDADE_ID = c.ID
                     LEFT JOIN ESTADO e ON c.ESTADO_ID = e.ID
                     WHERE h.PESSOA_ID = @pessoaId
                 ";
 
-                var hotelDictionary = new Dictionary<int, HotelEntity>();
+                var hotels = await con.QueryAsync<HotelWithLocationDTO>(sql, new { pessoaId });
+                var result = new List<HotelEntity>();
 
-                await con.QueryAsync<HotelEntity, CidadeEntity, EstadoEntity, HotelEntity>(
-                    sql,
-                    (hotel, cidade, estado) =>
+                foreach (var hotelDto in hotels)
+                {
+                    var hotel = new HotelEntity
                     {
-                        if (!hotelDictionary.TryGetValue(hotel.Id, out var hotelEntry))
+                        Id = hotelDto.Id,
+                        CNPJ = hotelDto.CNPJ,
+                        Nome = hotelDto.Nome,
+                        Tipo = hotelDto.Tipo,
+                        Email = hotelDto.Email,
+                        Telefone = hotelDto.Telefone,
+                        Site = hotelDto.Site,
+                        Acessibilidade = hotelDto.Acessibilidade,
+                        CEP = hotelDto.CEP,
+                        Bairro = hotelDto.Bairro,
+                        Rua = hotelDto.Rua,
+                        NumeroEndereco = hotelDto.NumeroEndereco,
+                        Descricao = hotelDto.Descricao,
+                        Ativo = hotelDto.Ativo,
+                        DataInicio = hotelDto.DataInicio,
+                        Cidade_Id = hotelDto.Cidade_Id,
+                        Pessoa_Id = hotelDto.Pessoa_Id,
+                        Cidade = new CidadeEntity
                         {
-                            hotelEntry = hotel;
-                            hotelDictionary.Add(hotel.Id, hotelEntry);
-                        }
-
-                        if (cidade != null)
-                        {
-                            hotelEntry.Cidade = cidade;
-                            if (estado != null)
+                            Id = hotelDto.CidadeId,
+                            Nome = hotelDto.CidadeNome,
+                            Estado_Id = hotelDto.CidadeEstadoId,
+                            Estado = new EstadoEntity
                             {
-                                hotelEntry.Cidade.Estado = estado;
+                                Id = hotelDto.EstadoId,
+                                Nome = hotelDto.EstadoNome,
+                                Sigla = hotelDto.EstadoSigla
                             }
                         }
+                    };
+                    result.Add(hotel);
+                }
 
-                        return hotelEntry;
-                    },
-                    new { pessoaId },
-                    splitOn: "Cidade_Id,Estado_Id"
-                );
-
-                return hotelDictionary.Values;
+                return result;
             }
         }
     }
