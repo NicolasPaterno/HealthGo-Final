@@ -83,7 +83,6 @@ namespace API_HealthGo
 
             //fazer as inje��es de depend�ncias
 
-            builder.Services.AddHttpClient();
             builder.Services.AddScoped<IHospitalService, HospitalService>();
 
 

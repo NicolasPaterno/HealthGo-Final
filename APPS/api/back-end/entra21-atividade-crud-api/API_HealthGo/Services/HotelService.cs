@@ -37,6 +37,14 @@ namespace API_HealthGo.Services
 
         public async Task<MessageResponse> Post(HotelInsertDTO hotel, int pessoaId)
         {
+            // Log de debug para coordenadas
+            Console.WriteLine($"DEBUG - Hotel recebido:");
+            Console.WriteLine($"  Nome: {hotel.Nome}");
+            Console.WriteLine($"  Latitude: {hotel.Latitude}");
+            Console.WriteLine($"  Longitude: {hotel.Longitude}");
+            Console.WriteLine($"  Tipo Latitude: {hotel.Latitude?.GetType()}");
+            Console.WriteLine($"  Tipo Longitude: {hotel.Longitude?.GetType()}");
+
             // Validações básicas
             if (string.IsNullOrWhiteSpace(hotel.Nome))
             {
@@ -170,7 +178,9 @@ namespace API_HealthGo.Services
                 Ativo = hotel.Ativo,
                 DataInicio = hotel.DataInicio,
                 Cidade_Id = cidade.Id,
-                Pessoa_Id = pessoaId
+                Pessoa_Id = pessoaId,
+                Latitude = hotel.Latitude,
+                Longitude = hotel.Longitude
             };
 
             await _repository.Insert(hotelInsert);
