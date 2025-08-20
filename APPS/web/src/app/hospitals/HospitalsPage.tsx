@@ -4,32 +4,14 @@ import { useNavigate } from 'react-router-dom';
 import api from '@/services/api';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Hospital, MapPin, Building, Hotel } from 'lucide-react';
+import { Hospital, MapPin, Building, Hotel, Phone } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
-
-interface HospitalData {
-  cnes: string;
-  nome: string;
-  razaoSocial: string;
-  naturezaJuridica: string;
-  tipoUnidade: string;
-  uf: string;
-  municipio: string;
-  bairro: string;
-  logradouro: string;
-  numeroEndereco: string;
-  cep: string;
-}
-
-interface HospitalResponse {
-  data: HospitalData[];
-  total: number;
-}
+import type { Hospital as HospitalType, HospitalResponse } from '@/types/hospital';
 
 export default function HospitalsPage() {
-  const [hospitals, setHospitals] = useState<HospitalData[]>([]);
+  const [hospitals, setHospitals] = useState<HospitalType[]>([]);
   const [loading, setLoading] = useState(false);
   const [uf, setUf] = useState('SP');
   const [searchTerm, setSearchTerm] = useState('');
@@ -134,7 +116,7 @@ export default function HospitalsPage() {
       .replace(/\b\w/g, l => l.toUpperCase());
   };
 
-  const handleHotelClick = (hospital: HospitalData) => {
+  const handleHotelClick = (hospital: HospitalType) => {
     navigate('/hotels', {
       state: {
         selectedHospital: hospital,
@@ -201,14 +183,7 @@ export default function HospitalsPage() {
           </div>
         </div>
 
-        {/* Indicador de pesquisa ativa */}
-        {searchTerm && (
-          <div className="mb-4 p-3 bg-blue-50 dark:bg-blue-900/20 rounded-lg border border-blue-200 dark:border-blue-800">
-            <p className="text-sm text-blue-700 dark:text-blue-300">
-              🔍 Pesquisando por: <span className="font-semibold">"{searchTerm}"</span>
-            </p>
-          </div>
-        )}
+
       </header>
 
       {loading ? (
@@ -238,7 +213,7 @@ export default function HospitalsPage() {
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-6">
             {hospitals.map((hospital) => (
-              <Card key={hospital.cnes} className="hover:shadow-lg transition-shadow duration-200">
+              <Card key={hospital.COMP} className="hover:shadow-lg transition-shadow duration-200">
                 <CardHeader className="pb-3">
                   <CardTitle className="text-lg line-clamp-2">
                     {hospital.nome}
@@ -249,6 +224,11 @@ export default function HospitalsPage() {
                       {hospital.razaoSocial || "Não informado"}
                     </span>
                   </CardDescription>
+                  {hospital.COMP && (
+                    <div className="text-xs text-gray-500 mt-1">
+                      COMP: {hospital.COMP}
+                    </div>
+                  )}
                 </CardHeader>
 
                 <CardContent className="pt-0">
@@ -276,6 +256,12 @@ export default function HospitalsPage() {
                       {hospital.municipio} - {hospital.uf}
                       {hospital.cep && ` • CEP: ${hospital.cep}`}
                     </p>
+                    {hospital.numero && (
+                      <p className="flex items-center gap-2 text-xs">
+                        <Phone size={12} />
+                        <span>{hospital.numero}</span>
+                      </p>
+                    )}
                   </div>
 
                   <div className="pt-3">

@@ -3,24 +3,47 @@
 using API_HealthGo.Contracts.Service;
 using API_HealthGo.DTO;
 using API_HealthGo.Responses;
-using System.Globalization;
 
 namespace API_HealthGo.Services
 {
     // DTO Interno para mapear os dados do arquivo CSV
     public class LocalHospitalData
     {
-        public string CNES { get; set; }
-        public string NOME_ESTABELECIMENTO { get; set; }
-        public string RAZAO_SOCIAL { get; set; }
-        public string DESC_NATUREZA_JURIDICA { get; set; }
-        public string DS_TIPO_UNIDADE { get; set; }
-        public string UF { get; set; }
-        public string MUNICIPIO { get; set; }
-        public string NO_BAIRRO { get; set; }
-        public string NO_LOGRADOURO { get; set; }
-        public string NU_ENDERECO { get; set; }
-        public string CO_CEP { get; set; }
+        public string COMP { get; set; } = "";
+        public string REGIAO { get; set; } = "";
+        public string UF { get; set; } = "";
+        public string CO_IBGE { get; set; } = "";
+        public string MUNICIPIO { get; set; } = "";
+        public string MOTIVO_DESABILITACAO { get; set; } = "";
+        public string CNES { get; set; } = "";
+        public string NOME_ESTABELECIMENTO { get; set; } = "";
+        public string RAZAO_SOCIAL { get; set; } = "";
+        public string TP_GESTAO { get; set; } = "";
+        public string CO_TIPO_UNIDADE { get; set; } = "";
+        public string DS_TIPO_UNIDADE { get; set; } = "";
+        public string NATUREZA_JURIDICA { get; set; } = "";
+        public string DESC_NATUREZA_JURIDICA { get; set; } = "";
+        public string NO_LOGRADOURO { get; set; } = "";
+        public string NU_ENDERECO { get; set; } = "";
+        public string NO_COMPLEMENTO { get; set; } = "";
+        public string NO_BAIRRO { get; set; } = "";
+        public string CO_CEP { get; set; } = "";
+        public string NU_TELEFONE { get; set; } = "";
+        public string NO_EMAIL { get; set; } = "";
+        public string LEITOS_EXISTENTES { get; set; } = "";
+        public string LEITOS_SUS { get; set; } = "";
+        public string UTI_TOTAL_EXIST { get; set; } = "";
+        public string UTI_TOTAL_SUS { get; set; } = "";
+        public string UTI_ADULTO_EXIST { get; set; } = "";
+        public string UTI_ADULTO_SUS { get; set; } = "";
+        public string UTI_PEDIATRICO_EXIST { get; set; } = "";
+        public string UTI_PEDIATRICO_SUS { get; set; } = "";
+        public string UTI_NEONATAL_EXIST { get; set; } = "";
+        public string UTI_NEONATAL_SUS { get; set; } = "";
+        public string UTI_QUEIMADO_EXIST { get; set; } = "";
+        public string UTI_QUEIMADO_SUS { get; set; } = "";
+        public string UTI_CORONARIANA_EXIST { get; set; } = "";
+        public string UTI_CORONARIANA_SUS { get; set; } = "";
     }
 
     public class HospitalService : IHospitalService
@@ -66,21 +89,45 @@ namespace API_HealthGo.Services
                     // Divide a linha por ponto e vírgula, respeitando aspas
                     var fields = ParseCsvLine(line);
                     
-                    if (fields.Length >= 23) // Verifica se tem campos suficientes
+                    if (fields.Length >= 34) // Verifica se tem campos suficientes
                     {
                         var hospital = new LocalHospitalData
                         {
+                            COMP = fields[0]?.Trim('"') ?? "",
+                            REGIAO = fields[1]?.Trim('"') ?? "",
+                            UF = fields[2]?.Trim('"') ?? "",
+                            CO_IBGE = fields[3]?.Trim('"') ?? "",
+                            MUNICIPIO = fields[4]?.Trim('"') ?? "",
+                            MOTIVO_DESABILITACAO = fields[5]?.Trim('"') ?? "",
                             CNES = fields[6]?.Trim('"') ?? "",
                             NOME_ESTABELECIMENTO = fields[7]?.Trim('"') ?? "",
                             RAZAO_SOCIAL = fields[8]?.Trim('"') ?? "",
-                            DESC_NATUREZA_JURIDICA = fields[13]?.Trim('"') ?? "",
+                            TP_GESTAO = fields[9]?.Trim('"') ?? "",
+                            CO_TIPO_UNIDADE = fields[10]?.Trim('"') ?? "",
                             DS_TIPO_UNIDADE = fields[11]?.Trim('"') ?? "",
-                            UF = fields[2]?.Trim('"') ?? "",
-                            MUNICIPIO = fields[4]?.Trim('"') ?? "",
-                            NO_BAIRRO = fields[18]?.Trim('"') ?? "",
+                            NATUREZA_JURIDICA = fields[12]?.Trim('"') ?? "",
+                            DESC_NATUREZA_JURIDICA = fields[13]?.Trim('"') ?? "",
                             NO_LOGRADOURO = fields[14]?.Trim('"') ?? "",
                             NU_ENDERECO = fields[15]?.Trim('"') ?? "",
-                            CO_CEP = fields[19]?.Trim('"') ?? ""
+                            NO_COMPLEMENTO = fields[16]?.Trim('"') ?? "",
+                            NO_BAIRRO = fields[17]?.Trim('"') ?? "",
+                            CO_CEP = fields[18]?.Trim('"') ?? "",
+                            NU_TELEFONE = fields[19]?.Trim('"') ?? "",
+                            NO_EMAIL = fields[20]?.Trim('"') ?? "",
+                            LEITOS_EXISTENTES = fields[21]?.Trim('"') ?? "",
+                            LEITOS_SUS = fields[22]?.Trim('"') ?? "",
+                            UTI_TOTAL_EXIST = fields[23]?.Trim('"') ?? "",
+                            UTI_TOTAL_SUS = fields[24]?.Trim('"') ?? "",
+                            UTI_ADULTO_EXIST = fields[25]?.Trim('"') ?? "",
+                            UTI_ADULTO_SUS = fields[26]?.Trim('"') ?? "",
+                            UTI_PEDIATRICO_EXIST = fields[27]?.Trim('"') ?? "",
+                            UTI_PEDIATRICO_SUS = fields[28]?.Trim('"') ?? "",
+                            UTI_NEONATAL_EXIST = fields[29]?.Trim('"') ?? "",
+                            UTI_NEONATAL_SUS = fields[30]?.Trim('"') ?? "",
+                            UTI_QUEIMADO_EXIST = fields[31]?.Trim('"') ?? "",
+                            UTI_QUEIMADO_SUS = fields[32]?.Trim('"') ?? "",
+                            UTI_CORONARIANA_EXIST = fields[33]?.Trim('"') ?? "",
+                            UTI_CORONARIANA_SUS = fields[34]?.Trim('"') ?? ""
                         };
 
                         hospitais.Add(hospital);
@@ -153,9 +200,9 @@ namespace API_HealthGo.Services
                 ).ToList();
             }
 
-            // Remove duplicatas usando o CNES como chave única
+            // Remove duplicatas usando o COMP como chave única
             var uniqueHospitals = hospitaisFiltrados
-                .GroupBy(h => h.CNES)
+                .GroupBy(h => h.COMP)
                 .Select(g => g.First())
                 .ToList();
 
@@ -167,7 +214,7 @@ namespace API_HealthGo.Services
                 .Take(limit)
                 .Select(h => new HospitalDTO
                 {
-                    Cnes = h.CNES ?? "",
+                    COMP = h.COMP ?? "",
                     Nome = h.NOME_ESTABELECIMENTO ?? "",
                     RazaoSocial = h.RAZAO_SOCIAL ?? "",
                     NaturezaJuridica = h.DESC_NATUREZA_JURIDICA ?? "",
@@ -177,7 +224,8 @@ namespace API_HealthGo.Services
                     Bairro = h.NO_BAIRRO ?? "",
                     Logradouro = h.NO_LOGRADOURO ?? "",
                     NumeroEndereco = h.NU_ENDERECO ?? "",
-                    Cep = h.CO_CEP ?? ""
+                    Cep = h.CO_CEP ?? "",
+                    Numero = h.NU_TELEFONE ?? ""
                 })
                 .ToList();
 
