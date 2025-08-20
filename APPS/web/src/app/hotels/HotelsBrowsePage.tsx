@@ -8,37 +8,14 @@ import { Badge } from '@/components/ui/badge';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Slider } from '@/components/ui/slider';
 import { Checkbox } from '@/components/ui/checkbox';
-import { Search, MapPin, Building, Filter, Eye } from 'lucide-react';
+import { Search, MapPin, Building, Filter, Eye, Map } from 'lucide-react';
 import { toast } from 'sonner';
 import api from '@/services/api';
+import type { Hotel } from '@/types/hotel';
+import HotelsMap from '@/components/hotels-map';
 
-interface Hotel {
-  id: number;
-  nome: string;
-  tipo: string;
-  email: string;
-  telefone: string;
-  site: string;
-  acessibilidade: string;
-  cep: string;
-  bairro: string;
-  rua: string;
-  numeroEndereco: string;
-  descricao: string;
-  cidade_Id: number;
-  pessoa_id: number;
-  ativo: boolean;
-  dataInicio: string;
-  cidade: {
-    id: number;
-    nome: string;
-    estado_Id: number;
-    estado: {
-      id: number;
-      nome: string;
-      sigla: string;
-    };
-  };
+// Extendendo o tipo Hotel para incluir quartos
+interface HotelWithRooms extends Hotel {
   quartos: Room[];
 }
 
@@ -65,11 +42,13 @@ interface Filters {
 
 export default function HotelsBrowsePage() {
   const [searchParams] = useSearchParams();
-  const [hotels, setHotels] = useState<Hotel[]>([]);
-  const [filteredHotels, setFilteredHotels] = useState<Hotel[]>([]);
+  const [hotels, setHotels] = useState<HotelWithRooms[]>([]);
+  const [filteredHotels, setFilteredHotels] = useState<HotelWithRooms[]>([]);
   const [loading, setLoading] = useState(true);
   const [cities, setCities] = useState<string[]>([]);
   const [states, setStates] = useState<string[]>([]);
+  const [viewMode, setViewMode] = useState<'list' | 'map'>('list');
+  const [selectedHotel, setSelectedHotel] = useState<HotelWithRooms | null>(null);
 
   // Inicializar filtros com base nos parâmetros da URL
   const getInitialFilters = (): Filters => {
@@ -94,12 +73,32 @@ export default function HotelsBrowsePage() {
   const fetchHotels = async () => {
     try {
       setLoading(true);
+      console.log('Buscando hotéis da API...');
       const response = await api.get('/Hotel');
+      console.log('Resposta da API:', response.data);
+
       const hotelsData = response.data.data || [];
+      console.log('Hotéis recebidos:', hotelsData);
+
+      // Verificar coordenadas dos hotéis
+      const hotelsWithCoordinates = hotelsData.filter((hotel: Hotel) => {
+        const hasCoords = hotel.latitude && hotel.longitude;
+        console.log(`Hotel ${hotel.nome}:`, {
+          id: hotel.id,
+          latitude: hotel.latitude,
+          longitude: hotel.longitude,
+          hasCoordinates: hasCoords
+        });
+        return hasCoords;
+      });
+
+      console.log(`Total de hotéis: ${hotelsData.length}`);
+      console.log(`Hotéis com coordenadas: ${hotelsWithCoordinates.length}`);
+      console.log(`Hotéis sem coordenadas: ${hotelsData.length - hotelsWithCoordinates.length}`);
 
       // Buscar quartos para cada hotel
       const hotelsWithRooms = await Promise.all(
-        hotelsData.map(async (hotel: Hotel) => {
+        hotelsWithCoordinates.map(async (hotel: Hotel) => {
           try {
             const roomsResponse = await api.get(`/Quarto/hotel/${hotel.id}`);
             return {
@@ -107,6 +106,7 @@ export default function HotelsBrowsePage() {
               quartos: roomsResponse.data.data || []
             };
           } catch (error) {
+            console.log(`Erro ao buscar quartos para hotel ${hotel.id}:`, error);
             return {
               ...hotel,
               quartos: []
@@ -115,15 +115,18 @@ export default function HotelsBrowsePage() {
         })
       );
 
+      console.log('Hotéis com quartos:', hotelsWithRooms);
       setHotels(hotelsWithRooms);
       setFilteredHotels(hotelsWithRooms);
 
       // Extrair cidades únicas
       const uniqueCities = [...new Set(hotelsData.map((hotel: Hotel) => hotel.cidade?.nome).filter(Boolean))] as string[];
+      console.log('Cidades únicas encontradas:', uniqueCities);
       setCities(uniqueCities);
 
       // Extrair estados únicos
       const uniqueStates = [...new Set(hotelsData.map((hotel: Hotel) => hotel.cidade?.estado?.sigla).filter(Boolean))] as string[];
+      console.log('Estados únicos encontrados:', uniqueStates);
       setStates(uniqueStates);
     } catch (error) {
       console.error('Erro ao carregar hotéis:', error);
@@ -220,12 +223,12 @@ export default function HotelsBrowsePage() {
     setFilteredHotels(filtered);
   };
 
-  const getMinPrice = (hotel: Hotel) => {
+  const getMinPrice = (hotel: HotelWithRooms) => {
     if (hotel.quartos.length === 0) return 0;
     return Math.min(...hotel.quartos.map(room => room.preco));
   };
 
-  const getMaxPrice = (hotel: Hotel) => {
+  const getMaxPrice = (hotel: HotelWithRooms) => {
     if (hotel.quartos.length === 0) return 0;
     return Math.max(...hotel.quartos.map(room => room.preco));
   };
@@ -237,9 +240,13 @@ export default function HotelsBrowsePage() {
     }).format(price);
   };
 
-  const handleViewHotel = (hotel: Hotel) => {
+  const handleViewHotel = (hotel: HotelWithRooms) => {
     // Navegar para página de detalhes do hotel
     window.location.href = `/hotel/${hotel.id}`;
+  };
+
+  const handleHotelSelect = (hotel: HotelWithRooms) => {
+    setSelectedHotel(hotel);
   };
 
   const clearFilters = () => {
@@ -457,129 +464,194 @@ export default function HotelsBrowsePage() {
 
           {/* Lista de Hotéis */}
           <div className="lg:col-span-3">
+            {/* Abas de Visualização */}
             <div className="flex justify-between items-center mb-6">
+              <div className="flex space-x-2">
+                <Button
+                  variant={viewMode === 'list' ? 'default' : 'outline'}
+                  onClick={() => setViewMode('list')}
+                  className="flex items-center gap-2"
+                >
+                  <Building className="h-4 w-4" />
+                  Lista
+                </Button>
+                <Button
+                  variant={viewMode === 'map' ? 'default' : 'outline'}
+                  onClick={() => setViewMode('map')}
+                  className="flex items-center gap-2"
+                >
+                  <Map className="h-4 w-4" />
+                  Mapa
+                </Button>
+              </div>
+
               <h2 className="text-2xl font-semibold text-gray-900 dark:text-white">
                 {filteredHotels.length} hotel{filteredHotels.length !== 1 ? 'is' : ''} encontrado{filteredHotels.length !== 1 ? 's' : ''}
               </h2>
             </div>
 
-            {filteredHotels.length === 0 ? (
-              <Card>
-                <CardContent className="text-center py-12">
-                  <Building className="h-12 w-12 text-gray-400 mx-auto mb-4" />
-                  <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-2">
-                    Nenhum hotel encontrado
-                  </h3>
-                  <p className="text-gray-600 dark:text-gray-400 mb-4">
-                    Tente ajustar os filtros para encontrar mais opções.
-                  </p>
-                  <Button onClick={clearFilters}>
-                    Limpar Filtros
-                  </Button>
-                </CardContent>
-              </Card>
+            {/* Conteúdo baseado no modo de visualização */}
+            {viewMode === 'map' ? (
+              <HotelsMap
+                hotels={filteredHotels}
+                onHotelSelect={handleHotelSelect}
+                selectedHotel={selectedHotel}
+              />
             ) : (
-              <div className="space-y-6">
-                {filteredHotels.map((hotel) => (
-                  <Card key={hotel.id} className="hover:shadow-lg transition-shadow">
-                    <CardContent className="p-6">
-                      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                        {/* Informações do Hotel */}
-                        <div className="md:col-span-2 space-y-4">
-                          <div>
-                            <div className="flex items-start justify-between">
-                              <div>
-                                <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-1">
-                                  {hotel.nome}
-                                </h3>
-                                <div className="flex items-center gap-2 text-gray-600 dark:text-gray-400 mb-2">
-                                  <MapPin className="h-4 w-4" />
-                                  <span>{hotel.cidade?.nome}, {hotel.cidade?.estado?.sigla}</span>
-                                </div>
-                              </div>
-                              <Badge variant="secondary">{hotel.tipo}</Badge>
-                            </div>
-
-                            {hotel.descricao && (
-                              <p className="text-gray-600 dark:text-gray-400 text-sm line-clamp-2">
-                                {hotel.descricao}
-                              </p>
-                            )}
-                          </div>
-
-                          {/* Características */}
-                          <div className="flex flex-wrap gap-2">
-                            {hotel.quartos.some(room => room.aceitaAnimal) && (
-                              <Badge variant="outline" className="text-xs">
-                                Aceita pets
-                              </Badge>
-                            )}
-                            {hotel.acessibilidade && hotel.acessibilidade.trim() !== '' && (
-                              <Badge variant="outline" className="text-xs">
-                                Acessível
-                              </Badge>
-                            )}
-                            {hotel.telefone && (
-                              <Badge variant="outline" className="text-xs">
-                                Contato disponível
-                              </Badge>
-                            )}
-                          </div>
-
-                          {/* Endereço */}
-                          <div className="text-sm text-gray-600 dark:text-gray-400">
-                            <p>{hotel.rua}, {hotel.numeroEndereco}</p>
-                            <p>{hotel.bairro && `${hotel.bairro} - `}CEP: {hotel.cep}</p>
-                          </div>
-                        </div>
-
-                        {/* Preços e Ações */}
-                        <div className="space-y-4">
-                          <div className="text-right">
-                            {hotel.quartos.length > 0 ? (
-                              <div>
-                                <p className="text-sm text-gray-600 dark:text-gray-400">A partir de</p>
-                                <p className="text-2xl font-bold text-green-600">
-                                  {formatPrice(getMinPrice(hotel))}
-                                </p>
-                                {getMaxPrice(hotel) > getMinPrice(hotel) && (
-                                  <p className="text-sm text-gray-500">
-                                    até {formatPrice(getMaxPrice(hotel))}
-                                  </p>
-                                )}
-                                <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">
-                                  {hotel.quartos.length} quarto{hotel.quartos.length !== 1 ? 's' : ''} disponível{hotel.quartos.length !== 1 ? 'is' : ''}
-                                </p>
-                              </div>
-                            ) : (
-                              <div>
-                                <p className="text-sm text-gray-500">Sem quartos disponíveis</p>
-                              </div>
-                            )}
-                          </div>
-
-                          <div className="space-y-2">
-                            <Button
-                              onClick={() => handleViewHotel(hotel)}
-                              className="w-full"
-                              disabled={hotel.quartos.length === 0}
-                            >
-                              <Eye className="h-4 w-4 mr-2" />
-                              Ver Detalhes
-                            </Button>
-
-                            {hotel.telefone && (
-                              <Button variant="outline" className="w-full text-sm">
-                                {hotel.telefone}
-                              </Button>
-                            )}
-                          </div>
-                        </div>
-                      </div>
+              <>
+                {filteredHotels.length === 0 ? (
+                  <Card>
+                    <CardContent className="text-center py-12">
+                      <Building className="h-12 w-12 text-gray-400 mx-auto mb-4" />
+                      <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-2">
+                        Nenhum hotel encontrado
+                      </h3>
+                      <p className="text-gray-600 dark:text-gray-400 mb-4">
+                        Tente ajustar os filtros para encontrar mais opções.
+                      </p>
+                      <Button onClick={clearFilters}>
+                        Limpar Filtros
+                      </Button>
                     </CardContent>
                   </Card>
-                ))}
-              </div>
+                ) : (
+                  <>
+                    {/* Debug Info - Remover após testes */}
+                    {process.env.NODE_ENV === 'development' && (
+                      <div className="mb-4 p-4 bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-800 rounded-lg">
+                        <h4 className="font-medium text-yellow-800 dark:text-yellow-200 mb-2">Debug Info</h4>
+                        <div className="text-sm text-yellow-700 dark:text-yellow-300 space-y-1">
+                          <p>Total de hotéis: {filteredHotels.length}</p>
+                          <p>Hotéis com cidade: {filteredHotels.filter(h => h.cidade?.nome).length}</p>
+                          <p>Hotéis com estado: {filteredHotels.filter(h => h.cidade?.estado?.sigla).length}</p>
+                          <p>Primeiro hotel cidade: {filteredHotels[0]?.cidade?.nome || 'N/A'}</p>
+                          <p>Primeiro hotel estado: {filteredHotels[0]?.cidade?.estado?.sigla || 'N/A'}</p>
+                        </div>
+                      </div>
+                    )}
+                    <div className="space-y-6">
+                      {filteredHotels.map((hotel) => (
+                        <Card key={hotel.id} className="hover:shadow-lg transition-shadow">
+                          <CardContent className="p-6">
+                            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                              {/* Informações do Hotel */}
+                              <div className="md:col-span-2 space-y-4">
+                                <div>
+                                  <div className="flex items-start justify-between">
+                                    <div>
+                                      <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-1">
+                                        {hotel.nome}
+                                      </h3>
+                                      <div className="flex items-center gap-2 text-gray-600 dark:text-gray-400 mb-2">
+                                        <MapPin className="h-4 w-4" />
+                                        <span>
+                                          {hotel.cidade?.nome ? (
+                                            <>
+                                              {hotel.cidade.nome}
+                                              {hotel.cidade.estado?.sigla && `, ${hotel.cidade.estado.sigla}`}
+                                            </>
+                                          ) : (
+                                            'Localização não informada'
+                                          )}
+                                        </span>
+                                      </div>
+                                    </div>
+                                    <Badge variant="secondary">{hotel.tipo}</Badge>
+                                  </div>
+
+                                  {hotel.descricao && (
+                                    <p className="text-gray-600 dark:text-gray-400 text-sm line-clamp-2">
+                                      {hotel.descricao}
+                                    </p>
+                                  )}
+                                </div>
+
+                                {/* Características */}
+                                <div className="flex flex-wrap gap-2">
+                                  {hotel.quartos.some(room => room.aceitaAnimal) && (
+                                    <Badge variant="outline" className="text-xs">
+                                      Aceita pets
+                                    </Badge>
+                                  )}
+                                  {hotel.acessibilidade && hotel.acessibilidade.trim() !== '' && (
+                                    <Badge variant="outline" className="text-xs">
+                                      Acessível
+                                    </Badge>
+                                  )}
+                                  {hotel.telefone && (
+                                    <Badge variant="outline" className="text-xs">
+                                      Contato disponível
+                                    </Badge>
+                                  )}
+                                </div>
+
+                                {/* Endereço */}
+                                <div className="text-sm text-gray-600 dark:text-gray-400">
+                                  <p>{hotel.rua}, {hotel.numeroEndereco}</p>
+                                  <p>
+                                    {hotel.bairro && `${hotel.bairro}`}
+                                    {hotel.bairro && hotel.cep && ' • '}
+                                    {hotel.cep && `CEP: ${hotel.cep}`}
+                                  </p>
+                                  {hotel.cidade?.nome && (
+                                    <p className="text-blue-600 dark:text-blue-400 font-medium">
+                                      📍 {hotel.cidade.nome}
+                                      {hotel.cidade.estado?.sigla && ` - ${hotel.cidade.estado.sigla}`}
+                                    </p>
+                                  )}
+                                </div>
+                              </div>
+
+                              {/* Preços e Ações */}
+                              <div className="space-y-4">
+                                <div className="text-right">
+                                  {hotel.quartos.length > 0 ? (
+                                    <div>
+                                      <p className="text-sm text-gray-600 dark:text-gray-400">A partir de</p>
+                                      <p className="text-2xl font-bold text-green-600">
+                                        {formatPrice(getMinPrice(hotel))}
+                                      </p>
+                                      {getMaxPrice(hotel) > getMinPrice(hotel) && (
+                                        <p className="text-sm text-gray-500">
+                                          até {formatPrice(getMaxPrice(hotel))}
+                                        </p>
+                                      )}
+                                      <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">
+                                        {hotel.quartos.length} quarto{hotel.quartos.length !== 1 ? 's' : ''} disponível{hotel.quartos.length !== 1 ? 'is' : ''}
+                                      </p>
+                                    </div>
+                                  ) : (
+                                    <div>
+                                      <p className="text-sm text-gray-500">Sem quartos disponíveis</p>
+                                    </div>
+                                  )}
+                                </div>
+
+                                <div className="space-y-2">
+                                  <Button
+                                    onClick={() => handleViewHotel(hotel)}
+                                    className="w-full"
+                                    disabled={hotel.quartos.length === 0}
+                                  >
+                                    <Eye className="h-4 w-4 mr-2" />
+                                    Ver Detalhes
+                                  </Button>
+
+                                  {hotel.telefone && (
+                                    <Button variant="outline" className="w-full text-sm">
+                                      {hotel.telefone}
+                                    </Button>
+                                  )}
+                                </div>
+                              </div>
+                            </div>
+                          </CardContent>
+                        </Card>
+                      ))}
+                    </div>
+                  </>
+                )}
+              </>
             )}
           </div>
         </div>

@@ -36,6 +36,11 @@
 
         public int Cidade_Id { get; set; }
 
+        // Coordenadas geográficas
+        public decimal? Latitude { get; set; }
+
+        public decimal? Longitude { get; set; }
+
         // Propriedades de navegação
         public virtual CidadeEntity Cidade { get; set; }
     }

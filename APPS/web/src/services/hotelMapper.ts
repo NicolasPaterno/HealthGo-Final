@@ -32,23 +32,22 @@ export const toInsertDTO = (formData: any, pessoaId: number): HotelInsertDTO => 
  */
 export const toUpdateDTO = (hotel: Hotel): HotelUpdateDTO => {
   return {
-    Id: hotel.id,
-    CNPJ: hotel.cnpj,
-    Nome: hotel.nome,
-    Tipo: hotel.tipo,
-    Email: hotel.email,
-    Telefone: hotel.telefone,
-    Site: hotel.site,
-    Acessibilidade: hotel.acessibilidade,
-    Descricao: hotel.descricao,
-    Ativo: hotel.ativo,
-    DataInicio: hotel.dataInicio,
-    CEP: hotel.cep,
-    Rua: hotel.rua,
-    NumeroEndereco: hotel.numeroEndereco,
-    Bairro: hotel.bairro,
-    Cidade_Id: hotel.cidade_Id,
-    Pessoa_Id: hotel.pessoa_id
+    id: hotel.id,
+    cnpj: hotel.cnpj,
+    nome: hotel.nome,
+    tipo: hotel.tipo,
+    email: hotel.email,
+    telefone: hotel.telefone,
+    site: hotel.site,
+    acessibilidade: hotel.acessibilidade,
+    descricao: hotel.descricao,
+    ativo: hotel.ativo,
+    cep: hotel.cep,
+    rua: hotel.rua,
+    numeroEndereco: hotel.numeroEndereco,
+    bairro: hotel.bairro,
+    cidadeNome: hotel.cidade?.nome,
+    estadoSigla: hotel.cidade?.estado?.sigla
   };
 };
 
@@ -98,13 +97,13 @@ export const fromEntityList = (entities: any[]): Hotel[] => {
  * Valida se um objeto é um Hotel válido
  */
 export const isValidHotel = (hotel: any): hotel is Hotel => {
-  return hotel && 
-         typeof hotel.id === 'number' &&
-         typeof hotel.nome === 'string' &&
-         typeof hotel.cnpj === 'string' &&
-         typeof hotel.tipo === 'string' &&
-         typeof hotel.email === 'string' &&
-         typeof hotel.telefone === 'string';
+  return hotel &&
+    typeof hotel.id === 'number' &&
+    typeof hotel.nome === 'string' &&
+    typeof hotel.cnpj === 'string' &&
+    typeof hotel.tipo === 'string' &&
+    typeof hotel.email === 'string' &&
+    typeof hotel.telefone === 'string';
 };
 
 /**
@@ -117,8 +116,8 @@ export const formatHotelForDisplay = (hotel: Hotel) => {
     telefoneFormatted: hotel.telefone.replace(/^(\d{2})(\d{4,5})(\d{4})$/, "($1) $2-$3"),
     cepFormatted: hotel.cep.replace(/^(\d{5})(\d{3})$/, "$1-$2"),
     enderecoCompleto: `${hotel.rua}, ${hotel.numeroEndereco} - ${hotel.bairro}`,
-    cidadeEstado: hotel.cidade ? 
-      `${hotel.cidade.nome}${hotel.cidade.estado ? `, ${hotel.cidade.estado.sigla}` : ''}` : 
+    cidadeEstado: hotel.cidade ?
+      `${hotel.cidade.nome}${hotel.cidade.estado ? `, ${hotel.cidade.estado.sigla}` : ''}` :
       'Não informado'
   };
 };

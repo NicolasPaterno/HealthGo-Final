@@ -28,6 +28,10 @@ namespace API_HealthGo.Responses
         public int Pessoa_Id { get; set; }
         public int Cidade_Id { get; set; }
         
+        // Coordenadas geográficas
+        public decimal? Latitude { get; set; }
+        public decimal? Longitude { get; set; }
+        
         // Dados de cidade
         public int CidadeId { get; set; }
         public string CidadeNome { get; set; }

@@ -41,6 +41,10 @@ export interface Hotel {
   numeroEndereco: string;
   bairro: string;
 
+  // Coordenadas geográficas (opcionais)
+  latitude?: number;
+  longitude?: number;
+
   // Relacionamentos
   cidade_Id: number;
   pessoa_id: number;
@@ -81,6 +85,10 @@ export interface HotelInsertDTO {
   // Localização obrigatória
   CidadeNome: string;
   EstadoSigla: string;
+
+  // Coordenadas geográficas (opcionais)
+  Latitude?: number | null;
+  Longitude?: number | null;
 
   // Relacionamento obrigatório
   Pessoa_Id: number;

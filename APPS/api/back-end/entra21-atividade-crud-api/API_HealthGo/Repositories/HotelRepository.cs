@@ -41,6 +41,8 @@ namespace API_HealthGo.Repositories
                         h.DATAINICIO AS DataInicio,
                         h.CIDADE_ID AS Cidade_Id,
                         h.PESSOA_ID AS Pessoa_id,
+                        h.LATITUDE AS Latitude,
+                        h.LONGITUDE AS Longitude,
                         c.ID AS CidadeId,
                         c.NOME AS CidadeNome,
                         c.ESTADO_ID AS CidadeEstadoId,
@@ -77,6 +79,8 @@ namespace API_HealthGo.Repositories
                         DataInicio = hotelDto.DataInicio,
                         Cidade_Id = hotelDto.Cidade_Id,
                         Pessoa_Id = hotelDto.Pessoa_Id,
+                        Latitude = hotelDto.Latitude,
+                        Longitude = hotelDto.Longitude,
                         Cidade = new CidadeEntity
                         {
                             Id = hotelDto.CidadeId,
@@ -122,6 +126,8 @@ namespace API_HealthGo.Repositories
                         h.DATAINICIO AS DataInicio,
                         h.CIDADE_ID AS Cidade_Id,
                         h.PESSOA_ID AS Pessoa_id,
+                        h.LATITUDE AS Latitude,
+                        h.LONGITUDE AS Longitude,
                         c.ID AS CidadeId,
                         c.NOME AS CidadeNome,
                         c.ESTADO_ID AS CidadeEstadoId,
@@ -157,6 +163,8 @@ namespace API_HealthGo.Repositories
                     DataInicio = hotelDto.DataInicio,
                     Cidade_Id = hotelDto.Cidade_Id,
                     Pessoa_Id = hotelDto.Pessoa_Id,
+                    Latitude = hotelDto.Latitude,
+                    Longitude = hotelDto.Longitude,
                     Cidade = new CidadeEntity
                     {
                         Id = hotelDto.CidadeId,
@@ -179,18 +187,35 @@ namespace API_HealthGo.Repositories
         {
             try
             {
+                // Log de debug para coordenadas
+                Console.WriteLine($"DEBUG - Repositório recebeu:");
+                Console.WriteLine($"  Nome: {hotel.Nome}");
+                Console.WriteLine($"  Latitude: {hotel.Latitude}");
+                Console.WriteLine($"  Longitude: {hotel.Longitude}");
+
                 string sql = @"
             INSERT INTO HOTEL (CNPJ, Nome, Tipo, Email, Telefone, Site, Acessibilidade, CEP, Bairro, Rua, NumeroEndereco, 
-                       Descricao, Ativo, DataInicio, Cidade_Id, Pessoa_Id) 
+                       Descricao, Ativo, DataInicio, Cidade_Id, Pessoa_Id, Latitude, Longitude) 
             VALUES (@CNPJ, @Nome, @Tipo, @Email, @Telefone, @Site, @Acessibilidade, @CEP, @Bairro, @Rua, @NumeroEndereco, 
-                       @Descricao, @Ativo, @DataInicio, @Cidade_Id, @Pessoa_Id) 
+                       @Descricao, @Ativo, @DataInicio, @Cidade_Id, @Pessoa_Id, @Latitude, @Longitude) 
         ";
 
+                Console.WriteLine($"DEBUG - SQL: {sql}");
+                Console.WriteLine($"DEBUG - Parâmetros: Latitude={hotel.Latitude}, Longitude={hotel.Longitude}");
+
                 await _connection.Execute(sql, hotel);
+                
+                Console.WriteLine("DEBUG - Hotel inserido com sucesso no repositório");
             }
             catch (MySqlException ex)
             {
+                Console.WriteLine($"DEBUG - Erro MySQL: {ex.Message}");
                 throw new Exception($"Erro na base de dados ao inserir hotel: {ex.Message}", ex);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"DEBUG - Erro geral: {ex.Message}");
+                throw;
             }
         }
 
@@ -214,7 +239,9 @@ namespace API_HealthGo.Repositories
                             ATIVO = @Ativo,
                             DATAINICIO = @DataInicio,
                             CIDADE_ID = @Cidade_Id,
-                            PESSOA_ID = @Pessoa_id
+                            PESSOA_ID = @Pessoa_id,
+                            LATITUDE = @Latitude,
+                            LONGITUDE = @Longitude
                        WHERE ID = @Id
                 ";
 
@@ -250,6 +277,8 @@ namespace API_HealthGo.Repositories
                         h.DATAINICIO AS DataInicio,
                         h.CIDADE_ID AS Cidade_Id,
                         h.PESSOA_ID AS Pessoa_id,
+                        h.LATITUDE AS Latitude,
+                        h.LONGITUDE AS Longitude,
                         c.ID AS CidadeId,
                         c.NOME AS CidadeNome,
                         c.ESTADO_ID AS CidadeEstadoId,
@@ -286,6 +315,8 @@ namespace API_HealthGo.Repositories
                         DataInicio = hotelDto.DataInicio,
                         Cidade_Id = hotelDto.Cidade_Id,
                         Pessoa_Id = hotelDto.Pessoa_Id,
+                        Latitude = hotelDto.Latitude,
+                        Longitude = hotelDto.Longitude,
                         Cidade = new CidadeEntity
                         {
                             Id = hotelDto.CidadeId,

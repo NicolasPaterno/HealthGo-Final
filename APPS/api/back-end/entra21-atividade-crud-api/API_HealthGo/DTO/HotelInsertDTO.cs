@@ -66,6 +66,11 @@ namespace API_HealthGo.DTO
         [Required(ErrorMessage = "ID da pessoa é obrigatório")]
         public int Pessoa_Id { get; set; }
 
+        // Coordenadas geográficas (opcionais)
+        public decimal? Latitude { get; set; }
+
+        public decimal? Longitude { get; set; }
+
         // Propriedade interna para o repositório
         public int Cidade_Id { get; set; }
     }
