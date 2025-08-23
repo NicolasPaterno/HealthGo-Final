@@ -21,8 +21,8 @@ const DashboardPage = lazy(() => import("./app/dashboard/DashboardPage"));
 const DashboardContent = lazy(() => import("./app/dashboard/DashboardContent"));
 const SettingsPage = lazy(() => import("./app/settings/SettingsPage"));
 const HotelsPage = lazy(() => import("./app/hotels/HotelsPage"));
-const HotelsBrowsePage = lazy(() => import("./app/hotels/HotelsBrowsePage"));
-const HotelDetailPage = lazy(() => import("./app/hotels/HotelDetailPage"));
+//const HotelsBrowsePage = lazy(() => import("./app/hotels/HotelsBrowsePage"));
+//const HotelDetailPage = lazy(() => import("./app/hotels/HotelDetailPage"));
 const TicketsPage = lazy(() => import("./app/tickets/TicketsPage"));
 const PsychologistPage = lazy(() => import("./app/psychologists/PsychologistPage"));
 const CaregiversPage = lazy(() => import("./app/caregivers/CaregiversPage"));
@@ -34,6 +34,11 @@ const DashboardGerenteContent = lazy(() => import("./app/dashboard/DashboardGere
 const CadastrarHotelPage = lazy(() => import("./app/hotels/CadastrarHotelPage"));
 const ViewHotelsPage = lazy(() => import("./app/hotels/ViewHotelsPage"));
 const QuartosPage = lazy(() => import("./app/dashboard/QuartosPage"));
+const DashboardPrestadorPage = lazy(() => import("./app/dashboard/DashboardPrestadorServicoPage"));
+const DashboardPrestadorContent = lazy(() => import("./app/dashboard/DashboardPrestadorContent"));
+const CadastrarServicoPage = lazy(() => import("./app/prestadorservico/CadastrarServicoPage"));
+const ViewServicosPage = lazy(() => import("./app/prestadorservico/ViewServicosPage"));
+
 
 
 function App() {
@@ -54,7 +59,7 @@ function App() {
               <Route element={<RoleProtectedRoute allowedRoles={["Consumidor"]} />}>
                 <Route path="/dashboard" element={<DashboardPage />}>
                   <Route index element={<DashboardContent />} />
-                  <Route path="hotels" element={<HotelsBrowsePage />} />
+                  {/*<Route path="hotels" element={<HotelsBrowsePage />} />*/}
                   <Route path="hotels-management" element={<HotelsPage />} />
                   <Route path="tickets" element={<TicketsPage />} />
                   <Route path="psychologist" element={<PsychologistPage />} />
@@ -73,6 +78,14 @@ function App() {
                 </Route>
               </Route>
 
+              <Route element={<RoleProtectedRoute allowedRoles={["PrestadorServico"]} />}>
+                <Route path="/dashboard-prestador" element={<DashboardPrestadorPage />}>
+                  <Route index element={<DashboardPrestadorContent />} />
+                  <Route path="add-servico" element={<CadastrarServicoPage />} />
+                  <Route path="view-servicos" element={<ViewServicosPage />} /> 
+                </Route>
+              </Route>
+
               {/* Rota de configurações acessível para todos os usuários autenticados */}
               <Route path="/settings" element={<SettingsPage />} />
 
@@ -81,7 +94,7 @@ function App() {
               </Route>
 
               {/* Rotas públicas para visualização de hotéis */}
-              <Route path="/hotel/:id" element={<HotelDetailPage />} />
+              {/* <Route path="/hotel/:id" element={<HotelDetailPage />} />*/}
 
             </Route>
 
