@@ -1,5 +1,6 @@
 ﻿using API_HealthGo.DTO;
 using API_HealthGo.Entities;
+using API_HealthGo.Responses.MessageResponse;
 
 namespace API_HealthGo.Contracts.Repositories
 {
@@ -16,5 +17,7 @@ namespace API_HealthGo.Contracts.Repositories
         Task Delete(int id);
 
         Task Update(PrestadorServicoEntity prestadorServico);
+
+        Task<int> GetByPessoaId(int id);
     }
 }

@@ -54,5 +54,11 @@ namespace API_HealthGo.Controllers
             return Ok(await _service.Update(prestadorServico));
         }
 
+        [HttpGet("get_by_pessoa_id")]
+        public async Task<ActionResult<int>> GetByPessoaId(int id)
+        {
+            return Ok(await _service.GetByPessoaId(id));
+        }
+
     }
 }

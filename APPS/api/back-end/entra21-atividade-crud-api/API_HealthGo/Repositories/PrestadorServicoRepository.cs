@@ -2,6 +2,7 @@
 using API_HealthGo.Contracts.Repositories;
 using API_HealthGo.DTO;
 using API_HealthGo.Entities;
+using API_HealthGo.Responses.MessageResponse;
 using Dapper;
 using MySql.Data.MySqlClient;
 
@@ -154,6 +155,16 @@ namespace API_HealthGo.Repository
                  WHERE ID = @Id;
             ";
             await _connection.Execute(sql, prestadorServico);
+        }
+
+        public async Task<int> GetByPessoaId(int id)
+        {
+            using (MySqlConnection con = _connection.GetConnection())
+            {
+                string sql = "SELECT id FROM prestadorservico WHERE pessoa_id = @id;";
+                int prestadorServicoId = await con.QueryFirstAsync<int>(sql, new { id });
+                return prestadorServicoId;
+            }
         }
     }
 }
