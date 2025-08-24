@@ -24,7 +24,7 @@ namespace API_HealthGo.Repository
                 string sql = @$"
                      SELECT ID AS {nameof(AeroportoEntity.Id)},
                             NOME AS {nameof(AeroportoEntity.Nome)},
-                            CODIGOIATA AS {nameof(AeroportoEntity.CodigoIata)},
+                            CODIGO AS {nameof(AeroportoEntity.Codigo)},
                            CIDADE_ID AS {nameof(AeroportoEntity.Cidade_Id)}
                        FROM AEROPORTO
                 ";
@@ -37,8 +37,8 @@ namespace API_HealthGo.Repository
         public async Task Insert(AeroportoInsertDTO aeroporto)
         {
             string sql = @$"
-                INSERT INTO AEROPORTO (NOME,CODIGOIATA,CIDADE_ID)
-                                VALUES (@Nome,@CodigoIata, @Cidade_ID)                                                         
+                INSERT INTO AEROPORTO (NOME,CODIGO,CIDADE_ID)
+                                VALUES (@Nome,@Codigo, @Cidade_ID)                                                         
             ";
             await _connection.Execute(sql, aeroporto);
         }
@@ -56,10 +56,10 @@ namespace API_HealthGo.Repository
                 string sql = @$"
                             SELECT ID AS {nameof(AeroportoEntity.Id)},
                             NOME AS {nameof(AeroportoEntity.Nome)},
-                            CODIGOIATA AS {nameof(AeroportoEntity.CodigoIata)},
-                           CIDADE_ID AS {nameof(AeroportoEntity.Cidade_Id)}
+                            CODIGO AS {nameof(AeroportoEntity.Codigo)},
+                            CIDADE_ID AS {nameof(AeroportoEntity.Cidade_Id)}
                        FROM AEROPORTO
-                         WHERE ID = @Id
+                       WHERE ID = @Id
                               
                             ";
                 AeroportoEntity aeroporto = await con.QueryFirstAsync<AeroportoEntity>(sql, new { id });
@@ -72,13 +72,11 @@ namespace API_HealthGo.Repository
             string sql = @$"
                       UPDATE AEROPORTO
                                SET NOME = @Nome,
-                               CODIGOIATA = @CodigoIata,
+                               CODIGO = @Codigo,
                                CIDADE_ID = @Cidade_Id
                                WHERE ID = @Id;
                           ";
             await _connection.Execute(sql, aeroporto);
         }
-
-
     }
 }

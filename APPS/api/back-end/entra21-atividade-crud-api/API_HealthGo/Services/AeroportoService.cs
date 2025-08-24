@@ -36,7 +36,7 @@ namespace API_HealthGo.Services
                 var aeroportsFiltered = allAeroports.Select(aeroporto => new AeroportoEntity 
                 {
                     Nome = aeroporto.Nome,
-                    CodigoIata = aeroporto.CodigoIata,
+                    Codigo = aeroporto.Codigo,
                     Cidade_Id = aeroporto.Cidade_Id
                 });
 
