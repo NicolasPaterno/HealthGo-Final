@@ -103,7 +103,7 @@ namespace API_HealthGo.Repository
                     BAIRRO = @Bairro,
                     RUA = @Rua,
                     NUMEROENDERECO = @NumeroEndereco,
-                    CIDADE_ID = @Cidade_Id
+                    CIDADE_ID = @Cidade_Id 
                 WHERE ID = @Id
             ";
 

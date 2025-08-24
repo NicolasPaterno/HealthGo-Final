@@ -28,7 +28,7 @@ export function AppSidebarPrestadorServico({
   // Menu específico para prestador de serviço
   const prestadorNavMain = [
     {
-      title: "Dashboard",
+      title: "Perfil",
       url: "/dashboard-prestador",
       icon: LayoutDashboard,
     },

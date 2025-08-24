@@ -84,6 +84,7 @@ namespace API_HealthGo.Controllers
             }
         }
 
+        [AllowAnonymous]
         [HttpPut]
         public async Task<ActionResult<MessageResponse>> Update(PessoaEntity pessoa)
         {

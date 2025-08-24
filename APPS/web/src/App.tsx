@@ -58,6 +58,7 @@ const DashboardPrestadorPage = lazy(
 const DashboardPrestadorContent = lazy(
   () => import("./app/dashboard/DashboardPrestadorServicoContent")
 );
+const ProfilePage = lazy(() => import("./app/prestadorservico/ProfilePage"));
 const CadastrarServicoPage = lazy(
   () => import("./app/prestadorservico/CadastrarServicoPage")
 );
@@ -123,7 +124,7 @@ function App() {
                   path="/dashboard-prestador"
                   element={<DashboardPrestadorPage />}
                 >
-                  <Route index element={<DashboardPrestadorContent />} />
+                  <Route index element={<ProfilePage />} />
                   <Route
                     path="add-servico"
                     element={<CadastrarServicoPage />}
