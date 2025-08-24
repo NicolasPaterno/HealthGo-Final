@@ -22,11 +22,9 @@ namespace API_HealthGo.Repository
             {
                 string sql = $@"
                     SELECT ID AS {nameof(AviaoEntity.Id)},
-                           QUANTIDADEVAGA AS {nameof(AviaoEntity.QuantidadeVaga)},
-                           CODIGOREGISTRO AS {nameof(AviaoEntity.CodigoRegistro)},
-                           COMPANHIA AS {nameof(AviaoEntity.Companhia)},
                            MODELO AS {nameof(AviaoEntity.Modelo)},
-                           FABRICANTE AS {nameof(AviaoEntity.Fabricante)}
+                           CAPACIDADE AS {nameof(AviaoEntity.Capacidade)},
+                           COMPANHIA AS {nameof(AviaoEntity.Companhia)}
                       FROM AVIAO
                 ";
 
@@ -38,8 +36,8 @@ namespace API_HealthGo.Repository
         public async Task Insert(AviaoInsertDTO aviao)
         {
             string sql = @"
-                INSERT INTO AVIAO (QUANTIDADEVAGA, CODIGOREGISTRO, COMPANHIA, MODELO, FABRICANTE)
-                                VALUES (@QuantidadeVaga, @CodigoRegistro, @Companhia, @Modelo, @Fabricante)
+                INSERT INTO AVIAO (MODELO, CAPACIDADE, COMPANHIA)
+                                VALUES (@Modelo, @Capacidade, @Companhia)
                 ";
 
             await _connection.Execute(sql, aviao);
@@ -58,12 +56,11 @@ namespace API_HealthGo.Repository
             {
                 string sql = $@"
                     SELECT ID AS {nameof(AviaoEntity.Id)},
-                           QUANTIDADEVAGA AS {nameof(AviaoEntity.QuantidadeVaga)},
-                           CODIGOREGISTRO AS {nameof(AviaoEntity.CodigoRegistro)},
-                           COMPANHIA AS {nameof(AviaoEntity.Companhia)},
                            MODELO AS {nameof(AviaoEntity.Modelo)},
-                           FABRICANTE AS {nameof(AviaoEntity.Fabricante)}
-                      FROM AVIAO WHERE ID = @Id
+                           CAPACIDADE AS {nameof(AviaoEntity.Capacidade)},
+                           COMPANHIA AS {nameof(AviaoEntity.Companhia)}
+                      FROM AVIAO
+                      WHERE ID = @Id
                 ";
 
                 AviaoEntity aviao = await con.QueryFirstAsync<AviaoEntity>(sql, new { id });
@@ -74,12 +71,10 @@ namespace API_HealthGo.Repository
         public async Task Update(AviaoEntity aviao)
         {
             string sql = $@"UPDATE AVIAO
-                                SET QUANTIDADEVAGA = @QuantidadeVaga,
-                                CodigoRegistro = @CodigoRegistro,
-                                COMPANHIA = @Companhia, 
-                                MODELO = @Modelo,
-                                FABRICANTE = @Fabricante
-                                WHERE ID = @Id
+                                SET MODELO = @Modelo,
+                                CAPACIDADE = @Capacidade,
+                                COMPANHIA = @Companhia 
+                            WHERE ID = @Id
             ";
 
             await _connection.Execute(sql, aviao);

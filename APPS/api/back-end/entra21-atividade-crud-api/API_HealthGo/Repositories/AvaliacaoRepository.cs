@@ -21,11 +21,14 @@ namespace API_HealthGo.Repository
             using (MySqlConnection con = _connection.GetConnection())
             {
                 string sql = @$"
-                    SELECT ID AS {nameof(AvaliacaoEntity.Id)},
-                           NOTA AS {nameof(AvaliacaoEntity.Nota)},
-                           COMENTARIO AS {nameof(AvaliacaoEntity.Comentario)},
-                           PESSOA_ID AS {nameof(AvaliacaoEntity.Pessoa_Id)}
-                      FROM AVALIACAO
+                     SELECT ID AS {nameof(AvaliacaoEntity.Id)},
+                            NOTA AS {nameof(AvaliacaoEntity.Nota)},
+                            COMENTARIO AS {nameof(AvaliacaoEntity.Comentario)},
+                            DATAAVALIACAO AS {nameof(AvaliacaoEntity.DataAvaliacao)},
+                            PESSOA_ID AS {nameof(AvaliacaoEntity.Pessoa_Id)},
+                            HOTEL_ID AS {nameof(AvaliacaoEntity.Hotel_Id)},
+                            PRESTADORSERVICO_ID AS {nameof(AvaliacaoEntity.PrestadorServico_Id)}
+                     FROM AVALIACAO
                 ";
                 IEnumerable<AvaliacaoEntity> avaliacaoList = await con.QueryAsync<AvaliacaoEntity>(sql);
                 return avaliacaoList;
@@ -35,8 +38,8 @@ namespace API_HealthGo.Repository
         public async Task Insert(AvaliacaoInsertDTO avaliacao)
         {
             string sql = @$"
-                INSERT INTO AVALIACAO (NOTA, COMENTARIO, PESSOA_ID)
-                             VALUES (@Nota, @Comentario, @Pessoa_Id)
+                INSERT INTO AVALIACAO (NOTA, COMENTARIO, DATAAVALIACAO, PESSOA_ID, HOTEL_ID, PRESTADORSERVICO_ID )
+                             VALUES (@Nota, @Comentario, @DataAvaliacao, @Pessoa_Id, @Hotel_Id, @PrestadorServico_Id)
             ";
             await _connection.Execute(sql, avaliacao);
         }
@@ -53,10 +56,13 @@ namespace API_HealthGo.Repository
             {
                 string sql = @$"
                     SELECT ID AS {nameof(AvaliacaoEntity.Id)},
-                           NOTA AS {nameof(AvaliacaoEntity.Nota)},
-                           COMENTARIO AS {nameof(AvaliacaoEntity.Comentario)},
-                           PESSOA_ID AS {nameof(AvaliacaoEntity.Pessoa_Id)}
-                      FROM AVALIACAO
+                            NOTA AS {nameof(AvaliacaoEntity.Nota)},
+                            COMENTARIO AS {nameof(AvaliacaoEntity.Comentario)},
+                            DATAAVALIACAO AS {nameof(AvaliacaoEntity.DataAvaliacao)},
+                            PESSOA_ID AS {nameof(AvaliacaoEntity.Pessoa_Id)},
+                            HOTEL_ID AS {nameof(AvaliacaoEntity.Hotel_Id)},
+                            PRESTADORSERVICO_ID AS {nameof(AvaliacaoEntity.PrestadorServico_Id)}
+                     FROM AVALIACAO
                      WHERE ID = @id
                 ";
                 AvaliacaoEntity avaliacao = await con.QueryFirstAsync<AvaliacaoEntity>(sql, new { id });
@@ -68,9 +74,11 @@ namespace API_HealthGo.Repository
         {
             string sql = @$"
                 UPDATE AVALIACAO
-                   SET NOTA = @Nota,
-                       COMENTARIO = @Comentario,
-                       PESSOA_ID = @Pessoa_Id
+                      SET NOTA = @Nota,
+                          COMENTARIO = @Comentario,
+                          PESSOA_ID = @Pessoa_Id,
+                          HOTEL_ID = @Hotel_Id, 
+                          PRESTADORSERVICO_ID = @PrestadorServico_Id
                  WHERE ID = @Id;
             ";
             await _connection.Execute(sql, avaliacao);

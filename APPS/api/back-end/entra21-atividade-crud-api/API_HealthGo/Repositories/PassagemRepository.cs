@@ -23,9 +23,9 @@ namespace API_HealthGo.Repository
                 string sql = $@"
                        SELECT ID AS {nameof(PassagemEntity.Id)},
                         PRECO AS {nameof(PassagemEntity.Preco)},
-                        ASSENTO_ID AS {nameof(PassagemEntity.Assento_Id)},
+                        CLASSE AS {nameof(PassagemEntity.Classe)},
                         VOO_ID AS {nameof(PassagemEntity.Voo_Id)},
-                        ORDEMSERVICO_ID AS {nameof(PassagemEntity.OrdemServico_Id)}
+                        PESSOA_ID AS {nameof(PassagemEntity.Pessoa_Id)}
                         FROM PASSAGEM
                 ";
 
@@ -39,12 +39,11 @@ namespace API_HealthGo.Repository
             using (MySqlConnection con = _connection.GetConnection())
             {
                 string sql = $@"
-                    SELECT ID AS {nameof(VooEntity.Id)},
-                        SELECT ID AS {nameof(PassagemEntity.Id)},
+                    SELECT ID AS {nameof(PassagemEntity.Id)},
                         PRECO AS {nameof(PassagemEntity.Preco)},
-                        ASSENTO_ID AS {nameof(PassagemEntity.Assento_Id)},
+                        CLASSE AS {nameof(PassagemEntity.Classe)},
                         VOO_ID AS {nameof(PassagemEntity.Voo_Id)},
-                        ORDEMSERVICO_ID AS {nameof(PassagemEntity.OrdemServico_Id)}
+                        PESSOA_ID AS {nameof(PassagemEntity.Pessoa_Id)}
                         FROM PASSAGEM
                         WHERE ID = @id
                 ";
@@ -57,8 +56,8 @@ namespace API_HealthGo.Repository
         public async Task Insert(PassagemInsertDTO passagem)
         {
             string sql = @"
-                INSERT INTO PASSAGEM (PRECO, ASSENTO_ID, VOO_ID, ORDEMSERVICO_ID)
-                    VALUES (@Preco, @Assento_Id, @Voo_Id, @OrdemServico_Id)
+                INSERT INTO PASSAGEM (PRECO, CLASSE, VOO_ID, PESSOA_ID)
+                    VALUES (@Preco, @Classe, @Voo_Id, @Pessoa_Id)
             ";
 
             await _connection.Execute(sql, passagem);
@@ -69,9 +68,9 @@ namespace API_HealthGo.Repository
             string sql = @"
                 UPDATE PASSAGEM
                     SET PRECO = @Preco,
-                        ASSENTO_ID = @Assento_Id,
+                        CLASSE = @Classe,
                         VOO_ID = @Voo_Id,
-                        ORDEMSERVICO_ID = @OrdemServico_Id
+                        PESSOA_ID = @Pessoa_Id
                     WHERE ID = @Id
             ";
 

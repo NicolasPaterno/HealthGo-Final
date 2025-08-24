@@ -21,7 +21,12 @@ namespace API_HealthGo.Repository
             using (MySqlConnection con = _connection.GetConnection())
             {
                 string sql = @$"
-                    SELECT Id, Endereco, Nome
+                    SELECT 
+                            ID as {nameof(ImagemEntity.Id)},
+                            URL as {nameof(ImagemEntity.Url)},
+                            DESCRICAO as {nameof(ImagemEntity.Descricao)},
+                            HOTEL_ID as {nameof(ImagemEntity.Hotel_Id)},
+                            PESSOA_ID as {nameof(ImagemEntity.Pessoa_Id)}
                     FROM IMAGEM
                 ";
 
@@ -35,7 +40,14 @@ namespace API_HealthGo.Repository
             using (MySqlConnection con = _connection.GetConnection())
             {
                 string sql = @$"
-                    SELECT Id, Endereco, Nome FROM IMAGEM WHERE Id = @id
+                    SELECT 
+                            ID as {nameof(ImagemEntity.Id)},    
+                            URL as {nameof(ImagemEntity.Url)},
+                            DESCRICAO as {nameof(ImagemEntity.Descricao)},
+                            HOTEL_ID as {nameof(ImagemEntity.Hotel_Id)},
+                            PESSOA_ID as {nameof(ImagemEntity.Pessoa_Id)}
+                    FROM IMAGEM
+                    WHERE Id = @id
                 ";
 
                 ImagemEntity imagem = await con.QueryFirstAsync<ImagemEntity>(sql, new { id });
@@ -46,8 +58,8 @@ namespace API_HealthGo.Repository
         public async Task Insert(ImagemInsertDTO imagem)
         {
             string sql = @"
-                INSERT INTO IMAGEM (Endereco, Nome)
-                VALUES (@Endereco, @Nome)
+                INSERT INTO IMAGEM (URL, DESCRICAO, HOTEL_ID, PESSOA_ID)
+                VALUES (@Url, @Descricao, @Hotel_Id, @Pessoa_Id)
             ";
 
             await _connection.Execute(sql, imagem);
@@ -57,8 +69,10 @@ namespace API_HealthGo.Repository
         {
             string sql = @"
                 UPDATE IMAGEM SET
-                    Endereco = @Endereco,
-                    Nome = @Nome
+                    Url = @Url, 
+                    Descricao = @Descricao,
+                    Hotel_Id = @Hotel_Id,   
+                    Pessoa_Id = @Pessoa_Id
                 WHERE Id = @Id
             ";
 

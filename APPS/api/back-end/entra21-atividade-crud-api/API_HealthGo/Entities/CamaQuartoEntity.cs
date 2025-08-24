@@ -4,9 +4,9 @@
     {
         public int Id { get; set; }
 
-        public string Quantidade { get; set; }
+        public string Tipo { get; set; }
 
-        public string TipoCama { get; set; } // ENUM('Solteiro', 'Casal', 'Beliche', 'Futon') 
+        public string Quantidade { get; set; }
 
         public int Quarto_Id { get; set; }
     }

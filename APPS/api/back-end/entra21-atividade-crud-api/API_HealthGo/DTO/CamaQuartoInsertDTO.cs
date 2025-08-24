@@ -2,9 +2,9 @@
 {
     public class CamaQuartoInsertDTO
     {
-        public string Quantidade { get; set; }
+        public string Tipo { get; set; }
 
-        public string TipoCama { get; set; }
+        public string Quantidade { get; set; }
 
         public int Quarto_Id { get; set; }
     }

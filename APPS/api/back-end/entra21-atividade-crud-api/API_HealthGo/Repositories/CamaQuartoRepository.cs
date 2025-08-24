@@ -22,8 +22,8 @@ namespace API_HealthGo.Repository
             {
                 string sql = @$"
                     SELECT ID AS {nameof(CamaQuartoEntity.Id)},
+                            TIPO AS {nameof(CamaQuartoEntity.Tipo)},
                            QUANTIDADE AS {nameof(CamaQuartoEntity.Quantidade)},
-                           TIPOCAMA AS {nameof(CamaQuartoEntity.TipoCama)},
                            QUARTO_ID AS {nameof(CamaQuartoEntity.Quarto_Id)}
                       FROM CAMAQUARTO
                 ";
@@ -35,8 +35,8 @@ namespace API_HealthGo.Repository
         public async Task Insert(CamaQuartoInsertDTO camaQuarto)
         {
             string sql = @$"
-                INSERT INTO CAMAQUARTO (QUANTIDADE, TIPOCAMA, QUARTO_ID)
-                             VALUES (@Quantidade, @TipoCama, @Quarto_Id)
+                INSERT INTO CAMAQUARTO (TIPO, QUANTIDADE, QUARTO_ID)
+                             VALUES (@Tipo, @Quantidade, @Quarto_Id)
             ";
             await _connection.Execute(sql, camaQuarto);
         }
@@ -53,8 +53,8 @@ namespace API_HealthGo.Repository
             {
                 string sql = @$"
                     SELECT ID AS {nameof(CamaQuartoEntity.Id)},
+                            TIPO AS {nameof(CamaQuartoEntity.Tipo)},
                            QUANTIDADE AS {nameof(CamaQuartoEntity.Quantidade)},
-                           TIPOCAMA AS {nameof(CamaQuartoEntity.TipoCama)},
                            QUARTO_ID AS {nameof(CamaQuartoEntity.Quarto_Id)}
                       FROM CAMAQUARTO
                      WHERE ID = @id
@@ -68,9 +68,9 @@ namespace API_HealthGo.Repository
         {
             string sql = @$"
                 UPDATE CAMAQUARTO
-                   SET QUANTIDADE = @Quantidade,
-                       TIPOCAMA = @TipoCama,
-                       QUARTO_ID = @Quarto_Id
+                   SET  TIPO = @Tipo,
+                        QUANTIDADE = @Quantidade,
+                        QUARTO_ID = @Quarto_Id
                  WHERE ID = @Id;
             ";
             await _connection.Execute(sql, camaQuarto);

@@ -4,15 +4,15 @@
     {
         public int Id { get; set; }
         
-        public string CodigoVoo { get; set; }
+        public string Numero { get; set; }
         
-        public DateTime DataHoraPartida { get; set; }
+        public DateTime DataPartida { get; set; }
         
-        public DateTime DataHoraChegada { get; set; }
+        public DateTime DataChegada { get; set; }
         
-        public int Origem_Id { get; set; }
+        public int AeroportoOrigem_Id { get; set; }
         
-        public int Destino_Id { get; set; }
+        public int AeroportoDestino_Id { get; set; }
         
         public int Aviao_Id { get; set; }
     }

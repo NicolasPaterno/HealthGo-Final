@@ -22,12 +22,12 @@ namespace API_HealthGo.Repository
             {
                 string sql = $@"
                        SELECT ID AS {nameof(VooEntity.Id)},
-                        CODIGOVOO AS {nameof(VooEntity.CodigoVoo)},
-                        DATAHORAPARTIDA AS {nameof(VooEntity.DataHoraPartida)},
-                        DATAHORACHEGADA AS {nameof(VooEntity.DataHoraChegada)},
-                        ORIGEM_ID AS {nameof(VooEntity.Origem_Id)},
-                        DESTINO_ID AS {nameof(VooEntity.Destino_Id)},
-                        AVIAO_ID AS  {nameof(VooEntity.Aviao_Id)}
+                        NUMERO AS {nameof(VooEntity.Numero)},
+                        DATAPARTIDA AS {nameof(VooEntity.DataPartida)},
+                        DATACHEGADA AS {nameof(VooEntity.DataChegada)},
+                        AEROPORTOORIGEM_ID AS {nameof(VooEntity.AeroportoOrigem_Id)},
+                        AEROPORTODESTINO_ID AS {nameof(VooEntity.AeroportoDestino_Id)},
+                        AVIAO_ID AS {nameof(VooEntity.Aviao_Id)}
                         FROM VOO
                 ";
 
@@ -42,12 +42,12 @@ namespace API_HealthGo.Repository
             {
                 string sql = $@"
                     SELECT ID AS {nameof(VooEntity.Id)},
-                        CODIGOVOO AS {nameof(VooEntity.CodigoVoo)},
-                        DATAHORAPARTIDA AS {nameof(VooEntity.DataHoraPartida)},
-                        DATAHORACHEGADA AS {nameof(VooEntity.DataHoraChegada)},
-                        ORIGEM_ID AS {nameof(VooEntity.Origem_Id)},
-                        DESTINO_ID AS {nameof(VooEntity.Destino_Id)},
-                        AVIAO_ID AS  {nameof(VooEntity.Aviao_Id)}
+                        NUMERO AS {nameof(VooEntity.Numero)},
+                        DATAPARTIDA AS {nameof(VooEntity.DataPartida)},
+                        DATACHEGADA AS {nameof(VooEntity.DataChegada)},
+                        AEROPORTOORIGEM_ID AS {nameof(VooEntity.AeroportoOrigem_Id)},
+                        AEROPORTODESTINO_ID AS {nameof(VooEntity.AeroportoDestino_Id)},
+                        AVIAO_ID AS {nameof(VooEntity.Aviao_Id)}
                         FROM VOO
                         WHERE ID = @id
                 ";
@@ -60,8 +60,8 @@ namespace API_HealthGo.Repository
         public async Task Insert(VooInsertDTO assento)
         {
             string sql = @"
-                INSERT INTO VOO (CODIGOVOO, DATAHORAPARTIDA, DATAHORACHEGADA, ORIGEM_ID, DESTINO_ID, AVIAO_ID)
-                    VALUES (@CodigoVoo, @DataHoraPartida, @DataHoraChegada, @Origem_Id, @Destino_Id, @Aviao_Id)
+                INSERT INTO VOO (NUMERO, DATAPARTIDA, DATACHEGADA, AEROPORTOORIGEM_ID, AEROPORTODESTINO_ID, AVIAO_ID)
+                    VALUES (@Numero, @DataPartida, @DataChegada, @AeroportoOrigem_Id, @AeroportoDestino_Id, @Aviao_Id)
             ";
 
             await _connection.Execute(sql, assento);
@@ -71,11 +71,11 @@ namespace API_HealthGo.Repository
         {
             string sql = @"
                 UPDATE VOO
-                    SET CODIGOVOO = @CodigoVoo,
-                        DATAHORAPARTIDA = @DataHoraPartida,
-                        DATAHORACHEGADA = @DataHoraChegada,
-                        ORIGEM_ID = @Origem_Id,
-                        DESTINO_ID = @Destino_Id,
+                    SET NUMERO = @Numero,
+                        DATAPARTIDA = @DataPartida,
+                        DATACHEGADA = @DataChegada,
+                        AEROPORTOORIGEM_ID = @AeroportoOrigem_Id,
+                        AEROPORTODESTINO_ID = @AeroportoDestino_Id,
                         AVIAO_ID = @Aviao_Id
                     WHERE ID = @Id
             ";
