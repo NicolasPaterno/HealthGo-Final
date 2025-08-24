@@ -55,7 +55,7 @@ namespace API_HealthGo.Controllers
         }
 
         [HttpGet("get_by_pessoa_id")]
-        public async Task<ActionResult<int>> GetByPessoaId(int id)
+        public async Task<ActionResult<PrestadorServicoEntity>> GetByPessoaId(int id)
         {
             return Ok(await _service.GetByPessoaId(id));
         }

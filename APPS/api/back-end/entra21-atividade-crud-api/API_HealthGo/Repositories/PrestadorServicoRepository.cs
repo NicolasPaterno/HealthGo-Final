@@ -157,13 +157,20 @@ namespace API_HealthGo.Repository
             await _connection.Execute(sql, prestadorServico);
         }
 
-        public async Task<int> GetByPessoaId(int id)
+        public async Task<PrestadorServicoEntity> GetByPessoaId(int id)
         {
             using (MySqlConnection con = _connection.GetConnection())
             {
-                string sql = "SELECT id FROM prestadorservico WHERE pessoa_id = @id;";
-                int prestadorServicoId = await con.QueryFirstAsync<int>(sql, new { id });
-                return prestadorServicoId;
+                string sql = @$"
+                    SELECT ID AS {nameof(PrestadorServicoEntity.Id)},
+                           OBSERVACAO AS {nameof(PrestadorServicoEntity.Observacao)},
+                           CNPJ AS {nameof(PrestadorServicoEntity.CNPJ)},
+                           PESSOA_ID AS {nameof(PrestadorServicoEntity.Pessoa_Id)}
+                      FROM PRESTADORSERVICO
+                     WHERE Pessoa_Id = @id
+                ";
+                PrestadorServicoEntity prestadorServico = await con.QueryFirstAsync<PrestadorServicoEntity>(sql, new { id });
+                return prestadorServico;
             }
         }
     }

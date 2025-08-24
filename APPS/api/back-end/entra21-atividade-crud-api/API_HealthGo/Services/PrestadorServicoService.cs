@@ -65,7 +65,7 @@ namespace API_HealthGo.Services
             };
         }
 
-        public async Task<int> GetByPessoaId(int id)
+        public async Task<PrestadorServicoEntity> GetByPessoaId(int id)
         {
             return await _repository.GetByPessoaId(id);
         }

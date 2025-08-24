@@ -3,8 +3,8 @@
     public class PrestadorServicoEspecialidadeEntity
     {
         public int Id { get; set; }
-        public int PrestadorServicoId { get; set; }
-        public int EspecialidadeId { get; set; }
+        public int PrestadorServico_Id { get; set; }
+        public int Especialidade_Id { get; set; }
         public decimal PrecoHora { get; set; }
     }
 }

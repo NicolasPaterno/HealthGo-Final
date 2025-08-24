@@ -17,7 +17,6 @@ export default function ProfilePage() {
     "/avatars/default-profile.jpg"
   );
 
-  // Inicializar com dados do token descriptografado
   const decodedUser = getAuthUser();
   const [name, setName] = useState(decodedUser?.name || "");
   const [description, setDescription] = useState(
@@ -26,19 +25,38 @@ export default function ProfilePage() {
   const [tempName, setTempName] = useState(decodedUser?.name || "");
   const [tempDescription, setTempDescription] = useState(description);
 
-  // Estados para especialidades
   const [showSpecialtyModal, setShowSpecialtyModal] = useState(false);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [selectedSpecialty, setSelectedSpecialty] = useState("");
   const [hourlyPrice, setHourlyPrice] = useState("");
+  const [selectedSpecialtyId, setSelectedSpecialtyId] = useState<number | null>(
+    null
+  );
+  const [specialtyToDelete, setSpecialtyToDelete] = useState<number | null>(
+    null
+  );
   const [specialties, setSpecialties] = useState<
-    Array<{ id: number; nome: string; preco: number }>
+    Array<{
+      id: number;
+      prestadorServico_Id: number;
+      especialidade_Id: number;
+      precoHora: number;
+    }>
   >([]);
+
+  const especialidadesMap = {
+    1: "Assistente Pessoal",
+    2: "Cuidador de Idosos",
+    3: "Enfermeiro",
+    4: "Fisioterapeuta",
+    5: "Psicólogo",
+    6: "Nutricionista",
+  };
 
   // Buscar informações do usuário quando a página carregar
   useEffect(() => {
     const fetchUserInfo = async () => {
       try {
-        // 1. Verificar se temos o token descriptografado
         const decodedUser = getAuthUser();
         if (!decodedUser) {
           console.warn("Token não encontrado ou inválido");
@@ -54,34 +72,27 @@ export default function ProfilePage() {
           throw new Error("ID do usuário inválido no token.");
         }
 
-        // 2. O nome já está sendo exibido do token (carregamento imediato)
-        // Agora vamos buscar informações adicionais da API
-
-        // 3. Buscar informações completas da pessoa da API
         const response = await api.get(`/Pessoa/${userId}`);
         const userData = response.data;
 
-        // 4. Atualizar com dados reais da API (se disponíveis)
         if (userData.nome && userData.nome !== decodedUser.name) {
           setName(userData.nome);
           setTempName(userData.nome);
         }
 
-        // 5. Atualizar foto se disponível na API
         if (userData.enderecoFoto && userData.enderecoFoto !== "default.jpg") {
           setProfileImage(userData.enderecoFoto);
         }
 
-        // 6. Buscar todas as informações do prestador de serviço usando a rota all_infos
-        const prestadorResponse = await api.get(`/PrestadorServico/all_infos`);
+        const prestadorResponse = await api.get(
+          `/PrestadorServico/get_by_pessoa_id?id=${userId}`
+        );
         const prestadorData = prestadorResponse.data;
 
-        // 7. Atualizar descrição
         if (prestadorData.observacao) {
           setDescription(prestadorData.observacao);
           setTempDescription(prestadorData.observacao);
         } else {
-          // Manter descrição padrão se não houver observação
           const descricaoPadrao =
             "Descreva sua experiência, especialidades e abordagem profissional...";
           setDescription(descricaoPadrao);
@@ -89,13 +100,12 @@ export default function ProfilePage() {
         }
       } catch (error) {
         console.error("Erro ao buscar informações do usuário:", error);
-        // O nome já está sendo exibido do token, então não precisamos fazer fallback
       }
     };
 
     if (isAuthenticated) {
       fetchUserInfo();
-      fetchSpecialties(); // Buscar especialidades também
+      fetchSpecialties();
     }
   }, [isAuthenticated]);
 
@@ -105,7 +115,6 @@ export default function ProfilePage() {
       const reader = new FileReader();
       reader.onload = (e) => {
         setProfileImage(e.target?.result as string);
-        // Toast será mostrado apenas quando salvar as alterações
       };
       reader.readAsDataURL(file);
     }
@@ -113,7 +122,6 @@ export default function ProfilePage() {
 
   const handleSave = async () => {
     try {
-      // 1. Verificar autenticação usando token descriptografado
       const decodedUser = getAuthUser();
       if (!decodedUser) {
         toast.error("Erro de autenticação", {
@@ -128,48 +136,43 @@ export default function ProfilePage() {
         throw new Error("ID do usuário inválido no token.");
       }
 
-      // 2. Buscar todas as informações atuais da pessoa da API
       const pessoaResponse = await api.get(`/Pessoa/${userId}`);
       const pessoaAtual = pessoaResponse.data;
 
-      // 2. Atualizar informações da pessoa na API (mantendo todos os campos originais)
       const pessoaUpdateData = {
-        ...pessoaAtual, // Manter todos os campos originais
+        ...pessoaAtual,
       };
 
-      // Atualizar apenas os campos que foram modificados
       if (tempName !== name) {
-        pessoaUpdateData.nome = tempName; // ✅ Nome atualizado apenas se mudou (usando minúsculo)
+        pessoaUpdateData.nome = tempName;
       }
 
-      // Atualizar a foto apenas se foi alterada
       if (profileImage !== "/avatars/default-profile.jpg") {
-        pessoaUpdateData.enderecoFoto = profileImage; // ✅ Foto atualizada condicionalmente (usando camelCase)
+        pessoaUpdateData.enderecoFoto = profileImage;
       }
 
-      // Definir role fixo como 2
       pessoaUpdateData.role = 2;
 
       console.log("Dados para atualizar pessoa:", pessoaUpdateData);
       const response = await api.put("/Pessoa", pessoaUpdateData);
 
-      // 3. Buscar o ID do prestador de serviço usando a rota all_infos
-      const prestadorResponse = await api.get(`/PrestadorServico/all_infos`);
+      const prestadorResponse = await api.get(
+        `/PrestadorServico/get_by_pessoa_id?id=${userId}`
+      );
 
+      console.log("Dados do prestador:", prestadorResponse.data);
       const prestadorId = prestadorResponse.data.id;
 
-      // 4. Atualizar a observação na tabela PrestadorServico
       const prestadorUpdateData = {
         id: prestadorId,
-        idPessoa: userId,
+        pessoa_id: userId,
         cnpj: prestadorResponse.data.cnpj,
         observacao: tempDescription,
       };
 
       console.log("Dados para atualizar prestador:", prestadorUpdateData);
-      const response1 = await api.put("/PrestadorServico", prestadorUpdateData);
+      await api.put("/PrestadorServico", prestadorUpdateData);
 
-      // Atualizar estado local
       setName(tempName);
       setDescription(tempDescription);
       setIsEditing(false);
@@ -186,16 +189,55 @@ export default function ProfilePage() {
     setIsEditing(false);
   };
 
-  // Funções para gerenciar especialidades
   const handleAddSpecialty = () => {
     setShowSpecialtyModal(true);
     setSelectedSpecialty("");
     setHourlyPrice("");
+    setSelectedSpecialtyId(null);
+  };
+
+  const handleEditSpecialty = (specialty: any) => {
+    setShowSpecialtyModal(true);
+    setSelectedSpecialty(specialty.especialidade_Id.toString());
+    setHourlyPrice(specialty.precoHora.toString());
+    setSelectedSpecialtyId(specialty.id);
+  };
+
+  const handleDeleteSpecialty = (specialtyId: number) => {
+    setSpecialtyToDelete(specialtyId);
+    setShowDeleteModal(true);
+  };
+
+  const confirmDeleteSpecialty = async () => {
+    if (!specialtyToDelete) return;
+
+    try {
+      await api.delete(`/PrestadorServicoEspecialidade/${specialtyToDelete}`);
+      await fetchSpecialties();
+      toast.success("Especialidade removida com sucesso!");
+      setShowDeleteModal(false);
+      setSpecialtyToDelete(null);
+    } catch (error) {
+      console.error("Erro ao remover especialidade:", error);
+      toast.error("Erro ao remover especialidade");
+    }
   };
 
   const handleSaveSpecialty = async () => {
     if (!selectedSpecialty || !hourlyPrice) {
       toast.error("Por favor, preencha todos os campos");
+      return;
+    }
+
+    const especialidadeId = parseInt(selectedSpecialty);
+    const isDuplicate = specialties.some(
+      (specialty) =>
+        specialty.especialidade_Id === especialidadeId &&
+        specialty.id !== selectedSpecialtyId
+    );
+
+    if (isDuplicate) {
+      toast.error("Você já possui esta especialidade cadastrada");
       return;
     }
 
@@ -211,26 +253,34 @@ export default function ProfilePage() {
         throw new Error("ID do usuário inválido");
       }
 
-      // Buscar o ID do prestador de serviço
-      const prestadorResponse = await api.get(`/PrestadorServico/all_infos`);
+      const prestadorResponse = await api.get(
+        `/PrestadorServico/get_by_pessoa_id?id=${userId}`
+      );
       const prestadorId = prestadorResponse.data.id;
 
-      // Criar nova especialidade
       const newSpecialty = {
-        idPrestadorServico: prestadorId,
-        idEspecialidade: parseInt(selectedSpecialty),
-        preco: parseFloat(hourlyPrice),
+        PrestadorServico_Id: parseInt(prestadorId),
+        Especialidade_Id: parseInt(selectedSpecialty),
+        PrecoHora: parseFloat(hourlyPrice) || 0.0,
       };
 
-      await api.post("/Especialidade", newSpecialty);
+      if (selectedSpecialty && hourlyPrice) {
+        await api.put("/PrestadorServicoEspecialidade", {
+          ...newSpecialty,
+          id: selectedSpecialtyId,
+        });
+        toast.success("Especialidade atualizada com sucesso!");
+      } else {
+        await api.post("/PrestadorServicoEspecialidade", newSpecialty);
+        toast.success("Especialidade adicionada com sucesso!");
+      }
 
-      // Atualizar lista de especialidades
       await fetchSpecialties();
 
       setShowSpecialtyModal(false);
       setSelectedSpecialty("");
       setHourlyPrice("");
-      toast.success("Especialidade adicionada com sucesso!");
+      setSelectedSpecialtyId(null);
     } catch (error) {
       console.error("Erro ao adicionar especialidade:", error);
       toast.error("Erro ao adicionar especialidade");
@@ -245,11 +295,13 @@ export default function ProfilePage() {
       const userId = parseInt(decodedUser.nameid);
       if (isNaN(userId)) return;
 
-      const prestadorResponse = await api.get(`/PrestadorServico/all_infos`);
+      const prestadorResponse = await api.get(
+        `/PrestadorServico/get_by_pessoa_id?id=${userId}`
+      );
       const prestadorId = prestadorResponse.data.id;
 
       const response = await api.get(
-        `/Especialidade/by-prestador/${prestadorId}`
+        `/PrestadorServicoEspecialidade/${prestadorId}/get-especialidades`
       );
       setSpecialties(response.data);
     } catch (error) {
@@ -257,7 +309,6 @@ export default function ProfilePage() {
     }
   };
 
-  // Verificar se está carregando ou não autenticado
   if (isLoading) {
     return (
       <div className="flex items-center justify-center h-64">
@@ -281,12 +332,10 @@ export default function ProfilePage() {
 
   return (
     <div className="space-y-6 p-6">
-      {/* Header da Página */}
       <div className="flex items-center justify-between">
         <h1 className="text-3xl font-bold tracking-tight">Meu Perfil</h1>
       </div>
 
-      {/* Card Principal do Perfil */}
       <Card>
         <CardHeader className="pb-6">
           <div className="flex items-center justify-between">
@@ -300,9 +349,7 @@ export default function ProfilePage() {
           </div>
         </CardHeader>
         <CardContent className="space-y-6">
-          {/* Seção da Foto e Informações Básicas */}
           <div className="flex items-center space-x-6">
-            {/* Foto de Perfil */}
             <div className="space-y-2">
               <input
                 id="fotoPerfil"
@@ -344,7 +391,6 @@ export default function ProfilePage() {
               </label>
             </div>
 
-            {/* Informações do Perfil */}
             <div className="flex-1 space-y-4">
               {isEditing ? (
                 <>
@@ -379,7 +425,6 @@ export default function ProfilePage() {
             </div>
           </div>
 
-          {/* Botões de Ação */}
           {isEditing && (
             <div className="flex space-x-3 pt-4">
               <Button onClick={handleSave} className="px-6">
@@ -395,9 +440,7 @@ export default function ProfilePage() {
         </CardContent>
       </Card>
 
-      {/* Informações Adicionais */}
       <div className="grid gap-6 md:grid-cols-2">
-        {/* Especialidades */}
         <Card>
           <CardHeader>
             <CardTitle>Especialidades</CardTitle>
@@ -419,14 +462,39 @@ export default function ProfilePage() {
               </div>
             ) : (
               <div className="space-y-4">
-                <div className="flex flex-wrap gap-2">
+                <div className="grid gap-4">
                   {specialties.map((specialty) => (
-                    <span
+                    <div
                       key={specialty.id}
-                      className="rounded-full bg-primary/10 px-3 py-1 text-sm text-primary"
+                      className="flex items-center justify-between p-4 border rounded-lg bg-card"
                     >
-                      {specialty.nome} - R$ {specialty.preco}/h
-                    </span>
+                      <div className="flex-1">
+                        <h4 className="font-semibold text-foreground">
+                          {especialidadesMap[
+                            specialty.especialidade_Id as keyof typeof especialidadesMap
+                          ] || "Especialidade"}
+                        </h4>
+                        <p className="text-sm text-muted-foreground">
+                          R$ {specialty.precoHora}/h
+                        </p>
+                      </div>
+                      <div className="flex space-x-2">
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          onClick={() => handleEditSpecialty(specialty)}
+                        >
+                          <Edit3 className="h-4 w-4" />
+                        </Button>
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          onClick={() => handleDeleteSpecialty(specialty.id)}
+                        >
+                          <X className="h-4 w-4" />
+                        </Button>
+                      </div>
+                    </div>
                   ))}
                 </div>
                 <Button
@@ -442,40 +510,31 @@ export default function ProfilePage() {
           </CardContent>
         </Card>
 
-        {/* Estatísticas */}
         <Card>
           <CardHeader>
-            <CardTitle>Estatísticas</CardTitle>
+            <CardTitle>Agenda</CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="space-y-3">
-              <div className="flex justify-between">
-                <span className="text-muted-foreground">
-                  Pacientes Atendidos
-                </span>
-                <span className="font-semibold">156</span>
-              </div>
-              <div className="flex justify-between">
-                <span className="text-muted-foreground">
-                  Anos de Experiência
-                </span>
-                <span className="font-semibold">8</span>
-              </div>
-              <div className="flex justify-between">
-                <span className="text-muted-foreground">Avaliação Média</span>
-                <span className="font-semibold">4.8 ⭐</span>
-              </div>
+            <div className="flex flex-col items-center justify-center py-8">
+              <p className="text-muted-foreground mb-4 text-center">
+                Nenhum agendamento para hoje
+              </p>
+              <Button variant="outline" className="w-full max-w-xs">
+                <Edit3 className="mr-2 h-4 w-4" />
+                Ver Agenda Completa
+              </Button>
             </div>
           </CardContent>
         </Card>
       </div>
 
-      {/* Modal para adicionar especialidade */}
       {showSpecialtyModal && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
           <div className="bg-background p-6 rounded-lg shadow-lg w-full max-w-md">
             <h3 className="text-lg font-semibold mb-4">
-              Adicionar Especialidade
+              {selectedSpecialty && hourlyPrice
+                ? "Editar Especialidade"
+                : "Adicionar Especialidade"}
             </h3>
 
             <div className="space-y-4">
@@ -518,6 +577,42 @@ export default function ProfilePage() {
               <Button
                 variant="outline"
                 onClick={() => setShowSpecialtyModal(false)}
+                className="flex-1"
+              >
+                Cancelar
+              </Button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Modal de confirmação para excluir especialidade */}
+      {showDeleteModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-background p-6 rounded-lg shadow-lg w-full max-w-md">
+            <h3 className="text-lg font-semibold mb-4 text-destructive">
+              Confirmar Exclusão
+            </h3>
+
+            <p className="text-muted-foreground mb-6">
+              Tem certeza que deseja excluir esta especialidade? Esta ação não
+              pode ser desfeita.
+            </p>
+
+            <div className="flex space-x-3">
+              <Button
+                variant="destructive"
+                onClick={confirmDeleteSpecialty}
+                className="flex-1"
+              >
+                Excluir
+              </Button>
+              <Button
+                variant="outline"
+                onClick={() => {
+                  setShowDeleteModal(false);
+                  setSpecialtyToDelete(null);
+                }}
                 className="flex-1"
               >
                 Cancelar

@@ -55,5 +55,13 @@ namespace API_HealthGo.Controllers
             var result = await _service.Delete(id);
             return Ok(result);
         }
+
+        [HttpGet("{id}/get-especialidades")]
+        public async Task<ActionResult<IEnumerable<PrestadorServicoEspecialidadeEntity>>> GetAllEspecialidadesById(int id)
+        {
+            var especialidades = await _service.GetAllEspecialidadesById(id);
+
+            return Ok(especialidades);
+        }
     }
 }

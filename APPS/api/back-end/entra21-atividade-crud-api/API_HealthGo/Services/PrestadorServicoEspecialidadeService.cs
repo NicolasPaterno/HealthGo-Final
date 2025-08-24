@@ -55,5 +55,10 @@ namespace API_HealthGo.Services
                 Message = "Relação Prestador/Especialidade excluída com sucesso!"
             };
         }
+
+        public async Task<IEnumerable<PrestadorServicoEspecialidadeEntity>> GetAllEspecialidadesById(int id)
+        {
+            return await _repository.GetAllEspecialidadesById(id);
+        }
     }
 }

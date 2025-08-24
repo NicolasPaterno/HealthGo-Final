@@ -12,5 +12,6 @@ namespace API_HealthGo.Contracts.Service
         Task<MessageResponse> Post(PrestadorServicoEspecialidadeInsertDTO entity);
         Task<MessageResponse> Update(PrestadorServicoEspecialidadeEntity entity);
         Task<MessageResponse> Delete(int id);
+        Task<IEnumerable<PrestadorServicoEspecialidadeEntity>> GetAllEspecialidadesById(int id);
     }
 }

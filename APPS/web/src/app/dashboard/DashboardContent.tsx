@@ -14,15 +14,15 @@ interface Reminder {
   id: number;
   dateTime: string;
   text: string;
-  type: 'consulta' | 'remédio' | 'outro'; // Changed 'outros' to 'outro'
+  type: "consulta" | "remédio" | "outro"; // Changed 'outros' to 'outro'
 }
 
 interface ApiReminder {
-    id: number;
-    titulo: string;
-    data: string;
-    tipo: 'Consulta' | 'Remédio' | 'Outro'; // Ensure this matches backend enum exactly
-    pessoa_Id: number;
+  id: number;
+  titulo: string;
+  data: string;
+  tipo: "Consulta" | "Remédio" | "Outro"; // Ensure this matches backend enum exactly
+  pessoa_Id: number;
 }
 
 interface User {
@@ -44,27 +44,38 @@ export default function DashboardContent() {
       try {
         const decodedUser = getAuthUser();
         if (!decodedUser) {
-          toast.error("Sessão expirada", { description: "Por favor, faça login novamente." });
+          toast.error("Sessão expirada", {
+            description: "Por favor, faça login novamente.",
+          });
           // Redirect to login if no valid token
-          window.location.href = '/login';
+          window.location.href = "/login";
           return;
         }
 
         // Fetch full user data from /Pessoa/me for up-to-date info
         // (Assuming you have implemented the /Pessoa/me endpoint as discussed previously)
-        const userResponse = await api.get(`/Pessoa/${parseInt(decodedUser.nameid)}`); // Fetching user by ID directly from token claim
+        const userResponse = await api.get(
+          `/Pessoa/${parseInt(decodedUser.nameid)}`
+        ); // Fetching user by ID directly from token claim
         setCurrentUser(userResponse.data);
 
         // Fetch reminders for the fetched user ID
-        const response = await api.get(`/Lembrete/Pessoa/${userResponse.data.id}`);
+        const response = await api.get(
+          `/Lembrete/Pessoa/${userResponse.data.id}`
+        );
         if (response.data && Array.isArray(response.data.data)) {
-          const formattedReminders = response.data.data.map((r: ApiReminder) => ({
-            id: r.id,
-            text: r.titulo,
-            dateTime: r.data,
-            // Convert to lowercase and ensure 'Outro' for consistency
-            type: r.tipo.toLowerCase() === 'outros' ? 'outro' : r.tipo.toLowerCase() as 'consulta' | 'remédio' | 'outro',
-          }));
+          const formattedReminders = response.data.data.map(
+            (r: ApiReminder) => ({
+              id: r.id,
+              text: r.titulo,
+              dateTime: r.data,
+              // Convert to lowercase and ensure 'Outro' for consistency
+              type:
+                r.tipo.toLowerCase() === "outros"
+                  ? "outro"
+                  : (r.tipo.toLowerCase() as "consulta" | "remédio" | "outro"),
+            })
+          );
           setReminders(formattedReminders);
         } else {
           setReminders([]);

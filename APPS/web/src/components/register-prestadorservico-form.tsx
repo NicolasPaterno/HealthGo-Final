@@ -14,7 +14,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
 import api from "@/services/api";
-import axios from "axios"; // Import axios for the API call
+import axios from "axios";
 
 export default function RegisterPrestadorServicoForm({
   className,
@@ -103,11 +103,9 @@ export default function RegisterPrestadorServicoForm({
     console.log(pessoaData);
 
     try {
-      // Criando a pessoa primeiro
       const pessoaResponse = await api.post("/Pessoa/return-id", pessoaData);
       const pessoaId = pessoaResponse.data.id;
 
-      // Depois, criando o prestador de serviço com o ID da pessoa
       const prestadorServicoData = {
         CNPJ: cnpj.trim() === "" ? null : cnpj,
         Observacao: observacao.trim() === "" ? null : observacao,
@@ -151,7 +149,6 @@ export default function RegisterPrestadorServicoForm({
         <CardContent>
           <form onSubmit={handleSubmit}>
             <div className="grid gap-4">
-              {/* Campos do Formulário com 'value' e 'onChange' atualizados */}
               <div className="grid gap-2">
                 <Label htmlFor="name">Nome</Label>
                 <Input
@@ -277,7 +274,6 @@ export default function RegisterPrestadorServicoForm({
                   />
                 </div>
               </div>
-              {/* Checkbox de cão guia */}
               <div className="flex items-center gap-2">
                 <Checkbox
                   id="guideDog"
@@ -289,10 +285,8 @@ export default function RegisterPrestadorServicoForm({
                 </Label>
               </div>
 
-              {/* Linha divisória */}
               <div className="h-px my-[2px] bg-gray-400 w-full mx-auto" />
 
-              {/* Campos extras do Prestador de Serviço */}
               <div className="grid gap-2">
                 <Label htmlFor="cnpj">CNPJ</Label>
                 <Input
@@ -314,7 +308,6 @@ export default function RegisterPrestadorServicoForm({
                 />
               </div>
 
-              {/* Botão de envio */}
               <Button type="submit" className="w-full" disabled={isCepLoading}>
                 {isCepLoading ? "Buscando CEP..." : "Criar conta"}
               </Button>

@@ -24,8 +24,8 @@ namespace API_HealthGo.Repositories
                 string sql = $@"
                     SELECT
                         ID AS {nameof(PrestadorServicoEspecialidadeEntity.Id)},
-                        PRESTADORSERVICO_ID AS {nameof(PrestadorServicoEspecialidadeEntity.PrestadorServicoId)},
-                        ESPECIALIDADE_ID AS {nameof(PrestadorServicoEspecialidadeEntity.EspecialidadeId)},
+                        PRESTADORSERVICO_ID AS {nameof(PrestadorServicoEspecialidadeEntity.PrestadorServico_Id)},
+                        ESPECIALIDADE_ID AS {nameof(PrestadorServicoEspecialidadeEntity.Especialidade_Id)},
                         PRECOHORA AS {nameof(PrestadorServicoEspecialidadeEntity.PrecoHora)}
                     FROM PrestadorServico_Especialidade;
                 ";
@@ -42,8 +42,8 @@ namespace API_HealthGo.Repositories
                 string sql = $@"
                     SELECT
                         ID AS {nameof(PrestadorServicoEspecialidadeEntity.Id)},
-                        PRESTADORSERVICO_ID AS {nameof(PrestadorServicoEspecialidadeEntity.PrestadorServicoId)},
-                        ESPECIALIDADE_ID AS {nameof(PrestadorServicoEspecialidadeEntity.EspecialidadeId)},
+                        PRESTADORSERVICO_ID AS {nameof(PrestadorServicoEspecialidadeEntity.PrestadorServico_Id)},
+                        ESPECIALIDADE_ID AS {nameof(PrestadorServicoEspecialidadeEntity.Especialidade_Id)},
                         PRECOHORA AS {nameof(PrestadorServicoEspecialidadeEntity.PrecoHora)}
                     FROM PrestadorServico_Especialidade
                     WHERE ID = @id;
@@ -60,7 +60,7 @@ namespace API_HealthGo.Repositories
                 INSERT INTO PrestadorServico_Especialidade
                     (PrestadorServico_Id, Especialidade_Id, PrecoHora)
                 VALUES
-                    (@PrestadorServicoId, @EspecialidadeId, @PrecoHora);
+                    (@PrestadorServico_Id, @Especialidade_Id, @PrecoHora);
             ";
 
             await _connection.Execute(sql, entity);
@@ -71,8 +71,8 @@ namespace API_HealthGo.Repositories
             string sql = @"
                 UPDATE PrestadorServico_Especialidade
                 SET
-                    PrestadorServico_Id = @PrestadorServicoId,
-                    Especialidade_Id = @EspecialidadeId,
+                    PrestadorServico_Id = @PrestadorServico_Id,
+                    Especialidade_Id = @Especialidade_Id,
                     PrecoHora = @PrecoHora
                 WHERE ID = @Id;
             ";
@@ -88,6 +88,18 @@ namespace API_HealthGo.Repositories
             ";
 
             await _connection.Execute(sql, new { id });
+        }
+
+        public async Task<IEnumerable<PrestadorServicoEspecialidadeEntity>> GetAllEspecialidadesById(int id)
+        {
+            string sql = @"
+            SELECT Id,PrestadorServico_Id,Especialidade_Id,PrecoHora FROM PrestadorServico_Especialidade WHERE PrestadorServico_Id = @id;
+        ";
+
+            using (var con = _connection.GetConnection())
+            {
+                return await con.QueryAsync<PrestadorServicoEspecialidadeEntity>(sql, new { id });
+            }
         }
     }
 }
