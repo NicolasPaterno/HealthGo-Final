@@ -53,5 +53,6 @@ namespace API_HealthGo.Controllers
         {
             return Ok(await _service.Update(prestadorServico));
         }
+
     }
 }

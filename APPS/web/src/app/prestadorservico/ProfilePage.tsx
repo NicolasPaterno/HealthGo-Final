@@ -16,18 +16,29 @@ export default function ProfilePage() {
   const [profileImage, setProfileImage] = useState(
     "/avatars/default-profile.jpg"
   );
-  const [name, setName] = useState("");
+
+  // Inicializar com dados do token descriptografado
+  const decodedUser = getAuthUser();
+  const [name, setName] = useState(decodedUser?.name || "");
   const [description, setDescription] = useState(
     "Descreva sua experiência, especialidades e abordagem profissional..."
   );
-  const [tempName, setTempName] = useState(name);
+  const [tempName, setTempName] = useState(decodedUser?.name || "");
   const [tempDescription, setTempDescription] = useState(description);
+
+  // Estados para especialidades
+  const [showSpecialtyModal, setShowSpecialtyModal] = useState(false);
+  const [selectedSpecialty, setSelectedSpecialty] = useState("");
+  const [hourlyPrice, setHourlyPrice] = useState("");
+  const [specialties, setSpecialties] = useState<
+    Array<{ id: number; nome: string; preco: number }>
+  >([]);
 
   // Buscar informações do usuário quando a página carregar
   useEffect(() => {
     const fetchUserInfo = async () => {
       try {
-        // 1. Primeiro, usar o token descriptografado para carregamento imediato
+        // 1. Verificar se temos o token descriptografado
         const decodedUser = getAuthUser();
         if (!decodedUser) {
           console.warn("Token não encontrado ou inválido");
@@ -43,16 +54,15 @@ export default function ProfilePage() {
           throw new Error("ID do usuário inválido no token.");
         }
 
-        // 2. Preencher nome imediatamente com o token (carregamento rápido)
-        setName(decodedUser.name || "");
-        setTempName(decodedUser.name || "");
+        // 2. O nome já está sendo exibido do token (carregamento imediato)
+        // Agora vamos buscar informações adicionais da API
 
-        // 3. Buscar informações completas da API
+        // 3. Buscar informações completas da pessoa da API
         const response = await api.get(`/Pessoa/${userId}`);
         const userData = response.data;
 
         // 4. Atualizar com dados reais da API (se disponíveis)
-        if (userData.nome) {
+        if (userData.nome && userData.nome !== decodedUser.name) {
           setName(userData.nome);
           setTempName(userData.nome);
         }
@@ -62,10 +72,8 @@ export default function ProfilePage() {
           setProfileImage(userData.enderecoFoto);
         }
 
-        // 6. Buscar observação do prestador de serviço
-        const prestadorResponse = await api.get(
-          `/PrestadorServico/by-pessoa/${userId}`
-        );
+        // 6. Buscar todas as informações do prestador de serviço usando a rota all_infos
+        const prestadorResponse = await api.get(`/PrestadorServico/all_infos`);
         const prestadorData = prestadorResponse.data;
 
         // 7. Atualizar descrição
@@ -81,17 +89,13 @@ export default function ProfilePage() {
         }
       } catch (error) {
         console.error("Erro ao buscar informações do usuário:", error);
-        // Fallback: usar informações do token descriptografado
-        const decodedUser = getAuthUser();
-        if (decodedUser) {
-          setName(decodedUser.name || "");
-          setTempName(decodedUser.name || "");
-        }
+        // O nome já está sendo exibido do token, então não precisamos fazer fallback
       }
     };
 
     if (isAuthenticated) {
       fetchUserInfo();
+      fetchSpecialties(); // Buscar especialidades também
     }
   }, [isAuthenticated]);
 
@@ -143,24 +147,27 @@ export default function ProfilePage() {
         pessoaUpdateData.enderecoFoto = profileImage; // ✅ Foto atualizada condicionalmente (usando camelCase)
       }
 
-      // Remover apenas o role (não deve ser alterado)
-      delete pessoaUpdateData.role;
+      // Definir role fixo como 2
+      pessoaUpdateData.role = 2;
 
       console.log("Dados para atualizar pessoa:", pessoaUpdateData);
-      await api.put(`/Pessoa/${userId}`, pessoaUpdateData);
+      const response = await api.put("/Pessoa", pessoaUpdateData);
 
-      // 3. Buscar o ID do prestador de serviço
-      const prestadorResponse = await api.get(
-        `/PrestadorServico/by-pessoa/${userId}`
-      );
+      // 3. Buscar o ID do prestador de serviço usando a rota all_infos
+      const prestadorResponse = await api.get(`/PrestadorServico/all_infos`);
+
       const prestadorId = prestadorResponse.data.id;
 
       // 4. Atualizar a observação na tabela PrestadorServico
       const prestadorUpdateData = {
+        id: prestadorId,
+        idPessoa: userId,
+        cnpj: prestadorResponse.data.cnpj,
         observacao: tempDescription,
       };
 
-      await api.put(`/PrestadorServico/${prestadorId}`, prestadorUpdateData);
+      console.log("Dados para atualizar prestador:", prestadorUpdateData);
+      const response1 = await api.put("/PrestadorServico", prestadorUpdateData);
 
       // Atualizar estado local
       setName(tempName);
@@ -177,6 +184,77 @@ export default function ProfilePage() {
     setTempName(name);
     setTempDescription(description);
     setIsEditing(false);
+  };
+
+  // Funções para gerenciar especialidades
+  const handleAddSpecialty = () => {
+    setShowSpecialtyModal(true);
+    setSelectedSpecialty("");
+    setHourlyPrice("");
+  };
+
+  const handleSaveSpecialty = async () => {
+    if (!selectedSpecialty || !hourlyPrice) {
+      toast.error("Por favor, preencha todos os campos");
+      return;
+    }
+
+    try {
+      const decodedUser = getAuthUser();
+      if (!decodedUser) {
+        toast.error("Erro de autenticação");
+        return;
+      }
+
+      const userId = parseInt(decodedUser.nameid);
+      if (isNaN(userId)) {
+        throw new Error("ID do usuário inválido");
+      }
+
+      // Buscar o ID do prestador de serviço
+      const prestadorResponse = await api.get(`/PrestadorServico/all_infos`);
+      const prestadorId = prestadorResponse.data.id;
+
+      // Criar nova especialidade
+      const newSpecialty = {
+        idPrestadorServico: prestadorId,
+        idEspecialidade: parseInt(selectedSpecialty),
+        preco: parseFloat(hourlyPrice),
+      };
+
+      await api.post("/Especialidade", newSpecialty);
+
+      // Atualizar lista de especialidades
+      await fetchSpecialties();
+
+      setShowSpecialtyModal(false);
+      setSelectedSpecialty("");
+      setHourlyPrice("");
+      toast.success("Especialidade adicionada com sucesso!");
+    } catch (error) {
+      console.error("Erro ao adicionar especialidade:", error);
+      toast.error("Erro ao adicionar especialidade");
+    }
+  };
+
+  const fetchSpecialties = async () => {
+    try {
+      const decodedUser = getAuthUser();
+      if (!decodedUser) return;
+
+      const userId = parseInt(decodedUser.nameid);
+      if (isNaN(userId)) return;
+
+      const prestadorResponse = await api.get(`/PrestadorServico/all_infos`);
+      const prestadorId = prestadorResponse.data.id;
+
+      const response = await api.get(
+        `/Especialidade/by-prestador/${prestadorId}`
+      );
+      setSpecialties(response.data);
+    } catch (error) {
+      console.error("Erro ao buscar especialidades:", error);
+    }
   };
 
   // Verificar se está carregando ou não autenticado
@@ -325,20 +403,42 @@ export default function ProfilePage() {
             <CardTitle>Especialidades</CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="flex flex-wrap gap-2">
-              <span className="rounded-full bg-primary/10 px-3 py-1 text-sm text-primary">
-                Terapia Cognitivo-Comportamental
-              </span>
-              <span className="rounded-full bg-primary/10 px-3 py-1 text-sm text-primary">
-                Ansiedade
-              </span>
-              <span className="rounded-full bg-primary/10 px-3 py-1 text-sm text-primary">
-                Depressão
-              </span>
-              <span className="rounded-full bg-primary/10 px-3 py-1 text-sm text-primary">
-                Desenvolvimento Pessoal
-              </span>
-            </div>
+            {specialties.length === 0 ? (
+              <div className="flex flex-col items-center justify-center py-8">
+                <p className="text-muted-foreground mb-4 text-center">
+                  Nenhuma especialidade cadastrada
+                </p>
+                <Button
+                  variant="outline"
+                  className="w-full max-w-xs"
+                  onClick={handleAddSpecialty}
+                >
+                  <Edit3 className="mr-2 h-4 w-4" />
+                  Adicionar Especialidade
+                </Button>
+              </div>
+            ) : (
+              <div className="space-y-4">
+                <div className="flex flex-wrap gap-2">
+                  {specialties.map((specialty) => (
+                    <span
+                      key={specialty.id}
+                      className="rounded-full bg-primary/10 px-3 py-1 text-sm text-primary"
+                    >
+                      {specialty.nome} - R$ {specialty.preco}/h
+                    </span>
+                  ))}
+                </div>
+                <Button
+                  variant="outline"
+                  className="w-full"
+                  onClick={handleAddSpecialty}
+                >
+                  <Edit3 className="mr-2 h-4 w-4" />
+                  Adicionar Mais Especialidades
+                </Button>
+              </div>
+            )}
           </CardContent>
         </Card>
 
@@ -369,6 +469,63 @@ export default function ProfilePage() {
           </CardContent>
         </Card>
       </div>
+
+      {/* Modal para adicionar especialidade */}
+      {showSpecialtyModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-background p-6 rounded-lg shadow-lg w-full max-w-md">
+            <h3 className="text-lg font-semibold mb-4">
+              Adicionar Especialidade
+            </h3>
+
+            <div className="space-y-4">
+              <div>
+                <Label htmlFor="specialty">Especialidade</Label>
+                <select
+                  id="specialty"
+                  value={selectedSpecialty}
+                  onChange={(e) => setSelectedSpecialty(e.target.value)}
+                  className="w-full p-2 border rounded-md bg-background"
+                >
+                  <option value="">Selecione uma especialidade</option>
+                  <option value="1">Assistente Pessoal</option>
+                  <option value="2">Cuidador de Idosos</option>
+                  <option value="3">Enfermeiro</option>
+                  <option value="4">Fisioterapeuta</option>
+                  <option value="5">Psicólogo</option>
+                  <option value="6">Nutricionista</option>
+                </select>
+              </div>
+
+              <div>
+                <Label htmlFor="price">Preço por Hora (R$)</Label>
+                <Input
+                  id="price"
+                  type="number"
+                  step="0.01"
+                  min="0"
+                  value={hourlyPrice}
+                  onChange={(e) => setHourlyPrice(e.target.value)}
+                  placeholder="0.00"
+                />
+              </div>
+            </div>
+
+            <div className="flex space-x-3 mt-6">
+              <Button onClick={handleSaveSpecialty} className="flex-1">
+                Salvar
+              </Button>
+              <Button
+                variant="outline"
+                onClick={() => setShowSpecialtyModal(false)}
+                className="flex-1"
+              >
+                Cancelar
+              </Button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

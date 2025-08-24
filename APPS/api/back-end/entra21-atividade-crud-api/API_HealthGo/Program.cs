@@ -1,5 +1,6 @@
 using API_HealthGo.Contracts.Infrastructure;
 using API_HealthGo.Contracts.Repositories;
+using API_HealthGo.Contracts.Repository;
 using API_HealthGo.Contracts.Service;
 using API_HealthGo.Infrastructure;
 using API_HealthGo.Repositories;
@@ -86,6 +87,8 @@ namespace API_HealthGo
             builder.Services.AddHttpClient();
             builder.Services.AddScoped<IHospitalService, HospitalService>();
 
+            builder.Services.AddScoped<IPrestadorServicoEspecialidadeRepository, PrestadorServicoEspecialidadeRepository>();
+            builder.Services.AddScoped<IPrestadorServicoEspecialidadeService, PrestadorServicoEspecialidadeService>();
 
             builder.Services.AddScoped<IAeroportoService, AeroportoService>();
             builder.Services.AddScoped<IAeroportoRepository, AeroportoRepository>();
