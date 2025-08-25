@@ -117,12 +117,26 @@ export default function HospitalsPage() {
   };
 
   const handleHotelClick = (hospital: HospitalType) => {
-    navigate('/hotels', {
-      state: {
-        selectedHospital: hospital,
-        searchLocation: `${hospital.municipio}, ${hospital.uf}`
-      }
-    });
+    // Construir parâmetros de busca para a página de hotéis
+    const searchParams = new URLSearchParams();
+
+    // Adicionar cidade do hospital
+    if (hospital.municipio) {
+      searchParams.set('city', hospital.municipio);
+    }
+
+    // Adicionar estado do hospital
+    if (hospital.uf) {
+      searchParams.set('state', hospital.uf);
+    }
+
+    // Adicionar bairro como termo de busca se disponível
+    if (hospital.bairro) {
+      searchParams.set('search', hospital.bairro);
+    }
+
+    // Navegar para a página de hotéis com os filtros aplicados
+    navigate(`/dashboard/hotels?${searchParams.toString()}`);
   };
 
   return (
