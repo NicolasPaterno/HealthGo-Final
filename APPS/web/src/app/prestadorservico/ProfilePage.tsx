@@ -37,7 +37,7 @@ export default function ProfilePage() {
   );
   const [specialties, setSpecialties] = useState<
     Array<{
-      id: number;
+      id?: number;
       prestadorServico_Id: number;
       especialidade_Id: number;
       precoHora: number;
@@ -264,7 +264,7 @@ export default function ProfilePage() {
         PrecoHora: parseFloat(hourlyPrice) || 0.0,
       };
 
-      if (selectedSpecialty && hourlyPrice) {
+      if (selectedSpecialtyId) {
         await api.put("/PrestadorServicoEspecialidade", {
           ...newSpecialty,
           id: selectedSpecialtyId,
@@ -489,7 +489,7 @@ export default function ProfilePage() {
                         <Button
                           variant="outline"
                           size="sm"
-                          onClick={() => handleDeleteSpecialty(specialty.id)}
+                          onClick={() => handleDeleteSpecialty(specialty.id || 0)}
                         >
                           <X className="h-4 w-4" />
                         </Button>

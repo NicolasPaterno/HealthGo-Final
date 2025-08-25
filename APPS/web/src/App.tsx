@@ -65,6 +65,9 @@ const CadastrarServicoPage = lazy(
 const ViewServicosPage = lazy(
   () => import("./app/prestadorservico/ViewServicosPage")
 );
+const PrestadoresPage = lazy(
+  () => import("./app/prestadorservico/PrestadoresPage")
+);
 
 function App() {
   return (
@@ -98,6 +101,7 @@ function App() {
                   <Route path="caregivers" element={<CaregiversPage />} />
                   <Route path="calendar" element={<CalendarPage />} />
                   <Route path="hospitals" element={<HospitalsPage />} />
+                  <Route path="prestadores" element={<PrestadoresPage />} />
                 </Route>
               </Route>
 
