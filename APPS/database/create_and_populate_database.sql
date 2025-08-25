@@ -201,6 +201,7 @@ CREATE TABLE IF NOT EXISTS `PrestadorServico_Especialidade` (
   `Id` INT NOT NULL AUTO_INCREMENT,
   `PrestadorServico_Id` INT NOT NULL,
   `Especialidade_Id` INT NOT NULL,
+  `PrecoHora` DECIMAL(10,2) NOT NULL,
   PRIMARY KEY (`Id`),
   INDEX `fk_PrestadorServico_Especialidade_PrestadorServico1_idx` (`PrestadorServico_Id` ASC) VISIBLE,
   INDEX `fk_PrestadorServico_Especialidade_Especialidade1_idx` (`Especialidade_Id` ASC) VISIBLE,
