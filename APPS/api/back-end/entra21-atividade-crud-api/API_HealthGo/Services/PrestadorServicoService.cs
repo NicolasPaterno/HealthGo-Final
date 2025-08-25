@@ -69,5 +69,10 @@ namespace API_HealthGo.Services
         {
             return await _repository.GetByPessoaId(id);
         }
+
+        public async Task<IEnumerable<PrestadorServicoEspecialidadeDTO>> GetAllPrestadoresComEspecialidades()
+        {
+            return await _repository.GetAllPrestadoresComEspecialidadesAsync();
+        }
     }
 }

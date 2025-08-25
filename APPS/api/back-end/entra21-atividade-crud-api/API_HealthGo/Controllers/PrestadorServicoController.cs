@@ -3,6 +3,7 @@ using API_HealthGo.DTO;
 using API_HealthGo.Entities;
 using API_HealthGo.Responses;
 using API_HealthGo.Responses.MessageResponse;
+using API_HealthGo.Services;
 using Microsoft.AspNetCore.Mvc;
 
 namespace API_HealthGo.Controllers
@@ -60,5 +61,15 @@ namespace API_HealthGo.Controllers
             return Ok(await _service.GetByPessoaId(id));
         }
 
+        [HttpGet("com-especialidades")]
+        public async Task<ActionResult<IEnumerable<PrestadorServicoEspecialidadeDTO>>> GetAllPrestadoresComEspecialidades()
+        {
+            var prestadores = await _service.GetAllPrestadoresComEspecialidades();
+            if (prestadores == null || !prestadores.Any())
+            {
+                return NotFound();
+            }
+            return Ok(prestadores);
+        }
     }
 }

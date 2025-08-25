@@ -173,5 +173,45 @@ namespace API_HealthGo.Repository
                 return prestadorServico;
             }
         }
+
+        public async Task<IEnumerable<PrestadorServicoEspecialidadeDTO>> GetAllPrestadoresComEspecialidadesAsync()
+        {
+            using (MySqlConnection con = _connection.GetConnection())
+            {
+                string sql = @"
+                    SELECT
+                        p.NOME AS NomePessoa,
+                        p.EMAIL AS Email,
+                        c.NOME AS Cidade,
+                        e.NOME AS Estado,
+                        p.TELEFONE AS Telefone,
+                        p.ROLE AS ROLE,
+                        p.RUA AS Rua,
+                        p.NUMEROENDERECO AS NumeroEndereco,
+                        p.BAIRRO AS Bairro,
+                        p.ENDERECOFOTO AS EnderecoFoto,
+                        pse.PRECOHORA AS PrecoHora,
+                        ps.OBSERVACAO AS Observacao,
+                        esp.NOME AS Especialidade
+                    FROM
+                        PrestadorServico ps
+                    INNER JOIN
+                        pessoa p ON ps.Pessoa_Id = p.Id
+                    INNER JOIN
+                        cidade c ON p.Cidade_Id = c.Id
+                    INNER JOIN
+                        estado e ON c.Estado_Id = e.Id
+                    INNER JOIN
+                        prestadorservico_especialidade pse ON ps.Id = pse.PrestadorServico_Id
+                    INNER JOIN
+                        especialidade esp ON pse.Especialidade_Id = esp.Id;
+                ";
+
+                // Dapper irá mapear automaticamente os campos da sua query para as propriedades do DTO
+                // com base nos aliases que correspondem aos nomes das propriedades.
+                var result = await con.QueryAsync<PrestadorServicoEspecialidadeDTO>(sql);
+                return result;
+            }
+        }
     }
 }

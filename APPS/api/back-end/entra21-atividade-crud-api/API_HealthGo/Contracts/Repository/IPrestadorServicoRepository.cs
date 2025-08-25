@@ -19,5 +19,7 @@ namespace API_HealthGo.Contracts.Repositories
         Task Update(PrestadorServicoEntity prestadorServico);
 
         Task<PrestadorServicoEntity> GetByPessoaId(int id);
+
+        Task<IEnumerable<PrestadorServicoEspecialidadeDTO>> GetAllPrestadoresComEspecialidadesAsync();
     }
 }
