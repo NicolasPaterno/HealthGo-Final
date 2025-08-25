@@ -358,6 +358,25 @@ CREATE TABLE IF NOT EXISTS `Imagem` (
   PRIMARY KEY (`Id`)
 ) ENGINE = InnoDB;
 
+
+-- -----------------------------------------------------
+-- Table `HealthGo`.`TokenRecuperacaoSenha`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `HealthGo`.`TokenRecuperacaoSenha` (
+  `Id` INT NOT NULL AUTO_INCREMENT,
+  `Token` VARCHAR(255) NOT NULL,
+  `DataExpiracao` DATETIME NOT NULL,
+  `Pessoa_Id` INT NOT NULL,
+  PRIMARY KEY (`Id`),
+  INDEX `fk_TokenRecuperacaoSenha_Pessoa1_idx` (`Pessoa_Id` ASC) VISIBLE,
+  CONSTRAINT `fk_TokenRecuperacaoSenha_Pessoa1`
+    FOREIGN KEY (`Pessoa_Id`)
+    REFERENCES `HealthGo`.`Pessoa` (`Id`)
+    ON DELETE CASCADE
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;
+
+
 -- =====================================================
 -- 3. INSERÇÃO DE DADOS BÁSICOS
 -- =====================================================
@@ -664,7 +683,7 @@ SELECT
 UNION ALL
 SELECT 
     'PRÓXIMOS PASSOS:' as Status,
-    '1. Configure a string de conexão no appsettings.json' as Mensagem
+    '1. Configure a string de conexão no appsettings.json' as Mensagem;
 UNION ALL
 SELECT 
     '' as Status,

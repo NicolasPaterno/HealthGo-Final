@@ -5,9 +5,9 @@ using API_HealthGo.Entities;
 using Dapper;
 using MySql.Data.MySqlClient;
 
-namespace API_HealthGo.Repository
+namespace API_HealthGo.Repositories
 {
-    class CidadeRepository : ICidadeRepository
+    public class CidadeRepository : ICidadeRepository
     {
         private IConnection _connection;
 

@@ -70,12 +70,16 @@ export function AddHotelGerenteForm({ className, ...props }: React.ComponentProp
   const [descricao, setDescricao] = useState("");
   const [cidade, setCidade] = useState("");
   const [estado, setEstado] = useState("");
+  const [latitude, setLatitude] = useState("");
+  const [longitude, setLongitude] = useState("");
 
   // Estados de controle
   const [loading, setLoading] = useState(false);
   const [isCepLoading, setIsCepLoading] = useState(false);
+  const [isGeocoding, setIsGeocoding] = useState(false);
   const [enderecoPreenchido, setEnderecoPreenchido] = useState(false);
   const [editandoEndereco, setEditandoEndereco] = useState(false);
+  const [coordenadasValidas, setCoordenadasValidas] = useState(false);
 
   const handleFotoChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
@@ -123,6 +127,11 @@ export function AddHotelGerenteForm({ className, ...props }: React.ComponentProp
         description: `${data.logradouro}, ${data.bairro}, ${data.localidade} - ${data.uf}`
       });
 
+      // Geocodificar automaticamente o endereço
+      if (data.logradouro && data.bairro && data.localidade && data.uf) {
+        geocodificarEndereco(data.logradouro, data.bairro, data.localidade, data.uf);
+      }
+
     } catch (error) {
       toast.error("Erro ao buscar CEP", {
         description: "Verifique sua conexão com a internet."
@@ -132,6 +141,54 @@ export function AddHotelGerenteForm({ className, ...props }: React.ComponentProp
       setIsCepLoading(false);
     }
   }, []);
+
+  // Função para geocodificar endereço usando OpenStreetMap Nominatim
+  const geocodificarEndereco = async (rua: string, bairro: string, cidade: string, estado: string) => {
+    if (!rua || !bairro || !cidade || !estado) return;
+
+    setIsGeocoding(true);
+    try {
+      const address = `${rua}, ${bairro}, ${cidade}, ${estado}, Brasil`;
+      const response = await fetch(
+        `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(address)}&limit=1&countrycodes=br`
+      );
+
+      const data = await response.json();
+
+      if (data && data.length > 0) {
+        const { lat, lon } = data[0];
+        setLatitude(lat);
+        setLongitude(lon);
+        setCoordenadasValidas(true);
+
+        toast.success("Coordenadas encontradas!", {
+          description: `Latitude: ${lat}, Longitude: ${lon}`
+        });
+      } else {
+        setCoordenadasValidas(false);
+        toast.warning("Coordenadas não encontradas", {
+          description: "Você pode inserir as coordenadas manualmente"
+        });
+      }
+    } catch (error) {
+      console.error('Erro ao geocodificar endereço:', error);
+      setCoordenadasValidas(false);
+      toast.error("Erro ao buscar coordenadas", {
+        description: "Você pode inserir as coordenadas manualmente"
+      });
+    } finally {
+      setIsGeocoding(false);
+    }
+  };
+
+  // Função para geocodificar manualmente
+  const geocodificarManual = () => {
+    if (!rua || !bairro || !cidade || !estado) {
+      toast.error("Preencha o endereço completo primeiro");
+      return;
+    }
+    geocodificarEndereco(rua, bairro, cidade, estado);
+  };
 
   const handleCepBlur = (event: React.FocusEvent<HTMLInputElement>) => {
     const currentCep = event.target.value.replace(/\D/g, "");
@@ -199,29 +256,54 @@ export function AddHotelGerenteForm({ className, ...props }: React.ComponentProp
     // Validações obrigatórias
     if (!cnpj.replace(/\D/g, "")) erros.push("CNPJ é obrigatório");
     if (!nome.trim()) erros.push("Nome do hotel é obrigatório");
-    if (!tipo) erros.push("Tipo de estabelecimento é obrigatório");
+    if (nome.trim() && nome.length > 255) erros.push("Nome deve ter no máximo 255 caracteres");
+    if (!tipo.trim()) erros.push("Tipo de estabelecimento é obrigatório");
     if (!email.trim()) erros.push("Email é obrigatório");
     if (!telefone.replace(/\D/g, "")) erros.push("Telefone é obrigatório");
     if (!cep.replace(/\D/g, "")) erros.push("CEP é obrigatório");
     if (!rua.trim()) erros.push("Rua é obrigatória");
+    if (rua.trim() && rua.length > 255) erros.push("Rua deve ter no máximo 255 caracteres");
     if (!numeroEndereco.trim()) erros.push("Número do endereço é obrigatório");
+    if (numeroEndereco.trim() && numeroEndereco.length > 255) erros.push("Número do endereço deve ter no máximo 255 caracteres");
     if (!bairro.trim()) erros.push("Bairro é obrigatório");
+    if (bairro.trim() && bairro.length > 255) erros.push("Bairro deve ter no máximo 255 caracteres");
     if (!cidade.trim()) erros.push("Cidade é obrigatória");
+    if (cidade.trim() && cidade.length > 255) erros.push("Cidade deve ter no máximo 255 caracteres");
     if (!estado.trim()) erros.push("Estado é obrigatório");
+    if (estado.trim() && estado.length > 4) erros.push("Estado deve ter no máximo 4 caracteres");
 
     // Validações de formato
     const cepLimpo = cep.replace(/\D/g, "");
     if (cepLimpo.length !== 8) erros.push("CEP deve ter 8 dígitos");
+    if (cepLimpo.length > 0 && cepLimpo.length < 8) erros.push("CEP deve ter 8 dígitos");
+    if (cepLimpo.length > 20) erros.push("CEP deve ter no máximo 20 caracteres");
 
     const cnpjLimpo = cnpj.replace(/\D/g, "");
     if (cnpjLimpo.length !== 14) erros.push("CNPJ deve ter 14 dígitos");
+    if (cnpjLimpo.length > 0 && cnpjLimpo.length < 14) erros.push("CNPJ deve ter 14 dígitos");
 
     const telefoneLimpo = telefone.replace(/\D/g, "");
     if (telefoneLimpo.length < 10) erros.push("Telefone deve ter pelo menos 10 dígitos");
+    if (telefoneLimpo.length > 0 && telefoneLimpo.length < 10) erros.push("Telefone deve ter pelo menos 10 dígitos");
+    if (telefoneLimpo.length > 45) erros.push("Telefone deve ter no máximo 45 caracteres");
 
     // Validação de email
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (email.trim() && !emailRegex.test(email)) erros.push("Email inválido");
+    if (email.trim() && email.length > 150) erros.push("Email deve ter no máximo 150 caracteres");
+
+    // Validações de coordenadas
+    if (latitude && (isNaN(parseFloat(latitude)) || parseFloat(latitude) < -90 || parseFloat(latitude) > 90)) {
+      erros.push("Latitude deve ser um número entre -90 e 90");
+    }
+    if (longitude && (isNaN(parseFloat(longitude)) || parseFloat(longitude) < -180 || parseFloat(longitude) > 180)) {
+      erros.push("Longitude deve ser um número entre -180 e 180");
+    }
+
+    // Validações de campos opcionais
+    if (site && site.length > 255) erros.push("Site deve ter no máximo 255 caracteres");
+    if (acessibilidade && acessibilidade.length > 255) erros.push("Acessibilidade deve ter no máximo 255 caracteres");
+    if (descricao && descricao.length > 255) erros.push("Descrição deve ter no máximo 255 caracteres");
 
     return erros;
   };
@@ -249,23 +331,25 @@ export function AddHotelGerenteForm({ className, ...props }: React.ComponentProp
     const pessoaId = parseInt(user?.nameid || "0");
 
     const hotelData: HotelInsertDTO = {
-      cnpj: cnpj.replace(/\D/g, ""),
-      nome: nome.trim(),
-      tipo: tipo,
-      email: email.trim(),
-      telefone: telefone.replace(/\D/g, ""),
-      site: site.trim() || undefined,
-      acessibilidade: acessibilidade.trim() || undefined,
-      cep: cep.replace(/\D/g, ""),
-      bairro: bairro.trim(),
-      rua: rua.trim(),
-      numeroEndereco: numeroEndereco.trim(),
-      descricao: descricao.trim() || undefined,
-      ativo: true,
-      dataInicio: new Date().toISOString(),
-      cidadeNome: cidade.trim(),
-      estadoSigla: estado.trim(),
-      pessoa_Id: pessoaId
+      CNPJ: cnpj.replace(/\D/g, ""),
+      Nome: nome.trim(),
+      Tipo: tipo,
+      Email: email.trim(),
+      Telefone: telefone.replace(/\D/g, ""),
+      Site: site.trim() || null,
+      Acessibilidade: acessibilidade.trim() || null,
+      CEP: cep.replace(/\D/g, ""),
+      Bairro: bairro.trim(),
+      Rua: rua.trim(),
+      NumeroEndereco: numeroEndereco.trim(),
+      Descricao: descricao.trim() || null,
+      Ativo: true,
+      DataInicio: new Date().toISOString(), // Formato ISO que o ASP.NET Core aceita automaticamente
+      CidadeNome: cidade.trim(),
+      EstadoSigla: estado.trim(),
+      Latitude: latitude ? parseFloat(latitude) : null,
+      Longitude: longitude ? parseFloat(longitude) : null,
+      Pessoa_Id: pessoaId
     };
 
     try {
@@ -386,7 +470,7 @@ export function AddHotelGerenteForm({ className, ...props }: React.ComponentProp
               <div className="space-y-2">
                 <Label htmlFor="tipo">Tipo de Estabelecimento *</Label>
                 <Select value={tipo} onValueChange={setTipo}>
-                  <SelectTrigger>
+                  <SelectTrigger className={!tipo ? "border-red-500" : ""}>
                     <SelectValue placeholder="Selecione o tipo" />
                   </SelectTrigger>
                   <SelectContent>
@@ -398,6 +482,9 @@ export function AddHotelGerenteForm({ className, ...props }: React.ComponentProp
                     <SelectItem value="Casa">Casa</SelectItem>
                   </SelectContent>
                 </Select>
+                {!tipo && (
+                  <p className="text-sm text-red-500">Tipo de estabelecimento é obrigatório</p>
+                )}
               </div>
 
               <div className="space-y-2">
@@ -636,6 +723,123 @@ export function AddHotelGerenteForm({ className, ...props }: React.ComponentProp
                   <X className="h-4 w-4" />
                   Cancelar
                 </Button>
+              </div>
+            )}
+          </div>
+
+          {/* Seção de Coordenadas Geográficas */}
+          <div className="space-y-6">
+            <h3 className="text-xl font-semibold flex items-center gap-2">
+              <MapPin className="h-5 w-5" />
+              Coordenadas Geográficas
+              <Badge variant={coordenadasValidas ? "default" : "secondary"} className="ml-2">
+                {coordenadasValidas ? "✅ Válidas" : "⚠️ Pendentes"}
+              </Badge>
+            </h3>
+
+            <div className="p-4 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg">
+              <p className="text-sm text-blue-800 dark:text-blue-200 mb-3">
+                <strong>💡 Dica:</strong> As coordenadas são essenciais para que seu hotel apareça no mapa.
+                Elas são preenchidas automaticamente quando você busca o CEP, mas você também pode inserir manualmente.
+              </p>
+
+              <div className="flex gap-2">
+                <Button
+                  type="button"
+                  variant="outline"
+                  size="sm"
+                  onClick={geocodificarManual}
+                  disabled={isGeocoding || !rua || !bairro || !cidade || !estado}
+                  className="text-blue-600 border-blue-300"
+                >
+                  {isGeocoding ? (
+                    <div className="flex items-center gap-2">
+                      <div className="animate-spin rounded-full h-3 w-3 border-b-2 border-blue-600"></div>
+                      Buscando...
+                    </div>
+                  ) : (
+                    <>
+                      <MapPin className="h-3 w-3 mr-1" />
+                      Buscar Coordenadas
+                    </>
+                  )}
+                </Button>
+
+                {coordenadasValidas && (
+                  <Badge variant="default" className="bg-green-100 text-green-800 border-green-300">
+                    <MapPin className="h-3 w-3 mr-1" />
+                    Pronto para o mapa!
+                  </Badge>
+                )}
+              </div>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div className="space-y-2">
+                <Label htmlFor="latitude">
+                  Latitude
+                  <span className="text-xs text-muted-foreground ml-1">(-90 a 90)</span>
+                </Label>
+                <Input
+                  id="latitude"
+                  type="number"
+                  step="any"
+                  placeholder="Ex: -23.5505"
+                  value={latitude}
+                  onChange={(e) => {
+                    setLatitude(e.target.value);
+                    setCoordenadasValidas(false);
+                  }}
+                  className={latitude && (isNaN(parseFloat(latitude)) || parseFloat(latitude) < -90 || parseFloat(latitude) > 90) ? "border-red-500" : ""}
+                />
+                {latitude && (isNaN(parseFloat(latitude)) || parseFloat(latitude) < -90 || parseFloat(latitude) > 90) && (
+                  <p className="text-sm text-red-500">Latitude deve ser um número entre -90 e 90</p>
+                )}
+              </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="longitude">
+                  Longitude
+                  <span className="text-xs text-muted-foreground ml-1">(-180 a 180)</span>
+                </Label>
+                <Input
+                  id="longitude"
+                  type="number"
+                  step="any"
+                  placeholder="Ex: -46.6333"
+                  value={longitude}
+                  onChange={(e) => {
+                    setLongitude(e.target.value);
+                    setCoordenadasValidas(false);
+                  }}
+                  className={longitude && (isNaN(parseFloat(longitude)) || parseFloat(longitude) < -180 || parseFloat(longitude) > 180) ? "border-red-500" : ""}
+                />
+                {longitude && (isNaN(parseFloat(longitude)) || parseFloat(longitude) < -180 || parseFloat(longitude) > 180) && (
+                  <p className="text-sm text-red-500">Longitude deve ser um número entre -180 e 180</p>
+                )}
+              </div>
+            </div>
+
+            {/* Status das coordenadas */}
+            {latitude && longitude && coordenadasValidas && (
+              <div className="flex items-center gap-2 p-3 bg-green-50 border border-green-200 rounded-lg">
+                <Check className="h-4 w-4 text-green-600" />
+                <span className="text-sm text-green-700">
+                  Coordenadas válidas: {parseFloat(latitude).toFixed(6)}, {parseFloat(longitude).toFixed(6)}
+                </span>
+                <Badge variant="outline" className="ml-auto text-green-600 border-green-300">
+                  <MapPin className="h-3 w-3 mr-1" />
+                  Aparecerá no mapa
+                </Badge>
+              </div>
+            )}
+
+            {(!latitude || !longitude) && (
+              <div className="flex items-center gap-2 p-3 bg-orange-50 border border-orange-200 rounded-lg">
+                <MapPin className="h-4 w-4 text-orange-600" />
+                <span className="text-sm text-orange-700">
+                  Sem coordenadas: seu hotel não aparecerá no mapa
+                </span>
               </div>
             )}
           </div>

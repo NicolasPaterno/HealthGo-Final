@@ -6,11 +6,11 @@ namespace API_HealthGo.Controllers
 {
     [ApiController]
     [Route("[controller]")]
-    public class HospitaisController : ControllerBase
+    public class HospitalController : ControllerBase
     {
         private readonly IHospitalService _hospitalService;
 
-        public HospitaisController(IHospitalService hospitalService)
+        public HospitalController(IHospitalService hospitalService)
         {
             _hospitalService = hospitalService;
         }
