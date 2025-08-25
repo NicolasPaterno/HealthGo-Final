@@ -68,6 +68,8 @@ const ViewServicosPage = lazy(
 const PrestadoresPage = lazy(
   () => import("./app/prestadorservico/PrestadoresPage")
 );
+const LandingPage = lazy(() => import("./app/landing/LandingPage"));
+const WorkWithUsPage = lazy(() => import("./app/landing/WorkWithUsPage"));
 
 function App() {
   return (
@@ -148,7 +150,9 @@ function App() {
               {/* <Route path="/hotel/:id" element={<HotelDetailPage />} />*/}
             </Route>
 
-            <Route path="/" element={<Navigate to="/dashboard" />} />
+                         <Route path="/" element={<LandingPage />} />
+             <Route path="/landing" element={<LandingPage />} />
+             <Route path="/work-with-us" element={<WorkWithUsPage />} />
           </Routes>
         </Suspense>
         <CartSidebar />

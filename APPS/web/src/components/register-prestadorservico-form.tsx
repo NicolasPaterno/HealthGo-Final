@@ -16,6 +16,26 @@ import { Checkbox } from "@/components/ui/checkbox";
 import api from "@/services/api";
 import axios from "axios";
 
+const applyMask = (value: string, mask: string): string => {
+  let result = "";
+  let valueIndex = 0;
+  
+  for (let i = 0; i < mask.length && valueIndex < value.length; i++) {
+    if (mask[i] === "#") {
+      result += value[valueIndex];
+      valueIndex++;
+    } else {
+      result += mask[i];
+    }
+  }
+  
+  return result;
+};
+
+const removeMask = (value: string): string => {
+  return value.replace(/\D/g, "");
+};
+
 export default function RegisterPrestadorServicoForm({
   className,
   ...props
@@ -37,11 +57,10 @@ export default function RegisterPrestadorServicoForm({
   const [isCepLoading, setIsCepLoading] = useState(false);
   const [cidadeId, setCidadeId] = useState<number | null>(null);
   const [cnpj, setCnpj] = useState("");
-  const [observacao, setObservacao] = useState("");
 
   const handleCepBlur = useCallback(
     async (event: React.FocusEvent<HTMLInputElement>) => {
-      const currentCep = event.target.value.replace(/\D/g, "");
+      const currentCep = removeMask(event.target.value);
 
       if (currentCep.length !== 8) {
         return;
@@ -107,8 +126,7 @@ export default function RegisterPrestadorServicoForm({
       const pessoaId = pessoaResponse.data.id;
 
       const prestadorServicoData = {
-        CNPJ: cnpj.trim() === "" ? null : cnpj,
-        Observacao: observacao.trim() === "" ? null : observacao,
+        CNPJ: cnpj.trim() === "" ? null : removeMask(cnpj),
         Pessoa_Id: pessoaId,
       };
 
@@ -192,7 +210,12 @@ export default function RegisterPrestadorServicoForm({
                     placeholder="000.000.000-00"
                     required
                     value={cpf}
-                    onChange={(e) => setCpf(e.target.value)}
+                    onChange={(e) => {
+                      const value = removeMask(e.target.value);
+                      const masked = applyMask(value, "###.###.###-##");
+                      setCpf(masked);
+                    }}
+                    maxLength={14}
                   />
                 </div>
                 <div className="grid gap-2">
@@ -213,7 +236,14 @@ export default function RegisterPrestadorServicoForm({
                   type="tel"
                   placeholder="(00) 00000-0000"
                   value={telefone}
-                  onChange={(e) => setTelefone(e.target.value)}
+                  onChange={(e) => {
+                    const value = removeMask(e.target.value);
+                    const masked = value.length <= 10 
+                      ? applyMask(value, "(##) ####-####")
+                      : applyMask(value, "(##) #####-####");
+                    setTelefone(masked);
+                  }}
+                  maxLength={15}
                 />
               </div>
               <div className="grid grid-cols-2 gap-4">
@@ -224,8 +254,13 @@ export default function RegisterPrestadorServicoForm({
                     type="text"
                     placeholder="00000-000"
                     value={cep}
-                    onChange={(e) => setCep(e.target.value)}
+                    onChange={(e) => {
+                      const value = removeMask(e.target.value);
+                      const masked = applyMask(value, "#####-###");
+                      setCep(masked);
+                    }}
                     onBlur={handleCepBlur}
+                    maxLength={9}
                   />
                 </div>
                 <div className="grid gap-2">
@@ -294,17 +329,12 @@ export default function RegisterPrestadorServicoForm({
                   type="text"
                   placeholder="00.000.000/0000-00"
                   value={cnpj}
-                  onChange={(e) => setCnpj(e.target.value)}
-                />
-              </div>
-              <div className="grid gap-2">
-                <Label htmlFor="observacao">Observação</Label>
-                <Input
-                  id="observacao"
-                  type="text"
-                  placeholder="Informações adicionais (opcional)"
-                  value={observacao}
-                  onChange={(e) => setObservacao(e.target.value)}
+                  onChange={(e) => {
+                    const value = removeMask(e.target.value);
+                    const masked = applyMask(value, "##.###.###/####-##");
+                    setCnpj(masked);
+                  }}
+                  maxLength={18}
                 />
               </div>
 
