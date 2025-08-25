@@ -29,7 +29,7 @@ export default function PrestadoresPage() {
   const [filteredPrestadores, setFilteredPrestadores] = useState<PrestadorServico[]>([]);
   const [selectedEspecialidade, setSelectedEspecialidade] = useState<string>("todas");
   const [selectedEstado, setSelectedEstado] = useState<string>("todos");
-  const [selectedCidade, setSelectedCidade] = useState<string>("todas");
+  const [selectedCidade, setSelectedCidade] = useState<string>("");
   const [isLoading, setIsLoading] = useState(true);
   const [especialidades, setEspecialidades] = useState<string[]>([]);
   const [estados, setEstados] = useState<string[]>([]);
@@ -40,7 +40,9 @@ export default function PrestadoresPage() {
   }, []);
 
   useEffect(() => {
-    filterPrestadores();
+    if (prestadores.length > 0) {
+      filterPrestadores();
+    }
   }, [selectedEspecialidade, selectedEstado, selectedCidade, prestadores]);
 
   const fetchPrestadores = async () => {
@@ -50,6 +52,7 @@ export default function PrestadoresPage() {
       
       if (response.data && Array.isArray(response.data)) {
         setPrestadores(response.data);
+        setFilteredPrestadores(response.data);
         
         const especialidadesUnicas = [...new Set(response.data.map((p: PrestadorServico) => p.especialidade))];
         setEspecialidades(especialidadesUnicas.sort());
@@ -69,7 +72,7 @@ export default function PrestadoresPage() {
   };
 
   const filterPrestadores = () => {
-    let filtered = prestadores;
+    let filtered = [...prestadores];
 
     if (selectedEspecialidade !== "todas") {
       filtered = filtered.filter(prestador => prestador.especialidade === selectedEspecialidade);
@@ -232,8 +235,7 @@ export default function PrestadoresPage() {
         </div>
       </div>
 
-      {/* Catálogo por Categorias */}
-      {selectedEspecialidade === "todas" ? (
+      {selectedEspecialidade === "todas" && filteredPrestadores.length > 0 ? (
         <div className="space-y-8">
           {Object.entries(groupedPrestadores).map(([especialidade, prestadoresCategoria]) => (
             <div key={especialidade} className="space-y-4">
@@ -414,8 +416,7 @@ export default function PrestadoresPage() {
         </div>
       )}
 
-      {/* Estado vazio */}
-      {Object.keys(groupedPrestadores).length === 0 && (
+      {filteredPrestadores.length === 0 && !isLoading && (
         <div className="text-center py-12">
           <div className="text-muted-foreground">
             <Users className="mx-auto h-12 w-12 mb-4 opacity-50" />
