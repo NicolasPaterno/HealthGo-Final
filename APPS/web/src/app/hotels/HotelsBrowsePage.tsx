@@ -6,6 +6,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Badge } from '@/components/ui/badge';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Combobox } from '@/components/ui/combobox';
 import { Slider } from '@/components/ui/slider';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Search, MapPin, Building, Filter, Eye, Map } from 'lucide-react';
@@ -45,8 +46,7 @@ export default function HotelsBrowsePage() {
   const [hotels, setHotels] = useState<HotelWithRooms[]>([]);
   const [filteredHotels, setFilteredHotels] = useState<HotelWithRooms[]>([]);
   const [loading, setLoading] = useState(true);
-  const [cities, setCities] = useState<string[]>([]);
-  const [states, setStates] = useState<string[]>([]);
+  const [allCities, setAllCities] = useState<{ name: string; state: string }[]>([]);
   const [viewMode, setViewMode] = useState<'list' | 'map'>('list');
   const [selectedHotel, setSelectedHotel] = useState<HotelWithRooms | null>(null);
 
@@ -55,6 +55,12 @@ export default function HotelsBrowsePage() {
     const cityParam = searchParams.get('city');
     const searchParam = searchParams.get('search');
     const stateParam = searchParams.get('state');
+
+    console.log('Parâmetros da URL recebidos:', {
+      city: cityParam,
+      search: searchParam,
+      state: stateParam
+    });
 
     return {
       search: searchParam || '',
@@ -68,7 +74,74 @@ export default function HotelsBrowsePage() {
   };
 
   const [filters, setFilters] = useState<Filters>(getInitialFilters);
-  const [showLocationInfo, setShowLocationInfo] = useState(false);
+
+  // Função para normalizar strings para comparação
+  const normalizeString = (str: string): string => {
+    return str.toLowerCase()
+      .normalize('NFD')
+      .replace(/[\u0300-\u036f]/g, '') // Remove acentos
+      .trim();
+  };
+
+  // Função para filtrar cidades baseado no estado selecionado
+  const getFilteredCities = (): { value: string; label: string }[] => {
+    if (filters.state === 'all') {
+      // Se nenhum estado está selecionado, mostrar todas as cidades
+      return allCities.map(city => ({
+        value: city.name,
+        label: `${city.name} - ${city.state}`
+      }));
+    } else {
+      // Filtrar cidades pelo estado selecionado
+      const filteredCities = allCities.filter(city =>
+        normalizeString(city.state) === normalizeString(filters.state)
+      );
+      return filteredCities.map(city => ({
+        value: city.name,
+        label: city.name
+      }));
+    }
+  };
+
+  // Função para obter o label correto da cidade selecionada
+  const getSelectedCityLabel = (): string => {
+    console.log('getSelectedCityLabel chamado:', {
+      filtersCity: filters.city,
+      filtersState: filters.state,
+      allCitiesLength: allCities.length,
+      allCities: allCities
+    });
+
+    if (filters.city === 'all') {
+      console.log('Retornando: Todas as cidades');
+      return 'Todas as cidades';
+    }
+
+    // Se ainda não temos cidades carregadas, retornar a cidade como está
+    if (allCities.length === 0) {
+      console.log('Cidades não carregadas ainda, retornando cidade original:', filters.city);
+      return filters.city;
+    }
+
+    const selectedCity = allCities.find(city =>
+      normalizeString(city.name) === normalizeString(filters.city)
+    );
+    console.log('Cidade encontrada:', selectedCity);
+
+    if (!selectedCity) {
+      console.log('Cidade não encontrada, retornando cidade original:', filters.city);
+      return filters.city;
+    }
+
+    if (filters.state === 'all') {
+      const label = `${selectedCity.name} - ${selectedCity.state}`;
+      console.log('Retornando label com estado:', label);
+      return label;
+    } else {
+      console.log('Retornando label sem estado:', selectedCity.name);
+      return selectedCity.name;
+    }
+  };
 
   const fetchHotels = async () => {
     try {
@@ -119,15 +192,23 @@ export default function HotelsBrowsePage() {
       setHotels(hotelsWithRooms);
       setFilteredHotels(hotelsWithRooms);
 
-      // Extrair cidades únicas
-      const uniqueCities = [...new Set(hotelsData.map((hotel: Hotel) => hotel.cidade?.nome).filter(Boolean))] as string[];
-      console.log('Cidades únicas encontradas:', uniqueCities);
-      setCities(uniqueCities);
+      // Extrair cidades únicas com seus estados
+      const citiesWithStates: { name: string; state: string }[] = hotelsData
+        .filter((hotel: Hotel) => hotel.cidade?.nome && hotel.cidade?.estado?.sigla)
+        .map((hotel: Hotel) => ({
+          name: hotel.cidade!.nome,
+          state: hotel.cidade!.estado!.sigla
+        }));
 
-      // Extrair estados únicos
-      const uniqueStates = [...new Set(hotelsData.map((hotel: Hotel) => hotel.cidade?.estado?.sigla).filter(Boolean))] as string[];
-      console.log('Estados únicos encontrados:', uniqueStates);
-      setStates(uniqueStates);
+      // Remover duplicatas usando Set
+      const uniqueCitiesSet = new Set(citiesWithStates.map(city => `${city.name}-${city.state}`));
+      const uniqueCitiesWithStates = Array.from(uniqueCitiesSet).map(cityKey => {
+        const [name, state] = cityKey.split('-');
+        return { name, state };
+      });
+
+      console.log('Cidades únicas encontradas:', uniqueCitiesWithStates);
+      setAllCities(uniqueCitiesWithStates);
     } catch (error) {
       console.error('Erro ao carregar hotéis:', error);
       toast.error('Erro ao carregar hotéis. Tente novamente.');
@@ -144,13 +225,6 @@ export default function HotelsBrowsePage() {
   useEffect(() => {
     const initialFilters = getInitialFilters();
     setFilters(initialFilters);
-
-    // Mostrar informação se há filtros aplicados
-    if (initialFilters.city !== 'all' || initialFilters.search || initialFilters.state !== 'all') {
-      setShowLocationInfo(true);
-      // Esconder a mensagem após 5 segundos
-      setTimeout(() => setShowLocationInfo(false), 5000);
-    }
   }, [searchParams]);
 
   // Aplicar filtros sempre que os filtros ou hotéis mudarem
@@ -160,32 +234,80 @@ export default function HotelsBrowsePage() {
     }
   }, [filters, hotels]);
 
+  // Aplicar filtros quando as cidades forem carregadas (para garantir que filtros da URL funcionem)
+  useEffect(() => {
+    if (allCities.length > 0 && hotels.length > 0) {
+      // Verificar se há parâmetros da URL para aplicar
+      const cityFromUrl = searchParams.get('city');
+      const stateFromUrl = searchParams.get('state');
+
+      if (cityFromUrl || stateFromUrl) {
+        console.log('Aplicando filtros da URL após carregamento das cidades:', {
+          city: cityFromUrl,
+          state: stateFromUrl,
+          allCities: allCities.length
+        });
+        applyFilters();
+      }
+    }
+  }, [allCities, hotels, searchParams]);
+
+  // Limpar cidade selecionada quando o estado mudar (apenas se não vier de parâmetros da URL)
+  useEffect(() => {
+    if (filters.state !== 'all' && allCities.length > 0) {
+      // Verificar se a cidade selecionada pertence ao estado selecionado
+      const cityBelongsToState = allCities.some(city =>
+        city.name === filters.city && normalizeString(city.state) === normalizeString(filters.state)
+      );
+
+      // Só limpar se a cidade não pertencer ao estado E se não vier de parâmetros da URL
+      const cityFromUrl = searchParams.get('city');
+      if (!cityBelongsToState && filters.city !== 'all' && filters.city !== cityFromUrl) {
+        setFilters(prev => ({ ...prev, city: 'all' }));
+      }
+    }
+  }, [filters.state, allCities, searchParams]);
+
   const applyFilters = () => {
     console.log('Aplicando filtros:', filters);
     console.log('Hotéis disponíveis:', hotels.length);
 
     let filtered = [...hotels];
 
-    // Filtro de busca
+    // Filtro de busca (mais flexível)
     if (filters.search) {
-      filtered = filtered.filter(hotel =>
-        hotel.nome.toLowerCase().includes(filters.search.toLowerCase()) ||
-        (hotel.descricao && hotel.descricao.toLowerCase().includes(filters.search.toLowerCase())) ||
-        (hotel.cidade?.nome && hotel.cidade.nome.toLowerCase().includes(filters.search.toLowerCase())) ||
-        (hotel.bairro && hotel.bairro.toLowerCase().includes(filters.search.toLowerCase()))
-      );
+      const searchTerm = normalizeString(filters.search);
+      filtered = filtered.filter(hotel => {
+        const searchFields = [
+          hotel.nome,
+          hotel.descricao,
+          hotel.cidade?.nome,
+          hotel.bairro,
+          hotel.rua
+        ].filter(Boolean).map(field => normalizeString(field || ''));
+
+        return searchFields.some(field => field.includes(searchTerm));
+      });
       console.log('Após filtro de busca:', filtered.length);
     }
 
-    // Filtro de cidade
+    // Filtro de cidade (busca exata e parcial)
     if (filters.city && filters.city !== 'all') {
-      filtered = filtered.filter(hotel => hotel.cidade?.nome === filters.city);
+      filtered = filtered.filter(hotel => {
+        const hotelCity = normalizeString(hotel.cidade?.nome || '');
+        const filterCity = normalizeString(filters.city);
+        return hotelCity === filterCity || hotelCity.includes(filterCity);
+      });
       console.log('Após filtro de cidade:', filtered.length);
     }
 
-    // Filtro de estado
+    // Filtro de estado (busca por sigla)
     if (filters.state && filters.state !== 'all') {
-      filtered = filtered.filter(hotel => hotel.cidade?.estado?.sigla === filters.state);
+      filtered = filtered.filter(hotel => {
+        const hotelState = normalizeString(hotel.cidade?.estado?.sigla || '');
+        const filterState = normalizeString(filters.state);
+        return hotelState === filterState;
+      });
       console.log('Após filtro de estado:', filtered.length);
     }
 
@@ -269,8 +391,6 @@ export default function HotelsBrowsePage() {
     // Navegar para a URL limpa
     const newUrl = window.location.pathname + (newSearchParams.toString() ? `?${newSearchParams.toString()}` : '');
     window.history.replaceState({}, '', newUrl);
-
-    setShowLocationInfo(false);
   };
 
   if (loading) {
@@ -301,42 +421,7 @@ export default function HotelsBrowsePage() {
       </div>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        {/* Mensagem informativa quando filtros são aplicados automaticamente */}
-        {showLocationInfo && (
-          <div className="mb-6 p-4 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-2">
-                <MapPin className="h-5 w-5 text-blue-600 dark:text-blue-400" />
-                <div>
-                  <p className="text-blue-800 dark:text-blue-200 font-medium">
-                    Filtros aplicados automaticamente
-                  </p>
-                  <p className="text-blue-600 dark:text-blue-300 text-sm">
-                    {filters.state !== 'all' && `Estado: ${filters.state}`}
-                    {filters.state !== 'all' && filters.city !== 'all' && ' • '}
-                    {filters.city !== 'all' && `Cidade: ${filters.city}`}
-                    {(filters.state !== 'all' || filters.city !== 'all') && filters.search && ' • '}
-                    {filters.search && `Bairro: ${filters.search}`}
-                  </p>
-                  <p className="text-blue-500 dark:text-blue-400 text-xs mt-1">
-                    Baseado no hospital selecionado
-                  </p>
-                </div>
-              </div>
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={() => {
-                  clearFilters();
-                  setShowLocationInfo(false);
-                }}
-                className="text-blue-600 dark:text-blue-400 border-blue-300 dark:border-blue-700"
-              >
-                Limpar Filtros
-              </Button>
-            </div>
-          </div>
-        )}
+
 
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
           {/* Filtros */}
@@ -367,17 +452,17 @@ export default function HotelsBrowsePage() {
                 {/* Cidade */}
                 <div className="space-y-2">
                   <Label htmlFor="city">Cidade</Label>
-                  <Select value={filters.city} onValueChange={(value) => setFilters({ ...filters, city: value })}>
-                    <SelectTrigger>
-                      <SelectValue placeholder="Todas as cidades" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="all">Todas as cidades</SelectItem>
-                      {cities.map((city) => (
-                        <SelectItem key={city} value={city}>{city}</SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
+                  <Combobox
+                    options={[
+                      { value: 'all', label: 'Todas as cidades' },
+                      ...getFilteredCities()
+                    ]}
+                    value={filters.city}
+                    onValueChange={(value) => setFilters({ ...filters, city: value })}
+                    placeholder="Selecione uma cidade..."
+                    emptyText="Nenhuma cidade encontrada."
+                    selectedLabel={getSelectedCityLabel()}
+                  />
                 </div>
 
                 {/* Estado */}
@@ -385,13 +470,37 @@ export default function HotelsBrowsePage() {
                   <Label htmlFor="state">Estado</Label>
                   <Select value={filters.state} onValueChange={(value) => setFilters({ ...filters, state: value })}>
                     <SelectTrigger>
-                      <SelectValue placeholder="Todos os estados" />
+                      <SelectValue placeholder="Selecione a UF" />
                     </SelectTrigger>
                     <SelectContent>
                       <SelectItem value="all">Todos os estados</SelectItem>
-                      {states.map((state) => (
-                        <SelectItem key={state} value={state}>{state}</SelectItem>
-                      ))}
+                      <SelectItem value="AC">Acre</SelectItem>
+                      <SelectItem value="AL">Alagoas</SelectItem>
+                      <SelectItem value="AP">Amapá</SelectItem>
+                      <SelectItem value="AM">Amazonas</SelectItem>
+                      <SelectItem value="BA">Bahia</SelectItem>
+                      <SelectItem value="CE">Ceará</SelectItem>
+                      <SelectItem value="DF">Distrito Federal</SelectItem>
+                      <SelectItem value="ES">Espírito Santo</SelectItem>
+                      <SelectItem value="GO">Goiás</SelectItem>
+                      <SelectItem value="MA">Maranhão</SelectItem>
+                      <SelectItem value="MT">Mato Grosso</SelectItem>
+                      <SelectItem value="MS">Mato Grosso do Sul</SelectItem>
+                      <SelectItem value="MG">Minas Gerais</SelectItem>
+                      <SelectItem value="PA">Pará</SelectItem>
+                      <SelectItem value="PB">Paraíba</SelectItem>
+                      <SelectItem value="PR">Paraná</SelectItem>
+                      <SelectItem value="PE">Pernambuco</SelectItem>
+                      <SelectItem value="PI">Piauí</SelectItem>
+                      <SelectItem value="RJ">Rio de Janeiro</SelectItem>
+                      <SelectItem value="RN">Rio Grande do Norte</SelectItem>
+                      <SelectItem value="RS">Rio Grande do Sul</SelectItem>
+                      <SelectItem value="RO">Rondônia</SelectItem>
+                      <SelectItem value="RR">Roraima</SelectItem>
+                      <SelectItem value="SC">Santa Catarina</SelectItem>
+                      <SelectItem value="SP">São Paulo</SelectItem>
+                      <SelectItem value="SE">Sergipe</SelectItem>
+                      <SelectItem value="TO">Tocantins</SelectItem>
                     </SelectContent>
                   </Select>
                 </div>
@@ -489,7 +598,8 @@ export default function HotelsBrowsePage() {
               </div>
 
               <h2 className="text-2xl font-semibold text-gray-900 dark:text-white">
-                {filteredHotels.length} hotel{filteredHotels.length !== 1 ? 'is' : ''} encontrado{filteredHotels.length !== 1 ? 's' : ''}
+                {filteredHotels.length}
+                {filteredHotels.length !== 1 ? 'hoteis' : 'hotel'} encontrado{filteredHotels.length !== 1 ? 's' : ''}
               </h2>
             </div>
 
@@ -519,19 +629,7 @@ export default function HotelsBrowsePage() {
                   </Card>
                 ) : (
                   <>
-                    {/* Debug Info - Remover após testes */}
-                    {process.env.NODE_ENV === 'development' && (
-                      <div className="mb-4 p-4 bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-800 rounded-lg">
-                        <h4 className="font-medium text-yellow-800 dark:text-yellow-200 mb-2">Debug Info</h4>
-                        <div className="text-sm text-yellow-700 dark:text-yellow-300 space-y-1">
-                          <p>Total de hotéis: {filteredHotels.length}</p>
-                          <p>Hotéis com cidade: {filteredHotels.filter(h => h.cidade?.nome).length}</p>
-                          <p>Hotéis com estado: {filteredHotels.filter(h => h.cidade?.estado?.sigla).length}</p>
-                          <p>Primeiro hotel cidade: {filteredHotels[0]?.cidade?.nome || 'N/A'}</p>
-                          <p>Primeiro hotel estado: {filteredHotels[0]?.cidade?.estado?.sigla || 'N/A'}</p>
-                        </div>
-                      </div>
-                    )}
+
                     <div className="space-y-6">
                       {filteredHotels.map((hotel) => (
                         <Card key={hotel.id} className="hover:shadow-lg transition-shadow">
