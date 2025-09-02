@@ -206,9 +206,6 @@ namespace API_HealthGo.Repository
                     INNER JOIN
                         especialidade esp ON pse.Especialidade_Id = esp.Id;
                 ";
-
-                // Dapper irá mapear automaticamente os campos da sua query para as propriedades do DTO
-                // com base nos aliases que correspondem aos nomes das propriedades.
                 var result = await con.QueryAsync<PrestadorServicoEspecialidadeDTO>(sql);
                 return result;
             }
