@@ -218,26 +218,26 @@ CREATE TABLE IF NOT EXISTS `PrestadorServico_Especialidade` (
 ) ENGINE = InnoDB;
 
 -- Tabela OrdemServico_PrestadorServico
-CREATE TABLE IF NOT EXISTS `OrdemServico_PrestadorServico` (
+CREATE TABLE IF NOT EXISTS `healthgo`.`ordemservico_prestadorservico` (
   `Id` INT NOT NULL AUTO_INCREMENT,
   `DataInicio` DATETIME NOT NULL,
   `DataFim` DATETIME NOT NULL,
   `OrdemServico_Id` INT NOT NULL,
-  `PrestadorServico_Id` INT NOT NULL,
-  PRIMARY KEY (`Id`),
+  `prestadorservico_especialidade_Id` INT NOT NULL,
+  PRIMARY KEY (`Id`, `prestadorservico_especialidade_Id`),
   INDEX `fk_OrdemServico_PrestadorServico_OrdemServico1_idx` (`OrdemServico_Id` ASC) VISIBLE,
-  INDEX `fk_OrdemServico_PrestadorServico_PrestadorServico1_idx` (`PrestadorServico_Id` ASC) VISIBLE,
+  INDEX `fk_ordemservico_prestadorservico_prestadorservico_especiali_idx` (`prestadorservico_especialidade_Id` ASC) VISIBLE,
   CONSTRAINT `fk_OrdemServico_PrestadorServico_OrdemServico1`
     FOREIGN KEY (`OrdemServico_Id`)
-    REFERENCES `OrdemServico` (`Id`)
-    ON DELETE CASCADE
-    ON UPDATE NO ACTION,
-  CONSTRAINT `fk_OrdemServico_PrestadorServico_PrestadorServico1`
-    FOREIGN KEY (`PrestadorServico_Id`)
-    REFERENCES `PrestadorServico` (`Id`)
-    ON DELETE CASCADE
-    ON UPDATE NO ACTION
-) ENGINE = InnoDB;
+    REFERENCES `healthgo`.`ordemservico` (`Id`)
+    ON DELETE CASCADE,
+  CONSTRAINT `fk_ordemservico_prestadorservico_prestadorservico_especialida1`
+    FOREIGN KEY (`prestadorservico_especialidade_Id`)
+    REFERENCES `healthgo`.`prestadorservico_especialidade` (`Id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8mb3;
 
 -- Tabela CamaQuarto
 CREATE TABLE IF NOT EXISTS `CamaQuarto` (

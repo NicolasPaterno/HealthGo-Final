@@ -8,10 +8,15 @@ namespace API_HealthGo.Contracts.Service
     public interface IPrestadorServicoEspecialidadeService
     {
         Task<PrestadorServicoEspecialidadeGetAllResponse> GetAll();
+
         Task<PrestadorServicoEspecialidadeEntity> GetById(int id);
+
         Task<MessageResponse> Post(PrestadorServicoEspecialidadeInsertDTO entity);
+
         Task<MessageResponse> Update(PrestadorServicoEspecialidadeEntity entity);
+
         Task<MessageResponse> Delete(int id);
+
         Task<IEnumerable<PrestadorServicoEspecialidadeEntity>> GetAllEspecialidadesById(int id);
     }
 }

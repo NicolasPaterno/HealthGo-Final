@@ -68,47 +68,35 @@ namespace API_HealthGo.Repository
                                 INNER JOIN PRESTADORSERVICO_ESPECIALIDADE pse ON ps.ID = pse.PRESTADORSERVICO_ID
                                 INNER JOIN ESPECIALIDADE e ON pse.ESPECIALIDADE_ID = e.ID
                             ";
-                
-                // 1. Cria um dicionário para armazenar os resultados únicos dos prestadores,
-                // usando o ID do prestador como chave para evitar repetição.
+            
                 var prestadorDict = new Dictionary<int, PrestadorServico_All_Infos_DTO>();
 
-                // 2. Executa a query com Dapper usando multi-mapping:
-                // Cada linha do resultado traz: prestador, pessoa e especialidade.
-                // O método recebe uma função que recebe estes 3 objetos mapeados.
                 var result = await con.QueryAsync<
-                    PrestadorServicoEntity,         // Mapeia os dados do prestador
-                    PessoaEntity,                  // Mapeia os dados da pessoa vinculada
-                    EspecialidadeComPrecoDTO,      // Mapeia os dados da especialidade com preço
-                    PrestadorServico_All_Infos_DTO // Monta o DTO final usando a função abaixo
+                    PrestadorServicoEntity,
+                    PessoaEntity,
+                    EspecialidadeComPrecoDTO,
+                    PrestadorServico_All_Infos_DTO
                 >(
                     sql,
-                    (prestador, pessoa, especialidade) =>   // Função chamada para cada linha
+                    (prestador, pessoa, especialidade) =>
                     {
-                        // 3. Tenta encontrar o DTO já criado para o prestador atual no dicionário
                         if (!prestadorDict.TryGetValue(prestador.Id, out var dto))
                         {
-                            // 4. Se não existir, cria um novo DTO e adiciona no dicionário
                             dto = new PrestadorServico_All_Infos_DTO
                             {
-                                prestadorServicoEntity = prestador, // Dados do prestador
-                                PessoaEntity = pessoa,               // Dados da pessoa
-                                Especialidades = new List<EspecialidadeComPrecoDTO>() // Inicializa lista
+                                prestadorServicoEntity = prestador,
+                                PessoaEntity = pessoa,
+                                Especialidades = new List<EspecialidadeComPrecoDTO>()
                             };
-                            prestadorDict.Add(prestador.Id, dto); // Adiciona no dicionário pelo ID
+                            prestadorDict.Add(prestador.Id, dto);
                         }
 
-                        // 5. Adiciona a especialidade atual na lista de especialidades do DTO
                         dto.Especialidades.Add(especialidade);
-
-                        // 6. Retorna o DTO (não importa aqui porque o resultado final é o dicionário)
                         return dto;
                     },
-                    splitOn: "Id,Id" // 7. Diz ao Dapper onde separar os objetos na linha do resultado SQL (nos campos "Id")
+                    splitOn: "Id,Id"
                 );
 
-                // 8. Retorna apenas os valores únicos do dicionário, ou seja, uma lista de DTOs,
-                // cada um com sua lista completa de especialidades.
                 return prestadorDict.Values;
             }
         }
@@ -208,6 +196,42 @@ namespace API_HealthGo.Repository
                 ";
                 var result = await con.QueryAsync<PrestadorServicoEspecialidadeDTO>(sql);
                 return result;
+            }
+        }
+
+        public async Task<IEnumerable<PrestadorServicoAgendaDTO>> GetAgendaByPrestadorId(int prestadorId)
+        {
+            using (MySqlConnection con = _connection.GetConnection())
+            {
+                string sql = @"
+                    SELECT
+                        os_ps.DataInicio AS DataInicio,
+                        os_ps.DataFim AS DataFim,
+                        espec.Nome AS Funcao,
+                        cliente.Nome AS NomeCliente,
+                        cliente.Email AS EmailCliente,
+                        cliente.Telefone AS TelefoneCliente,
+                        (TIMESTAMPDIFF(HOUR, os_ps.DataInicio, os_ps.DataFim) * pse.PrecoHora) AS PrecoTotal
+                    FROM
+                        OrdemServico_PrestadorServico os_ps
+                    JOIN
+                        PrestadorServico_Especialidade pse ON os_ps.prestadorservico_especialidade_Id = pse.Id
+                    JOIN
+                        PrestadorServico ps ON pse.PrestadorServico_Id = ps.Id
+                    JOIN
+                        Especialidade espec ON pse.Especialidade_Id = espec.Id
+                    JOIN
+                        OrdemServico os ON os_ps.OrdemServico_Id = os.Id
+                    JOIN
+                        Pessoa cliente ON os.Pessoa_Id = cliente.Id
+                    WHERE
+                        ps.Id = @prestadorId
+                    ORDER BY
+                        os_ps.DataInicio DESC;
+                ";
+
+                var agenda = await con.QueryAsync<PrestadorServicoAgendaDTO>(sql, new { prestadorId });
+                return agenda;
             }
         }
     }

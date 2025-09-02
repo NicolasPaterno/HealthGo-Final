@@ -71,5 +71,16 @@ namespace API_HealthGo.Controllers
             }
             return Ok(prestadores);
         }
+
+        [HttpGet("agenda/{id}")]
+        public async Task<ActionResult<IEnumerable<PrestadorServicoAgendaDTO>>> GetAgendaByPrestadorId(int id)
+        {
+            var agenda = await _service.GetAgendaByPrestadorId(id);
+            if (agenda == null || !agenda.Any())
+            {
+                return NotFound("Agenda não encontrada para o prestador de serviço.");
+            }
+            return Ok(agenda);
+        }
     }
 }
