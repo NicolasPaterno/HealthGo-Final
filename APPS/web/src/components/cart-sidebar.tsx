@@ -4,12 +4,14 @@ import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetFooter } from "@/com
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Separator } from "@/components/ui/separator";
 import { Minus, Plus, Trash2, ShoppingCart } from "lucide-react";
+import { CheckoutModal } from "./checkout-modal";
 
 export function CartSidebar() {
-  const { cartItems, removeFromCart, increaseQuantity, decreaseQuantity, cartTotal, isCartOpen, closeCart, completePurchase } = useCart();
+  const { cartItems, removeFromCart, increaseQuantity, decreaseQuantity, cartTotal, isCartOpen, closeCart, isCheckoutOpen, openCheckout, closeCheckout } = useCart();
 
   const handleCompletePurchase = () => {
-    completePurchase();
+    closeCart();
+    openCheckout();
   };
 
   return (
@@ -59,6 +61,7 @@ export function CartSidebar() {
           </div>
         )}
       </SheetContent>
+      <CheckoutModal isOpen={isCheckoutOpen} onClose={closeCheckout} />
     </Sheet>
   );
 }
