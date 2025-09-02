@@ -316,7 +316,10 @@ export default function HotelsBrowsePage() {
                     {filters.state !== 'all' && filters.city !== 'all' && ' • '}
                     {filters.city !== 'all' && `Cidade: ${filters.city}`}
                     {(filters.state !== 'all' || filters.city !== 'all') && filters.search && ' • '}
-                    {filters.search && `Busca: ${filters.search}`}
+                    {filters.search && `Bairro: ${filters.search}`}
+                  </p>
+                  <p className="text-blue-500 dark:text-blue-400 text-xs mt-1">
+                    Baseado no hospital selecionado
                   </p>
                 </div>
               </div>

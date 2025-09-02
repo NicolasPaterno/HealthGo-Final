@@ -4,6 +4,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Separator } from '@/components/ui/separator';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import {
   MapPin,
   Phone,
@@ -14,7 +15,11 @@ import {
   Bed,
   ArrowLeft,
   Accessibility,
-  Heart
+  Heart,
+  Map,
+  Navigation,
+  ExternalLink,
+  X
 } from 'lucide-react';
 import { toast } from 'sonner';
 import api from '@/services/api';
@@ -32,6 +37,8 @@ interface Hotel {
   rua: string;
   numeroEndereco: string;
   descricao: string;
+  latitude?: number;
+  longitude?: number;
   cidade: {
     nome: string;
     estado: {
@@ -59,6 +66,8 @@ export default function HotelDetailPage() {
   const [hotel, setHotel] = useState<Hotel | null>(null);
   const [loading, setLoading] = useState(true);
   const [selectedRoom, setSelectedRoom] = useState<Room | null>(null);
+  const [showMap, setShowMap] = useState(false);
+  const [isGeocoding, setIsGeocoding] = useState(false);
 
   useEffect(() => {
     if (id) {
@@ -105,6 +114,95 @@ export default function HotelDetailPage() {
 
   const handleBack = () => {
     navigate('/dashboard/hotels');
+  };
+
+  // Função para geocodificar endereço usando OpenStreetMap Nominatim
+  const geocodeAddress = async () => {
+    if (!hotel || isGeocoding) return;
+
+    setIsGeocoding(true);
+    try {
+      const address = [
+        hotel.rua,
+        hotel.numeroEndereco,
+        hotel.bairro,
+        hotel.cidade?.nome,
+        hotel.cidade?.estado?.sigla,
+        'Brasil'
+      ].filter(Boolean).join(', ');
+
+      const response = await fetch(
+        `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(address)}&limit=1&countrycodes=br`
+      );
+
+      const data = await response.json();
+
+      if (data && data.length > 0) {
+        const { lat, lon } = data[0];
+        // Atualizar o hotel com as coordenadas
+        setHotel(prev => prev ? {
+          ...prev,
+          latitude: parseFloat(lat),
+          longitude: parseFloat(lon)
+        } : null);
+
+        toast.success('Localização do hotel atualizada com sucesso!');
+      } else {
+        toast.error('Não foi possível encontrar as coordenadas para este endereço.');
+      }
+    } catch (error) {
+      console.error('Erro ao geocodificar endereço:', error);
+      toast.error('Erro ao obter localização do hotel. Tente novamente.');
+    } finally {
+      setIsGeocoding(false);
+    }
+  };
+
+  // Função para fazer ligação
+  const handleCall = () => {
+    if (hotel?.telefone) {
+      // Formatar telefone removendo caracteres especiais
+      const phoneNumber = hotel.telefone.replace(/[^\d+]/g, '');
+      window.open(`tel:${phoneNumber}`, '_self');
+    } else {
+      toast.error('Telefone não disponível para este hotel.');
+    }
+  };
+
+  // Função para enviar e-mail
+  const handleEmail = () => {
+    if (hotel?.email) {
+      window.open(`mailto:${hotel.email}?subject=Consulta sobre ${hotel.nome}`, '_self');
+    } else {
+      toast.error('E-mail não disponível para este hotel.');
+    }
+  };
+
+  // Função para abrir rota no Google Maps
+  const handleGetDirections = () => {
+    if (hotel?.latitude && hotel?.longitude) {
+      // Usar coordenadas específicas do hotel se disponíveis
+      const url = `https://www.google.com/maps/dir/?api=1&destination=${hotel.latitude},${hotel.longitude}`;
+      window.open(url, '_blank');
+    } else if (hotel?.rua && hotel?.cidade?.nome) {
+      // Usar endereço se não houver coordenadas
+      const address = `${hotel.rua}, ${hotel.numeroEndereco}, ${hotel.bairro}, ${hotel.cidade.nome}, ${hotel.cidade.estado.sigla}, Brasil`;
+      const url = `https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(address)}`;
+      window.open(url, '_blank');
+    } else {
+      toast.error('Informações de localização insuficientes para obter rota.');
+    }
+  };
+
+  // Função para abrir site do hotel
+  const handleVisitWebsite = () => {
+    if (hotel?.site) {
+      // Verificar se o site já tem protocolo
+      const url = hotel.site.startsWith('http') ? hotel.site : `https://${hotel.site}`;
+      window.open(url, '_blank');
+    } else {
+      toast.error('Site não disponível para este hotel.');
+    }
   };
 
   if (loading) {
@@ -222,7 +320,25 @@ export default function HotelDetailPage() {
             {/* Endereço */}
             <Card>
               <CardHeader>
-                <CardTitle>Localização</CardTitle>
+                <CardTitle className="flex items-center justify-between">
+                  <span>Localização</span>
+                  {!hotel.latitude && !hotel.longitude && (
+                    <Button
+                      size="sm"
+                      variant="outline"
+                      onClick={geocodeAddress}
+                      disabled={isGeocoding}
+                      className="text-orange-600 border-orange-300 hover:bg-orange-100"
+                    >
+                      {isGeocoding ? (
+                        <div className="animate-spin rounded-full h-3 w-3 border-b-2 border-orange-600"></div>
+                      ) : (
+                        <Globe className="h-3 w-3 mr-1" />
+                      )}
+                      Obter Localização
+                    </Button>
+                  )}
+                </CardTitle>
               </CardHeader>
               <CardContent>
                 <div className="space-y-3">
@@ -241,6 +357,11 @@ export default function HotelDetailPage() {
                       <p className="text-gray-600 dark:text-gray-400">
                         CEP: {hotel.cep}
                       </p>
+                      {hotel.latitude && hotel.longitude && (
+                        <p className="text-sm text-green-600 font-medium mt-1">
+                          ✅ Coordenadas: {hotel.latitude.toFixed(6)}, {hotel.longitude.toFixed(6)}
+                        </p>
+                      )}
                     </div>
                   </div>
                 </div>
@@ -396,14 +517,14 @@ export default function HotelDetailPage() {
                   <div className="flex items-center gap-3">
                     <Globe className="h-5 w-5 text-gray-400" />
                     <div>
-                      <a
-                        href={hotel.site}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="font-medium text-blue-600 hover:text-blue-800 dark:text-blue-400"
+                      <Button
+                        variant="link"
+                        className="p-0 h-auto font-medium text-blue-600 hover:text-blue-800 dark:text-blue-400"
+                        onClick={handleVisitWebsite}
                       >
                         Visitar site
-                      </a>
+                        <ExternalLink className="h-3 w-3 ml-1" />
+                      </Button>
                       <p className="text-sm text-gray-500">Website</p>
                     </div>
                   </div>
@@ -417,20 +538,112 @@ export default function HotelDetailPage() {
                 <CardTitle>Ações</CardTitle>
               </CardHeader>
               <CardContent className="space-y-3">
-                <Button className="w-full" variant="outline">
+                <Button
+                  className="w-full"
+                  variant="outline"
+                  onClick={handleCall}
+                  disabled={!hotel.telefone}
+                >
                   <Phone className="h-4 w-4 mr-2" />
                   Ligar Agora
                 </Button>
 
-                <Button className="w-full" variant="outline">
+                <Button
+                  className="w-full"
+                  variant="outline"
+                  onClick={handleEmail}
+                  disabled={!hotel.email}
+                >
                   <Mail className="h-4 w-4 mr-2" />
                   Enviar Mensagem
                 </Button>
 
-                <Button className="w-full" variant="outline">
-                  <Globe className="h-4 w-4 mr-2" />
-                  Ver no Mapa
-                </Button>
+                <Dialog open={showMap} onOpenChange={setShowMap}>
+                  <DialogTrigger asChild>
+                    <Button className="w-full" variant="outline">
+                      <Map className="h-4 w-4 mr-2" />
+                      Ver no Mapa
+                    </Button>
+                  </DialogTrigger>
+                  <DialogContent className="max-w-4xl max-h-[80vh] overflow-hidden">
+                    <DialogHeader>
+                      <DialogTitle className="flex items-center gap-2">
+                        <MapPin className="h-5 w-5 text-blue-600" />
+                        Localização: {hotel.nome}
+                      </DialogTitle>
+                    </DialogHeader>
+                    <div className="relative">
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        className="absolute top-2 right-2 z-10"
+                        onClick={() => setShowMap(false)}
+                      >
+                        <X className="h-4 w-4" />
+                      </Button>
+
+                      {hotel.latitude && hotel.longitude ? (
+                        <div className="h-96 w-full rounded-lg overflow-hidden border">
+                          <iframe
+                            src={`https://www.openstreetmap.org/export/embed.html?bbox=${hotel.longitude - 0.01},${hotel.latitude - 0.01},${hotel.longitude + 0.01},${hotel.latitude + 0.01}&layer=mapnik&marker=${hotel.latitude},${hotel.longitude}`}
+                            width="100%"
+                            height="100%"
+                            frameBorder="0"
+                            scrolling="no"
+                            marginHeight={0}
+                            marginWidth={0}
+                            title={`Mapa de ${hotel.nome}`}
+                            className="w-full h-full"
+                          />
+                        </div>
+                      ) : (
+                        <div className="h-96 w-full flex items-center justify-center bg-gray-100 dark:bg-gray-800 rounded-lg border">
+                          <div className="text-center">
+                            <MapPin className="h-12 w-12 text-gray-400 mx-auto mb-4" />
+                            <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-2">
+                              Localização não disponível
+                            </h3>
+                            <p className="text-gray-600 dark:text-gray-400 mb-4">
+                              Este hotel não possui coordenadas geográficas.
+                            </p>
+                            <Button onClick={geocodeAddress} disabled={isGeocoding}>
+                              {isGeocoding ? (
+                                <div className="animate-spin rounded-full h-3 w-3 border-b-2 border-primary"></div>
+                              ) : (
+                                <Globe className="h-3 w-3 mr-1" />
+                              )}
+                              Obter Localização
+                            </Button>
+                          </div>
+                        </div>
+                      )}
+
+                      <div className="mt-4 flex flex-col sm:flex-row gap-2">
+                        <Button
+                          variant="outline"
+                          className="flex-1"
+                          onClick={handleGetDirections}
+                        >
+                          <Navigation className="h-4 w-4 mr-2" />
+                          Obter Rota no Google Maps
+                        </Button>
+                        {hotel.latitude && hotel.longitude && (
+                          <Button
+                            variant="outline"
+                            className="flex-1"
+                            onClick={() => {
+                              const url = `https://www.openstreetmap.org/?mlat=${hotel.latitude}&mlon=${hotel.longitude}#map=15/${hotel.latitude}/${hotel.longitude}`;
+                              window.open(url, '_blank');
+                            }}
+                          >
+                            <ExternalLink className="h-4 w-4 mr-2" />
+                            Abrir no OpenStreetMap
+                          </Button>
+                        )}
+                      </div>
+                    </div>
+                  </DialogContent>
+                </Dialog>
               </CardContent>
             </Card>
           </div>

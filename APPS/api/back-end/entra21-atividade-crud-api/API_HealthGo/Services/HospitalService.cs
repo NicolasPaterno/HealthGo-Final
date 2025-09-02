@@ -200,11 +200,38 @@ namespace API_HealthGo.Services
                 ).ToList();
             }
 
-            // Remove duplicatas usando o COMP como chave única
+            // Remove duplicatas usando o CNES como chave única (identificador único do hospital) e ordena por nome
             var uniqueHospitals = hospitaisFiltrados
-                .GroupBy(h => h.COMP)
+                .Where(h => !string.IsNullOrEmpty(h.CNES) && !string.IsNullOrWhiteSpace(h.CNES)) // Filtra CNES nulos ou vazios
+                .GroupBy(h => h.CNES.Trim().ToUpper()) // Remove espaços em branco e converte para maiúsculo para evitar problemas de case
                 .Select(g => g.First())
+                .OrderBy(h => h.NOME_ESTABELECIMENTO) // Ordena por nome para melhor experiência
                 .ToList();
+
+            // Log detalhado para debug (remover em produção)
+            Console.WriteLine($"=== DEBUG HOSPITAIS ===");
+            Console.WriteLine($"Total de hospitais filtrados: {hospitaisFiltrados.Count}");
+            Console.WriteLine($"Total de hospitais únicos após agrupamento: {uniqueHospitals.Count}");
+            
+            if (!string.IsNullOrEmpty(nome))
+            {
+                Console.WriteLine($"Pesquisando por: '{nome}'");
+                Console.WriteLine($"Hospitais encontrados:");
+                foreach (var hospital in uniqueHospitals)
+                {
+                    Console.WriteLine($"  - CNES: {hospital.CNES}, Nome: {hospital.NOME_ESTABELECIMENTO}, Município: {hospital.MUNICIPIO}");
+                }
+            }
+            
+            // Log dos dados antes do agrupamento para debug
+            Console.WriteLine($"Dados antes do agrupamento:");
+            foreach (var hospital in hospitaisFiltrados.Take(10)) // Mostra apenas os primeiros 10 para não poluir o log
+            {
+                Console.WriteLine($"  - CNES: {hospital.CNES}, Nome: {hospital.NOME_ESTABELECIMENTO}, Município: {hospital.MUNICIPIO}");
+            }
+            Console.WriteLine($"=== FIM DEBUG ===");
+
+
 
             var totalItems = uniqueHospitals.Count;
 
