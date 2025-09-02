@@ -65,6 +65,12 @@ const CadastrarServicoPage = lazy(
 const ViewServicosPage = lazy(
   () => import("./app/prestadorservico/ViewServicosPage")
 );
+const AgendaPrestadorPage = lazy(
+  () => import("./app/prestadorservico/AgendaPrestadorPage")
+);
+const HistoricoServicosPage = lazy(
+  () => import("./app/prestadorservico/HistoricoServicosPage")
+);
 const PrestadoresPage = lazy(
   () => import("./app/prestadorservico/PrestadoresPage")
 );
@@ -136,6 +142,8 @@ function App() {
                     element={<CadastrarServicoPage />}
                   />
                   <Route path="view-servicos" element={<ViewServicosPage />} />
+                  <Route path="agenda" element={<AgendaPrestadorPage />} />
+                  <Route path="historico" element={<HistoricoServicosPage />} />
                 </Route>
               </Route>
 

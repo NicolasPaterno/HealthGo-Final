@@ -14,6 +14,7 @@ import {
   HelpCircle,
   FileText,
   History,
+  Calendar,
 } from "lucide-react";
 import { NavMain } from "./nav-main";
 import { NavDocuments } from "./nav-documents";
@@ -32,17 +33,11 @@ export function AppSidebarPrestadorServico({
       url: "/dashboard-prestador",
       icon: LayoutDashboard,
     },
-    // Futuras abas podem ser adicionadas aqui
-    // {
-    //   title: "Meus Serviços",
-    //   url: "/dashboard-prestador/servicos",
-    //   icon: Briefcase,
-    // },
-    // {
-    //   title: "Agenda",
-    //   url: "/dashboard-prestador/agenda",
-    //   icon: Calendar,
-    // },
+    {
+      title: "Agenda",
+      url: "/dashboard-prestador/agenda",
+      icon: Calendar,
+    },
   ];
 
   const prestadorDocuments = [
