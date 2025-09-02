@@ -234,5 +234,23 @@ namespace API_HealthGo.Repository
                 return agenda;
             }
         }
+
+        public async Task<int> GetByEmailAndTelefone(string email, string telefone)
+        {
+            using (MySqlConnection con = _connection.GetConnection())
+            {
+                string sql = @"
+                    SELECT 
+                        ps.ID AS Id,
+                        ps.OBSERVACAO AS Observacao,
+                        ps.CNPJ AS CNPJ,
+                        ps.PESSOA_ID AS Pessoa_Id
+                    FROM PRESTADORSERVICO ps
+                    INNER JOIN PESSOA p ON ps.PESSOA_ID = p.ID
+                    WHERE p.Email = @email AND p.Telefone = @telefone;
+                ";
+                return await con.QueryFirstOrDefaultAsync<int>(sql, new { email, telefone });
+            }
+        }
     }
 }

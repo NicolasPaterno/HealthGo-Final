@@ -79,5 +79,10 @@ namespace API_HealthGo.Services
         {
             return await _repository.GetAgendaByPrestadorId(prestadorId);
         }
+
+        public async Task<int> GetByEmailAndTelefone(string email, string telefone)
+        {
+            return await _repository.GetByEmailAndTelefone(email, telefone);
+        }
     }
 }

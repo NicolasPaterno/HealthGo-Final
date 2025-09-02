@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -7,8 +7,10 @@ import { Input } from "@/components/ui/input";
 import { MapPin, Phone, Mail, Clock, Users, ChevronLeft, ChevronRight, User } from "lucide-react";
 import api from "@/services/api";
 import { toast } from "sonner";
+import { PrestadorDetailModal } from "@/components/prestador-detail-modal";
 
 interface PrestadorServico {
+  id?: number;
   nomePessoa: string;
   email: string;
   cidade: string;
@@ -33,7 +35,9 @@ export default function PrestadoresPage() {
   const [isLoading, setIsLoading] = useState(true);
   const [especialidades, setEspecialidades] = useState<string[]>([]);
   const [estados, setEstados] = useState<string[]>([]);
-  const [cidades, setCidades] = useState<string[]>([]);
+
+  const [selectedPrestador, setSelectedPrestador] = useState<PrestadorServico | null>(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   useEffect(() => {
     fetchPrestadores();
@@ -60,8 +64,7 @@ export default function PrestadoresPage() {
         const estadosUnicos = [...new Set(response.data.map((p: PrestadorServico) => p.estado))];
         setEstados(estadosUnicos.sort());
         
-        const cidadesUnicas = [...new Set(response.data.map((p: PrestadorServico) => p.cidade))];
-        setCidades(cidadesUnicas.sort());
+
       }
     } catch (error) {
       console.error("Erro ao buscar prestadores:", error);
@@ -99,9 +102,13 @@ export default function PrestadoresPage() {
   };
 
   const handleContact = (prestador: PrestadorServico) => {
-    toast.info("Funcionalidade de contato em desenvolvimento", {
-      description: `Contato: ${prestador.telefone} | ${prestador.email}`
-    });
+    setSelectedPrestador(prestador);
+    setIsModalOpen(true);
+  };
+
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+    setSelectedPrestador(null);
   };
 
   const scrollContainer = (direction: 'left' | 'right', containerId: string) => {
@@ -129,10 +136,7 @@ export default function PrestadoresPage() {
     return grouped;
   };
 
-  const getCidadesByEstado = (estado: string) => {
-    if (estado === "todos") return cidades;
-    return [...new Set(prestadores.filter(p => p.estado === estado).map(p => p.cidade))].sort();
-  };
+
 
   const handleCidadeChange = (value: string) => {
     setSelectedCidade(value);
@@ -425,6 +429,13 @@ export default function PrestadoresPage() {
           </div>
         </div>
       )}
+
+      <PrestadorDetailModal
+        prestador={selectedPrestador}
+        isOpen={isModalOpen}
+        onClose={handleCloseModal}
+        prestadorId={selectedPrestador?.id}
+      />
     </div>
   );
 }

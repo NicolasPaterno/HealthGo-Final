@@ -82,5 +82,16 @@ namespace API_HealthGo.Controllers
             }
             return Ok(agenda);
         }
+
+        [HttpGet("by-email-and-telefone")]
+        public async Task<ActionResult<int>> GetByEmailAndTelefone([FromQuery] string email, [FromQuery] string telefone)
+        {
+            var prestador = await _service.GetByEmailAndTelefone(email, telefone);
+            if (prestador == null)
+            {
+                return NotFound("Prestador de serviço não encontrado.");
+            }
+            return Ok(prestador);
+        }
     }
 }

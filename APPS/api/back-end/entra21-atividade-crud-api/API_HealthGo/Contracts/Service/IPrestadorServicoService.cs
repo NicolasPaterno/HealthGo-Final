@@ -24,5 +24,7 @@ namespace API_HealthGo.Contracts.Service
         Task<IEnumerable<PrestadorServicoEspecialidadeDTO>> GetAllPrestadoresComEspecialidades();
 
         Task<IEnumerable<PrestadorServicoAgendaDTO>> GetAgendaByPrestadorId(int prestadorId);
+
+        Task<int> GetByEmailAndTelefone(string email, string telefone);
     }
 }
