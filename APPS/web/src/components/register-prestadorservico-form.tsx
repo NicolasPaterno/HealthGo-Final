@@ -12,7 +12,6 @@ import {
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Checkbox } from "@/components/ui/checkbox";
 import api from "@/services/api";
 import axios from "axios";
 
@@ -53,7 +52,7 @@ export default function RegisterPrestadorServicoForm({
   const [rua, setRua] = useState("");
   const [bairro, setBairro] = useState("");
   const [numeroEndereco, setNumeroEndereco] = useState("");
-  const [caoGuia, setCaoGuia] = useState(false);
+  
   const [isCepLoading, setIsCepLoading] = useState(false);
   const [cidadeId, setCidadeId] = useState<number | null>(null);
   const [cnpj, setCnpj] = useState("");
@@ -111,7 +110,7 @@ export default function RegisterPrestadorServicoForm({
       Email: email,
       Senha: senha,
       EnderecoFoto: "default.jpg",
-      CaoGuia: caoGuia,
+      CaoGuia: false,
       CEP: cep,
       Bairro: bairro,
       Rua: rua,
@@ -127,6 +126,7 @@ export default function RegisterPrestadorServicoForm({
 
       const prestadorServicoData = {
         CNPJ: cnpj.trim() === "" ? null : removeMask(cnpj),
+        Observacao: "",
         Pessoa_Id: pessoaId,
       };
 
@@ -309,16 +309,7 @@ export default function RegisterPrestadorServicoForm({
                   />
                 </div>
               </div>
-              <div className="flex items-center gap-2">
-                <Checkbox
-                  id="guideDog"
-                  checked={caoGuia}
-                  onCheckedChange={(checked) => setCaoGuia(Boolean(checked))}
-                />
-                <Label htmlFor="guideDog" className="font-normal">
-                  Possui cão guia
-                </Label>
-              </div>
+              
 
               <div className="h-px my-[2px] bg-gray-400 w-full mx-auto" />
 
