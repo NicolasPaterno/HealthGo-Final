@@ -105,7 +105,7 @@ export default function PrestadoresPage() {
     setSelectedPrestador(prestador);
     setIsModalOpen(true);
   };
-
+  
   const handleCloseModal = () => {
     setIsModalOpen(false);
     setSelectedPrestador(null);
@@ -434,7 +434,6 @@ export default function PrestadoresPage() {
         prestador={selectedPrestador}
         isOpen={isModalOpen}
         onClose={handleCloseModal}
-        prestadorId={selectedPrestador?.id}
       />
     </div>
   );

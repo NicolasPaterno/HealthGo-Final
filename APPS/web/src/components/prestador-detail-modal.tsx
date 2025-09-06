@@ -47,10 +47,9 @@ interface PrestadorDetailModalProps {
   prestador: PrestadorServico | null;
   isOpen: boolean;
   onClose: () => void;
-  prestadorId?: number; // ID do prestador passado diretamente
 }
 
-export function PrestadorDetailModal({ prestador, isOpen, onClose, prestadorId: propPrestadorId }: PrestadorDetailModalProps) {
+export function PrestadorDetailModal({ prestador, isOpen, onClose }: PrestadorDetailModalProps) {
   const [selectedDate, setSelectedDate] = useState<Date | undefined>(new Date());
   const [agendaItems, setAgendaItems] = useState<AgendaItem[]>([]);
   const [isLoadingAgenda, setIsLoadingAgenda] = useState(false);
@@ -58,13 +57,9 @@ export function PrestadorDetailModal({ prestador, isOpen, onClose, prestadorId: 
 
   useEffect(() => {
     if (prestador && isOpen) {
-      if (propPrestadorId) {
-        setPrestadorId(propPrestadorId);
-      } else {
-        fetchPrestadorId();
-      }
+      fetchPrestadorId();
     }
-  }, [prestador, isOpen, propPrestadorId]);
+  }, [prestador, isOpen]);
 
   useEffect(() => {
     if (prestadorId) {
@@ -76,25 +71,16 @@ export function PrestadorDetailModal({ prestador, isOpen, onClose, prestadorId: 
     if (!prestador) return;
     
     try {
-      console.log("Buscando prestador:", prestador.email, prestador.telefone);
-      
-      // Buscar o ID do prestador usando email e telefone
       const response = await api.get(`/PrestadorServico/by-email-and-telefone?email=${encodeURIComponent(prestador.email)}&telefone=${encodeURIComponent(prestador.telefone)}`);
-      console.log("Resposta do prestador:", response.data);
-      
-      // A API pode retornar o ID diretamente ou como objeto
       const prestadorId = response.data?.id || response.data;
       
       if (prestadorId) {
         setPrestadorId(prestadorId);
-        console.log("ID do prestador definido:", prestadorId);
       } else {
-        console.error("ID do prestador não encontrado na resposta");
-        toast.error("Prestador não encontrado");
+        toast.error("ID do prestador não encontrado");
       }
     } catch (error: any) {
       console.error("Erro ao buscar ID do prestador:", error);
-      console.error("Detalhes do erro:", error.response?.data);
       toast.error("Erro ao carregar informações do prestador");
     }
   };
@@ -104,10 +90,7 @@ export function PrestadorDetailModal({ prestador, isOpen, onClose, prestadorId: 
     
     try {
       setIsLoadingAgenda(true);
-      console.log("Buscando agenda para prestador ID:", prestadorId);
-      
       const response = await api.get(`/PrestadorServico/agenda/${prestadorId}`);
-      console.log("Resposta da agenda:", response.data);
       
       const raw = Array.isArray(response.data) 
         ? response.data 
@@ -117,10 +100,8 @@ export function PrestadorDetailModal({ prestador, isOpen, onClose, prestadorId: 
         ? response.data.result 
         : [];
       
-      console.log("Dados brutos da agenda:", raw);
-      
       const normalized: AgendaItem[] = raw.map((it: any) => ({
-        DataInicio: it.dataInicio ?? it.DataInicio ?? it.data_inicio ?? it.datainicio,
+        DataInicio: it.dataInicio ?? it.DataInicio ?? it.dat-inicio ?? it.datainicio,
         DataFim: it.dataFim ?? it.DataFim ?? it.data_fim ?? it.datafim,
         Funcao: it.funcao ?? it.Funcao ?? it.funcaoNome ?? it.role,
         NomeCliente: it.nomeCliente ?? it.NomeCliente ?? it.clienteNome ?? it.nome,
@@ -129,11 +110,9 @@ export function PrestadorDetailModal({ prestador, isOpen, onClose, prestadorId: 
         PrecoTotal: it.precoTotal ?? it.PrecoTotal ?? it.total ?? it.valor ?? 0,
       })).filter((it: AgendaItem) => Boolean(it.DataInicio));
       
-      console.log("Agenda normalizada:", normalized);
       setAgendaItems(normalized);
     } catch (error: any) {
       console.error("Erro ao carregar agenda:", error);
-      console.error("Detalhes do erro:", error.response?.data);
       toast.error("Erro ao carregar agenda do prestador");
     } finally {
       setIsLoadingAgenda(false);
@@ -192,7 +171,7 @@ export function PrestadorDetailModal({ prestador, isOpen, onClose, prestadorId: 
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="max-w-7xl w-[95vw] max-h-[95vh] overflow-y-auto">
+      <DialogContent className="max-w-7xl md:min-w-[1100px] max-h-[95vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2">
             <User className="h-5 w-5" />
@@ -279,6 +258,13 @@ export function PrestadorDetailModal({ prestador, isOpen, onClose, prestadorId: 
                   className="rounded-md border w-full"
                   modifiers={{ hasService: serviceDays }}
                   modifiersClassNames={{ hasService: "bg-amber-100/50 dark:bg-amber-900/30" }}
+                  classNames={{
+                    day_selected: "bg-primary text-primary-foreground hover:bg-primary hover:text-primary-foreground focus:bg-primary focus:text-primary-foreground",
+                    day: "font-normal aria-selected:rounded-md",
+                    day_range_start: "rdp-day_range_start",
+                    day_range_end: "rdp-day_range_end",
+                    day_range_middle: "rdp-day_range_middle"
+                  }}
                 />
               </CardContent>
             </Card>
