@@ -8,6 +8,10 @@ export interface CartItem {
   price: number;
   quantity: number;
   image?: string;
+  prestadorId: number;
+  especialidade: string;
+  dataInicio: Date;
+  dataFim: Date;
 }
 
 export interface Order {
@@ -59,12 +63,26 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
   const openCheckout = () => setIsCheckoutOpen(true);
   const closeCheckout = () => setIsCheckoutOpen(false);
 
-  const addToCart = (itemToAdd: Omit<CartItem, 'quantity'>) => {
+  const addToCart = (itemToAdd: Omit<CartItem, 'quantity' | 'prestadorId' | 'especialidade' | 'dataInicio' | 'dataFim'> & 
+  { prestadorId: number; especialidade: string; dataInicio: Date; dataFim: Date; }) => {
+    
+    if (itemToAdd.prestadorId && itemToAdd.dataInicio < new Date()) {
+      toast.error("Não é possível agendar serviços para datas e horários passados.");
+      return;
+    }
+
     setCartItems(prevItems => {
-      const existingItem = prevItems.find(item => item.id === itemToAdd.id);
+      const existingItem = prevItems.find(item => 
+        item.id === itemToAdd.id && 
+        item.prestadorId === itemToAdd.prestadorId && 
+        item.dataInicio.getTime() === itemToAdd.dataInicio.getTime() &&
+        item.especialidade === itemToAdd.especialidade
+      );
       if (existingItem) {
         return prevItems.map(item =>
-          item.id === itemToAdd.id ? { ...item, quantity: item.quantity + 1 } : item
+          item.id === itemToAdd.id && item.prestadorId === itemToAdd.prestadorId && item.dataInicio.getTime() === itemToAdd.dataInicio.getTime() && item.especialidade === itemToAdd.especialidade
+            ? { ...item, quantity: item.quantity + 1 } 
+            : item
         );
       }
       return [...prevItems, { ...itemToAdd, quantity: 1 }];

@@ -32,9 +32,19 @@ export function CartSidebar() {
                       <p className="font-semibold">{item.name}</p>
                       <p className="text-sm text-muted-foreground">R$ {item.price.toFixed(2)}</p>
                       <div className="flex items-center gap-2 mt-2">
-                        <Button variant="outline" size="icon" className="h-6 w-6" onClick={() => decreaseQuantity(item.id)}><Minus size={12} /></Button>
-                        <span>{item.quantity}</span>
-                        <Button variant="outline" size="icon" className="h-6 w-6" onClick={() => increaseQuantity(item.id)}><Plus size={12} /></Button>
+                        {item.prestadorId ? (
+                          <span className="text-xs text-muted-foreground">
+                            Data: {new Date(item.dataInicio).toLocaleDateString("pt-BR")} 
+                            Horário: {new Date(item.dataInicio).toLocaleTimeString("pt-BR", { hour: "2-digit", minute: "2-digit" })} 
+                            - {new Date(item.dataFim).toLocaleTimeString("pt-BR", { hour: "2-digit", minute: "2-digit" })}
+                          </span>
+                        ) : (
+                          <>
+                            <Button variant="outline" size="icon" className="h-6 w-6" onClick={() => decreaseQuantity(item.id)}><Minus size={12} /></Button>
+                            <span>{item.quantity}</span>
+                            <Button variant="outline" size="icon" className="h-6 w-6" onClick={() => increaseQuantity(item.id)}><Plus size={12} /></Button>
+                          </>
+                        )}
                       </div>
                     </div>
                     <Button variant="ghost" size="icon" className="text-muted-foreground hover:text-destructive" onClick={() => removeFromCart(item.id)}><Trash2 size={16} /></Button>

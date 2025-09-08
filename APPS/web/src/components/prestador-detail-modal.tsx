@@ -16,6 +16,7 @@ import {
 } from "lucide-react";
 import api from "@/services/api";
 import { toast } from "sonner";
+import { useCart } from "@/context/CartContext";
 
 interface PrestadorServico {
   nomePessoa: string;
@@ -54,6 +55,9 @@ export function PrestadorDetailModal({ prestador, isOpen, onClose }: PrestadorDe
   const [agendaItems, setAgendaItems] = useState<AgendaItem[]>([]);
   const [isLoadingAgenda, setIsLoadingAgenda] = useState(false);
   const [prestadorId, setPrestadorId] = useState<number | null>(null);
+  const [selectedTimeSlots, setSelectedTimeSlots] = useState<Date[]>([]);
+
+  const { addToCart, openCart } = useCart();
 
   useEffect(() => {
     if (prestador && isOpen) {
@@ -70,6 +74,7 @@ export function PrestadorDetailModal({ prestador, isOpen, onClose }: PrestadorDe
   const fetchPrestadorId = async () => {
     if (!prestador) return;
     
+    console.log("Buscando ID do prestador para:", prestador);
     try {
       const response = await api.get(`/PrestadorServico/by-email-and-telefone?email=${encodeURIComponent(prestador.email)}&telefone=${encodeURIComponent(prestador.telefone)}`);
       const prestadorId = response.data?.id || response.data;
@@ -87,6 +92,7 @@ export function PrestadorDetailModal({ prestador, isOpen, onClose }: PrestadorDe
 
     const fetchAgenda = async () => {
     if (!prestadorId) return;
+    console.log("Buscando agenda para prestadorId:", prestadorId);
     
     try {
       setIsLoadingAgenda(true);
@@ -296,15 +302,33 @@ export function PrestadorDetailModal({ prestador, isOpen, onClose }: PrestadorDe
                             {availableSlots.map((slot, index) => {
                               const isBooked = bookedSlots.some(booked => {
                                 const bookedStart = new Date(booked.DataInicio);
-                                return bookedStart.getHours() === slot.getHours();
+                                const bookedEnd = new Date(booked.DataFim);
+                                return slot >= bookedStart && slot < bookedEnd;
                               });
                               
+                              const isSelected = selectedTimeSlots.some(selectedSlot => 
+                                selectedSlot.getTime() === slot.getTime()
+                              );
+
+                              const handleSlotClick = () => {
+                                setSelectedTimeSlots(prevSelectedSlots => {
+                                  if (isSelected) {
+                                    return prevSelectedSlots.filter(
+                                      selectedSlot => selectedSlot.getTime() !== slot.getTime()
+                                    );
+                                  } else {
+                                    return [...prevSelectedSlots, slot];
+                                  }
+                                });
+                              };
+
                               return (
                                 <Button
                                   key={index}
-                                  variant={isBooked ? "secondary" : "outline"}
+                                  variant={isBooked ? "secondary" : (isSelected ? "default" : "outline")}
                                   size="sm"
                                   disabled={isBooked}
+                                  onClick={handleSlotClick}
                                   className="text-sm h-8"
                                 >
                                   {formatTime(slot)}
@@ -313,6 +337,33 @@ export function PrestadorDetailModal({ prestador, isOpen, onClose }: PrestadorDe
                             })}
                           </div>
                         </div>
+                        
+                        {selectedTimeSlots.length > 0 && (
+                          <div className="mt-4 text-right">
+                            <Button onClick={() => {
+                              selectedTimeSlots.sort((a, b) => a.getTime() - b.getTime());
+                              const firstSlot = selectedTimeSlots[0];
+                              const lastSlot = selectedTimeSlots[selectedTimeSlots.length - 1];
+                              
+                              const itemToAdd = {
+                                id: `${prestadorId}-${firstSlot.getTime()}-${prestador?.especialidade}`,
+                                name: `Consulta com ${prestador?.nomePessoa} (${prestador?.especialidade})`,
+                                price: prestador?.precoHora ? prestador.precoHora * selectedTimeSlots.length : 0,
+                                image: prestador?.enderecoFoto,
+                                prestadorId: prestadorId!,
+                                especialidade: prestador?.especialidade || "",
+                                dataInicio: firstSlot,
+                                dataFim: new Date(lastSlot.setHours(lastSlot.getHours() + 1)),
+                              };
+                              
+                              addToCart(itemToAdd);
+                              openCart();
+                              onClose(); 
+                            }}>
+                              Adicionar ao carrinho
+                            </Button>
+                          </div>
+                        )}
                         
                         {bookedSlots.length > 0 && (
                           <div>
