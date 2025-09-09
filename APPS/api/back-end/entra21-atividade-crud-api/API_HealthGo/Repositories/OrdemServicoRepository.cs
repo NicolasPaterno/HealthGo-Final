@@ -78,5 +78,12 @@ namespace API_HealthGo.Repository
             ";
             await _connection.Execute(sql, ordemServico);
         }
+
+        public async Task<OrdemServicoEntity> GetLatestByPessoaId(int pessoaId)
+        {
+            using var conn = _connection.GetConnection();
+            string sql = "SELECT * FROM OrdemServico WHERE Pessoa_Id = @PessoaId ORDER BY DataCriacao DESC LIMIT 1";
+            return await conn.QueryFirstOrDefaultAsync<OrdemServicoEntity>(sql, new { PessoaId = pessoaId });
+        }
     }
 }

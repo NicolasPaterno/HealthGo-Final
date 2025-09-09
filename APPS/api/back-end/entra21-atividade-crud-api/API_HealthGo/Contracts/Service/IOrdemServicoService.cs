@@ -16,5 +16,7 @@ namespace API_HealthGo.Contracts.Service
         Task<MessageResponse> Update(OrdemServicoEntity ordemServico);
 
         Task<MessageResponse> Delete(int id);
+
+        Task<OrdemServicoGetLatestResponseDTO> GetLatestOrdemServicoByPessoaId(int pessoaId);
     }
 }
