@@ -363,26 +363,27 @@ CREATE TABLE IF NOT EXISTS `Voo` (
 ) ENGINE = InnoDB;
 
 -- Tabela Passagem
-CREATE TABLE IF NOT EXISTS `Passagem` (
+CREATE TABLE IF NOT EXISTS `healthgo`.`passagem` (
   `Id` INT NOT NULL AUTO_INCREMENT,
   `Preco` DECIMAL(10,2) NOT NULL,
-  `Classe` ENUM('Econômica', 'Executiva', 'Primeira') NOT NULL,
+  `Classe` ENUM('Primeira Classe', 'Executiva', 'Econômica') NOT NULL,
   `Voo_Id` INT NOT NULL,
-  `Pessoa_Id` INT NOT NULL,
+  `OrdemServico_Id` INT NOT NULL,
   PRIMARY KEY (`Id`),
   INDEX `fk_Passagem_Voo1_idx` (`Voo_Id` ASC) VISIBLE,
-  INDEX `fk_Passagem_Pessoa1_idx` (`Pessoa_Id` ASC) VISIBLE,
+  INDEX `fk_passagem_ordemservico1_idx` (`ordemservico_Id` ASC) VISIBLE,
   CONSTRAINT `fk_Passagem_Voo1`
     FOREIGN KEY (`Voo_Id`)
-    REFERENCES `Voo` (`Id`)
-    ON DELETE CASCADE
-    ON UPDATE NO ACTION,
-  CONSTRAINT `fk_Passagem_Pessoa1`
-    FOREIGN KEY (`Pessoa_Id`)
-    REFERENCES `Pessoa` (`Id`)
-    ON DELETE CASCADE
-    ON UPDATE NO ACTION
-) ENGINE = InnoDB;
+    REFERENCES `healthgo`.`voo` (`Id`)
+    ON DELETE CASCADE,
+  CONSTRAINT `fk_passagem_ordemservico1`
+    FOREIGN KEY (`ordemservico_Id`)
+    REFERENCES `healthgo`.`ordemservico` (`Id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB
+AUTO_INCREMENT = 3
+DEFAULT CHARACTER SET = utf8mb3;
 
 -- Tabela TokenRecuperacaoSenha
 CREATE TABLE IF NOT EXISTS `TokenRecuperacaoSenha` (
@@ -627,11 +628,6 @@ INSERT INTO Aviao (Id, Modelo, Capacidade, Companhia) VALUES
 INSERT INTO Voo (Id, Numero, DataPartida, DataChegada, AeroportoOrigem_Id, AeroportoDestino_Id, Aviao_Id) VALUES
 (1, 'LA1234', '2024-02-15 10:00:00', '2024-02-15 11:30:00', 1, 2, 1),
 (2, 'G31000', '2024-02-16 14:00:00', '2024-02-16 15:30:00', 2, 1, 2);
-
--- Passagens
-INSERT INTO Passagem (Id, Preco, Classe, Voo_Id, Pessoa_Id) VALUES
-(1, 250.00, 'Econômica', 1, 2),
-(2, 350.00, 'Executiva', 2, 2);
 
 -- Avaliações
 INSERT INTO Avaliacao (Id, Nota, Comentario, DataAvaliacao, Pessoa_Id, Hotel_Id) VALUES

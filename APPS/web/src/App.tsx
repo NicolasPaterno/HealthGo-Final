@@ -103,7 +103,7 @@ function App() {
                 <Route path="/dashboard" element={<DashboardPage />}>
                   <Route index element={<DashboardContent />} />
                   {/*<Route path="hotels" element={<HotelsBrowsePage />} />*/}
-                  <Route path="hotels-management" element={<HotelsPage />} />
+                  <Route path="hotels" element={<HotelsPage />} />
                   <Route path="tickets" element={<TicketsPage />} />
                   <Route path="psychologist" element={<PsychologistPage />} />
                   <Route path="caregivers" element={<CaregiversPage />} />

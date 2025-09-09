@@ -227,7 +227,7 @@ export default function HospitalsPage() {
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-6">
             {hospitals.map((hospital) => (
-              <Card key={hospital.COMP} className="hover:shadow-lg transition-shadow duration-200">
+              <Card key={hospital.id} className="hover:shadow-lg transition-shadow duration-200">
                 <CardHeader className="pb-3">
                   <CardTitle className="text-lg line-clamp-2">
                     {hospital.nome}
