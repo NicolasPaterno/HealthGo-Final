@@ -15,6 +15,6 @@ namespace API_HealthGo.Contracts.Repositories
 
         Task Update(OrdemServicoEntity ordemServico);
 
-        Task<OrdemServicoEntity> GetLatestByPessoaId(int pessoaId);
+        Task<int> GetLatestByPessoaId(int pessoaId);
     }
 }

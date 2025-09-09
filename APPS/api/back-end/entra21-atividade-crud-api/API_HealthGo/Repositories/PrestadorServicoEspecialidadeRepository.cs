@@ -101,5 +101,24 @@ namespace API_HealthGo.Repositories
                 return await con.QueryAsync<PrestadorServicoEspecialidadeEntity>(sql, new { id });
             }
         }
+
+        public async Task<int> ReturnIdByFunction(int id, string function)
+        {
+            string sql = @"
+        SELECT pse.Id
+        FROM PrestadorServico_Especialidade AS pse
+        JOIN PrestadorServico AS ps
+          ON pse.PrestadorServico_Id = ps.Id
+        JOIN Especialidade AS e
+          ON pse.Especialidade_Id = e.Id
+        WHERE
+            ps.Id = @id AND e.Nome = @function;
+    ";
+
+            using (var con = _connection.GetConnection())
+            {
+                return await con.QuerySingleOrDefaultAsync<int>(sql, new { id, function });
+            }
+        }
     }
 }

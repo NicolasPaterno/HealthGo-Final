@@ -57,22 +57,16 @@ namespace API_HealthGo.Services
             };
         }
 
-        public async Task<OrdemServicoGetLatestResponseDTO> GetLatestOrdemServicoByPessoaId(int pessoaId)
+        public async Task<int> GetLatestOrdemServicoByPessoaId(int pessoaId)
         {
-            var entity = await _repository.GetLatestByPessoaId(pessoaId);
-            if (entity == null)
+            var ordemServicoId = await _repository.GetLatestByPessoaId(pessoaId);
+
+            if (ordemServicoId == 0)
             {
-                return null;
+                return 0;
             }
 
-            return new OrdemServicoGetLatestResponseDTO
-            {
-                Id = entity.Id,
-                DataCriacao = entity.DataCriacao,
-                StatusOS = entity.StatusOS,
-                FormaPagamento = entity.FormaPagamento,
-                Pessoa_Id = entity.Pessoa_Id
-            };
+            return ordemServicoId;
         }
     }
 }

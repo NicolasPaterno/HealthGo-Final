@@ -32,6 +32,7 @@ interface PrestadorServico {
   precoHora: number;
   observacao: string;
   especialidade: string;
+  especialidadeId: number; // Reintroduzindo esta propriedade
 }
 
 interface AgendaItem {
@@ -56,6 +57,7 @@ export function PrestadorDetailModal({ prestador, isOpen, onClose }: PrestadorDe
   const [isLoadingAgenda, setIsLoadingAgenda] = useState(false);
   const [prestadorId, setPrestadorId] = useState<number | null>(null);
   const [selectedTimeSlots, setSelectedTimeSlots] = useState<Date[]>([]);
+  // const [prestadorServicoEspecialidadeId, setPrestadorServicoEspecialidadeId] = useState<number | null>(null); // Novo estado
 
   const { addToCart, openCart } = useCart();
 
@@ -68,13 +70,14 @@ export function PrestadorDetailModal({ prestador, isOpen, onClose }: PrestadorDe
   useEffect(() => {
     if (prestadorId) {
       fetchAgenda();
+      // fetchPrestadorServicoEspecialidadeId(); // Chamar a nova função aqui
     }
   }, [prestadorId]);
 
   const fetchPrestadorId = async () => {
     if (!prestador) return;
     
-    console.log("Buscando ID do prestador para:", prestador);
+    // console.log("Buscando ID do prestador para:", prestador);
     try {
       const response = await api.get(`/PrestadorServico/by-email-and-telefone?email=${encodeURIComponent(prestador.email)}&telefone=${encodeURIComponent(prestador.telefone)}`);
       const prestadorId = response.data?.id || response.data;
@@ -90,9 +93,25 @@ export function PrestadorDetailModal({ prestador, isOpen, onClose }: PrestadorDe
     }
   };
 
-    const fetchAgenda = async () => {
+  // const fetchPrestadorServicoEspecialidadeId = async () => {
+  //   if (!prestadorId || !prestador?.especialidade) return;
+  //
+  //   try {
+  //     const response = await api.get(`/PrestadorServicoEspecialidade/${prestadorId}/get-id-by-function?functionName=${encodeURIComponent(prestador.especialidade)}`);
+  //     const id = response.data?.id || response.data; // Assumindo que a resposta retorna diretamente o ID
+  //     if (id) {
+  //       setPrestadorServicoEspecialidadeId(id);
+  //     } else {
+  //       toast.error("ID da especialidade do prestador não encontrado");
+  //     }
+  //   } catch (error: any) {
+  //     console.error("Erro ao buscar ID da especialidade do prestador:", error);
+  //     toast.error("Erro ao carregar ID da especialidade do prestador");
+  //   }
+  // };
+
+  const fetchAgenda = async () => {
     if (!prestadorId) return;
-    console.log("Buscando agenda para prestadorId:", prestadorId);
     
     try {
       setIsLoadingAgenda(true);
@@ -107,7 +126,7 @@ export function PrestadorDetailModal({ prestador, isOpen, onClose }: PrestadorDe
         : [];
       
       const normalized: AgendaItem[] = raw.map((it: any) => ({
-        DataInicio: it.dataInicio ?? it.DataInicio ?? it.dat-inicio ?? it.datainicio,
+        DataInicio: it.dataInicio ?? it.DataInicio ?? it.datainicio,
         DataFim: it.dataFim ?? it.DataFim ?? it.data_fim ?? it.datafim,
         Funcao: it.funcao ?? it.Funcao ?? it.funcaoNome ?? it.role,
         NomeCliente: it.nomeCliente ?? it.NomeCliente ?? it.clienteNome ?? it.nome,
@@ -171,6 +190,16 @@ export function PrestadorDetailModal({ prestador, isOpen, onClose }: PrestadorDe
   };
 
   if (!prestador) return null;
+
+  const formatDateToLocalISOString = (date: Date) => {
+    const year = date.getFullYear();
+    const month = (date.getMonth() + 1).toString().padStart(2, '0');
+    const day = date.getDate().toString().padStart(2, '0');
+    const hours = date.getHours().toString().padStart(2, '0');
+    const minutes = date.getMinutes().toString().padStart(2, '0');
+    const seconds = date.getSeconds().toString().padStart(2, '0');
+    return `${year}-${month}-${day}T${hours}:${minutes}:${seconds}`;
+  };
 
   const availableSlots = selectedDate ? getAvailableTimeSlots(selectedDate) : [];
   const bookedSlots = selectedDate ? getBookedTimeSlots(selectedDate) : [];
@@ -346,14 +375,17 @@ export function PrestadorDetailModal({ prestador, isOpen, onClose }: PrestadorDe
                               const lastSlot = selectedTimeSlots[selectedTimeSlots.length - 1];
                               
                               const itemToAdd = {
+                                type: "serviceProvider" as const, 
                                 id: `${prestadorId}-${firstSlot.getTime()}-${prestador?.especialidade}`,
                                 name: `Consulta com ${prestador?.nomePessoa} (${prestador?.especialidade})`,
                                 price: prestador?.precoHora ? prestador.precoHora * selectedTimeSlots.length : 0,
                                 image: prestador?.enderecoFoto,
                                 prestadorId: prestadorId!,
-                                especialidade: prestador?.especialidade || "",
-                                dataInicio: firstSlot,
-                                dataFim: new Date(lastSlot.setHours(lastSlot.getHours() + 1)),
+                                especialidadeId: prestador?.especialidadeId || 0, // Usar especialidadeId
+                                especialidade: prestador?.especialidade || "", // Adicionar o nome da especialidade de volta
+                                dataInicio: formatDateToLocalISOString(firstSlot), 
+                                dataFim: formatDateToLocalISOString(new Date(lastSlot.getTime() + 60 * 60 * 1000)), // Adicionar 1 hora antes de formatar como local ISO
+                                quantity: 1, 
                               };
                               
                               addToCart(itemToAdd);

@@ -52,12 +52,12 @@ namespace API_HealthGo.Controllers
         [HttpGet("latest/{pessoaId}")]
         public async Task<IActionResult> GetLatestOrdemServicoByPessoaId(int pessoaId)
         {
-            var response = await _service.GetLatestOrdemServicoByPessoaId(pessoaId);
-            if (response == null)
+            var ordemServicoId = await _service.GetLatestOrdemServicoByPessoaId(pessoaId);
+            if (ordemServicoId == 0)
             {
                 return NotFound();
             }
-            return Ok(response);
+            return Ok(ordemServicoId);
         }
     }
 }
