@@ -3,7 +3,7 @@ namespace API_HealthGo.DTO
 {
     public class HospitalDTO
     {
-        public string Cnes { get; set; }
+        public string COMP { get; set; }
         public string Nome { get; set; }
         public string RazaoSocial { get; set; }
         public string NaturezaJuridica { get; set; }
@@ -14,5 +14,6 @@ namespace API_HealthGo.DTO
         public string Logradouro { get; set; }
         public string NumeroEndereco { get; set; }
         public string Cep { get; set; }
+        public string Numero { get; set; }
     }
 }

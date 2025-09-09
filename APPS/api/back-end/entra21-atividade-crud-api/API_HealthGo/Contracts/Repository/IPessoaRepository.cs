@@ -17,6 +17,8 @@ namespace API_HealthGo.Contracts.Repositories
 
         Task<PessoaEntity> GetPessoaByEmail(string email);
 
+        Task<int> GetIdByEmail(string email);
+
         Task AtualizarSenhaAsync(int pessoa_Id, string novaSenha);
     }
 }

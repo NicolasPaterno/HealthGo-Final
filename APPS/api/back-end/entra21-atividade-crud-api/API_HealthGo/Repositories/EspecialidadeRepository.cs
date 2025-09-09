@@ -1,17 +1,23 @@
 ﻿using Dapper;
 using API_HealthGo.Contracts.Repositories;
+using API_HealthGo.Contracts.Infrastructure;
 using API_HealthGo.DTO;
 using API_HealthGo.Entities;
-using API_HealthGo.Infrastructure;
 using MySql.Data.MySqlClient;
 
 namespace API_HealthGo.Repository
 {
-    class EspecialidadeRepository : IEspecialidadeRepository
+    public class EspecialidadeRepository : IEspecialidadeRepository
     {
+        private readonly IConnection _connection;
+
+        public EspecialidadeRepository(IConnection connection)
+        {
+            _connection = connection;
+        }
+
         public async Task<IEnumerable<EspecialidadeEntity>> GetAll()
         {
-            Connection _connection = new Connection();
             using (MySqlConnection con = _connection.GetConnection())
             {
                 string sql = $@"
@@ -28,7 +34,6 @@ namespace API_HealthGo.Repository
 
         public async Task Insert(EspecialidadeInsertDTO especialidade)
         {
-            Connection _connection = new Connection();
             string sql = @"
                 INSERT INTO ESPECIALIDADE (NOME)
                                 VALUE (@Nome)
@@ -39,7 +44,6 @@ namespace API_HealthGo.Repository
 
         public async Task Delete(int id)
         {
-            Connection _connection = new Connection();
             string sql = "DELETE FROM ESPECIALIDADE WHERE ID = @id";
 
             await _connection.Execute(sql, new { id });
@@ -47,7 +51,6 @@ namespace API_HealthGo.Repository
 
         public async Task<EspecialidadeEntity> GetById(int id)
         {
-            Connection _connection = new Connection();
             using (MySqlConnection con = _connection.GetConnection())
             {
                 string sql = $@"
@@ -64,7 +67,6 @@ namespace API_HealthGo.Repository
 
         public async Task Update(EspecialidadeEntity especialidade)
         {
-            Connection _connection = new Connection();
             string sql = @"UPDATE ESPECIALIDADE
                               SET NOME = @Nome
                               WHERE ID = @Id

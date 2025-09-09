@@ -7,5 +7,8 @@
         public string Nome { get; set; }
 
         public int Estado_Id { get; set; }
+
+        // Propriedades de navegação
+        public virtual EstadoEntity Estado { get; set; }
     }
 }

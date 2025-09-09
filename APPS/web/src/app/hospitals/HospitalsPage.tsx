@@ -1,147 +1,325 @@
 // APPS/web/src/app/hospitals/HospitalsPage.tsx
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
+import { useNavigate } from 'react-router-dom';
 import api from '@/services/api';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Hospital, MapPin, Building } from 'lucide-react';
+import { Hospital, MapPin, Building, Hotel, Phone } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
-
-interface HospitalData {
-  cnes: string;
-  nome: string;
-  razaoSocial: string;
-  naturezaJuridica: string;
-  tipoUnidade: string;
-  uf: string;
-  municipio: string;
-  bairro: string;
-  logradouro: string;
-  numeroEndereco: string;
-  cep: string;
-}
+import type { Hospital as HospitalType, HospitalResponse } from '@/types/hospital';
 
 export default function HospitalsPage() {
-  const [hospitals, setHospitals] = useState<HospitalData[]>([]);
-  const [uf, setUf] = useState('SC');
+  const [hospitals, setHospitals] = useState<HospitalType[]>([]);
   const [loading, setLoading] = useState(false);
+  const [uf, setUf] = useState('SP');
   const [searchTerm, setSearchTerm] = useState('');
   const [currentPage, setCurrentPage] = useState(0);
   const [totalPages, setTotalPages] = useState(0);
-  const limit = 21;
+  const [totalHospitals, setTotalHospitals] = useState(0);
+  const navigate = useNavigate();
 
-  const ufs = ["AC", "AL", "AP", "AM", "BA", "CE", "DF", "ES", "GO", "MA", "MT", "MS", "MG", "PA", "PB", "PR", "PE", "PI", "RJ", "RN", "RS", "RO", "RR", "SC", "SP", "SE", "TO"];
+  // Timeout para debounce da pesquisa
+  const [searchTimeout, setSearchTimeout] = useState<NodeJS.Timeout | null>(null);
 
-  useEffect(() => {
-    const fetchHospitals = async () => {
-      if (!uf) return;
-      setLoading(true);
-      try {
-        const response = await api.get(`/Hospitais`, {
-          params: {
-            uf,
-            limit,
-            page: currentPage,
-            nome: searchTerm
-          }
-        });
-        setHospitals(response.data.data);
-        setTotalPages(Math.ceil(response.data.total / limit));
-      } catch (error) {
-        console.error("Erro ao buscar hospitais:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
+  const fetchHospitals = useCallback(async (ufParam: string, page: number, search: string) => {
+    setLoading(true);
+    try {
+      const response = await api.get<HospitalResponse>('/Hospital', {
+        params: {
+          uf: ufParam,
+          limit: 21,
+          page: page,
+          nome: search || undefined
+        }
+      });
 
-    fetchHospitals();
-  }, [uf, currentPage, searchTerm]);
+      setHospitals(response.data.data);
+      setTotalHospitals(response.data.total);
+      setTotalPages(Math.ceil(response.data.total / 21));
+    } catch (error) {
+      console.error('Erro ao buscar hospitais:', error);
+      setHospitals([]);
+      setTotalHospitals(0);
+      setTotalPages(0);
+    } finally {
+      setLoading(false);
+    }
+  }, []);
 
-  const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setSearchTerm(event.target.value);
-    setCurrentPage(0);
+  // Função para lidar com mudanças na pesquisa com debounce
+  const handleSearchChange = (value: string) => {
+    setSearchTerm(value);
+    setCurrentPage(0); // Reset para primeira página
+
+    // Cancela o timeout anterior se existir
+    if (searchTimeout) {
+      clearTimeout(searchTimeout);
+    }
+
+    // Cria um novo timeout de 500ms
+    const newTimeout = setTimeout(() => {
+      fetchHospitals(uf, 0, value);
+    }, 500);
+
+    setSearchTimeout(newTimeout);
   };
 
-  const handlePageChange = (newPage: number) => {
-    setCurrentPage(newPage);
+  // Função para lidar com mudanças na UF
+  const handleUfChange = (value: string) => {
+    setUf(value);
+    setCurrentPage(0);
+    setSearchTerm(''); // Limpa a pesquisa ao mudar UF
+
+    // Cancela qualquer pesquisa pendente
+    if (searchTimeout) {
+      clearTimeout(searchTimeout);
+      setSearchTimeout(null);
+    }
+
+    fetchHospitals(value, 0, '');
+  };
+
+  // Função para mudança de página
+  const handlePageChange = (page: number) => {
+    setCurrentPage(page);
+    fetchHospitals(uf, page, searchTerm);
+  };
+
+  // Carrega hospitais iniciais
+  useEffect(() => {
+    fetchHospitals(uf, 0, '');
+  }, [fetchHospitals]);
+
+  // Cleanup do timeout quando o componente for desmontado
+  useEffect(() => {
+    return () => {
+      if (searchTimeout) {
+        clearTimeout(searchTimeout);
+      }
+    };
+  }, [searchTimeout]);
+
+  const formatNaturezaJuridica = (natureza: string) => {
+    if (!natureza) return 'Não informado';
+
+    return natureza
+      .replace(/_/g, ' ')
+      .replace(/\b\w/g, l => l.toUpperCase());
+  };
+
+  const formatTipoUnidade = (tipo: string) => {
+    if (!tipo) return 'Não informado';
+
+    return tipo
+      .replace(/\b\w/g, l => l.toUpperCase());
+  };
+
+  const handleHotelClick = (hospital: HospitalType) => {
+    // Construir parâmetros de busca para a página de hotéis
+    const searchParams = new URLSearchParams();
+
+    // Adicionar cidade do hospital
+    if (hospital.municipio) {
+      searchParams.set('city', hospital.municipio);
+    }
+
+    // Adicionar estado do hospital
+    if (hospital.uf) {
+      searchParams.set('state', hospital.uf);
+    }
+
+    // Adicionar bairro como termo de busca se disponível
+    if (hospital.bairro) {
+      searchParams.set('search', hospital.bairro);
+    }
+
+    // Navegar para a página de hotéis com os filtros aplicados
+    navigate(`/dashboard/hotels?${searchParams.toString()}`);
   };
 
   return (
-    <main className="flex-1 p-6">
-      <header className="mb-6">
-        <h1 className="text-3xl font-bold flex items-center gap-2">
-          <Hospital className="size-8" />
-          Hospitais e Leitos
+    <div className="container mx-auto px-4 py-8">
+      <header className="mb-8">
+        <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">
+          Hospitais
         </h1>
-        <p className="text-muted-foreground mt-1">
-          Consulte informações de hospitais por estado.
+        <p className="text-gray-600 dark:text-gray-400">
+          Encontre hospitais próximos e reserve hotéis para sua estadia
         </p>
+
+        <div className="flex flex-col md:flex-row gap-4 mb-6">
+          <Select onValueChange={handleUfChange} defaultValue={uf}>
+            <SelectTrigger className="w-full md:w-48">
+              <SelectValue placeholder="Selecione a UF" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="AC">Acre</SelectItem>
+              <SelectItem value="AL">Alagoas</SelectItem>
+              <SelectItem value="AP">Amapá</SelectItem>
+              <SelectItem value="AM">Amazonas</SelectItem>
+              <SelectItem value="BA">Bahia</SelectItem>
+              <SelectItem value="CE">Ceará</SelectItem>
+              <SelectItem value="DF">Distrito Federal</SelectItem>
+              <SelectItem value="ES">Espírito Santo</SelectItem>
+              <SelectItem value="GO">Goiás</SelectItem>
+              <SelectItem value="MA">Maranhão</SelectItem>
+              <SelectItem value="MT">Mato Grosso</SelectItem>
+              <SelectItem value="MS">Mato Grosso do Sul</SelectItem>
+              <SelectItem value="MG">Minas Gerais</SelectItem>
+              <SelectItem value="PA">Pará</SelectItem>
+              <SelectItem value="PB">Paraíba</SelectItem>
+              <SelectItem value="PR">Paraná</SelectItem>
+              <SelectItem value="PE">Pernambuco</SelectItem>
+              <SelectItem value="PI">Piauí</SelectItem>
+              <SelectItem value="RJ">Rio de Janeiro</SelectItem>
+              <SelectItem value="RN">Rio Grande do Norte</SelectItem>
+              <SelectItem value="RS">Rio Grande do Sul</SelectItem>
+              <SelectItem value="RO">Rondônia</SelectItem>
+              <SelectItem value="RR">Roraima</SelectItem>
+              <SelectItem value="SC">Santa Catarina</SelectItem>
+              <SelectItem value="SP">São Paulo</SelectItem>
+              <SelectItem value="SE">Sergipe</SelectItem>
+              <SelectItem value="TO">Tocantins</SelectItem>
+            </SelectContent>
+          </Select>
+
+          <div className="relative flex-1">
+            <Input
+              type="text"
+              placeholder="Pesquisar por nome do hospital ou cidade..."
+              value={searchTerm}
+              onChange={(e) => handleSearchChange(e.target.value)}
+              className="pl-10"
+            />
+            <Hospital className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={20} />
+          </div>
+        </div>
+
+
       </header>
-      <div className="flex flex-col md:flex-row gap-4 mb-6">
-        <Select onValueChange={(value) => { setUf(value); setCurrentPage(0); }} defaultValue={uf}>
-          <SelectTrigger className="w-full md:w-[280px]">
-            <SelectValue placeholder="Selecione um estado" />
-          </SelectTrigger>
-          <SelectContent>
-            {ufs.map(uf => (
-              <SelectItem key={uf} value={uf}>{uf}</SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
-        <Input
-          type="text"
-          placeholder="Pesquisar por nome do hospital ou cidade..."
-          value={searchTerm}
-          onChange={handleSearch}
-          className="w-full md:flex-1"
-        />
-      </div>
+
       {loading ? (
-        <div className="flex justify-center items-center h-64">
-          <p>Carregando hospitais...</p>
+        <div className="flex flex-col items-center justify-center py-12">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mb-4"></div>
+          <p className="text-gray-600 dark:text-gray-400">
+            {searchTerm ? `Buscando hospitais para "${searchTerm}"...` : 'Carregando hospitais...'}
+          </p>
+        </div>
+      ) : hospitals.length === 0 ? (
+        <div className="text-center py-12">
+          <Hospital className="mx-auto h-16 w-16 text-gray-400 mb-4" />
+          <h3 className="text-lg font-semibold mb-2">Nenhum hospital encontrado</h3>
+          <p className="text-muted-foreground">
+            {searchTerm
+              ? `Não foram encontrados hospitais para "${searchTerm}" em ${uf}`
+              : `Não há hospitais cadastrados em ${uf}`
+            }
+          </p>
         </div>
       ) : (
         <>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="mb-4 text-sm text-gray-600 dark:text-gray-400">
+            {totalHospitals} hospital{totalHospitals !== 1 ? 'is' : ''} encontrado{totalHospitals !== 1 ? 's' : ''}
+            {searchTerm && ` para "${searchTerm}"`}
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-6">
             {hospitals.map((hospital) => (
-              <Card key={hospital.cnes} className="flex flex-col">
-                <CardHeader>
-                  <CardTitle className="text-lg">{hospital.nome || "Nome não informado"}</CardTitle>
+              <Card key={hospital.COMP} className="hover:shadow-lg transition-shadow duration-200">
+                <CardHeader className="pb-3">
+                  <CardTitle className="text-lg line-clamp-2">
+                    {hospital.nome}
+                  </CardTitle>
                   <CardDescription className="flex items-center gap-1.5 pt-1 text-xs">
-                     <Building size={12}/> {hospital.razaoSocial || "Não informado"}
+                    <Building size={12} />
+                    <span className="line-clamp-1">
+                      {hospital.razaoSocial || "Não informado"}
+                    </span>
                   </CardDescription>
+                  {hospital.COMP && (
+                    <div className="text-xs text-gray-500 mt-1">
+                      COMP: {hospital.COMP}
+                    </div>
+                  )}
                 </CardHeader>
-                <CardContent className="flex-grow space-y-3">
-                  <div className="flex justify-between items-center text-xs">
-                      <Badge variant="secondary">{hospital.tipoUnidade || "Não informado"}</Badge>
-                      <Badge variant="outline" className="capitalize">
-                        {hospital.naturezaJuridica?.replace(/_/g, ' ').toLowerCase() || 'Não informado'}
-                      </Badge>
+
+                <CardContent className="pt-0">
+                  <div className="flex flex-wrap gap-2 mb-3">
+                    <Badge variant="secondary" className="text-xs">
+                      {formatTipoUnidade(hospital.tipoUnidade)}
+                    </Badge>
+                    <Badge variant="outline" className="text-xs">
+                      {formatNaturezaJuridica(hospital.naturezaJuridica)}
+                    </Badge>
                   </div>
+
                   <div className="text-sm text-muted-foreground space-y-1 pt-2 border-t">
-                      <p className="flex items-center gap-2">
-                          <MapPin size={14}/> 
-                          {`${hospital.logradouro || "Rua não informada"}, ${hospital.numeroEndereco || 'S/N'}`}
+                    <p className="flex items-center gap-2">
+                      <MapPin size={14} />
+                      <span className="line-clamp-1">
+                        {hospital.logradouro
+                          ? `${hospital.logradouro}, ${hospital.numeroEndereco || 'S/N'}`
+                          : 'Endereço não informado'
+                        }
+                      </span>
+                    </p>
+                    <p className="text-xs">
+                      {hospital.bairro && `${hospital.bairro}, `}
+                      {hospital.municipio} - {hospital.uf}
+                      {hospital.cep && ` • CEP: ${hospital.cep}`}
+                    </p>
+                    {hospital.numero && (
+                      <p className="flex items-center gap-2 text-xs">
+                        <Phone size={12} />
+                        <span>{hospital.numero}</span>
                       </p>
-                      <p className="pl-6">{`${hospital.bairro || "Bairro não informado"}, ${hospital.municipio || "Cidade não informada"} - ${hospital.uf}`}</p>
-                      <p className="pl-6">{`CEP: ${hospital.cep || 'Não informado'}`}</p>
+                    )}
+                  </div>
+
+                  <div className="pt-3">
+                    <Button
+                      onClick={() => handleHotelClick(hospital)}
+                      className="w-full"
+                      size="sm"
+                    >
+                      <Hotel size={16} className="mr-2" />
+                      Ver Hotéis Próximos
+                    </Button>
                   </div>
                 </CardContent>
               </Card>
             ))}
           </div>
-          <div className="flex justify-center items-center mt-6 gap-2">
-            <Button onClick={() => handlePageChange(currentPage - 1)} disabled={currentPage === 0}>
-              Anterior
-            </Button>
-            <span>Página {currentPage + 1} de {totalPages || 1}</span>
-            <Button onClick={() => handlePageChange(currentPage + 1)} disabled={currentPage >= totalPages - 1}>
-              Próxima
-            </Button>
-          </div>
+
+          {totalPages > 1 && (
+            <div className="flex justify-center items-center gap-2">
+              <Button
+                onClick={() => handlePageChange(currentPage - 1)}
+                disabled={currentPage === 0}
+                variant="outline"
+                size="sm"
+              >
+                Anterior
+              </Button>
+
+              <span className="text-sm text-gray-600 dark:text-gray-400 px-4">
+                Página {currentPage + 1} de {totalPages}
+              </span>
+
+              <Button
+                onClick={() => handlePageChange(currentPage + 1)}
+                disabled={currentPage >= totalPages - 1}
+                variant="default"
+                size="sm"
+              >
+                Próxima
+              </Button>
+            </div>
+          )}
         </>
       )}
-    </main>
+    </div>
   );
 }

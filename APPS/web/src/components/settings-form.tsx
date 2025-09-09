@@ -177,47 +177,48 @@ export function SettingsForm() {
 
   React.useEffect(() => {
     const fetchUserData = async () => {
-        setIsLoading(true);
-        try {
-            // Get userId from decoded token
-            const decodedUser = getAuthUser();
-            if (!decodedUser) {
-                toast.error("Sessão expirada", { description: "Por favor, faça login novamente." });
-                // Redirect to login if no valid token
-                window.location.href = '/login';
-                return;
-            }
-            const userId = parseInt(decodedUser.nameid); // 'nameid' claim contains the user ID
-
-            if (isNaN(userId)) {
-                throw new Error("ID do usuário inválido no token.");
-            }
-
-            const response = await api.get(`/Pessoa/${userId}`); // Fetch by ID as before
-            const fetchedUser = response.data;
-
-            const formattedUser = {
-                ...fetchedUser,
-                dataNascimento: new Date(fetchedUser.dataNascimento).toISOString().split('T')[0],
-            };
-
-            setCurrentUser(formattedUser);
-            profileForm.reset(formattedUser);
-
-        } catch (error) {
-            console.error("Falha ao buscar dados do usuário:", error);
-            toast.error("Erro ao carregar dados do perfil", {
-                description: "Não foi possível carregar seus dados. Tente novamente mais tarde.",
-            });
-        } finally {
-            setIsLoading(false);
+      setIsLoading(true);
+      try {
+        // Get userId from decoded token
+        const decodedUser = getAuthUser();
+        if (!decodedUser) {
+          console.warn("Token não encontrado ou inválido");
+          toast.error("Erro de autenticação", {
+            description: "Não foi possível verificar sua autenticação. Tente recarregar a página."
+          });
+          return;
         }
+        const userId = parseInt(decodedUser.nameid); // 'nameid' claim contains the user ID
+
+        if (isNaN(userId)) {
+          throw new Error("ID do usuário inválido no token.");
+        }
+
+        const response = await api.get(`/Pessoa/${userId}`); // Fetch by ID as before
+        const fetchedUser = response.data;
+
+        const formattedUser = {
+          ...fetchedUser,
+          dataNascimento: new Date(fetchedUser.dataNascimento).toISOString().split('T')[0],
+        };
+
+        setCurrentUser(formattedUser);
+        profileForm.reset(formattedUser);
+
+      } catch (error) {
+        console.error("Falha ao buscar dados do usuário:", error);
+        toast.error("Erro ao carregar dados do perfil", {
+          description: "Não foi possível carregar seus dados. Tente novamente mais tarde.",
+        });
+      } finally {
+        setIsLoading(false);
+      }
     };
 
     if (activeTab === 'profile') {
-        fetchUserData();
+      fetchUserData();
     }
-}, [profileForm, activeTab]);
+  }, [profileForm, activeTab]);
 
   async function onProfileSubmit(data: ProfileFormValues) {
     try {
@@ -451,7 +452,7 @@ export function SettingsForm() {
                     render={({ field }) => (
                       <FormItem>
                         <FormLabel>Cidade</FormLabel>
-                        <Select onValueChange={(value) => field.onChange(Number(value))} value={String(field.value)}>
+                        <Select onValueChange={(value) => field.onChange(Number(value))} value={field.value ? String(field.value) : undefined}>
                           <FormControl>
                             <SelectTrigger>
                               <SelectValue placeholder="Selecione a cidade" />
@@ -622,7 +623,7 @@ export function SettingsForm() {
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel>Tamanho da Fonte</FormLabel>
-                      <Select onValueChange={field.onChange} defaultValue={field.value}>
+                      <Select onValueChange={field.onChange} value={field.value || undefined}>
                         <FormControl>
                           <SelectTrigger>
                             <SelectValue placeholder="Selecione o tamanho da fonte" />

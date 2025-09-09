@@ -2,6 +2,7 @@
 using API_HealthGo.DTO;
 using API_HealthGo.Entities;
 using API_HealthGo.Responses;
+using API_HealthGo.Responses.MessageResponse;
 using Microsoft.AspNetCore.Mvc;
 
 namespace API_HealthGo.Controllers
@@ -27,6 +28,12 @@ namespace API_HealthGo.Controllers
         public async Task<ActionResult<QuartoEntity>> GetById(int id)
         {
             return Ok(await _service.GetById(id));
+        }
+
+        [HttpGet("hotel/{hotelId}")]
+        public async Task<ActionResult<QuartoGetAllResponse>> GetByHotelId(int hotelId)
+        {
+            return Ok(await _service.GetByHotelId(hotelId));
         }
 
         [HttpPost]
