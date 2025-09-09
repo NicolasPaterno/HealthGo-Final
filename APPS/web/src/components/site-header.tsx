@@ -4,9 +4,12 @@ import { SidebarTrigger } from "@/components/ui/sidebar"
 import { useCart } from "@/context/CartContext"; // Importe o useCart
 import { ShoppingCart } from "lucide-react";
 import { Badge } from "./ui/badge";
+import { useLocation } from "react-router-dom";
 
 export function SiteHeader() {
   const { openCart, cartCount } = useCart();
+  const location = useLocation();
+  const isPrestadorRoute = location.pathname.startsWith("/dashboard-prestador");
 
   return (
     <header className="flex h-(--header-height) shrink-0 items-center gap-2 border-b transition-[width,height] ease-linear group-has-data-[collapsible=icon]/sidebar-wrapper:h-(--header-height)">
@@ -18,20 +21,22 @@ export function SiteHeader() {
         />
         <h1 className="text-base font-medium">Menu</h1>
         <div className="ml-auto flex items-center gap-2">
-          {/* Botão do Carrinho */}
-          <Button variant="ghost" size="icon" className="relative" onClick={openCart}>
-            <ShoppingCart />
-            {cartCount > 0 && (
-              <Badge variant="destructive" className="absolute -top-2 -right-2 h-5 w-5 justify-center rounded-full p-0">
-                {cartCount}
-              </Badge>
-            )}
-            <span className="sr-only">Abrir carrinho</span>
-          </Button>
+          {/* Botão do Carrinho (oculto em páginas do Prestador de Serviço) */}
+          {!isPrestadorRoute && (
+            <Button variant="ghost" size="icon" className="relative" onClick={openCart}>
+              <ShoppingCart />
+              {cartCount > 0 && (
+                <Badge variant="destructive" className="absolute -top-2 -right-2 h-5 w-5 justify-center rounded-full p-0">
+                  {cartCount}
+                </Badge>
+              )}
+              <span className="sr-only">Abrir carrinho</span>
+            </Button>
+          )}
 
           <Button variant="ghost" asChild size="sm" className="hidden sm:flex">
             <a
-              href="https://github.com/NicolasPaterno/HealthGo-react" // Link corrigido
+              href="https://github.com/NicolasPaterno/HealthGo-Final"
               rel="noopener noreferrer"
               target="_blank"
               className="dark:text-foreground"

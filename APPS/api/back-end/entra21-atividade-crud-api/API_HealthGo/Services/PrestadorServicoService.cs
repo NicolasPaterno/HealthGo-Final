@@ -4,6 +4,7 @@ using API_HealthGo.Contracts.Repositories;
 using API_HealthGo.Entities;
 using API_HealthGo.DTO;
 using API_HealthGo.Repository;
+using API_HealthGo.Responses.MessageResponse;
 
 namespace API_HealthGo.Services
 {
@@ -33,6 +34,14 @@ namespace API_HealthGo.Services
             };
         }
 
+        public async Task<PrestadorServico_All_Infos_DTOGetAllResponse> GetPrestadorAllInfos()
+        {
+            return new PrestadorServico_All_Infos_DTOGetAllResponse
+            {
+                Data = await _repository.GetPrestadorAllInfos()
+            };
+        }
+
         public async Task<PrestadorServicoEntity> GetById(int id)
         {
             return await _repository.GetById(id);
@@ -54,6 +63,26 @@ namespace API_HealthGo.Services
             {
                 Message = "Prestador de Serviço alterado com sucesso!"
             };
+        }
+
+        public async Task<PrestadorServicoEntity> GetByPessoaId(int id)
+        {
+            return await _repository.GetByPessoaId(id);
+        }
+
+        public async Task<IEnumerable<PrestadorServicoEspecialidadeDTO>> GetAllPrestadoresComEspecialidades()
+        {
+            return await _repository.GetAllPrestadoresComEspecialidadesAsync();
+        }
+
+        public async Task<IEnumerable<PrestadorServicoAgendaDTO>> GetAgendaByPrestadorId(int prestadorId)
+        {
+            return await _repository.GetAgendaByPrestadorId(prestadorId);
+        }
+
+        public async Task<int> GetByEmailAndTelefone(string email, string telefone)
+        {
+            return await _repository.GetByEmailAndTelefone(email, telefone);
         }
     }
 }

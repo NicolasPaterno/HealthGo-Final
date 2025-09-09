@@ -28,8 +28,11 @@ interface ICartContext {
   isCartOpen: boolean;
   openCart: () => void;
   closeCart: () => void;
-  purchaseHistory: Order[]; // Novo
-  completePurchase: () => void; // Novo
+  purchaseHistory: Order[];
+  completePurchase: () => void;
+  isCheckoutOpen: boolean;
+  openCheckout: () => void;
+  closeCheckout: () => void;
 }
 
 const CartContext = createContext<ICartContext | undefined>(undefined);
@@ -45,13 +48,16 @@ export const useCart = () => {
 export const CartProvider = ({ children }: { children: ReactNode }) => {
   const [cartItems, setCartItems] = useState<CartItem[]>([]);
   const [isCartOpen, setIsCartOpen] = useState(false);
-  const [purchaseHistory, setPurchaseHistory] = useState<Order[]>([]); // Novo
+  const [isCheckoutOpen, setIsCheckoutOpen] = useState(false);
+  const [purchaseHistory, setPurchaseHistory] = useState<Order[]>([]);
 
   const cartCount = useMemo(() => cartItems.reduce((total, item) => total + item.quantity, 0), [cartItems]);
   const cartTotal = useMemo(() => cartItems.reduce((total, item) => total + item.price * item.quantity, 0), [cartItems]);
 
   const openCart = () => setIsCartOpen(true);
   const closeCart = () => setIsCartOpen(false);
+  const openCheckout = () => setIsCheckoutOpen(true);
+  const closeCheckout = () => setIsCheckoutOpen(false);
 
   const addToCart = (itemToAdd: Omit<CartItem, 'quantity'>) => {
     setCartItems(prevItems => {
@@ -98,6 +104,7 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
     setPurchaseHistory(prevHistory => [newOrder, ...prevHistory]);
     setCartItems([]);
     closeCart();
+    closeCheckout();
     toast.success("Compra finalizada com sucesso!");
   };
 
@@ -114,6 +121,9 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
     closeCart,
     purchaseHistory,
     completePurchase,
+    isCheckoutOpen,
+    openCheckout,
+    closeCheckout,
   };
 
   return <CartContext.Provider value={value}>{children}</CartContext.Provider>;

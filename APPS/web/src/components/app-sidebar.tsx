@@ -1,4 +1,4 @@
-import * as React from "react"
+import * as React from "react";
 import {
   Building,
   CalendarClock,
@@ -14,12 +14,12 @@ import {
   Settings,
   Users,
   Hospital,
-} from "lucide-react"
+} from "lucide-react";
 
-import { NavDocuments } from "@/components/nav-documents"
-import { NavMain } from "@/components/nav-main"
-import { NavSecondary } from "@/components/nav-secondary"
-import { NavUser } from "@/components/nav-user"
+import { NavDocuments } from "@/components/nav-documents";
+import { NavMain } from "@/components/nav-main";
+import { NavSecondary } from "@/components/nav-secondary";
+import { NavUser } from "@/components/nav-user";
 import {
   Sidebar,
   SidebarContent,
@@ -28,8 +28,8 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
-} from "@/components/ui/sidebar"
-import { Link, useLocation } from "react-router-dom"
+} from "@/components/ui/sidebar";
+import { Link, useLocation } from "react-router-dom";
 
 const data = {
   user: {
@@ -59,13 +59,8 @@ const data = {
       icon: Plane,
     },
     {
-      title: "Psicologos",
-      url: "/dashboard/Psychologist",
-      icon: Heart,
-    },
-    {
-      title: "cuidadores",
-      url: "/dashboard/caregivers",
+      title: "Prestadores de Serviço",
+      url: "/dashboard/prestadores",
       icon: Users,
     },
     {
@@ -156,7 +151,7 @@ const data = {
       icon: FileText,
     },
   ],
-}
+};
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   const location = useLocation();
@@ -174,7 +169,6 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
                 <Heart className="!size-7" />
                 <span className="text-base font-semibold">HealthGo</span>
               </Link>
-
             </SidebarMenuButton>
           </SidebarMenuItem>
         </SidebarMenu>
@@ -185,12 +179,16 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         {/* A LINHA ABAIXO FOI ALTERADA */}
         <NavDocuments items={data.documents} pathname={location.pathname} />
         {/* A LINHA ABAIXO FOI ALTERADA */}
-        <NavSecondary items={data.navSecondary} pathname={location.pathname} className="mt-auto" />
+        <NavSecondary
+          items={data.navSecondary}
+          pathname={location.pathname}
+          className="mt-auto"
+        />
       </SidebarContent>
       <SidebarFooter>
         {/* A LINHA ABAIXO FOI ALTERADA */}
         <NavUser />
       </SidebarFooter>
     </Sidebar>
-  )
+  );
 }

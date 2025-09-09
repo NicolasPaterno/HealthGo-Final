@@ -1,5 +1,6 @@
 using API_HealthGo.Contracts.Infrastructure;
 using API_HealthGo.Contracts.Repositories;
+using API_HealthGo.Contracts.Repository;
 using API_HealthGo.Contracts.Service;
 using API_HealthGo.Infrastructure;
 using API_HealthGo.Repositories;
@@ -63,6 +64,7 @@ namespace API_HealthGo
             builder.Services.AddEndpointsApiExplorer();
 
 
+
             //INJE��ES DE DEPEND�NCIAS
 
             //connection to database
@@ -76,7 +78,6 @@ namespace API_HealthGo
             builder.Services.AddScoped<IAuthService, AuthService>();
             builder.Services.AddScoped<IEmailService, EmailService>();
 
-
             //prestador servi�o
             builder.Services.AddScoped<IPrestadorServicoRepository, PrestadorServicoRepository>();
             builder.Services.AddScoped<IPrestadorServicoService, PrestadorServicoService>();
@@ -85,6 +86,8 @@ namespace API_HealthGo
 
             builder.Services.AddScoped<IHospitalService, HospitalService>();
 
+            builder.Services.AddScoped<IPrestadorServicoEspecialidadeRepository, PrestadorServicoEspecialidadeRepository>();
+            builder.Services.AddScoped<IPrestadorServicoEspecialidadeService, PrestadorServicoEspecialidadeService>();
 
             builder.Services.AddScoped<IAeroportoService, AeroportoService>();
             builder.Services.AddScoped<IAeroportoRepository, AeroportoRepository>();
@@ -110,11 +113,13 @@ namespace API_HealthGo
             builder.Services.AddScoped<IEstadoService, EstadoService>();
             builder.Services.AddScoped<IEstadoRepository, EstadoRepository>();
 
+          
             builder.Services.AddHttpContextAccessor();
             builder.Services.AddScoped<IHotelService, HotelService>();
             builder.Services.AddScoped<IHotelRepository, HotelRepository>();
 
-            builder.Services.AddScoped<IImagemService, ImagemService>();
+
+          builder.Services.AddScoped<IImagemService, ImagemService>();
             builder.Services.AddScoped<IImagemRepository, ImagemRepository>();
 
             builder.Services.AddScoped<ILembreteService, LembreteService>();
@@ -131,6 +136,14 @@ namespace API_HealthGo
 
             builder.Services.AddScoped<IQuartoService, QuartoService>();
             builder.Services.AddScoped<IQuartoRepository, QuartoRepository>();
+          
+
+            builder.Services.AddScoped<IAeroportoService, AeroportoService>();
+            builder.Services.AddTransient<IAeroportoRepository, AeroportoRepository>();
+
+            builder.Services.AddScoped<IPrestadorServicoService, PrestadorServicoService>();
+            builder.Services.AddTransient<IPrestadorServicoRepository, PrestadorServicoRepository>();
+
 
             builder.Services.AddScoped<IVooService, VooService>();
             builder.Services.AddScoped<IVooRepository, VooRepository>();
