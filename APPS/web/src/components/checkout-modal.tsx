@@ -107,6 +107,22 @@ export function CheckoutModal({ isOpen, onClose }: CheckoutModalProps) {
     }
   };
 
+  const createServiceReminder = async (serviceName: string, serviceDateStart: string, serviceDateEnd: string, pessoaId: number) => {
+    try {
+      const reminderPayload = {
+        Titulo: `Consulta: ${serviceName} (${serviceDateStart.substring(11, 16)} - ${serviceDateEnd.substring(11, 16)})`,
+        Data: new Date(new Date(serviceDateStart).setHours(new Date(serviceDateStart).getHours())).toISOString(), // Usar a data de início diretamente, como já ajustada
+        Tipo: "Consulta",
+        Pessoa_Id: pessoaId,
+      };
+      await api.post('/Lembrete', reminderPayload);
+      toast.success("Lembrete da consulta adicionado ao calendário!");
+    } catch (error: any) {
+      console.error("Erro ao criar lembrete de serviço:", error);
+      toast.error("Erro ao adicionar lembrete da consulta.");
+    }
+  };
+
   const handleFinalizePurchase = async () => {
     if (cartItems.length === 0) {
       toast.error("Carrinho vazio!");
@@ -127,8 +143,8 @@ export function CheckoutModal({ isOpen, onClose }: CheckoutModalProps) {
       await new Promise(resolve => setTimeout(resolve, 1500));
 
       const formaPagamento = mapPaymentMethodToString(paymentMethod);
+      await createOrdemServico(formaPagamento); // Reintroduzir a chamada para criar a Ordem de Serviço
 
-      const ordemServicoId = await createOrdemServico(formaPagamento);
       const decodedUser = getAuthUser();
       if (!decodedUser) {
         throw new Error("Usuário não autenticado");
@@ -177,12 +193,13 @@ export function CheckoutModal({ isOpen, onClose }: CheckoutModalProps) {
         }
 
         const serviceProviderData = {
-          dataInicio: new Date(new Date(serviceProvider.dataInicio).setHours(new Date(serviceProvider.dataInicio).getHours() - 3)).toISOString(), // Subtrair 1 hora
-          dataFim: new Date(new Date(serviceProvider.dataFim).setHours(new Date(serviceProvider.dataFim).getHours() - 3)).toISOString(),       // Subtrair 1 hora
+          dataInicio: new Date(new Date(serviceProvider.dataInicio).setHours(new Date(serviceProvider.dataInicio).getHours() - 1)).toISOString(), // Subtrair 1 hora
+          dataFim: new Date(new Date(serviceProvider.dataFim).setHours(new Date(serviceProvider.dataFim).getHours() - 1)).toISOString(),       // Subtrair 1 hora
           ordemServico_Id: latestOrdemServicoId,
           prestadorServico_Especialidade_Id: fetchedEspecialidadeId
         };
         await api.post("/api/OrdemServico_PrestadorServico", serviceProviderData);
+        await createServiceReminder(serviceProvider.name, serviceProvider.dataInicio, serviceProvider.dataFim, pessoaId); // Chamar para criar lembrete
       }
 
       completePurchase();
