@@ -202,6 +202,7 @@ CREATE TABLE IF NOT EXISTS `Especialidade` (
 -- Tabela PrestadorServico_Especialidade
 CREATE TABLE IF NOT EXISTS `PrestadorServico_Especialidade` (
   `Id` INT NOT NULL AUTO_INCREMENT,
+  `PrecoHora` DECIMAL(10,2) NOT NULL,
   `PrestadorServico_Id` INT NOT NULL,
   `Especialidade_Id` INT NOT NULL,
   PRIMARY KEY (`Id`),
@@ -401,7 +402,6 @@ CREATE TABLE IF NOT EXISTS `TokenRecuperacaoSenha` (
     ON UPDATE NO ACTION
 ) ENGINE = InnoDB;
 
-
 -- =====================================================
 -- 3. INSERÇÃO DE DADOS BÁSICOS
 -- =====================================================
@@ -465,160 +465,10 @@ INSERT INTO Cidade (Id, Nome, Estado_Id) VALUES
 (25, 'São Paulo', 25),
 (26, 'Aracaju', 26),
 (27, 'Palmas', 27),
--- Cidades adicionais do Sul e Sudeste
-(28, 'Campinas', 25),
-(29, 'Santos', 25),
-(30, 'Ribeirão Preto', 25),
-(31, 'Sorocaba', 25),
-(32, 'Guarulhos', 25),
-(33, 'São Bernardo do Campo', 25),
-(34, 'Santo André', 25),
-(35, 'Osasco', 25),
-(36, 'São José dos Campos', 25),
-(37, 'Mogi das Cruzes', 25),
-(38, 'Diadema', 25),
-(39, 'Jundiaí', 25),
-(40, 'Carapicuíba', 25),
-(41, 'Piracicaba', 25),
-(42, 'Bauru', 25),
-(43, 'Itaquaquecetuba', 25),
-(44, 'São Vicente', 25),
-(45, 'Franca', 25),
-(46, 'Praia Grande', 25),
-(47, 'Guarujá', 25),
-(48, 'Taubaté', 25),
-(49, 'Limeira', 25),
-(50, 'Suzano', 25),
-(51, 'Sumaré', 25),
-(52, 'Barueri', 25),
-(53, 'Embu das Artes', 25),
-(54, 'São Caetano do Sul', 25),
-(55, 'Mauá', 25),
-(56, 'Taboão da Serra', 25),
-(57, 'Indaiatuba', 25),
-(58, 'Cotia', 25),
-(59, 'Americana', 25),
-(60, 'Araraquara', 25),
 (61, 'Blumenau', 24),
 (62, 'Joinville', 24),
 (63, 'Itajaí', 24),
-(64, 'Rio do Sul', 24),
-(65, 'Chapecó', 24),
-(66, 'Criciúma', 24),
-(67, 'Lages', 24),
-(68, 'Jaraguá do Sul', 24),
-(69, 'Palhoça', 24),
-(70, 'Balneário Camboriú', 24),
-(71, 'Brusque', 24),
-(72, 'Tubarão', 24),
-(73, 'São José', 24),
-(74, 'Navegantes', 24),
-(75, 'Canoinhas', 24),
-(76, 'Araranguá', 24),
-(77, 'Caçador', 24),
-(78, 'Concórdia', 24),
-(79, 'Itapema', 24),
-(80, 'São Bento do Sul', 24),
-(81, 'Curitiba', 16),
-(82, 'Londrina', 16),
-(83, 'Maringá', 16),
-(84, 'Ponta Grossa', 16),
-(85, 'Cascavel', 16),
-(86, 'São José dos Pinhais', 16),
-(87, 'Foz do Iguaçu', 16),
-(88, 'Colombo', 16),
-(89, 'Guarapuava', 16),
-(90, 'Paranaguá', 16),
-(91, 'Araucária', 16),
-(92, 'Toledo', 16),
-(93, 'Apucarana', 16),
-(94, 'Pinhais', 16),
-(95, 'Campo Largo', 16),
-(96, 'Arapongas', 16),
-(97, 'Almirante Tamandaré', 16),
-(98, 'Umuarama', 16),
-(99, 'Piraquara', 16),
-(100, 'Cambé', 16),
-(101, 'Porto Alegre', 21),
-(102, 'Caxias do Sul', 21),
-(103, 'Pelotas', 21),
-(104, 'Canoas', 21),
-(105, 'Santa Maria', 21),
-(106, 'Gravataí', 21),
-(107, 'Viamão', 21),
-(108, 'Novo Hamburgo', 21),
-(109, 'São Leopoldo', 21),
-(110, 'Rio Grande', 21),
-(111, 'Alvorada', 21),
-(112, 'Passo Fundo', 21),
-(113, 'Sapucaia do Sul', 21),
-(114, 'Uruguaiana', 21),
-(115, 'Santa Cruz do Sul', 21),
-(116, 'Cachoeirinha', 21),
-(117, 'Bagé', 21),
-(118, 'Bento Gonçalves', 21),
-(119, 'Erechim', 21),
-(120, 'Guaíba', 21),
-(121, 'Belo Horizonte', 13),
-(122, 'Uberlândia', 13),
-(123, 'Contagem', 13),
-(124, 'Juiz de Fora', 13),
-(125, 'Betim', 13),
-(126, 'Montes Claros', 13),
-(127, 'Ribeirão das Neves', 13),
-(128, 'Uberaba', 13),
-(129, 'Governador Valadares', 13),
-(130, 'Ipatinga', 13),
-(131, 'Sete Lagoas', 13),
-(132, 'Divinópolis', 13),
-(133, 'Santa Luzia', 13),
-(134, 'Ibirité', 13),
-(135, 'Poços de Caldas', 13),
-(136, 'Patos de Minas', 13),
-(137, 'Pouso Alegre', 13),
-(138, 'Teófilo Otoni', 13),
-(139, 'Barbacena', 13),
-(140, 'Sabará', 13),
-(141, 'Rio de Janeiro', 19),
-(142, 'São Gonçalo', 19),
-(143, 'Duque de Caxias', 19),
-(144, 'Nova Iguaçu', 19),
-(145, 'Niterói', 19),
-(146, 'Belford Roxo', 19),
-(147, 'São João de Meriti', 19),
-(148, 'Campos dos Goytacazes', 19),
-(149, 'Petrópolis', 19),
-(150, 'Volta Redonda', 19),
-(151, 'Magé', 19),
-(152, 'Macaé', 19),
-(153, 'Itaboraí', 19),
-(154, 'Cabo Frio', 19),
-(155, 'Angra dos Reis', 19),
-(156, 'Nova Friburgo', 19),
-(157, 'Barra Mansa', 19),
-(158, 'Teresópolis', 19),
-(159, 'Mesquita', 19),
-(160, 'Nilópolis', 19),
-(161, 'Vitória', 8),
-(162, 'Vila Velha', 8),
-(163, 'Cariacica', 8),
-(164, 'Serra', 8),
-(165, 'Cachoeiro de Itapemirim', 8),
-(166, 'Vitória', 8),
-(167, 'Linhares', 8),
-(168, 'São Mateus', 8),
-(169, 'Colatina', 8),
-(170, 'Guarapari', 8),
-(171, 'Aracruz', 8),
-(172, 'Viana', 8),
-(173, 'Nova Venécia', 8),
-(174, 'Barra de São Francisco', 8),
-(175, 'Santa Teresa', 8),
-(176, 'Domingos Martins', 8),
-(177, 'Castelo', 8),
-(178, 'Itapemirim', 8),
-(179, 'Marataízes', 8),
-(180, 'São Gabriel da Palha', 8);
+(64, 'Rio do Sul', 24);
 
 -- =====================================================
 -- 4. INSERÇÃO DE USUÁRIOS PRINCIPAIS (SENHAS CRIPTOGRAFADAS)
@@ -634,146 +484,43 @@ INSERT INTO Pessoa (Id, Nome, DataNascimento, CPF, Telefone, Email, Senha, Ender
 INSERT INTO Pessoa (Id, Nome, DataNascimento, CPF, Telefone, Email, Senha, EnderecoFoto, CaoGuia, CEP, Bairro, Rua, NumeroEndereco, ROLE, Cidade_Id) VALUES
 (2, 'Usuário Teste', '1990-01-01', '111.111.111-11', '(47) 88888-8888', 'user@gmail.com', '$2a$10$/Xja513hl0RPjToTVpxeNeVhpOITrWB6qwZ5xMDuh.FOfbssSO5FO', 'https://via.placeholder.com/150', 0, '89020-000', 'Vila Nova', 'Rua das Flores', '456', 'Consumidor', 61);
 
-
 -- =====================================================
--- 6. INSERÇÃO DE HOTÉIS COM COORDENADAS REAIS
+-- 5. INSERÇÃO DE HOTÉIS COM COORDENADAS REAIS
 -- =====================================================
 
--- Hotéis de Blumenau (5 hotéis próximos a hospitais reais)
+-- Hotéis de Blumenau (coordenadas reais)
 INSERT INTO Hotel (CNPJ, Nome, Tipo, Email, Telefone, Site, Acessibilidade, CEP, Bairro, Rua, NumeroEndereco, Descricao, DataInicio, Cidade_Id, Pessoa_id, Ativo, Latitude, Longitude) VALUES
--- Hotel no Centro (próximo ao Hospital Santo Antônio)
-('12.345.678/0001-01', 'Hotel Central Blumenau', 'Hotel', 'contato@hotelcentral.com', '(47) 3333-1111', 'https://hotelcentral.com', 'Rampas de acesso, elevadores', '89010-000', 'Centro', 'Rua XV de Novembro', '100', 'Hotel localizado no coração de Blumenau, próximo ao Hospital Santo Antônio', NOW(), 61, 1, 1, -26.9189, -49.0661),
+-- Hotel no Centro de Blumenau (Rua XV de Novembro)
+('12.345.678/0001-01', 'Hotel Central Blumenau', 'Hotel', 'contato@hotelcentral.com', '(47) 3333-1111', 'https://hotelcentral.com', 'Rampas de acesso, elevadores', '89010-000', 'Centro', 'Rua XV de Novembro', '100', 'Hotel localizado no coração de Blumenau, próximo ao centro comercial', NOW(), 61, 1, 1, -26.9189, -49.0661),
 
--- Hotel na Itoupava Seca (próximo ao Hospital Santa Catarina)
-('12.345.678/0001-02', 'Pousada Itoupava', 'Pousada', 'contato@pousadaitoupava.com', '(47) 3333-2222', 'https://pousadaitoupava.com', 'Quartos adaptados', '89030-000', 'Itoupava Seca', 'Rua da Paz', '250', 'Pousada familiar próximo ao Hospital Santa Catarina', NOW(), 61, 1, 1, -26.9250, -49.0750),
+-- Hotel na Itoupava Seca
+('12.345.678/0001-02', 'Pousada Itoupava', 'Pousada', 'contato@pousadaitoupava.com', '(47) 3333-2222', 'https://pousadaitoupava.com', 'Quartos adaptados', '89030-000', 'Itoupava Seca', 'Rua da Paz', '250', 'Pousada familiar em ambiente tranquilo', NOW(), 61, 1, 1, -26.9250, -49.0750),
 
--- Hotel na Itoupava Central (próximo ao Hospital Regional)
-('12.345.678/0001-03', 'Hotel Itoupava Central', 'Hotel', 'contato@itoupavacentral.com', '(47) 3333-3333', 'https://itoupavacentral.com', 'Acessibilidade completa', '89030-100', 'Itoupava Central', 'Rua das Flores', '500', 'Hotel próximo ao Hospital Regional', NOW(), 61, 1, 1, -26.9300, -49.0800),
+-- Hotel na Itoupava Central
+('12.345.678/0001-03', 'Residencial Itoupava Central', 'Apartamento', 'contato@residencialitoupava.com', '(47) 3333-3333', 'https://residencialitoupava.com', 'Acessibilidade completa', '89030-100', 'Itoupava Central', 'Rua das Flores', '500', 'Residencial com apartamentos mobiliados', NOW(), 61, 1, 1, -26.9300, -49.0800),
 
--- Hotel na Itoupava Norte (próximo ao Hospital da Mulher)
-('12.345.678/0001-04', 'Hotel Itoupava Norte', 'Hotel', 'contato@itoupavanorte.com', '(47) 3333-4444', 'https://itoupavanorte.com', 'Acessibilidade completa', '89030-200', 'Itoupava Norte', 'Rua do Progresso', '750', 'Hotel próximo ao Hospital da Mulher', NOW(), 61, 1, 1, -26.9350, -49.0850),
+-- Hotel na Itoupava Norte
+('12.345.678/0001-04', 'Hostel Itoupava Norte', 'Hostel', 'contato@hostelitoupava.com', '(47) 3333-4444', 'https://hostelitoupava.com', 'Quartos compartilhados acessíveis', '89030-200', 'Itoupava Norte', 'Rua do Progresso', '750', 'Hostel para mochileiros e viajantes', NOW(), 61, 1, 1, -26.9350, -49.0850),
 
--- Hotel no Vorstadt (próximo ao Hospital Psiquiátrico)
-('12.345.678/0001-05', 'Pousada Vorstadt', 'Pousada', 'contato@pousadavorstadt.com', '(47) 3333-7777', 'https://pousadavorstadt.com', 'Pousada familiar acessível', '89015-000', 'Vorstadt', 'Rua do Comércio', '300', 'Pousada no bairro Vorstadt próximo ao hospital', NOW(), 61, 1, 1, -26.9100, -49.0550);
+-- Casa de temporada
+('12.345.678/0001-05', 'Casa Temporada Blumenau', 'Casa', 'contato@casatemporada.com', '(47) 3333-5555', 'https://casatemporada.com', 'Casa térrea com rampas', '89030-300', 'Itoupava Seca', 'Rua da Harmonia', '1000', 'Casa completa para temporada', NOW(), 61, 1, 1, -26.9200, -49.0700),
 
--- Hotéis de Florianópolis (5 hotéis próximos a hospitais reais)
+-- Hotel no Garcia (bairro histórico)
+('12.345.678/0001-06', 'Hotel Garcia Heritage', 'Hotel', 'contato@hotelgarcia.com', '(47) 3333-6666', 'https://hotelgarcia.com', 'Hotel histórico com acessibilidade', '89025-000', 'Garcia', 'Rua das Palmeiras', '200', 'Hotel histórico no bairro Garcia', NOW(), 61, 1, 1, -26.9150, -49.0600),
+
+-- Hotel no Vorstadt
+('12.345.678/0001-07', 'Pousada Vorstadt', 'Pousada', 'contato@pousadavorstadt.com', '(47) 3333-7777', 'https://pousadavorstadt.com', 'Pousada familiar acessível', '89015-000', 'Vorstadt', 'Rua do Comércio', '300', 'Pousada no bairro Vorstadt', NOW(), 61, 1, 1, -26.9100, -49.0550);
+
+-- Hotéis de Rio do Sul (coordenadas reais)
 INSERT INTO Hotel (CNPJ, Nome, Tipo, Email, Telefone, Site, Acessibilidade, CEP, Bairro, Rua, NumeroEndereco, Descricao, DataInicio, Cidade_Id, Pessoa_id, Ativo, Latitude, Longitude) VALUES
--- Hotel no Centro (próximo ao Hospital de Caridade)
-('12.345.678/0001-06', 'Hotel Centro Floripa', 'Hotel', 'contato@centrofloripa.com', '(48) 3333-1001', 'https://centrofloripa.com', 'Totalmente acessível', '88015-200', 'Centro', 'Rua Menino Deus', '100', 'Hotel no centro próximo ao Hospital de Caridade', NOW(), 24, 1, 1, -27.5900, -48.5500),
+-- Hotel no Centro de Rio do Sul
+('12.345.678/0001-08', 'Hotel Rio do Sul Centro', 'Hotel', 'contato@hotelriodosul.com', '(47) 3333-8888', 'https://hotelriodosul.com', 'Hotel completo com acessibilidade', '89160-000', 'Centro', 'Rua do Comércio', '150', 'Hotel no centro de Rio do Sul', NOW(), 64, 1, 1, -27.2150, -49.6430),
 
--- Hotel no Centro (próximo ao Hospital Baía Sul)
-('12.345.678/0001-07', 'Hotel Baía Sul Medical', 'Hotel', 'contato@baiasulmedical.com', '(48) 3333-1002', 'https://baiasulmedical.com', 'Acessível para cadeirantes', '88020-000', 'Centro', 'Rua Rui Barbosa', '50', 'Hotel próximo ao Hospital Baía Sul', NOW(), 24, 1, 1, -27.5900, -48.5500),
+-- Pousada na Barra do Trombudo
+('12.345.678/0001-09', 'Pousada Barra do Trombudo', 'Pousada', 'contato@pousadabarra.com', '(47) 3333-9999', 'https://pousadabarra.com', 'Pousada familiar', '89160-100', 'Barra do Trombudo', 'Rua da Barra', '250', 'Pousada na Barra do Trombudo', NOW(), 64, 1, 1, -27.2200, -49.6480),
 
--- Hotel na Trindade (próximo ao Hospital Universitário)
-('12.345.678/0001-08', 'Hotel Trindade Medical', 'Hotel', 'contato@trindademedical.com', '(48) 3333-2001', 'https://trindademedical.com', 'Totalmente acessível', '88040-900', 'Trindade', 'Rua Prof. Maria Flora Pausewang', '100', 'Hotel próximo ao Hospital Universitário', NOW(), 24, 1, 1, -27.6000, -48.5200),
-
--- Pousada na Trindade (próximo ao Hospital Infantil)
-('12.345.678/0001-09', 'Pousada Trindade', 'Pousada', 'contato@pousadatrindade.com', '(48) 3333-2002', 'https://pousadatrindade.com', 'Acessibilidade completa', '88040-900', 'Trindade', 'Rua Prof. Maria Flora Pausewang', '200', 'Pousada próxima ao Hospital Infantil', NOW(), 24, 1, 1, -27.6001, -48.5201),
-
--- Hotel no Centro (próximo ao Hospital Dona Helena)
-('12.345.678/0001-10', 'Hotel Dona Helena Plaza', 'Hotel', 'contato@donahelenaplaza.com', '(48) 3333-1003', 'https://donahelenaplaza.com', 'Totalmente acessível', '88020-000', 'Centro', 'Rua Rui Barbosa', '100', 'Hotel próximo ao Hospital Dona Helena', NOW(), 24, 1, 1, -27.5901, -48.5501);
-
--- Hotéis de São Paulo (5 hotéis próximos a hospitais reais)
-INSERT INTO Hotel (CNPJ, Nome, Tipo, Email, Telefone, Site, Acessibilidade, CEP, Bairro, Rua, NumeroEndereco, Descricao, DataInicio, Cidade_Id, Pessoa_id, Ativo, Latitude, Longitude) VALUES
--- Hotel no Cerqueira César (próximo ao Hospital das Clínicas)
-('12.345.678/0001-11', 'Hotel Cerqueira Medical', 'Hotel', 'contato@cerqueiramedical.com', '(11) 3333-3001', 'https://cerqueiramedical.com', 'Totalmente acessível', '05403-000', 'Cerqueira César', 'Av. Dr. Enéas Carvalho de Aguiar', '100', 'Hotel próximo ao Hospital das Clínicas', NOW(), 25, 1, 1, -23.5617, -46.6565),
-
--- Hotel na Bela Vista (próximo ao Hospital Sírio-Libanês)
-('12.345.678/0001-12', 'Hotel Bela Vista Medical', 'Hotel', 'contato@belavistamedical.com', '(11) 3333-4001', 'https://belavistamedical.com', 'Totalmente acessível', '01308-050', 'Bela Vista', 'Rua Dona Adma Jafet', '50', 'Hotel próximo ao Hospital Sírio-Libanês', NOW(), 25, 1, 1, -23.5617, -46.6565),
-
--- Hotel no Morumbi (próximo ao Hospital Albert Einstein)
-('12.345.678/0001-13', 'Hotel Morumbi Medical', 'Hotel', 'contato@morumbimedical.com', '(11) 3333-5001', 'https://morumbimedical.com', 'Totalmente acessível', '05652-900', 'Morumbi', 'Av. Albert Einstein', '300', 'Hotel próximo ao Hospital Albert Einstein', NOW(), 25, 1, 1, -23.6000, -46.7000),
-
--- Hotel no Paraíso (próximo ao Hospital do Coração)
-('12.345.678/0001-14', 'Hotel Paraíso Medical', 'Hotel', 'contato@paraisomedical.com', '(11) 3333-6001', 'https://paraisomedical.com', 'Acessível para cadeirantes', '04005-000', 'Paraíso', 'Rua Desembargador Eliseu Guilherme', '100', 'Hotel próximo ao Hospital do Coração', NOW(), 25, 1, 1, -23.5700, -46.6400),
-
--- Hotel na Vila Clementino (próximo ao Hospital São Paulo)
-('12.345.678/0001-15', 'Hotel Vila Clementino Medical', 'Hotel', 'contato@vilaclementinomedical.com', '(11) 3333-7001', 'https://vilaclementinomedical.com', 'Totalmente acessível', '04039-000', 'Vila Clementino', 'Rua Napoleão de Barros', '500', 'Hotel próximo ao Hospital São Paulo', NOW(), 25, 1, 1, -23.6000, -46.6400);
-
--- Hotéis de Curitiba (5 hotéis próximos a hospitais reais)
-INSERT INTO Hotel (CNPJ, Nome, Tipo, Email, Telefone, Site, Acessibilidade, CEP, Bairro, Rua, NumeroEndereco, Descricao, DataInicio, Cidade_Id, Pessoa_id, Ativo, Latitude, Longitude) VALUES
--- Hotel no Bom Retiro (próximo ao Hospital de Clínicas)
-('12.345.678/0001-16', 'Hotel Bom Retiro Medical', 'Hotel', 'contato@bomretiromedical.com', '(41) 3333-6001', 'https://bomretiromedical.com', 'Totalmente acessível', '80060-240', 'Bom Retiro', 'Rua General Carneiro', '100', 'Hotel próximo ao Hospital de Clínicas', NOW(), 81, 1, 1, -25.4284, -49.2733),
-
--- Hotel no Bom Retiro (próximo ao Hospital Pequeno Príncipe)
-('12.345.678/0001-17', 'Hotel Pequeno Príncipe Plaza', 'Hotel', 'contato@pequenoprincipeplaza.com', '(41) 3333-6002', 'https://pequenoprincipeplaza.com', 'Acessível para cadeirantes', '80250-060', 'Bom Retiro', 'Rua Desembargador Motta', '1000', 'Hotel próximo ao Hospital Pequeno Príncipe', NOW(), 81, 1, 1, -25.4284, -49.2733),
-
--- Hotel no Bom Retiro (próximo ao Hospital Erasto Gaertner)
-('12.345.678/0001-18', 'Hotel Erasto Gaertner Medical', 'Hotel', 'contato@erastogaertnermedical.com', '(41) 3333-6003', 'https://erastogaertnermedical.com', 'Totalmente acessível', '81520-010', 'Bom Retiro', 'Rua Dr. Ovande do Amaral', '150', 'Hotel próximo ao Hospital Erasto Gaertner', NOW(), 81, 1, 1, -25.4284, -49.2733),
-
--- Hotel no Bom Retiro (próximo ao Hospital Nossa Senhora das Graças)
-('12.345.678/0001-19', 'Hotel Nossa Senhora Medical', 'Hotel', 'contato@nossasenhormedical.com', '(41) 3333-6004', 'https://nossasenhormedical.com', 'Acessível para cadeirantes', '80060-240', 'Bom Retiro', 'Rua General Carneiro', '250', 'Hotel próximo ao Hospital Nossa Senhora das Graças', NOW(), 81, 1, 1, -25.4284, -49.2733),
-
--- Hotel no Cajuru (próximo ao Hospital Cajuru)
-('12.345.678/0001-20', 'Hotel Cajuru Medical', 'Hotel', 'contato@cajurumedical.com', '(41) 3333-6005', 'https://cajurumedical.com', 'Totalmente acessível', '80050-350', 'Cajuru', 'Rua São José', '200', 'Hotel próximo ao Hospital Cajuru', NOW(), 81, 1, 1, -25.4500, -49.2500);
-
--- Hotéis de Porto Alegre (5 hotéis próximos a hospitais reais)
-INSERT INTO Hotel (CNPJ, Nome, Tipo, Email, Telefone, Site, Acessibilidade, CEP, Bairro, Rua, NumeroEndereco, Descricao, DataInicio, Cidade_Id, Pessoa_id, Ativo, Latitude, Longitude) VALUES
--- Hotel no Bom Fim (próximo ao Hospital de Clínicas)
-('12.345.678/0001-21', 'Hotel Bom Fim Medical', 'Hotel', 'contato@bomfimmedical.com', '(51) 3333-8001', 'https://bomfimmedical.com', 'Totalmente acessível', '90035-903', 'Bom Fim', 'Rua Ramiro Barcelos', '2000', 'Hotel próximo ao Hospital de Clínicas', NOW(), 101, 1, 1, -30.0346, -51.2177),
-
--- Hotel no Moinhos de Vento (próximo ao Hospital Moinhos de Vento)
-('12.345.678/0001-22', 'Hotel Moinhos Medical', 'Hotel', 'contato@moinhosmedical.com', '(51) 3333-9001', 'https://moinhosmedical.com', 'Totalmente acessível', '90560-030', 'Moinhos de Vento', 'Rua Ramiro Barcelos', '800', 'Hotel próximo ao Hospital Moinhos de Vento', NOW(), 101, 1, 1, -30.0346, -51.2177),
-
--- Hotel no Moinhos de Vento (próximo ao Hospital Mãe de Deus)
-('12.345.678/0001-23', 'Hotel Mãe de Deus Plaza', 'Hotel', 'contato@maededeusplaza.com', '(51) 3333-9002', 'https://maededeusplaza.com', 'Acessível para cadeirantes', '90460-190', 'Moinhos de Vento', 'Rua Costa', '20', 'Hotel próximo ao Hospital Mãe de Deus', NOW(), 101, 1, 1, -30.0346, -51.2177),
-
--- Hotel no Santana (próximo ao Hospital São Lucas)
-('12.345.678/0001-24', 'Hotel Santana Medical', 'Hotel', 'contato@santanamedical.com', '(51) 3333-9003', 'https://santanamedical.com', 'Totalmente acessível', '90619-900', 'Santana', 'Av. Assis Brasil', '1800', 'Hotel próximo ao Hospital São Lucas', NOW(), 101, 1, 1, -30.0346, -51.2177),
-
--- Hotel no Cristo Redentor (próximo ao Hospital Conceição)
-('12.345.678/0001-25', 'Hotel Cristo Redentor Medical', 'Hotel', 'contato@cristoredentormedical.com', '(51) 3333-9004', 'https://cristoredentormedical.com', 'Acessível para cadeirantes', '91350-200', 'Cristo Redentor', 'Av. Francisco Trein', '500', 'Hotel próximo ao Hospital Conceição', NOW(), 101, 1, 1, -30.0346, -51.2177);
-
--- Hotéis de Belo Horizonte (5 hotéis próximos a hospitais reais)
-INSERT INTO Hotel (CNPJ, Nome, Tipo, Email, Telefone, Site, Acessibilidade, CEP, Bairro, Rua, NumeroEndereco, Descricao, DataInicio, Cidade_Id, Pessoa_id, Ativo, Latitude, Longitude) VALUES
--- Hotel na Santa Efigênia (próximo ao Hospital das Clínicas)
-('12.345.678/0001-26', 'Hotel Santa Efigênia Medical', 'Hotel', 'contato@santaefigeniamedical.com', '(31) 3333-0001', 'https://santaefigeniamedical.com', 'Totalmente acessível', '30130-100', 'Santa Efigênia', 'Av. Prof. Alfredo Balena', '50', 'Hotel próximo ao Hospital das Clínicas', NOW(), 121, 1, 1, -19.9167, -43.9345),
-
--- Hotel no Funcionários (próximo ao Hospital Mater Dei)
-('12.345.678/0001-27', 'Hotel Funcionários Medical', 'Hotel', 'contato@funcionariosmedical.com', '(31) 3333-1001', 'https://funcionariosmedical.com', 'Totalmente acessível', '30112-000', 'Funcionários', 'Rua Gonçalves Dias', '2500', 'Hotel próximo ao Hospital Mater Dei', NOW(), 121, 1, 1, -19.9167, -43.9345),
-
--- Hotel no Funcionários (próximo ao Hospital Felício Rocho)
-('12.345.678/0001-28', 'Hotel Felício Rocho Medical', 'Hotel', 'contato@feliciorochomedical.com', '(31) 3333-1002', 'https://feliciorochomedical.com', 'Acessível para cadeirantes', '30112-000', 'Funcionários', 'Rua da Bahia', '350', 'Hotel próximo ao Hospital Felício Rocho', NOW(), 121, 1, 1, -19.9167, -43.9345),
-
--- Hotel na Santa Efigênia (próximo ao Hospital Odilon Behrens)
-('12.345.678/0001-29', 'Hotel Odilon Behrens Medical', 'Hotel', 'contato@odilonbehrensmedical.com', '(31) 3333-1003', 'https://odilonbehrensmedical.com', 'Totalmente acessível', '30130-100', 'Santa Efigênia', 'Rua Formiga', '30', 'Hotel próximo ao Hospital Odilon Behrens', NOW(), 121, 1, 1, -19.9167, -43.9345),
-
--- Hotel no Caiçara (próximo ao Hospital Risoleta Tolentino Neves)
-('12.345.678/0001-30', 'Hotel Caiçara Medical', 'Hotel', 'contato@caiçaramedical.com', '(31) 3333-1004', 'https://caiçaramedical.com', 'Acessível para cadeirantes', '30640-000', 'Caiçara', 'Rua das Gabirobas', '50', 'Hotel próximo ao Hospital Risoleta Tolentino Neves', NOW(), 121, 1, 1, -19.9167, -43.9345);
-
--- Hotéis do Rio de Janeiro (5 hotéis próximos a hospitais reais)
-INSERT INTO Hotel (CNPJ, Nome, Tipo, Email, Telefone, Site, Acessibilidade, CEP, Bairro, Rua, NumeroEndereco, Descricao, DataInicio, Cidade_Id, Pessoa_id, Ativo, Latitude, Longitude) VALUES
--- Hotel em Copacabana (próximo ao Hospital Copa D'Or)
-('12.345.678/0001-31', 'Hotel Copa D\'Or Medical', 'Hotel', 'contato@copadormedical.com', '(21) 3333-2001', 'https://copadormedical.com', 'Totalmente acessível', '22071-900', 'Copacabana', 'Rua Figueiredo de Magalhães', '800', 'Hotel próximo ao Hospital Copa D\'Or', NOW(), 141, 1, 1, -22.9068, -43.1729),
-
--- Hotel em Copacabana (próximo ao Hospital São Lucas)
-('12.345.678/0001-32', 'Hotel São Lucas Medical', 'Hotel', 'contato@saolucasmedical.com', '(21) 3333-2002', 'https://saolucasmedical.com', 'Acessível para cadeirantes', '22071-900', 'Copacabana', 'Rua Figueiredo de Magalhães', '850', 'Hotel próximo ao Hospital São Lucas', NOW(), 141, 1, 1, -22.9068, -43.1729),
-
--- Hotel em Copacabana (próximo ao Hospital Miguel Couto)
-('12.345.678/0001-33', 'Hotel Miguel Couto Medical', 'Hotel', 'contato@miguelcoutomedical.com', '(21) 3333-2003', 'https://miguelcoutomedical.com', 'Totalmente acessível', '22071-900', 'Copacabana', 'Rua Figueiredo de Magalhães', '900', 'Hotel próximo ao Hospital Miguel Couto', NOW(), 141, 1, 1, -22.9068, -43.1729),
-
--- Hotel em Copacabana (próximo ao Hospital Pró-Cardíaco)
-('12.345.678/0001-34', 'Hotel Pró-Cardíaco Medical', 'Hotel', 'contato@procardiacomedical.com', '(21) 3333-2004', 'https://procardiacomedical.com', 'Acessível para cadeirantes', '22071-900', 'Copacabana', 'Rua Figueiredo de Magalhães', '950', 'Hotel próximo ao Hospital Pró-Cardíaco', NOW(), 141, 1, 1, -22.9068, -43.1729),
-
--- Hotel na Ilha do Fundão (próximo ao Hospital Universitário)
-('12.345.678/0001-35', 'Hotel Fundão Medical', 'Hotel', 'contato@fundaomedical.com', '(21) 3333-3001', 'https://fundaomedical.com', 'Totalmente acessível', '21941-590', 'Ilha do Fundão', 'Av. Carlos Chagas Filho', '300', 'Hotel próximo ao Hospital Universitário', NOW(), 141, 1, 1, -22.9068, -43.1729);
-
--- Hotéis de Vitória (5 hotéis próximos a hospitais reais)
-INSERT INTO Hotel (CNPJ, Nome, Tipo, Email, Telefone, Site, Acessibilidade, CEP, Bairro, Rua, NumeroEndereco, Descricao, DataInicio, Cidade_Id, Pessoa_id, Ativo, Latitude, Longitude) VALUES
--- Hotel no Centro (próximo a hospitais do centro)
-('12.345.678/0001-36', 'Hotel Centro Vitória', 'Hotel', 'contato@centrovitoria.com', '(27) 3333-4001', 'https://centrovitoria.com', 'Totalmente acessível', '29010-000', 'Centro', 'Rua da Praia', '100', 'Hotel no centro próximo a hospitais', NOW(), 161, 1, 1, -20.3155, -40.3128),
-
--- Hotel no Centro (próximo ao Hospital Universitário)
-('12.345.678/0001-37', 'Hotel Universitário Vitória', 'Hotel', 'contato@universitariovitoria.com', '(27) 3333-4002', 'https://universitariovitoria.com', 'Acessível para cadeirantes', '29010-000', 'Centro', 'Rua da Praia', '200', 'Hotel próximo ao Hospital Universitário', NOW(), 161, 1, 1, -20.3156, -40.3129),
-
--- Hotel no Centro (próximo ao Hospital Santa Casa)
-('12.345.678/0001-38', 'Hotel Santa Casa Vitória', 'Hotel', 'contato@santacasavitoria.com', '(27) 3333-4003', 'https://santacasavitoria.com', 'Totalmente acessível', '29010-000', 'Centro', 'Rua da Praia', '300', 'Hotel próximo ao Hospital Santa Casa', NOW(), 161, 1, 1, -20.3157, -40.3130),
-
--- Hotel no Centro (próximo ao Hospital Evangélico)
-('12.345.678/0001-39', 'Hotel Evangélico Vitória', 'Hotel', 'contato@evangelicovitoria.com', '(27) 3333-4004', 'https://evangelicovitoria.com', 'Acessível para cadeirantes', '29010-000', 'Centro', 'Rua da Praia', '400', 'Hotel próximo ao Hospital Evangélico', NOW(), 161, 1, 1, -20.3158, -40.3131),
-
--- Hotel no Centro (próximo ao Hospital Meridional)
-('12.345.678/0001-40', 'Hotel Meridional Vitória', 'Hotel', 'contato@meridionalvitoria.com', '(27) 3333-4005', 'https://meridionalvitoria.com', 'Totalmente acessível', '29010-000', 'Centro', 'Rua da Praia', '500', 'Hotel próximo ao Hospital Meridional', NOW(), 161, 1, 1, -20.3159, -40.3132);
+-- Hotel no Bairro Canta Galo
+('12.345.678/0001-10', 'Hotel Canta Galo', 'Hotel', 'contato@hotelcantagalo.com', '(47) 3333-0000', 'https://hotelcantagalo.com', 'Hotel executivo', '89160-200', 'Canta Galo', 'Rua do Progresso', '350', 'Hotel executivo no bairro Canta Galo', NOW(), 64, 1, 1, -27.2250, -49.6530);
 
 -- =====================================================
 -- 6. INSERÇÃO DE QUARTOS
@@ -793,101 +540,47 @@ INSERT INTO Quarto (Numero, Andar, AceitaAnimal, Observacao, Preco, LimitePessoa
 ('2', 1, 0, 'Quarto casal com vista para o jardim', 100.00, 2, (SELECT Id FROM Hotel WHERE Nome = 'Pousada Itoupava')),
 ('3', 1, 1, 'Quarto triplo', 140.00, 3, (SELECT Id FROM Hotel WHERE Nome = 'Pousada Itoupava'));
 
--- Quartos para Hotel Itoupava Central
+-- Quartos para Residencial Itoupava Central
 INSERT INTO Quarto (Numero, Andar, AceitaAnimal, Observacao, Preco, LimitePessoa, Hotel_Id) VALUES
-('A101', 1, 0, 'Apartamento 1 quarto mobiliado', 180.00, 2, (SELECT Id FROM Hotel WHERE Nome = 'Hotel Itoupava Central')),
-('A102', 1, 0, 'Apartamento 1 quarto mobiliado', 180.00, 2, (SELECT Id FROM Hotel WHERE Nome = 'Hotel Itoupava Central')),
-('A201', 2, 0, 'Apartamento 2 quartos mobiliado', 220.00, 4, (SELECT Id FROM Hotel WHERE Nome = 'Hotel Itoupava Central'));
+('A101', 1, 0, 'Apartamento 1 quarto mobiliado', 180.00, 2, (SELECT Id FROM Hotel WHERE Nome = 'Residencial Itoupava Central')),
+('A102', 1, 0, 'Apartamento 1 quarto mobiliado', 180.00, 2, (SELECT Id FROM Hotel WHERE Nome = 'Residencial Itoupava Central')),
+('A201', 2, 0, 'Apartamento 2 quartos mobiliado', 220.00, 4, (SELECT Id FROM Hotel WHERE Nome = 'Residencial Itoupava Central'));
 
--- Quartos para Hotel Itoupava Norte
+-- Quartos para Hostel Itoupava Norte
 INSERT INTO Quarto (Numero, Andar, AceitaAnimal, Observacao, Preco, LimitePessoa, Hotel_Id) VALUES
-('Dorm1', 1, 1, 'Dormitório feminino (6 camas)', 60.00, 6, (SELECT Id FROM Hotel WHERE Nome = 'Hotel Itoupava Norte')),
-('Dorm2', 1, 1, 'Dormitório masculino (6 camas)', 60.00, 6, (SELECT Id FROM Hotel WHERE Nome = 'Hotel Itoupava Norte')),
-('Priv1', 2, 0, 'Quarto privativo casal', 120.00, 2, (SELECT Id FROM Hotel WHERE Nome = 'Hotel Itoupava Norte'));
+('Dorm1', 1, 1, 'Dormitório feminino (6 camas)', 60.00, 6, (SELECT Id FROM Hotel WHERE Nome = 'Hostel Itoupava Norte')),
+('Dorm2', 1, 1, 'Dormitório masculino (6 camas)', 60.00, 6, (SELECT Id FROM Hotel WHERE Nome = 'Hostel Itoupava Norte')),
+('Priv1', 2, 0, 'Quarto privativo casal', 120.00, 2, (SELECT Id FROM Hotel WHERE Nome = 'Hostel Itoupava Norte'));
+
+-- Quartos para Casa Temporada Blumenau
+INSERT INTO Quarto (Numero, Andar, AceitaAnimal, Observacao, Preco, LimitePessoa, Hotel_Id) VALUES
+('Casa', 1, 1, 'Casa completa com 3 quartos', 300.00, 8, (SELECT Id FROM Hotel WHERE Nome = 'Casa Temporada Blumenau'));
+
+-- Quartos para Hotel Garcia Heritage
+INSERT INTO Quarto (Numero, Andar, AceitaAnimal, Observacao, Preco, LimitePessoa, Hotel_Id) VALUES
+('101', 1, 0, 'Quarto histórico', 180.00, 2, (SELECT Id FROM Hotel WHERE Nome = 'Hotel Garcia Heritage')),
+('201', 2, 0, 'Suíte histórica', 250.00, 3, (SELECT Id FROM Hotel WHERE Nome = 'Hotel Garcia Heritage'));
 
 -- Quartos para Pousada Vorstadt
 INSERT INTO Quarto (Numero, Andar, AceitaAnimal, Observacao, Preco, LimitePessoa, Hotel_Id) VALUES
 ('1', 1, 1, 'Quarto familiar', 110.00, 4, (SELECT Id FROM Hotel WHERE Nome = 'Pousada Vorstadt')),
 ('2', 1, 0, 'Quarto casal', 90.00, 2, (SELECT Id FROM Hotel WHERE Nome = 'Pousada Vorstadt'));
 
--- Quartos para Hotel Centro Floripa
+-- Quartos para Hotel Rio do Sul Centro
 INSERT INTO Quarto (Numero, Andar, AceitaAnimal, Observacao, Preco, LimitePessoa, Hotel_Id) VALUES
-('101', 1, 0, 'Quarto padrão', 130.00, 2, (SELECT Id FROM Hotel WHERE Nome = 'Hotel Centro Floripa')),
-('201', 2, 0, 'Quarto superior', 160.00, 3, (SELECT Id FROM Hotel WHERE Nome = 'Hotel Centro Floripa')),
-('301', 3, 0, 'Suíte', 220.00, 4, (SELECT Id FROM Hotel WHERE Nome = 'Hotel Centro Floripa'));
+('101', 1, 0, 'Quarto padrão', 130.00, 2, (SELECT Id FROM Hotel WHERE Nome = 'Hotel Rio do Sul Centro')),
+('201', 2, 0, 'Quarto superior', 160.00, 3, (SELECT Id FROM Hotel WHERE Nome = 'Hotel Rio do Sul Centro')),
+('301', 3, 0, 'Suíte', 220.00, 4, (SELECT Id FROM Hotel WHERE Nome = 'Hotel Rio do Sul Centro'));
 
--- Quartos para Hotel Baía Sul Medical
+-- Quartos para Pousada Barra do Trombudo
 INSERT INTO Quarto (Numero, Andar, AceitaAnimal, Observacao, Preco, LimitePessoa, Hotel_Id) VALUES
-('1', 1, 1, 'Quarto familiar', 100.00, 4, (SELECT Id FROM Hotel WHERE Nome = 'Hotel Baía Sul Medical')),
-('2', 1, 0, 'Quarto casal', 80.00, 2, (SELECT Id FROM Hotel WHERE Nome = 'Hotel Baía Sul Medical'));
+('1', 1, 1, 'Quarto familiar', 100.00, 4, (SELECT Id FROM Hotel WHERE Nome = 'Pousada Barra do Trombudo')),
+('2', 1, 0, 'Quarto casal', 80.00, 2, (SELECT Id FROM Hotel WHERE Nome = 'Pousada Barra do Trombudo'));
 
--- Quartos para Hotel Trindade Medical
+-- Quartos para Hotel Canta Galo
 INSERT INTO Quarto (Numero, Andar, AceitaAnimal, Observacao, Preco, LimitePessoa, Hotel_Id) VALUES
-('101', 1, 0, 'Quarto executivo', 140.00, 2, (SELECT Id FROM Hotel WHERE Nome = 'Hotel Trindade Medical')),
-('201', 2, 0, 'Suíte executiva', 200.00, 3, (SELECT Id FROM Hotel WHERE Nome = 'Hotel Trindade Medical'));
-
--- Quartos para Pousada Trindade
-INSERT INTO Quarto (Numero, Andar, AceitaAnimal, Observacao, Preco, LimitePessoa, Hotel_Id) VALUES
-('1', 1, 1, 'Quarto familiar', 110.00, 4, (SELECT Id FROM Hotel WHERE Nome = 'Pousada Trindade')),
-('2', 1, 0, 'Quarto casal', 90.00, 2, (SELECT Id FROM Hotel WHERE Nome = 'Pousada Trindade'));
-
--- Quartos para Hotel Dona Helena Plaza
-INSERT INTO Quarto (Numero, Andar, AceitaAnimal, Observacao, Preco, LimitePessoa, Hotel_Id) VALUES
-('101', 1, 0, 'Quarto padrão', 120.00, 2, (SELECT Id FROM Hotel WHERE Nome = 'Hotel Dona Helena Plaza')),
-('201', 2, 0, 'Quarto superior', 150.00, 3, (SELECT Id FROM Hotel WHERE Nome = 'Hotel Dona Helena Plaza'));
-
--- Quartos para Hotel Cerqueira Medical
-INSERT INTO Quarto (Numero, Andar, AceitaAnimal, Observacao, Preco, LimitePessoa, Hotel_Id) VALUES
-('101', 1, 0, 'Quarto padrão', 200.00, 2, (SELECT Id FROM Hotel WHERE Nome = 'Hotel Cerqueira Medical')),
-('201', 2, 0, 'Quarto superior', 250.00, 3, (SELECT Id FROM Hotel WHERE Nome = 'Hotel Cerqueira Medical')),
-('301', 3, 0, 'Suíte executiva', 350.00, 4, (SELECT Id FROM Hotel WHERE Nome = 'Hotel Cerqueira Medical'));
-
--- Quartos para Hotel Bela Vista Medical
-INSERT INTO Quarto (Numero, Andar, AceitaAnimal, Observacao, Preco, LimitePessoa, Hotel_Id) VALUES
-('101', 1, 0, 'Quarto padrão', 180.00, 2, (SELECT Id FROM Hotel WHERE Nome = 'Hotel Bela Vista Medical')),
-('201', 2, 0, 'Quarto superior', 220.00, 3, (SELECT Id FROM Hotel WHERE Nome = 'Hotel Bela Vista Medical'));
-
--- Quartos para Hotel Morumbi Medical
-INSERT INTO Quarto (Numero, Andar, AceitaAnimal, Observacao, Preco, LimitePessoa, Hotel_Id) VALUES
-('101', 1, 0, 'Quarto padrão', 300.00, 2, (SELECT Id FROM Hotel WHERE Nome = 'Hotel Morumbi Medical')),
-('201', 2, 0, 'Quarto superior', 380.00, 3, (SELECT Id FROM Hotel WHERE Nome = 'Hotel Morumbi Medical')),
-('301', 3, 0, 'Suíte executiva', 500.00, 4, (SELECT Id FROM Hotel WHERE Nome = 'Hotel Morumbi Medical'));
-
--- Quartos para Hotel Paraíso Medical
-INSERT INTO Quarto (Numero, Andar, AceitaAnimal, Observacao, Preco, LimitePessoa, Hotel_Id) VALUES
-('101', 1, 0, 'Quarto padrão', 250.00, 2, (SELECT Id FROM Hotel WHERE Nome = 'Hotel Paraíso Medical')),
-('201', 2, 0, 'Quarto superior', 300.00, 3, (SELECT Id FROM Hotel WHERE Nome = 'Hotel Paraíso Medical'));
-
--- Quartos para Hotel Vila Clementino Medical
-INSERT INTO Quarto (Numero, Andar, AceitaAnimal, Observacao, Preco, LimitePessoa, Hotel_Id) VALUES
-('101', 1, 0, 'Quarto padrão', 200.00, 2, (SELECT Id FROM Hotel WHERE Nome = 'Hotel Vila Clementino Medical')),
-('201', 2, 0, 'Quarto superior', 250.00, 3, (SELECT Id FROM Hotel WHERE Nome = 'Hotel Vila Clementino Medical'));
-
--- Quartos para alguns hotéis das capitais
--- Quartos para Hotel Bom Retiro Medical (Curitiba)
-INSERT INTO Quarto (Numero, Andar, AceitaAnimal, Observacao, Preco, LimitePessoa, Hotel_Id) VALUES
-('101', 1, 0, 'Quarto padrão', 150.00, 2, (SELECT Id FROM Hotel WHERE Nome = 'Hotel Bom Retiro Medical')),
-('201', 2, 0, 'Quarto superior', 180.00, 3, (SELECT Id FROM Hotel WHERE Nome = 'Hotel Bom Retiro Medical'));
-
--- Quartos para Hotel Bom Fim Medical (Porto Alegre)
-INSERT INTO Quarto (Numero, Andar, AceitaAnimal, Observacao, Preco, LimitePessoa, Hotel_Id) VALUES
-('101', 1, 0, 'Quarto padrão', 160.00, 2, (SELECT Id FROM Hotel WHERE Nome = 'Hotel Bom Fim Medical')),
-('201', 2, 0, 'Quarto superior', 200.00, 3, (SELECT Id FROM Hotel WHERE Nome = 'Hotel Bom Fim Medical'));
-
--- Quartos para Hotel Santa Efigênia Medical (Belo Horizonte)
-INSERT INTO Quarto (Numero, Andar, AceitaAnimal, Observacao, Preco, LimitePessoa, Hotel_Id) VALUES
-('101', 1, 0, 'Quarto padrão', 140.00, 2, (SELECT Id FROM Hotel WHERE Nome = 'Hotel Santa Efigênia Medical')),
-('201', 2, 0, 'Quarto superior', 170.00, 3, (SELECT Id FROM Hotel WHERE Nome = 'Hotel Santa Efigênia Medical'));
-
--- Quartos para Hotel Copa D'Or Medical (Rio de Janeiro)
-INSERT INTO Quarto (Numero, Andar, AceitaAnimal, Observacao, Preco, LimitePessoa, Hotel_Id) VALUES
-('101', 1, 0, 'Quarto padrão', 220.00, 2, (SELECT Id FROM Hotel WHERE Nome = 'Hotel Copa D\'Or Medical')),
-('201', 2, 0, 'Quarto superior', 280.00, 3, (SELECT Id FROM Hotel WHERE Nome = 'Hotel Copa D\'Or Medical'));
-
--- Quartos para Hotel Centro Vitória (Vitória)
-INSERT INTO Quarto (Numero, Andar, AceitaAnimal, Observacao, Preco, LimitePessoa, Hotel_Id) VALUES
-('101', 1, 0, 'Quarto padrão', 120.00, 2, (SELECT Id FROM Hotel WHERE Nome = 'Hotel Centro Vitória')),
-('201', 2, 0, 'Quarto superior', 150.00, 3, (SELECT Id FROM Hotel WHERE Nome = 'Hotel Centro Vitória'));
+('101', 1, 0, 'Quarto executivo', 140.00, 2, (SELECT Id FROM Hotel WHERE Nome = 'Hotel Canta Galo')),
+('201', 2, 0, 'Suíte executiva', 200.00, 3, (SELECT Id FROM Hotel WHERE Nome = 'Hotel Canta Galo'));
 
 -- =====================================================
 -- 7. INSERÇÃO DE DADOS ADICIONAIS
@@ -910,9 +603,9 @@ INSERT INTO PrestadorServico (Id, Observacao, CNPJ, Pessoa_Id) VALUES
 (2, 'Psicóloga especializada em terapia cognitivo-comportamental', '98.765.432/0001-02', 2);
 
 -- Relacionamento Prestador-Especialidade
-INSERT INTO PrestadorServico_Especialidade (PrestadorServico_Id, Especialidade_Id) VALUES
-(1, 1), -- Cardiologista
-(2, 7); -- Psicóloga
+INSERT INTO PrestadorServico_Especialidade (PrestadorServico_Id, Especialidade_Id, PrecoHora) VALUES
+(1, 1, 200), -- Cardiologista
+(2, 7, 300); -- Psicóloga
 
 -- Lembretes de exemplo
 INSERT INTO Lembrete (Id, Titulo, Data, Tipo, Pessoa_Id) VALUES

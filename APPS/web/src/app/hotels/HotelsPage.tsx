@@ -1,5 +1,4 @@
 import { useState, useEffect } from "react";
-import { useSearchParams } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -20,6 +19,7 @@ import {
 } from "@/components/ui/select";
 import { Badge } from "@/components/ui/badge";
 import { useCart } from "@/context/CartContext";
+import { useAuth } from "@/hooks/useAuth";
 import api from "@/services/api";
 import { LoadingSpinner } from "@/components/loading-spinner";
 import {
@@ -33,12 +33,17 @@ import {
   Mail,
   Globe,
   Accessibility,
+  Calendar,
   Users,
-  Waves
+  Wifi,
+  Car,
+  Utensils,
+  Dumbbell,
+  Waves,
+  Heart
 } from "lucide-react";
 import { toast } from "sonner";
 import type { Hotel } from "@/types/hotel";
-import DefaultHotelImage from "@/assets/logo.png"; // Importar a imagem padrão
 
 interface Filtros {
   nome: string;
@@ -51,13 +56,13 @@ interface Filtros {
 
 export default function HotelsPage() {
   const { addToCart } = useCart();
-  const [searchParams] = useSearchParams();
+  const { isAuthenticated } = useAuth();
   const [hotels, setHotels] = useState<Hotel[]>([]);
   const [hotelsFiltrados, setHotelsFiltrados] = useState<Hotel[]>([]);
   const [loading, setLoading] = useState(true);
   const [filtros, setFiltros] = useState<Filtros>({
     nome: "",
-    tipo: "all",
+    tipo: "",
     cidade: "",
     precoMin: "",
     precoMax: "",
@@ -70,36 +75,13 @@ export default function HotelsPage() {
     carregarHoteis();
   }, []);
 
-  // Aplicar filtros da URL quando a página carrega
-  useEffect(() => {
-    const cityParam = searchParams.get('city');
-    const stateParam = searchParams.get('state');
-    const searchParam = searchParams.get('search');
-
-    if (cityParam || stateParam || searchParam) {
-      setFiltros(prev => ({
-        ...prev,
-        cidade: cityParam || '',
-        nome: searchParam || '',
-      }));
-      setMostrarFiltros(true);
-    }
-  }, [searchParams]);
-
   const carregarHoteis = async () => {
     try {
       setLoading(true);
       const response = await api.get("/Hotel");
-      console.log("Resposta da API /Hotel:", response.data); // Adicionar este log
-      if (response.data && Array.isArray(response.data)) { // Ajustar a condição
-        setHotels(response.data);
-        setHotelsFiltrados(response.data);
-      } else if (response.data && response.data.data && Array.isArray(response.data.data)) {
+      if (response.data && response.data.data) {
         setHotels(response.data.data);
         setHotelsFiltrados(response.data.data);
-      } else {
-        console.error("Formato de dados inesperado da API /Hotel:", response.data);
-        toast.error("Formato de dados de hotéis inesperado");
       }
     } catch (error) {
       console.error("Erro ao carregar hotéis:", error);
@@ -119,7 +101,7 @@ export default function HotelsPage() {
       );
     }
 
-    if (filtros.tipo && filtros.tipo !== "all") {
+    if (filtros.tipo) {
       filtrados = filtrados.filter(hotel => hotel.tipo === filtros.tipo);
     }
 
@@ -131,7 +113,7 @@ export default function HotelsPage() {
 
     if (filtros.acessibilidade) {
       filtrados = filtrados.filter(hotel =>
-        hotel.acessibilidade?.toLowerCase().includes(filtros.acessibilidade.toLowerCase())
+        hotel.acessibilidade.toLowerCase().includes(filtros.acessibilidade.toLowerCase())
       );
     }
 
@@ -155,7 +137,7 @@ export default function HotelsPage() {
       id: hotel.id.toString(),
       name: hotel.nome,
       price: preco,
-      image: DefaultHotelImage,
+      image: `https://via.placeholder.com/300x200/1E90FF/FFFFFF?text=${encodeURIComponent(hotel.nome)}`,
     });
 
     toast.success(`${hotel.nome} adicionado ao carrinho!`);
@@ -164,7 +146,7 @@ export default function HotelsPage() {
   const limparFiltros = () => {
     setFiltros({
       nome: "",
-      tipo: "all",
+      tipo: "",
       cidade: "",
       precoMin: "",
       precoMax: "",
@@ -265,7 +247,7 @@ export default function HotelsPage() {
                     <SelectValue placeholder="Todos os tipos" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="all">Todos os tipos</SelectItem>
+                    <SelectItem value="">Todos os tipos</SelectItem>
                     <SelectItem value="Hotel">Hotel</SelectItem>
                     <SelectItem value="Pousada">Pousada</SelectItem>
                     <SelectItem value="Resort">Resort</SelectItem>
@@ -350,7 +332,7 @@ export default function HotelsPage() {
               <CardHeader className="pb-3">
                 <div className="relative">
                   <img
-                    src={DefaultHotelImage}
+                    src={`https://via.placeholder.com/300x200/1E90FF/FFFFFF?text=${encodeURIComponent(hotel.nome)}`}
                     alt={`Imagem do ${hotel.nome}`}
                     className="rounded-t-lg w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300"
                   />
