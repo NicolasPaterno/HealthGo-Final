@@ -103,7 +103,8 @@ namespace API_HealthGo.Repository
                     BAIRRO = @Bairro,
                     RUA = @Rua,
                     NUMEROENDERECO = @NumeroEndereco,
-                    CIDADE_ID = @Cidade_Id
+                    CIDADE_ID = @Cidade_Id, 
+                    ROLE = @Role
                 WHERE ID = @Id
             ";
 
@@ -141,6 +142,22 @@ namespace API_HealthGo.Repository
                                 WHERE EMAIL = @Email
                             ";
                 return await con.QueryFirstOrDefaultAsync<PessoaEntity>(sql, new { email });
+            }
+        }
+
+        public async Task<int> GetIdByEmail(string email)
+        {
+            using (MySqlConnection con = _connection.GetConnection())
+            {
+                string sql = @$"
+                                SELECT 
+                                    ID AS {nameof(PessoaEntity.Id)}                                    
+                                FROM PESSOA
+                                WHERE EMAIL = @Email
+                            ";
+
+                int id = await con.QueryFirstOrDefaultAsync<int>(sql, new { email });
+                return id;
             }
         }
 

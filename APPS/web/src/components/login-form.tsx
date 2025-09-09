@@ -49,6 +49,8 @@ export function LoginForm({
       const user = getAuthUser() as DecodedToken | null;
       if (user && user.role === "Gerente") {
         navigate("/dashboard-gerente");
+      } else if (user?.role === "PrestadorServico") {
+        navigate("/dashboard-prestador"); // você cria essa rota
       } else {
         navigate("/dashboard");
       }
@@ -61,9 +63,11 @@ export function LoginForm({
       setTimeout(() => {
        if (user?.role === "Consumidor") {
         navigate("/dashboard");
-       } else {
-        navigate("/dashboard-gerente");
-       }
+        } else if (user?.role === "PrestadorServico") {
+          navigate("/dashboard-prestador");
+        } else {
+          navigate("/dashboard-gerente");
+        }   
       }, 200);
 
     } catch (error: any) {

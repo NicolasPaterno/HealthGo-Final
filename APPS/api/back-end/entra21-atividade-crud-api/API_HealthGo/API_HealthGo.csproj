@@ -8,6 +8,17 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Responses\NovaPasta1\**" />
+    <Compile Remove="Responses\NovaPasta\**" />
+    <Content Remove="Responses\NovaPasta1\**" />
+    <Content Remove="Responses\NovaPasta\**" />
+    <EmbeddedResource Remove="Responses\NovaPasta1\**" />
+    <EmbeddedResource Remove="Responses\NovaPasta\**" />
+    <None Remove="Responses\NovaPasta1\**" />
+    <None Remove="Responses\NovaPasta\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="BCrypt.Net-Next" Version="4.0.3" />
     <PackageReference Include="Dapper" Version="2.1.66" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="7.0.20" />

@@ -1,6 +1,7 @@
 ﻿using API_HealthGo.DTO;
 using API_HealthGo.Entities;
 using API_HealthGo.Responses;
+using API_HealthGo.Responses.MessageResponse;
 
 namespace API_HealthGo.Contracts.Service
 {
@@ -11,6 +12,8 @@ namespace API_HealthGo.Contracts.Service
         Task<PessoaEntity> GetPessoaById(int id);
 
         Task<MessageResponse> Post(PessoaInsertDTO pessoa);
+
+        Task<MessageWithIdResponse> PostAndReturnId(PessoaInsertDTO pessoa);
 
         Task<MessageResponse> Delete(int id);
 
