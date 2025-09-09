@@ -597,16 +597,6 @@ INSERT INTO Especialidade (Id, Nome) VALUES
 (7, 'Psicologia'),
 (8, 'Fisioterapia');
 
--- Prestadores de serviço
-INSERT INTO PrestadorServico (Id, Observacao, CNPJ, Pessoa_Id) VALUES
-(1, 'Médico cardiologista com 15 anos de experiência', '98.765.432/0001-01', 1),
-(2, 'Psicóloga especializada em terapia cognitivo-comportamental', '98.765.432/0001-02', 2);
-
--- Relacionamento Prestador-Especialidade
-INSERT INTO PrestadorServico_Especialidade (PrestadorServico_Id, Especialidade_Id, PrecoHora) VALUES
-(1, 1, 200), -- Cardiologista
-(2, 7, 300); -- Psicóloga
-
 -- Lembretes de exemplo
 INSERT INTO Lembrete (Id, Titulo, Data, Tipo, Pessoa_Id) VALUES
 (1, 'Consulta Cardiologista', '2024-02-15 14:00:00', 'Consulta', 2),
