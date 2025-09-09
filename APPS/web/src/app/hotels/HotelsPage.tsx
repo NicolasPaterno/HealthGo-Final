@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { useSearchParams } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -19,7 +20,6 @@ import {
 } from "@/components/ui/select";
 import { Badge } from "@/components/ui/badge";
 import { useCart } from "@/context/CartContext";
-import { useAuth } from "@/hooks/useAuth";
 import api from "@/services/api";
 import { LoadingSpinner } from "@/components/loading-spinner";
 import {
@@ -33,14 +33,8 @@ import {
   Mail,
   Globe,
   Accessibility,
-  Calendar,
   Users,
-  Wifi,
-  Car,
-  Utensils,
-  Dumbbell,
-  Waves,
-  Heart
+  Waves
 } from "lucide-react";
 import { toast } from "sonner";
 import type { Hotel } from "@/types/hotel";
@@ -57,7 +51,7 @@ interface Filtros {
 
 export default function HotelsPage() {
   const { addToCart } = useCart();
-  const { isAuthenticated } = useAuth();
+  const [searchParams] = useSearchParams();
   const [hotels, setHotels] = useState<Hotel[]>([]);
   const [hotelsFiltrados, setHotelsFiltrados] = useState<Hotel[]>([]);
   const [loading, setLoading] = useState(true);
@@ -75,6 +69,22 @@ export default function HotelsPage() {
   useEffect(() => {
     carregarHoteis();
   }, []);
+
+  // Aplicar filtros da URL quando a página carrega
+  useEffect(() => {
+    const cityParam = searchParams.get('city');
+    const stateParam = searchParams.get('state');
+    const searchParam = searchParams.get('search');
+
+    if (cityParam || stateParam || searchParam) {
+      setFiltros(prev => ({
+        ...prev,
+        cidade: cityParam || '',
+        nome: searchParam || '',
+      }));
+      setMostrarFiltros(true);
+    }
+  }, [searchParams]);
 
   const carregarHoteis = async () => {
     try {
@@ -121,7 +131,7 @@ export default function HotelsPage() {
 
     if (filtros.acessibilidade) {
       filtrados = filtrados.filter(hotel =>
-        hotel.acessibilidade.toLowerCase().includes(filtros.acessibilidade.toLowerCase())
+        hotel.acessibilidade?.toLowerCase().includes(filtros.acessibilidade.toLowerCase())
       );
     }
 

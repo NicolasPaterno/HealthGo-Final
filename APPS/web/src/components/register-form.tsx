@@ -120,103 +120,103 @@ export function RegisterForm({
 
   return (
     <div className={cn("flex flex-col gap-6", className)} {...props}>
-    <Card className={cn("mx-auto max-w-lg border-2", className)} {...props}>
-      <CardHeader className="text-center">
-        <CardTitle className="text-2xl">Criar conta</CardTitle>
-        <CardDescription>
-          Insira seus dados abaixo para criar sua conta
-        </CardDescription>
-      </CardHeader>
-      <CardContent>
-        <form onSubmit={handleSubmit}>
-          <div className="grid gap-4">
-            {/* Campos do Formulário com 'value' e 'onChange' atualizados */}
-            <div className="grid gap-2">
-              <Label htmlFor="name">Nome</Label>
-              <Input id="name" type="text" placeholder="Seu nome completo" required value={nome} onChange={(e) => setNome(e.target.value)} />
-            </div>
-            <div className="grid grid-cols-2 gap-4">
+      <Card className={cn("mx-auto max-w-lg border-2", className)} {...props}>
+        <CardHeader className="text-center">
+          <CardTitle className="text-2xl">Criar conta</CardTitle>
+          <CardDescription>
+            Insira seus dados abaixo para criar sua conta
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          <form onSubmit={handleSubmit}>
+            <div className="grid gap-4">
+              {/* Campos do Formulário com 'value' e 'onChange' atualizados */}
               <div className="grid gap-2">
-                <Label htmlFor="email">Email</Label>
-                <Input id="email" type="email" placeholder="nome@exemplo.com" required value={email} onChange={(e) => setEmail(e.target.value)} />
+                <Label htmlFor="name">Nome</Label>
+                <Input id="name" type="text" placeholder="Seu nome completo" required value={nome} onChange={(e) => setNome(e.target.value)} />
+              </div>
+              <div className="grid grid-cols-2 gap-4">
+                <div className="grid gap-2">
+                  <Label htmlFor="email">Email</Label>
+                  <Input id="email" type="email" placeholder="nome@exemplo.com" required value={email} onChange={(e) => setEmail(e.target.value)} />
+                </div>
+                <div className="grid gap-2">
+                  <Label htmlFor="password">Senha</Label>
+                  <Input id="password" type="password" required value={senha} onChange={(e) => setSenha(e.target.value)} />
+                </div>
+              </div>
+              <div className="grid grid-cols-2 gap-4">
+                <div className="grid gap-2">
+                  <Label htmlFor="cpf">CPF</Label>
+                  <Input id="cpf" type="text" placeholder="000.000.000-00" required value={cpf} onChange={(e) => setCpf(e.target.value)} />
+                </div>
+                <div className="grid gap-2">
+                  <Label htmlFor="birthdate">Data de Nascimento</Label>
+                  <Input id="birthdate" type="date" required value={dataNascimento} onChange={(e) => setDataNascimento(e.target.value)} />
+                </div>
               </div>
               <div className="grid gap-2">
-                <Label htmlFor="password">Senha</Label>
-                <Input id="password" type="password" required value={senha} onChange={(e) => setSenha(e.target.value)} />
-              </div>
-            </div>
-            <div className="grid grid-cols-2 gap-4">
-              <div className="grid gap-2">
-                <Label htmlFor="cpf">CPF</Label>
-                <Input id="cpf" type="text" placeholder="000.000.000-00" required value={cpf} onChange={(e) => setCpf(e.target.value)} />
-              </div>
-              <div className="grid gap-2">
-                <Label htmlFor="birthdate">Data de Nascimento</Label>
-                <Input id="birthdate" type="date" required value={dataNascimento} onChange={(e) => setDataNascimento(e.target.value)} />
-              </div>
-            </div>
-             <div className="grid gap-2">
                 <Label htmlFor="telefone">Telefone</Label>
                 <Input id="telefone" type="tel" placeholder="(00) 00000-0000" value={telefone} onChange={(e) => setTelefone(e.target.value)} />
               </div>
-            <div className="grid grid-cols-2 gap-4">
-              <div className="grid gap-2">
-                <Label htmlFor="cep">CEP</Label>
-                <Input id="cep" type="text" placeholder="00000-000" value={cep} onChange={(e) => setCep(e.target.value)} onBlur={handleCepBlur} />
+              <div className="grid grid-cols-2 gap-4">
+                <div className="grid gap-2">
+                  <Label htmlFor="cep">CEP</Label>
+                  <Input id="cep" type="text" placeholder="00000-000" value={cep} onChange={(e) => setCep(e.target.value)} onBlur={handleCepBlur} />
+                </div>
+                <div className="grid gap-2">
+                  <Label htmlFor="city">Cidade</Label>
+                  <Input id="city" type="text" placeholder="Sua cidade" value={cidade} onChange={(e) => setCidade(e.target.value)} disabled={isCepLoading} />
+                </div>
               </div>
               <div className="grid gap-2">
-                <Label htmlFor="city">Cidade</Label>
-                <Input id="city" type="text" placeholder="Sua cidade" value={cidade} onChange={(e) => setCidade(e.target.value)} disabled={isCepLoading} />
+                <Label htmlFor="street">Rua</Label>
+                <Input id="street" type="text" placeholder="Nome da sua rua" value={rua} onChange={(e) => setRua(e.target.value)} disabled={isCepLoading} />
               </div>
-            </div>
-            <div className="grid gap-2">
-              <Label htmlFor="street">Rua</Label>
-              <Input id="street" type="text" placeholder="Nome da sua rua" value={rua} onChange={(e) => setRua(e.target.value)} disabled={isCepLoading} />
-            </div>
-            <div className="grid grid-cols-2 gap-4">
-              <div className="grid gap-2">
-                <Label htmlFor="neighborhood">Bairro</Label>
-                <Input id="neighborhood" type="text" placeholder="Seu bairro" value={bairro} onChange={(e) => setBairro(e.target.value)} disabled={isCepLoading} />
+              <div className="grid grid-cols-2 gap-4">
+                <div className="grid gap-2">
+                  <Label htmlFor="neighborhood">Bairro</Label>
+                  <Input id="neighborhood" type="text" placeholder="Seu bairro" value={bairro} onChange={(e) => setBairro(e.target.value)} disabled={isCepLoading} />
+                </div>
+                <div className="grid gap-2">
+                  <Label htmlFor="addressNumber">Número</Label>
+                  <Input id="addressNumber" type="text" placeholder="Número" value={numeroEndereco} onChange={(e) => setNumeroEndereco(e.target.value)} />
+                </div>
               </div>
-              <div className="grid gap-2">
-                <Label htmlFor="addressNumber">Número</Label>
-                <Input id="addressNumber" type="text" placeholder="Número" value={numeroEndereco} onChange={(e) => setNumeroEndereco(e.target.value)} />
+              <div className="flex items-center gap-2">
+                <Checkbox id="guideDog" checked={caoGuia} onCheckedChange={(checked) => setCaoGuia(Boolean(checked))} />
+                <Label htmlFor="guideDog" className="font-normal">Possui cão guia</Label>
               </div>
+              <Button type="submit" className="w-full" disabled={isCepLoading}>
+                {isCepLoading ? "Buscando CEP..." : "Criar conta"}
+              </Button>
             </div>
-            <div className="flex items-center gap-2">
-              <Checkbox id="guideDog" checked={caoGuia} onCheckedChange={(checked) => setCaoGuia(Boolean(checked))} />
-              <Label htmlFor="guideDog" className="font-normal">Possui cão guia</Label>
-            </div>
-            <Button type="submit" className="w-full" disabled={isCepLoading}>
-              {isCepLoading ? "Buscando CEP..." : "Criar conta"}
-            </Button>
+          </form>
+          <div className="mt-4 text-center text-sm">
+            Já possui uma conta?{" "}
+            <Link to="/login" className="underline">
+              Entrar
+            </Link>
           </div>
-        </form>
-        <div className="mt-4 text-center text-sm">
-          Já possui uma conta?{" "}
-          <Link to="/login" className="underline">
-            Entrar
-          </Link>
-        </div>
-      </CardContent>
-    </Card> 
-    <div className="text-center mt-2 text-xs text-muted-foreground flex flex-col items-center gap-4">
-      <div className="hover:[&>a]:text-primary [&>a]:underline [&>a]:underline-offset-4">
+        </CardContent>
+      </Card>
+      <div className="text-center mt-2 text-xs text-muted-foreground flex flex-col items-center gap-4">
+        <div className="hover:[&>a]:text-primary [&>a]:underline [&>a]:underline-offset-4">
           <a href="/register-prestadorservico">
             Clique aqui para se registrar como Prestador de Serviço
           </a>
-      </div>
-      <div className="text-center max-w-xs">
-        Ao clicar em continuar, você concorda com nossos{" "}
+        </div>
+        <div className="text-center max-w-xs">
+          Ao clicar em continuar, você concorda com nossos{" "}
           <a href="#" className="text-muted-foreground underline underline-offset-4 hover:text-primary">
-          Termos de Serviço
+            Termos de Serviço
           </a>{" "}
-        e{" "}
+          e{" "}
           <a href="#" className="text-muted-foreground underline underline-offset-4 hover:text-primary">
-          Política de Privacidade
+            Política de Privacidade
           </a>.
+        </div>
       </div>
     </div>
-  </div>
   );
 }
