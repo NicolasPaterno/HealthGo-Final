@@ -18,7 +18,7 @@ import axios from "axios";
 const applyMask = (value: string, mask: string): string => {
   let result = "";
   let valueIndex = 0;
-  
+
   for (let i = 0; i < mask.length && valueIndex < value.length; i++) {
     if (mask[i] === "#") {
       result += value[valueIndex];
@@ -27,7 +27,7 @@ const applyMask = (value: string, mask: string): string => {
       result += mask[i];
     }
   }
-  
+
   return result;
 };
 
@@ -52,7 +52,7 @@ export default function RegisterPrestadorServicoForm({
   const [rua, setRua] = useState("");
   const [bairro, setBairro] = useState("");
   const [numeroEndereco, setNumeroEndereco] = useState("");
-  
+
   const [isCepLoading, setIsCepLoading] = useState(false);
   const [cidadeId, setCidadeId] = useState<number | null>(null);
   const [cnpj, setCnpj] = useState("");
@@ -116,7 +116,7 @@ export default function RegisterPrestadorServicoForm({
       Rua: rua,
       NumeroEndereco: numeroEndereco,
       Role: 2,
-      Cidade_Id: 1,
+      Cidade_Id: 64,
     };
     console.log(pessoaData);
 
@@ -238,7 +238,7 @@ export default function RegisterPrestadorServicoForm({
                   value={telefone}
                   onChange={(e) => {
                     const value = removeMask(e.target.value);
-                    const masked = value.length <= 10 
+                    const masked = value.length <= 10
                       ? applyMask(value, "(##) ####-####")
                       : applyMask(value, "(##) #####-####");
                     setTelefone(masked);
@@ -309,7 +309,7 @@ export default function RegisterPrestadorServicoForm({
                   />
                 </div>
               </div>
-              
+
 
               <div className="h-px my-[2px] bg-gray-400 w-full mx-auto" />
 
