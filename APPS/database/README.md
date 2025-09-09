@@ -66,13 +66,13 @@ mysql -u root -p < APPS/database/create_and_populate_database.sql
 
 ### Administrador
 - **Email**: `admin@gmail.com`
-- **Senha**: `Admin123`
+- **Senha**: `Admin123.`
 - **Role**: `Gerente`
 - **Funcionalidades**: Pode gerenciar hotéis, quartos, etc.
 
 ### Usuário Comum
 - **Email**: `user@gmail.com`
-- **Senha**: `User123`
+- **Senha**: `User123.`
 - **Role**: `Consumidor`
 - **Funcionalidades**: Pode visualizar hotéis, fazer reservas, etc.
 
