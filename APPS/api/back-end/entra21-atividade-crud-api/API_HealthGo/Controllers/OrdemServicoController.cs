@@ -59,5 +59,11 @@ namespace API_HealthGo.Controllers
             }
             return Ok(ordemServicoId);
         }
+
+        [HttpGet("historico/{pessoaId}")]
+        public async Task<ActionResult<IEnumerable<HistoricoComprasDTO>>> GetHistoricoCompras(int pessoaId)
+        {
+            return Ok(await _service.GetHistoricoCompras(pessoaId));
+        }
     }
 }

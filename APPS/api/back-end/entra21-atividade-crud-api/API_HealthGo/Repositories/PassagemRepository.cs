@@ -22,8 +22,6 @@ namespace API_HealthGo.Repository
             {
                 string sql = $@"
                        SELECT ID AS {nameof(PassagemEntity.Id)},
-                        PRECO AS {nameof(PassagemEntity.Preco)},
-                        ASSENTO_ID AS {nameof(PassagemEntity.Assento_Id)},
                         VOO_ID AS {nameof(PassagemEntity.Voo_Id)},
                         ORDEMSERVICO_ID AS {nameof(PassagemEntity.OrdemServico_Id)}
                         FROM PASSAGEM
@@ -41,8 +39,6 @@ namespace API_HealthGo.Repository
                 string sql = $@"
                     SELECT ID AS {nameof(VooEntity.Id)},
                         SELECT ID AS {nameof(PassagemEntity.Id)},
-                        PRECO AS {nameof(PassagemEntity.Preco)},
-                        ASSENTO_ID AS {nameof(PassagemEntity.Assento_Id)},
                         VOO_ID AS {nameof(PassagemEntity.Voo_Id)},
                         ORDEMSERVICO_ID AS {nameof(PassagemEntity.OrdemServico_Id)}
                         FROM PASSAGEM
@@ -57,8 +53,8 @@ namespace API_HealthGo.Repository
         public async Task Insert(PassagemInsertDTO passagem)
         {
             string sql = @"
-                INSERT INTO PASSAGEM (PRECO, ASSENTO_ID, VOO_ID, ORDEMSERVICO_ID)
-                    VALUES (@Preco, @Assento_Id, @Voo_Id, @OrdemServico_Id)
+                INSERT INTO PASSAGEM (VOO_ID, ORDEMSERVICO_ID)
+                    VALUES (@Voo_Id, @OrdemServico_Id)
             ";
 
             await _connection.Execute(sql, passagem);
@@ -68,9 +64,7 @@ namespace API_HealthGo.Repository
         {
             string sql = @"
                 UPDATE PASSAGEM
-                    SET PRECO = @Preco,
-                        ASSENTO_ID = @Assento_Id,
-                        VOO_ID = @Voo_Id,
+                    SET VOO_ID = @Voo_Id,
                         ORDEMSERVICO_ID = @OrdemServico_Id
                     WHERE ID = @Id
             ";

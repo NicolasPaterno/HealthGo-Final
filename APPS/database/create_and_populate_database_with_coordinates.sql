@@ -324,28 +324,20 @@ CREATE TABLE IF NOT EXISTS `Aeroporto` (
     ON UPDATE NO ACTION
 ) ENGINE = InnoDB;
 
--- Tabela Aviao
-CREATE TABLE IF NOT EXISTS `Aviao` (
-  `Id` INT NOT NULL AUTO_INCREMENT,
-  `Modelo` VARCHAR(255) NOT NULL,
-  `Capacidade` INT NOT NULL,
-  `Companhia` VARCHAR(255) NOT NULL,
-  PRIMARY KEY (`Id`)
-) ENGINE = InnoDB;
-
 -- Tabela Voo
 CREATE TABLE IF NOT EXISTS `Voo` (
   `Id` INT NOT NULL AUTO_INCREMENT,
-  `Numero` VARCHAR(20) NOT NULL,
+  `Numero` VARCHAR(20) NOT NULL UNIQUE,
+  `Preco` DECIMAL(10,2) NOT NULL,
   `DataPartida` DATETIME NOT NULL,
   `DataChegada` DATETIME NOT NULL,
+  `Companhia` VARCHAR(20) NOT NULL,
+  `Assento_Tipo` ENUM('Primeira Classe', 'Executiva', 'Econômica'),
   `AeroportoOrigem_Id` INT NOT NULL,
   `AeroportoDestino_Id` INT NOT NULL,
-  `Aviao_Id` INT NOT NULL,
   PRIMARY KEY (`Id`),
   INDEX `fk_Voo_Aeroporto1_idx` (`AeroportoOrigem_Id` ASC) VISIBLE,
   INDEX `fk_Voo_Aeroporto2_idx` (`AeroportoDestino_Id` ASC) VISIBLE,
-  INDEX `fk_Voo_Aviao1_idx` (`Aviao_Id` ASC) VISIBLE,
   CONSTRAINT `fk_Voo_Aeroporto1`
     FOREIGN KEY (`AeroportoOrigem_Id`)
     REFERENCES `Aeroporto` (`Id`)
@@ -355,19 +347,12 @@ CREATE TABLE IF NOT EXISTS `Voo` (
     FOREIGN KEY (`AeroportoDestino_Id`)
     REFERENCES `Aeroporto` (`Id`)
     ON DELETE CASCADE
-    ON UPDATE NO ACTION,
-  CONSTRAINT `fk_Voo_Aviao1`
-    FOREIGN KEY (`Aviao_Id`)
-    REFERENCES `Aviao` (`Id`)
-    ON DELETE CASCADE
     ON UPDATE NO ACTION
 ) ENGINE = InnoDB;
 
 -- Tabela Passagem
 CREATE TABLE IF NOT EXISTS `healthgo`.`passagem` (
   `Id` INT NOT NULL AUTO_INCREMENT,
-  `Preco` DECIMAL(10,2) NOT NULL,
-  `Classe` ENUM('Primeira Classe', 'Executiva', 'Econômica') NOT NULL,
   `Voo_Id` INT NOT NULL,
   `OrdemServico_Id` INT NOT NULL,
   PRIMARY KEY (`Id`),
@@ -608,17 +593,70 @@ INSERT INTO Aeroporto (Id, Nome, Codigo, Cidade_Id) VALUES
 (1, 'Aeroporto Internacional de Florianópolis', 'FLN', 24),
 (2, 'Aeroporto de Navegantes', 'NVT', 63),
 (3, 'Aeroporto de Blumenau', 'BNU', 61);
+INSERT INTO `Aeroporto` (`Nome`, `Codigo`, `Cidade_Id`) VALUES ('Aeroporto Internacional de Guarulhos', 'GRU', 24);
+INSERT INTO `Aeroporto` (`Nome`, `Codigo`, `Cidade_Id`) VALUES ('Aeroporto de Congonhas', 'CGH', 24);
+INSERT INTO `Aeroporto` (`Nome`, `Codigo`, `Cidade_Id`) VALUES ('Aeroporto Internacional do Galeão', 'GIG', 19);
+INSERT INTO `Aeroporto` (`Nome`, `Codigo`, `Cidade_Id`) VALUES ('Aeroporto Santos Dumont', 'SDU', 19);
+INSERT INTO `Aeroporto` (`Nome`, `Codigo`, `Cidade_Id`) VALUES ('Aeroporto Internacional de Brasília', 'BSB', 25);
+INSERT INTO `Aeroporto` (`Nome`, `Codigo`, `Cidade_Id`) VALUES ('Aeroporto Internacional de Florianópolis', 'FLN', 61);
 
--- Aviões
-INSERT INTO Aviao (Id, Modelo, Capacidade, Companhia) VALUES
-(1, 'Boeing 737-800', 189, 'LATAM'),
-(2, 'Airbus A320', 180, 'GOL'),
-(3, 'Embraer E195', 118, 'Azul');
+INSERT INTO `Aeroporto` (`Nome`, `Codigo`, `Cidade_Id`) VALUES
+('Aeroporto Campo de Marte', 'SBMT', 24),
+('Aeroporto de Jacarepaguá', 'SBJR', 19),
+('Aeroporto Brigadeiro Cabral', 'SNZW', 25),
+('Aeroporto Costa de Piranhas', 'SBFI', 61),
+('Aeroporto Presidente Juscelino Kubitschek', 'BSB', 25),
+('Aeroporto Internacional de Viracopos', 'VCP', 24),
+('Aeroporto Internacional de Curitiba', 'CWB', 25);
 
--- Voos
-INSERT INTO Voo (Id, Numero, DataPartida, DataChegada, AeroportoOrigem_Id, AeroportoDestino_Id, Aviao_Id) VALUES
-(1, 'LA1234', '2024-02-15 10:00:00', '2024-02-15 11:30:00', 1, 2, 1),
-(2, 'G31000', '2024-02-16 14:00:00', '2024-02-16 15:30:00', 2, 1, 2);
+
+-- Inserts para a tabela Voo
+-- Vários voos conectando os aeroportos existentes e os recém-adicionados.
+-- As novas referências de AeroportoOrigem_Id e AeroportoDestino_Id usarão os IDs gerados acima.
+-- Assumindo que os IDs de aeroporto são gerados sequencialmente, usei os IDs 1-6 dos exemplos anteriores e 7-13 para os novos.
+
+INSERT INTO `Voo` (`Numero`, `DataPartida`, `DataChegada`, `Companhia`, `Assento_Tipo`, `Preco`, `AeroportoOrigem_Id`, `AeroportoDestino_Id`) VALUES
+('LA3121', '2025-09-10 08:00:00', '2025-09-10 09:10:00', 'LATAM', 'Econômica', 350.50, 1, 3),
+('G31002', '2025-09-10 10:30:00', '2025-09-10 11:45:00', 'GOL', 'Executiva', 850.75, 4, 2),
+('AD5010', '2025-09-11 12:00:00', '2025-09-11 13:50:00', 'AZUL', 'Primeira Classe', 1500.00, 1, 5),
+('LA4567', '2025-09-11 15:30:00', '2025-09-11 17:00:00', 'LATAM', 'Econômica', 420.00, 5, 6),
+('G31088', '2025-09-12 18:00:00', '2025-09-12 19:35:00', 'GOL', 'Executiva', 910.00, 6, 3),
+('JJ3156', '2025-09-15 14:00:00', '2025-09-15 15:30:00', 'LATAM', 'Econômica', 380.25, 1, 4),
+('AD2050', '2025-09-15 16:30:00', '2025-09-15 18:00:00', 'AZUL', 'Executiva', 790.00, 3, 2),
+('GOL8875', '2025-09-16 09:00:00', '2025-09-16 10:45:00', 'GOL', 'Econômica', 300.00, 2, 5),
+('LATAM9123', '2025-09-16 11:30:00', '2025-09-16 13:00:00', 'LATAM', 'Executiva', 880.50, 5, 1),
+('AZUL4489', '2025-09-17 19:00:00', '2025-09-17 21:00:00', 'AZUL', 'Primeira Classe', 1650.00, 4, 3),
+('GOL5500', '2025-09-18 07:00:00', '2025-09-18 08:30:00', 'GOL', 'Econômica', 290.00, 6, 2),
+('LA3345', '2025-09-18 10:00:00', '2025-09-18 12:00:00', 'LATAM', 'Econômica', 450.00, 7, 8),
+('AD9876', '2025-09-19 13:00:00', '2025-09-19 14:40:00', 'AZUL', 'Executiva', 950.00, 8, 9),
+('G32578', '2025-09-19 15:15:00', '2025-09-19 16:50:00', 'GOL', 'Primeira Classe', 1800.00, 9, 10),
+('LA7654', '2025-09-20 17:00:00', '2025-09-20 18:30:00', 'LATAM', 'Econômica', 360.00, 10, 11),
+('AD1234', '2025-09-21 06:00:00', '2025-09-21 07:30:00', 'AZUL', 'Executiva', 810.00, 11, 12),
+('GOL6789', '2025-09-21 09:00:00', '2025-09-21 10:45:00', 'GOL', 'Econômica', 320.00, 12, 13),
+('LA1122', '2025-09-22 11:00:00', '2025-09-22 12:30:00', 'LATAM', 'Primeira Classe', 1750.00, 13, 7),
+('AD2233', '2025-09-22 14:00:00', '2025-09-22 15:50:00', 'AZUL', 'Econômica', 400.00, 7, 9),
+('G34455', '2025-09-23 16:00:00', '2025-09-23 17:30:00', 'GOL', 'Executiva', 930.00, 9, 11),
+('LA6677', '2025-09-23 18:00:00', '2025-09-23 19:45:00', 'LATAM', 'Econômica', 390.00, 11, 8),
+('AD8899', '2025-09-24 20:00:00', '2025-09-24 22:00:00', 'AZUL', 'Primeira Classe', 1900.00, 8, 12),
+('GOL9900', '2025-09-25 08:30:00', '2025-09-25 10:00:00', 'GOL', 'Econômica', 330.00, 12, 10),
+('LA1111', '2025-10-04 12:30:00', '2025-10-04 14:00:00', 'LATAM', 'Executiva', 925.00, 9, 10),
+('AD2222', '2025-10-05 15:00:00', '2025-10-05 16:45:00', 'AZUL', 'Primeira Classe', 1950.00, 10, 11),
+('GOL3333', '2025-10-06 17:00:00', '2025-10-06 18:30:00', 'GOL', 'Econômica', 275.00, 11, 12),
+('LA4444', '2025-10-07 19:00:00', '2025-10-07 20:40:00', 'LATAM', 'Executiva', 895.00, 12, 13),
+('AD5555', '2025-10-08 21:00:00', '2025-10-08 22:30:00', 'AZUL', 'Econômica', 410.00, 13, 1),
+('LA9024', '2025-10-10 08:00:00', '2025-10-10 09:30:00', 'LATAM', 'Primeira Classe', 1800.00, 2, 11),
+('G31924', '2025-10-10 10:15:00', '2025-10-10 11:45:00', 'GOL', 'Executiva', 920.00, 4, 12),
+('AD5024', '2025-10-10 13:00:00', '2025-10-10 14:30:00', 'AZUL', 'Econômica', 350.00, 5, 11),
+('LA9019', '2025-10-11 08:30:00', '2025-10-11 10:00:00', 'LATAM', 'Primeira Classe', 1750.00, 3, 4),
+('G31919', '2025-10-11 11:00:00', '2025-10-11 12:30:00', 'GOL', 'Executiva', 880.00, 1, 2),
+('AD5019', '2025-10-11 14:00:00', '2025-10-11 15:30:00', 'AZUL', 'Econômica', 330.00, 2, 12),
+('LA9025', '2025-10-12 07:45:00', '2025-10-12 09:15:00', 'LATAM', 'Primeira Classe', 1850.00, 10, 11),
+('G31925', '2025-10-12 10:00:00', '2025-10-12 11:30:00', 'GOL', 'Executiva', 940.00, 2, 4),
+('AD5025', '2025-10-12 12:45:00', '2025-10-12 14:15:00', 'AZUL', 'Econômica', 345.00, 6, 4),
+('LA9061', '2025-10-13 09:00:00', '2025-10-13 10:30:00', 'LATAM', 'Primeira Classe', 1900.00, 11, 6),
+('G31961', '2025-10-13 11:00:00', '2025-10-13 12:30:00', 'GOL', 'Executiva', 970.00, 9, 3),
+('AD5061', '2025-10-13 13:30:00', '2025-10-13 15:00:00', 'AZUL', 'Econômica', 360.00, 8, 6);
+
 
 -- Avaliações
 INSERT INTO Avaliacao (Id, Nota, Comentario, DataAvaliacao, Pessoa_Id, Hotel_Id) VALUES

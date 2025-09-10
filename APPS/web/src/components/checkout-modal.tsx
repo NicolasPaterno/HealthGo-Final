@@ -154,6 +154,7 @@ export function CheckoutModal({ isOpen, onClose }: CheckoutModalProps) {
         throw new Error("ID do usuário inválido");
       }
       const latestOrdemServicoId = await getLatestOrdemServicoId(pessoaId);
+      // console.log("ID da última Ordem de Serviço (latestOrdemServicoId):", latestOrdemServicoId);
 
       // Processar Hotéis
       const hotelsInCart = cartItems.filter(item => item.type === "hotel");
@@ -167,17 +168,18 @@ export function CheckoutModal({ isOpen, onClose }: CheckoutModalProps) {
         await api.post("/api/OrdemServico_Hotel", hotelData);
       }
 
-      // Processar Passagens de Avião
-      const flightsInCart = cartItems.filter(item => item.type === "flight");
-      for (const flight of flightsInCart) {
-        const flightData = {
-          preco: flight.price,
-          classe: flight.class,
-          voo_Id: flight.voo_Id,
-          ordemServico_Id: latestOrdemServicoId
-        };
-        await api.post("/Passagem", flightData);
-      }
+      // Processar Passagens de Avião (removido daqui, será tratado em CartContext.tsx)
+      // const flightsInCart = cartItems.filter(item => item.type === "flight");
+      // for (const flight of flightsInCart) {
+      //   const flightData = {
+      //     preco: flight.price,
+      //     classe: flight.class,
+      //     voo_Id: flight.voo_Id,
+      //     ordemServico_Id: latestOrdemServicoId
+      //   };
+      //   // console.log("Enviando dados da passagem para /Passagem:", flightData);
+      //   await api.post("/Passagem", flightData);
+      // }
 
       // Processar Prestadores de Serviço
       const serviceProvidersInCart = cartItems.filter(item => item.type === "serviceProvider");
@@ -202,16 +204,16 @@ export function CheckoutModal({ isOpen, onClose }: CheckoutModalProps) {
         await createServiceReminder(serviceProvider.name, serviceProvider.dataInicio, serviceProvider.dataFim, pessoaId); // Chamar para criar lembrete
       }
 
-      completePurchase();
+      completePurchase(latestOrdemServicoId, pessoaId); // Passar o ID da ordem de serviço e o pessoaId
       onClose();
       
       toast.success("Compra finalizada com sucesso!", {
         description: `Ordem de serviço criada com pagamento via ${formaPagamento}`
       });
     } catch (error: any) {
-      console.error("Erro ao finalizar compra:", error);
+      console.error("Erro ao finalizar compra:", error.response?.data || error.message);
       toast.error("Erro ao processar pagamento", {
-        description: error.message || "Tente novamente mais tarde."
+        description: error.response?.data?.message || error.message || "Tente novamente mais tarde."
       });
     } finally {
       setIsProcessing(false);

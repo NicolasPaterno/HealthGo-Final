@@ -55,5 +55,21 @@ namespace API_HealthGo.Services
                 Message = "Voo alterada com sucesso!"
             };
         }
+
+        public async Task<VooDetalhadoGetAllResponse> GetVoosDetalhado()
+        {
+            return new VooDetalhadoGetAllResponse
+            {
+                Data = await _repository.GetVoosDetalhado()
+            };
+        }
+
+        public async Task<VooIdResponseDTO> GetIdByNumero(string numero)
+        {
+            return new VooIdResponseDTO
+            {
+                Id = await _repository.GetIdByNumero(numero)
+            };
+        }
     }
 }
