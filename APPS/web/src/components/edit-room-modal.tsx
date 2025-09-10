@@ -48,6 +48,8 @@ export default function EditRoomModal({ room, isOpen, onClose, onRoomUpdated }: 
 
   useEffect(() => {
     if (room) {
+      console.log('Room recebido no modal:', room);
+      console.log('Hotel_Id do room:', room.Hotel_Id);
       setFormData({
         numero: room.numero,
         andar: room.andar,
@@ -64,35 +66,78 @@ export default function EditRoomModal({ room, isOpen, onClose, onRoomUpdated }: 
 
     if (!room) return;
 
-    if (!formData.numero.trim()) {
+    // Validações mais robustas
+    if (!formData.numero || !formData.numero.trim()) {
       toast.error('Número do quarto é obrigatório');
       return;
     }
 
-    if (formData.preco <= 0) {
+    if (!formData.preco || formData.preco <= 0) {
       toast.error('Preço deve ser maior que zero');
       return;
     }
 
-    if (formData.limitePessoa <= 0) {
+    if (!formData.limitePessoa || formData.limitePessoa <= 0) {
       toast.error('Limite de pessoas deve ser maior que zero');
+      return;
+    }
+
+    // Verificar se o Hotel_Id existe e é válido
+    const hotelId = room.Hotel_Id || (room as any).hotel_Id || (room as any).hotelId;
+    if (!hotelId || hotelId <= 0) {
+      console.error('Hotel_Id inválido:', hotelId, 'Room completo:', room);
+      toast.error('ID do hotel é inválido');
       return;
     }
 
     try {
       setLoading(true);
-      await api.put('/Quarto', {
-        id: room.id,
-        ...formData,
-        Hotel_Id: room.Hotel_Id
-      });
 
-      toast.success('Quarto atualizado com sucesso!');
-      onRoomUpdated();
-      onClose();
-    } catch (error) {
+      // Preparar os dados para envio com tipos corretos
+      const updateData = {
+        Id: parseInt(room.id.toString()),
+        Numero: formData.numero.trim(),
+        Andar: parseInt(formData.andar.toString()),
+        AceitaAnimal: Boolean(formData.aceitaAnimal),
+        Observacao: formData.observacao ? formData.observacao.trim() : '',
+        Preco: parseFloat(formData.preco.toString()),
+        LimitePessoa: parseInt(formData.limitePessoa.toString()),
+        Hotel_Id: parseInt(hotelId.toString())
+      };
+
+      console.log('Enviando dados para atualização:', updateData);
+
+      const response = await api.put('/Quarto', updateData);
+
+      // Verificar se a resposta contém uma mensagem de erro
+      if (response.data && response.data.message) {
+        if (response.data.message.includes('sucesso')) {
+          toast.success('Quarto atualizado com sucesso!');
+          onRoomUpdated();
+          onClose();
+        } else {
+          toast.error(response.data.message);
+        }
+      } else {
+        toast.success('Quarto atualizado com sucesso!');
+        onRoomUpdated();
+        onClose();
+      }
+    } catch (error: any) {
       console.error('Erro ao atualizar quarto:', error);
-      toast.error('Erro ao atualizar quarto. Tente novamente.');
+
+      // Tratar diferentes tipos de erro
+      if (error.response?.data?.message) {
+        toast.error(error.response.data.message);
+      } else if (error.response?.status === 400) {
+        toast.error('Dados inválidos. Verifique os campos preenchidos.');
+      } else if (error.response?.status === 404) {
+        toast.error('Quarto não encontrado.');
+      } else if (error.response?.status === 500) {
+        toast.error('Erro interno do servidor. Tente novamente mais tarde.');
+      } else {
+        toast.error('Erro ao atualizar quarto. Tente novamente.');
+      }
     } finally {
       setLoading(false);
     }
@@ -103,6 +148,9 @@ export default function EditRoomModal({ room, isOpen, onClose, onRoomUpdated }: 
       ...prev,
       [field]: value
     }));
+
+    // Log para debug
+    console.log(`Campo ${field} alterado para:`, value);
   };
 
   if (!room) return null;

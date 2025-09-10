@@ -33,7 +33,9 @@ namespace API_HealthGo.Controllers
         [HttpGet("hotel/{hotelId}")]
         public async Task<ActionResult<QuartoGetAllResponse>> GetByHotelId(int hotelId)
         {
-            return Ok(await _service.GetByHotelId(hotelId));
+            var result = await _service.GetByHotelId(hotelId);
+            Console.WriteLine($"Retornando quartos para hotel {hotelId}: {result.Data?.Count()} quartos");
+            return Ok(result);
         }
 
         [HttpPost]
@@ -51,7 +53,18 @@ namespace API_HealthGo.Controllers
         [HttpPut]
         public async Task<ActionResult<MessageResponse>> Update(QuartoEntity quarto)
         {
-            return Ok(await _service.Update(quarto));
+            Console.WriteLine($"Controller recebeu quarto para atualização: ID={quarto.Id}, Número={quarto.Numero}");
+            var result = await _service.Update(quarto);
+            
+            // Verificar se há mensagem de erro na resposta
+            if (result.Message.Contains("obrigatório") || 
+                result.Message.Contains("deve ser maior") || 
+                result.Message.Contains("não encontrado"))
+            {
+                return BadRequest(result);
+            }
+            
+            return Ok(result);
         }
     }
 }
