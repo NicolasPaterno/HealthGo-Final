@@ -2,13 +2,36 @@ import { createContext, useContext, useState, type ReactNode, useMemo } from 're
 import { toast } from "sonner";
 
 // Interfaces
-export interface CartItem {
+export interface BaseCartItem {
   id: string;
   name: string;
   price: number;
   quantity: number;
   image?: string;
 }
+
+export interface HotelCartItem extends BaseCartItem {
+  type: "hotel";
+  checkInDate: string; // ou Date, dependendo de como você armazena
+  checkOutDate: string; // ou Date
+}
+
+export interface FlightCartItem extends BaseCartItem {
+  type: "flight";
+  class: string; // Classe do voo
+  voo_Id: number; // ID do voo
+}
+
+export interface ServiceProviderCartItem extends BaseCartItem {
+  type: "serviceProvider";
+  prestadorId: number;
+  especialidadeId: number; // ID da especialidade do prestador de serviço
+  especialidade: string; // Adicionar o nome da especialidade
+  dataInicio: string; // ou Date
+  dataFim: string; // ou Date
+}
+
+export type CartItem = HotelCartItem | FlightCartItem | ServiceProviderCartItem;
 
 export interface Order {
   orderId: string;
@@ -19,7 +42,7 @@ export interface Order {
 
 interface ICartContext {
   cartItems: CartItem[];
-  addToCart: (item: Omit<CartItem, 'quantity'>) => void;
+  addToCart: (item: CartItem) => void;
   removeFromCart: (id: string) => void;
   increaseQuantity: (id: string) => void;
   decreaseQuantity: (id: string) => void;
@@ -59,12 +82,39 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
   const openCheckout = () => setIsCheckoutOpen(true);
   const closeCheckout = () => setIsCheckoutOpen(false);
 
-  const addToCart = (itemToAdd: Omit<CartItem, 'quantity'>) => {
+  const addToCart = (itemToAdd: CartItem) => {
+
+    if (itemToAdd.type === "serviceProvider" && new Date(itemToAdd.dataInicio) < new Date()) {
+      toast.error("Não é possível agendar serviços para datas e horários passados.");
+      return;
+    }
+
     setCartItems(prevItems => {
-      const existingItem = prevItems.find(item => item.id === itemToAdd.id);
+      const existingItem = prevItems.find(item => {
+        if (item.id === itemToAdd.id && item.type === itemToAdd.type) {
+          if (item.type === "serviceProvider" && itemToAdd.type === "serviceProvider") {
+            return item.prestadorId === itemToAdd.prestadorId && item.dataInicio === itemToAdd.dataInicio && item.especialidadeId === itemToAdd.especialidadeId;
+          }
+          if (item.type === "hotel" && itemToAdd.type === "hotel") {
+            return item.checkInDate === itemToAdd.checkInDate && item.checkOutDate === itemToAdd.checkOutDate;
+          }
+          if (item.type === "flight" && itemToAdd.type === "flight") {
+            return item.voo_Id === itemToAdd.voo_Id && item.class === itemToAdd.class;
+          }
+          return true;
+        }
+        return false;
+      });
+
       if (existingItem) {
         return prevItems.map(item =>
-          item.id === itemToAdd.id ? { ...item, quantity: item.quantity + 1 } : item
+          (item.id === itemToAdd.id && item.type === itemToAdd.type &&
+          (item.type === "serviceProvider" && itemToAdd.type === "serviceProvider" && item.prestadorId === itemToAdd.prestadorId && item.dataInicio === itemToAdd.dataInicio && item.especialidadeId === itemToAdd.especialidadeId) ||
+          (item.type === "hotel" && itemToAdd.type === "hotel" && item.checkInDate === itemToAdd.checkInDate && item.checkOutDate === itemToAdd.checkOutDate) ||
+          (item.type === "flight" && itemToAdd.type === "flight" && item.voo_Id === itemToAdd.voo_Id && item.class === itemToAdd.class)
+          )
+            ? { ...item, quantity: item.quantity + 1 }
+            : item
         );
       }
       return [...prevItems, { ...itemToAdd, quantity: 1 }];

@@ -80,10 +80,46 @@ export function CheckoutModal({ isOpen, onClose }: CheckoutModalProps) {
 
       const response = await api.post("/OrdemServico", ordemServicoData);
       
-      return response.data;
+      return response.data.id; // Retorna o ID da ordem de serviço
     } catch (error: any) {
       console.error("Erro ao criar OrdemServico:", error);
       throw new Error(error.response?.data?.message || "Erro ao criar ordem de serviço");
+    }
+  };
+
+  const getLatestOrdemServicoId = async (pessoaId: number) => {
+    try {
+      const response = await api.get(`/OrdemServico/latest/${pessoaId}`);
+      return response.data; // Deve retornar apenas o ID
+    } catch (error: any) {
+      console.error("Erro ao obter o último ID da OrdemServico:", error);
+      throw new Error(error.response?.data?.message || "Erro ao obter o ID da última ordem de serviço");
+    }
+  };
+
+  const fetchPrestadorServicoEspecialidadeId = async (prestadorId: number, especialidadeName: string) => {
+    try {
+      const response = await api.get(`/PrestadorServicoEspecialidade/${prestadorId}/get-id-by-function?function=${encodeURIComponent(especialidadeName)}`);
+      return response.data;
+    } catch (error: any) {
+      console.error("Erro ao buscar ID da especialidade do prestador na CheckoutModal:", error);
+      throw new Error(error.response?.data?.message || "Erro ao obter ID da especialidade do prestador");
+    }
+  };
+
+  const createServiceReminder = async (serviceName: string, serviceDateStart: string, serviceDateEnd: string, pessoaId: number) => {
+    try {
+      const reminderPayload = {
+        Titulo: `Consulta: ${serviceName} (${serviceDateStart.substring(11, 16)} - ${serviceDateEnd.substring(11, 16)})`,
+        Data: new Date(new Date(serviceDateStart).setHours(new Date(serviceDateStart).getHours())).toISOString(), // Usar a data de início diretamente, como já ajustada
+        Tipo: "Consulta",
+        Pessoa_Id: pessoaId,
+      };
+      await api.post('/Lembrete', reminderPayload);
+      toast.success("Lembrete da consulta adicionado ao calendário!");
+    } catch (error: any) {
+      console.error("Erro ao criar lembrete de serviço:", error);
+      toast.error("Erro ao adicionar lembrete da consulta.");
     }
   };
 
@@ -107,8 +143,64 @@ export function CheckoutModal({ isOpen, onClose }: CheckoutModalProps) {
       await new Promise(resolve => setTimeout(resolve, 1500));
 
       const formaPagamento = mapPaymentMethodToString(paymentMethod);
+      await createOrdemServico(formaPagamento); // Reintroduzir a chamada para criar a Ordem de Serviço
 
-      await createOrdemServico(formaPagamento);
+      const decodedUser = getAuthUser();
+      if (!decodedUser) {
+        throw new Error("Usuário não autenticado");
+      }
+      const pessoaId = parseInt(decodedUser.nameid);
+      if (isNaN(pessoaId)) {
+        throw new Error("ID do usuário inválido");
+      }
+      const latestOrdemServicoId = await getLatestOrdemServicoId(pessoaId);
+
+      // Processar Hotéis
+      const hotelsInCart = cartItems.filter(item => item.type === "hotel");
+      for (const hotel of hotelsInCart) {
+        const hotelData = {
+          dataEntrada: hotel.checkInDate,
+          dataSaida: hotel.checkOutDate,
+          ordemServico_Id: latestOrdemServicoId,
+          hotel_Id: parseInt(hotel.id) // Supondo que o id do hotel seja um número
+        };
+        await api.post("/api/OrdemServico_Hotel", hotelData);
+      }
+
+      // Processar Passagens de Avião
+      const flightsInCart = cartItems.filter(item => item.type === "flight");
+      for (const flight of flightsInCart) {
+        const flightData = {
+          preco: flight.price,
+          classe: flight.class,
+          voo_Id: flight.voo_Id,
+          ordemServico_Id: latestOrdemServicoId
+        };
+        await api.post("/Passagem", flightData);
+      }
+
+      // Processar Prestadores de Serviço
+      const serviceProvidersInCart = cartItems.filter(item => item.type === "serviceProvider");
+      for (const serviceProvider of serviceProvidersInCart) {
+        // Buscar o ID da especialidade do prestador de serviço dinamicamente
+        const fetchedEspecialidadeId = await fetchPrestadorServicoEspecialidadeId(
+          serviceProvider.prestadorId,
+          serviceProvider.especialidade // O nome da especialidade deve estar disponível no item do carrinho
+        );
+
+        if (!fetchedEspecialidadeId) {
+          throw new Error(`Não foi possível obter o ID da especialidade para ${serviceProvider.name}`);
+        }
+
+        const serviceProviderData = {
+          dataInicio: new Date(new Date(serviceProvider.dataInicio).setHours(new Date(serviceProvider.dataInicio).getHours() - 1)).toISOString(), // Subtrair 1 hora
+          dataFim: new Date(new Date(serviceProvider.dataFim).setHours(new Date(serviceProvider.dataFim).getHours() - 1)).toISOString(),       // Subtrair 1 hora
+          ordemServico_Id: latestOrdemServicoId,
+          prestadorServico_Especialidade_Id: fetchedEspecialidadeId
+        };
+        await api.post("/api/OrdemServico_PrestadorServico", serviceProviderData);
+        await createServiceReminder(serviceProvider.name, serviceProvider.dataInicio, serviceProvider.dataFim, pessoaId); // Chamar para criar lembrete
+      }
 
       completePurchase();
       onClose();

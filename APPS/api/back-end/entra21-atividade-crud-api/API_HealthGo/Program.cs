@@ -3,9 +3,9 @@ using API_HealthGo.Contracts.Repositories;
 using API_HealthGo.Contracts.Repository;
 using API_HealthGo.Contracts.Service;
 using API_HealthGo.Infrastructure;
-using API_HealthGo.Repositories;
 using API_HealthGo.Repository;
 using API_HealthGo.Services;
+using API_HealthGo.Repositories;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.OpenApi.Models;
 
@@ -81,6 +81,9 @@ namespace API_HealthGo
             //prestador servi�o
             builder.Services.AddScoped<IPrestadorServicoRepository, PrestadorServicoRepository>();
             builder.Services.AddScoped<IPrestadorServicoService, PrestadorServicoService>();
+
+            builder.Services.AddScoped<IOrdemServico_PrestadorServicoRepository, OrdemServico_PrestadorServicoRepository>();
+            builder.Services.AddScoped<IOrdemServico_PrestadorServicoService, OrdemServico_PrestadorServicoService>();
 
             //fazer as inje��es de depend�ncias
 

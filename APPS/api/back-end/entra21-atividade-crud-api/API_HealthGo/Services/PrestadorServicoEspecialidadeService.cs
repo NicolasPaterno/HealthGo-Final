@@ -60,5 +60,10 @@ namespace API_HealthGo.Services
         {
             return await _repository.GetAllEspecialidadesById(id);
         }
+
+        public async Task<int> ReturnIdByFunction(int id, string function)
+        {
+            return await _repository.ReturnIdByFunction(id, function);
+        }
     }
 }

@@ -24,6 +24,7 @@ interface PrestadorServico {
   precoHora: number;
   observacao: string;
   especialidade: string;
+  especialidadeId: number;
 }
 
 export default function PrestadoresPage() {

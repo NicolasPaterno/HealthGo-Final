@@ -46,11 +46,6 @@ export function AppSidebarPrestadorServico({
       url: "/dashboard-prestador/historico",
       icon: History,
     },
-    {
-      name: "Relatórios",
-      url: "/dashboard-prestador/relatorios",
-      icon: FileText,
-    },
   ];
 
   const prestadorNavSecondary = [
@@ -58,11 +53,6 @@ export function AppSidebarPrestadorServico({
       title: "Configurações",
       url: "/settings",
       icon: Settings,
-    },
-    {
-      title: "Ajuda",
-      url: "/dashboard/help",
-      icon: HelpCircle,
     },
   ];
 
@@ -88,11 +78,6 @@ export function AppSidebarPrestadorServico({
       <SidebarContent>
         <NavMain items={prestadorNavMain} pathname={location.pathname} />
         <NavDocuments items={prestadorDocuments} pathname={location.pathname} />
-        <NavSecondary
-          items={prestadorNavSecondary}
-          pathname={location.pathname}
-          className="mt-auto"
-        />
       </SidebarContent>
       <SidebarFooter>
         <NavUser />

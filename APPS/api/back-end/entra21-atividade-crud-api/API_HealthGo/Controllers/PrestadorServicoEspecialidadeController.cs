@@ -63,5 +63,23 @@ namespace API_HealthGo.Controllers
 
             return Ok(especialidades);
         }
+
+        [HttpGet("{id}/get-id-by-function")]
+        public async Task<ActionResult<int>> ReturnIdByFunction(int id, [FromQuery] string function)
+        {
+            if (string.IsNullOrEmpty(function))
+            {
+                return BadRequest("O parâmetro 'function' é obrigatório.");
+            }
+
+            var idPS = await _service.ReturnIdByFunction(id, function);
+
+            if (idPS == 0)
+            {
+                return NotFound("Nenhum ID de especialidade encontrado para o prestador de serviço e função especificados.");
+            }
+
+            return Ok(idPS);
+        }
     }
 }

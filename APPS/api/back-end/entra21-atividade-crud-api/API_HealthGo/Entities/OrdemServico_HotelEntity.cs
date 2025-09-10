@@ -2,20 +2,13 @@
 {
     public class OrdemServico_HotelEntity
     {
-        public string StatusOS { get; set; } // tipo ENUM deixa em string ou em método à parte?
-                                             // ENUM('Concluído', 'Em andamento', 'Cancelado')
+        public int Id { get; set; }
 
-        public decimal Preco { get; set; }
+        public DateTime DataEntrada { get; set; }
 
-        public string Observacao { get; set; }
+        public DateTime DataSaida { get; set; }
 
-        public int QuantAcompanhante { get; set; }
-
-        public DateTime DataInicio { get; set; }
-
-        public DateTime DataFim { get; set; }
-
-        public int Quarto_Id { get; set; }
+        public int Hotel_Id { get; set; }
 
         public int OrdemServico_Id { get; set; }
     }
