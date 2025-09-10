@@ -3,9 +3,9 @@ using API_HealthGo.Contracts.Repositories;
 using API_HealthGo.Contracts.Repository;
 using API_HealthGo.Contracts.Service;
 using API_HealthGo.Infrastructure;
-using API_HealthGo.Repositories;
 using API_HealthGo.Repository;
 using API_HealthGo.Services;
+using API_HealthGo.Repositories;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.OpenApi.Models;
 
@@ -82,6 +82,9 @@ namespace API_HealthGo
             builder.Services.AddScoped<IPrestadorServicoRepository, PrestadorServicoRepository>();
             builder.Services.AddScoped<IPrestadorServicoService, PrestadorServicoService>();
 
+            builder.Services.AddScoped<IOrdemServico_PrestadorServicoRepository, OrdemServico_PrestadorServicoRepository>();
+            builder.Services.AddScoped<IOrdemServico_PrestadorServicoService, OrdemServico_PrestadorServicoService>();
+
             //fazer as inje��es de depend�ncias
 
             builder.Services.AddScoped<IHospitalService, HospitalService>();
@@ -97,9 +100,6 @@ namespace API_HealthGo
 
             builder.Services.AddScoped<IAvaliacaoService, AvaliacaoService>();
             builder.Services.AddScoped<IAvaliacaoRepository, AvaliacaoRepository>();
-
-            builder.Services.AddScoped<IAviaoService, AviaoService>();
-            builder.Services.AddScoped<IAviaoRepository, AviaoRepository>();
 
             builder.Services.AddScoped<ICamaQuartoService, CamaQuartoService>();
             builder.Services.AddScoped<ICamaQuartoRepository, CamaQuartoRepository>();

@@ -1,5 +1,7 @@
 import { LoginForm } from "@/components/login-form"
 import { HeartPulse } from "lucide-react"
+import { Link } from "react-router-dom"; // Importar Link
+import { Button } from "@/components/ui/button"; // Importar Button
 
 export default function LoginPage() {
   return (
@@ -12,6 +14,11 @@ export default function LoginPage() {
           Health Go
         </a>
         <LoginForm />
+        <Link to="/" className="self-center">
+          <Button variant="link" className="text-sm text-muted-foreground">
+            Voltar para a Página Inicial
+          </Button>
+        </Link>
       </div>
     </div>
   )

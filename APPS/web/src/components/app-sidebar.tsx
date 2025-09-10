@@ -123,32 +123,12 @@ const data = {
       url: "/settings",
       icon: Settings,
     },
-    {
-      title: "Ajuda",
-      url: "/dashboard/help",
-      icon: HelpCircle,
-    },
-    {
-      title: "Search",
-      url: "/dashboard",
-      icon: Search,
-    },
   ],
   documents: [
     {
       name: "Histórico de compras",
-      url: "/purchase/history",
+      url: "/dashboard/history",
       icon: History,
-    },
-    {
-      name: "Reports",
-      url: "/dashboard",
-      icon: FileText,
-    },
-    {
-      name: "Word Assistant",
-      url: "/dashboard",
-      icon: FileText,
     },
   ],
 };

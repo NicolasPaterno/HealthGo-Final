@@ -56,5 +56,22 @@ namespace API_HealthGo.Services
                 Message = "Ordem de Serviço alterada com sucesso!"
             };
         }
+
+        public async Task<int> GetLatestOrdemServicoByPessoaId(int pessoaId)
+        {
+            var ordemServicoId = await _repository.GetLatestByPessoaId(pessoaId);
+
+            if (ordemServicoId == 0)
+            {
+                return 0;
+            }
+
+            return ordemServicoId;
+        }
+
+        public async Task<IEnumerable<HistoricoComprasDTO>> GetHistoricoCompras(int pessoaId)
+        {
+            return await _repository.GetHistoricoComprasByPessoaId(pessoaId);
+        }
     }
 }

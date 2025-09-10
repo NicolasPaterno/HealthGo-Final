@@ -18,5 +18,7 @@ namespace API_HealthGo.Contracts.Service
         Task<MessageResponse> Delete(int id);
 
         Task<IEnumerable<PrestadorServicoEspecialidadeEntity>> GetAllEspecialidadesById(int id);
+
+        Task<int> ReturnIdByFunction(int id, string function);
     }
 }

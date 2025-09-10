@@ -14,5 +14,9 @@ namespace API_HealthGo.Contracts.Repositories
         Task Delete(int id);
 
         Task Update(VooEntity voo);
+
+        Task<IEnumerable<VooDetalhadoDTO>> GetVoosDetalhado();
+
+        Task<int> GetIdByNumero(string numero);
     }
 }

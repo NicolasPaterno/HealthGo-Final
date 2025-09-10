@@ -1,8 +1,9 @@
 import { createContext, useContext, useState, type ReactNode, useMemo } from 'react';
 import { toast } from "sonner";
+import api from "@/services/api"; // Importar o módulo api
 
 // Interfaces
-export interface CartItem {
+export interface BaseCartItem {
   id: string;
   name: string;
   price: number;
@@ -10,8 +11,38 @@ export interface CartItem {
   image?: string;
 }
 
+export interface HotelCartItem extends BaseCartItem {
+  type: "hotel";
+  checkInDate: string; // ou Date, dependendo de como você armazena
+  checkOutDate: string; // ou Date
+}
+
+export interface FlightCartItem extends BaseCartItem {
+  type: "flight";
+  class: string; // Classe do voo
+  voo_Id?: number; // ID do voo (agora opcional)
+  flightNumber: string; // Número do voo original para buscar o Voo_Id
+  dataPartida: string; // Data e hora de partida do voo
+  dataChegada: string; // Data e hora de chegada do voo
+  nomeAeroportoOrigem: string; // Adicionado para o lembrete
+  nomeAeroportoDestino: string; // Adicionado para o lembrete
+  cidadeOrigem: string; // Adicionado para o lembrete
+  cidadeDestino: string; // Adicionado para o lembrete
+}
+
+export interface ServiceProviderCartItem extends BaseCartItem {
+  type: "serviceProvider";
+  prestadorId: number;
+  especialidadeId: number; // ID da especialidade do prestador de serviço
+  especialidade: string; // Adicionar o nome da especialidade
+  dataInicio: string; // ou Date
+  dataFim: string; // ou Date
+}
+
+export type CartItem = HotelCartItem | FlightCartItem | ServiceProviderCartItem;
+
 export interface Order {
-  orderId: string;
+  orderId: number;
   date: Date;
   items: CartItem[];
   total: number;
@@ -19,7 +50,7 @@ export interface Order {
 
 interface ICartContext {
   cartItems: CartItem[];
-  addToCart: (item: Omit<CartItem, 'quantity'>) => void;
+  addToCart: (item: CartItem) => void;
   removeFromCart: (id: string) => void;
   increaseQuantity: (id: string) => void;
   decreaseQuantity: (id: string) => void;
@@ -29,7 +60,7 @@ interface ICartContext {
   openCart: () => void;
   closeCart: () => void;
   purchaseHistory: Order[];
-  completePurchase: () => void;
+  completePurchase: (ordemServico_Id: number, pessoaId: number) => void;
   isCheckoutOpen: boolean;
   openCheckout: () => void;
   closeCheckout: () => void;
@@ -59,12 +90,39 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
   const openCheckout = () => setIsCheckoutOpen(true);
   const closeCheckout = () => setIsCheckoutOpen(false);
 
-  const addToCart = (itemToAdd: Omit<CartItem, 'quantity'>) => {
+  const addToCart = (itemToAdd: CartItem) => {
+
+    if (itemToAdd.type === "serviceProvider" && new Date(itemToAdd.dataInicio) < new Date()) {
+      toast.error("Não é possível agendar serviços para datas e horários passados.");
+      return;
+    }
+
     setCartItems(prevItems => {
-      const existingItem = prevItems.find(item => item.id === itemToAdd.id);
+      const existingItem = prevItems.find(item => {
+        if (item.id === itemToAdd.id && item.type === itemToAdd.type) {
+          if (item.type === "serviceProvider" && itemToAdd.type === "serviceProvider") {
+            return item.prestadorId === itemToAdd.prestadorId && item.dataInicio === itemToAdd.dataInicio && item.especialidadeId === itemToAdd.especialidadeId;
+          }
+          if (item.type === "hotel" && itemToAdd.type === "hotel") {
+            return item.checkInDate === itemToAdd.checkInDate && item.checkOutDate === itemToAdd.checkOutDate;
+          }
+          if (item.type === "flight" && itemToAdd.type === "flight") {
+            return item.voo_Id === itemToAdd.voo_Id && item.class === itemToAdd.class;
+          }
+          return true;
+        }
+        return false;
+      });
+
       if (existingItem) {
         return prevItems.map(item =>
-          item.id === itemToAdd.id ? { ...item, quantity: item.quantity + 1 } : item
+          (item.id === itemToAdd.id && item.type === itemToAdd.type &&
+          (item.type === "serviceProvider" && itemToAdd.type === "serviceProvider" && item.prestadorId === itemToAdd.prestadorId && item.dataInicio === itemToAdd.dataInicio && item.especialidadeId === itemToAdd.especialidadeId) ||
+          (item.type === "hotel" && itemToAdd.type === "hotel" && item.checkInDate === itemToAdd.checkInDate && item.checkOutDate === itemToAdd.checkOutDate) ||
+          (item.type === "flight" && itemToAdd.type === "flight" && item.voo_Id === itemToAdd.voo_Id && item.class === itemToAdd.class)
+          )
+            ? { ...item, quantity: item.quantity + 1 }
+            : item
         );
       }
       return [...prevItems, { ...itemToAdd, quantity: 1 }];
@@ -93,19 +151,60 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
     );
   };
 
-  const completePurchase = () => {
+  const completePurchase = async (ordemServico_Id: number, pessoaId: number) => {
     if (cartItems.length === 0) return;
+
     const newOrder: Order = {
-      orderId: `order-${Date.now()}`,
+      orderId: ordemServico_Id,
       date: new Date(),
       items: [...cartItems],
       total: cartTotal,
     };
+
+    // Processar passagens se houver
+    const flightItems = cartItems.filter(item => item.type === "flight") as FlightCartItem[];
+
+    for (const flightItem of flightItems) {
+      try {
+        // 1. Obter voo_Id
+        console.log("Buscando voo_Id para o número de voo:", flightItem.flightNumber);
+        const vooIdResponse = await api.get(`/Voo/numero/${flightItem.flightNumber}`);
+        console.log("Resposta da busca do voo_Id:", vooIdResponse.data);
+        const voo_Id = vooIdResponse.data.id; // Corrigido: o endpoint retorna { id: number }
+
+        if (voo_Id) {
+          // 2. Registrar Passagem
+          const passagemData = {
+            voo_Id: voo_Id,
+            ordemServico_Id: newOrder.orderId,
+          };
+          console.log("Enviando para /Passagem:", passagemData);
+          const passagemResponse = await api.post("/Passagem", passagemData);
+          console.log("Resposta de /Passagem:", passagemResponse.data);
+          // toast.success(`Passagem para o voo ${flightItem.flightNumber} registrada com sucesso!`); // Removido
+
+          // 3. Adicionar Lembrete para a Passagem (REMOVIDO)
+          // const reminderPayload = {
+          //   Titulo: `Voo ${flightItem.flightNumber}: ${flightItem.cidadeOrigem} → ${flightItem.cidadeDestino}`,
+          //   Data: new Date(flightItem.dataPartida).toISOString(),
+          //   Tipo: "Voo",
+          //   Pessoa_Id: pessoaId,
+          // };
+          // await api.post('/Lembrete', reminderPayload);
+          // toast.success("Lembrete do voo adicionado ao calendário!");
+        } else {
+          toast.error(`Falha ao obter ID do voo ${flightItem.flightNumber}.`);
+        }
+      } catch (error: any) {
+        console.error(`Erro ao processar passagem para o voo ${flightItem.flightNumber}:`, error.response?.data || error.message);
+        toast.error(`Erro ao registrar passagem para o voo ${flightItem.flightNumber}.`);
+      }
+    }
+
     setPurchaseHistory(prevHistory => [newOrder, ...prevHistory]);
     setCartItems([]);
     closeCart();
     closeCheckout();
-    toast.success("Compra finalizada com sucesso!");
   };
 
   const value = {

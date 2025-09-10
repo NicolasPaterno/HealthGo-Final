@@ -3,6 +3,7 @@ using API_HealthGo.DTO;
 using API_HealthGo.Entities;
 using API_HealthGo.Responses;
 using API_HealthGo.Responses.MessageResponse;
+using API_HealthGo.Services;
 using Microsoft.AspNetCore.Mvc;
 
 namespace API_HealthGo.Controllers
@@ -46,6 +47,23 @@ namespace API_HealthGo.Controllers
         public async Task<ActionResult<MessageResponse>> Update(OrdemServicoEntity ordemServico)
         {
             return Ok(await _service.Update(ordemServico));
+        }
+
+        [HttpGet("latest/{pessoaId}")]
+        public async Task<IActionResult> GetLatestOrdemServicoByPessoaId(int pessoaId)
+        {
+            var ordemServicoId = await _service.GetLatestOrdemServicoByPessoaId(pessoaId);
+            if (ordemServicoId == 0)
+            {
+                return NotFound();
+            }
+            return Ok(ordemServicoId);
+        }
+
+        [HttpGet("historico/{pessoaId}")]
+        public async Task<ActionResult<IEnumerable<HistoricoComprasDTO>>> GetHistoricoCompras(int pessoaId)
+        {
+            return Ok(await _service.GetHistoricoCompras(pessoaId));
         }
     }
 }

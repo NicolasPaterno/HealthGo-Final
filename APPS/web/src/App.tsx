@@ -9,6 +9,7 @@ import { CartProvider } from "./context/CartContext";
 import { CartSidebar } from "./components/cart-sidebar";
 import { ProtectedRoute } from "./components/protected-route"; // 1. Importe a rota protegida
 import { RoleProtectedRoute } from "./components/role-protected-route";
+import HistoryPage from "./app/history/HistoryPage"; // Importe a HistoryPage
 
 
 const LoginPage = lazy(() => import("./app/login/LoginPage"));
@@ -27,19 +28,6 @@ const PsychologistPage = lazy(() => import("./app/psychologists/PsychologistPage
 const CaregiversPage = lazy(() => import("./app/caregivers/CaregiversPage"));
 const CalendarPage = lazy(() => import("./app/calendar/CalendarPage"));
 const HospitalsPage = lazy(() => import("./app/hospitals/HospitalsPage"));
-const PurchaseHistoryPage = lazy(() => import("./app/history/PurchaseHistoryPage"));
-const DashboardGerentePage = lazy(() => import("./app/dashboard/DashboardGerentePage"));
-const DashboardGerenteContent = lazy(() => import("./app/dashboard/DashboardGerenteContent"));
-const CadastrarHotelPage = lazy(() => import("./app/hotels/CadastrarHotelPage"));
-const ViewHotelsPage = lazy(() => import("./app/hotels/ViewHotelsPage"));
-const QuartosPage = lazy(() => import("./app/dashboard/QuartosPage"));
-const DashboardPrestadorPage = lazy(() => import("./app/dashboard/DashboardPrestadorServicoPage"));
-//const DashboardPrestadorContent = lazy(() => import("./app/dashboard/DashboardPrestadorServicoContent"));
-const ProfilePage = lazy(() => import("./app/prestadorservico/ProfilePage"));
-const CadastrarServicoPage = lazy(() => import("./app/prestadorservico/CadastrarServicoPage"));
-const ViewServicosPage = lazy(() => import("./app/prestadorservico/ViewServicosPage"));
-const AgendaPrestadorPage = lazy(() => import("./app/prestadorservico/AgendaPrestadorPage"));
-const HistoricoServicosPage = lazy(() => import("./app/prestadorservico/HistoricoServicosPage"));
 const PrestadoresPage = lazy(() => import("./app/prestadorservico/PrestadoresPage"));
 const LandingPage = lazy(() => import("./app/landing/LandingPage"));
 const WorkWithUsPage = lazy(() => import("./app/landing/WorkWithUsPage"));
@@ -76,10 +64,11 @@ function App() {
                   <Route path="calendar" element={<CalendarPage />} />
                   <Route path="hospitals" element={<HospitalsPage />} />
                   <Route path="prestadores" element={<PrestadoresPage />} />
+                  <Route path="history" element={<HistoryPage />} />
                 </Route>
               </Route>
 
-              <Route
+              {/* <Route
                 element={<RoleProtectedRoute allowedRoles={["Gerente"]} />}
               >
                 <Route
@@ -91,9 +80,9 @@ function App() {
                   <Route path="view-hotels" element={<ViewHotelsPage />} />
                   <Route path="quartos" element={<QuartosPage />} />
                 </Route>
-              </Route>
+              </Route> */}
 
-              <Route
+              {/* <Route
                 element={
                   <RoleProtectedRoute allowedRoles={["PrestadorServico"]} />
                 }
@@ -111,14 +100,17 @@ function App() {
                   <Route path="agenda" element={<AgendaPrestadorPage />} />
                   <Route path="historico" element={<HistoricoServicosPage />} />
                 </Route>
-              </Route>
+              </Route> */}
 
               {/* Rota de configurações acessível para todos os usuários autenticados */}
               <Route path="/settings" element={<SettingsPage />} />
 
-              <Route path="/purchase" element={<DashboardPage />}>
+              {/* <Route path="/purchase" element={<DashboardPage />}>
                 <Route path="history" index element={<PurchaseHistoryPage />} />
-              </Route>
+              </Route> */}
+
+              {/* Nova rota para o histórico de compras (REMOVIDA) */}
+              {/* <Route path="/history" element={<HistoryPage />} /> */}
 
             </Route>
 
