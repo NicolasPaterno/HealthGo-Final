@@ -47,6 +47,18 @@ namespace API_HealthGo.Controllers
         {
             return Ok(await _service.Update(voo));
         }
+
+        [HttpGet("detalhado")]
+        public async Task<ActionResult<VooDetalhadoGetAllResponse>> GetDetalhado()
+        {
+            return Ok(await _service.GetVoosDetalhado());
+        }
+
+        [HttpGet("numero/{numero}")]
+        public async Task<ActionResult<VooIdResponseDTO>> GetIdByNumero(string numero)
+        {
+            return Ok(await _service.GetIdByNumero(numero));
+        }
     }
 }
 

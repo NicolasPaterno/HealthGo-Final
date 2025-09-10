@@ -14,6 +14,6 @@
         
         public int Destino_Id { get; set; }
         
-        public int Aviao_Id { get; set; }
+        public string Companhia { get; set; }
     }
 }

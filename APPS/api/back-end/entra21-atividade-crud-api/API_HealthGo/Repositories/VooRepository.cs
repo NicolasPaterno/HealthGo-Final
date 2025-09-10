@@ -27,7 +27,7 @@ namespace API_HealthGo.Repository
                         DATAHORACHEGADA AS {nameof(VooEntity.DataHoraChegada)},
                         ORIGEM_ID AS {nameof(VooEntity.Origem_Id)},
                         DESTINO_ID AS {nameof(VooEntity.Destino_Id)},
-                        AVIAO_ID AS  {nameof(VooEntity.Aviao_Id)}
+                        COMPANHIA AS  {nameof(VooEntity.Companhia)}
                         FROM VOO
                 ";
 
@@ -47,7 +47,7 @@ namespace API_HealthGo.Repository
                         DATAHORACHEGADA AS {nameof(VooEntity.DataHoraChegada)},
                         ORIGEM_ID AS {nameof(VooEntity.Origem_Id)},
                         DESTINO_ID AS {nameof(VooEntity.Destino_Id)},
-                        AVIAO_ID AS  {nameof(VooEntity.Aviao_Id)}
+                        COMPANHIA AS  {nameof(VooEntity.Companhia)}
                         FROM VOO
                         WHERE ID = @id
                 ";
@@ -60,8 +60,8 @@ namespace API_HealthGo.Repository
         public async Task Insert(VooInsertDTO assento)
         {
             string sql = @"
-                INSERT INTO VOO (CODIGOVOO, DATAHORAPARTIDA, DATAHORACHEGADA, ORIGEM_ID, DESTINO_ID, AVIAO_ID)
-                    VALUES (@CodigoVoo, @DataHoraPartida, @DataHoraChegada, @Origem_Id, @Destino_Id, @Aviao_Id)
+                INSERT INTO VOO (CODIGOVOO, DATAHORAPARTIDA, DATAHORACHEGADA, ORIGEM_ID, DESTINO_ID, COMPANHIA)
+                    VALUES (@CodigoVoo, @DataHoraPartida, @DataHoraChegada, @Origem_Id, @Destino_Id, @Companhia)
             ";
 
             await _connection.Execute(sql, assento);
@@ -76,7 +76,7 @@ namespace API_HealthGo.Repository
                         DATAHORACHEGADA = @DataHoraChegada,
                         ORIGEM_ID = @Origem_Id,
                         DESTINO_ID = @Destino_Id,
-                        AVIAO_ID = @Aviao_Id
+                        COMPANHIA = @Companhia
                     WHERE ID = @Id
             ";
 
@@ -88,6 +88,41 @@ namespace API_HealthGo.Repository
             string sql = "DELETE FROM VOO WHERE ID = @id";
 
             await _connection.Execute(sql, new { id });
+        }
+
+        public async Task<IEnumerable<VooDetalhadoDTO>> GetVoosDetalhado()
+        {
+            using (MySqlConnection con = _connection.GetConnection())
+            {
+                string sql = @"
+                    SELECT
+                        AEROPORTO_ORIGEM.Nome AS NomeAeroportoOrigem,
+                        AEROPORTO_DESTINO.Nome AS NomeAeroportoDestino,
+                        CIDADE_ORIGEM.Nome AS CidadeOrigem,
+                        CIDADE_DESTINO.Nome AS CidadeDestino,
+                        Voo.Numero AS NumeroVoo,
+                        Voo.Assento_Tipo AS TipoAssento,
+                        Voo.Preco AS Preco,
+                        Voo.Companhia AS Companhia
+                    FROM Voo
+                    INNER JOIN Aeroporto AS AEROPORTO_ORIGEM ON AEROPORTO_ORIGEM.Id = Voo.AeroportoOrigem_Id
+                    INNER JOIN Aeroporto AS AEROPORTO_DESTINO ON AEROPORTO_DESTINO.Id = Voo.AeroportoDestino_Id
+                    INNER JOIN Cidade AS CIDADE_ORIGEM ON CIDADE_ORIGEM.Id = AEROPORTO_ORIGEM.Cidade_Id
+                    INNER JOIN Cidade AS CIDADE_DESTINO ON CIDADE_DESTINO.Id = AEROPORTO_DESTINO.Cidade_Id;
+                ";
+
+                IEnumerable<VooDetalhadoDTO> vooDetalhadoList = await con.QueryAsync<VooDetalhadoDTO>(sql);
+                return vooDetalhadoList;
+            }
+        }
+
+        public async Task<int> GetIdByNumero(string numero)
+        {
+            using (MySqlConnection con = _connection.GetConnection())
+            {
+                string sql = "SELECT Id FROM Voo WHERE Numero = @numero";
+                return await con.QueryFirstAsync<int>(sql, new { numero });
+            }
         }
 
     }
