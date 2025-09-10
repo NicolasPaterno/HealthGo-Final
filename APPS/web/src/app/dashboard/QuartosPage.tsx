@@ -54,6 +54,7 @@ export default function QuartosPage() {
     try {
       setLoading(true);
       const response = await api.get(`/Quarto/hotel/${selectedHotel.id}`);
+      console.log('Resposta da API de quartos:', response.data);
       setRooms(response.data.data || []);
     } catch (error) {
       console.error('Erro ao carregar quartos:', error);
@@ -166,8 +167,8 @@ export default function QuartosPage() {
                 <Card
                   key={hotel.id}
                   className={`cursor-pointer transition-all hover:shadow-md ${selectedHotel?.id === hotel.id
-                      ? 'ring-2 ring-primary bg-primary/5'
-                      : 'hover:bg-muted/50'
+                    ? 'ring-2 ring-primary bg-primary/5'
+                    : 'hover:bg-muted/50'
                     }`}
                   onClick={() => handleHotelSelect(hotel)}
                 >

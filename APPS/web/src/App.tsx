@@ -10,6 +10,17 @@ import { CartSidebar } from "./components/cart-sidebar";
 import { ProtectedRoute } from "./components/protected-route"; // 1. Importe a rota protegida
 import { RoleProtectedRoute } from "./components/role-protected-route";
 import HistoryPage from "./app/history/HistoryPage"; // Importe a HistoryPage
+import ViewServicosPage from "./app/prestadorservico/ViewServicosPage";
+import AgendaPrestadorPage from "./app/prestadorservico/AgendaPrestadorPage";
+import HistoricoServicosPage from "./app/prestadorservico/HistoricoServicosPage";
+import CadastrarServicoPage from "./app/prestadorservico/CadastrarServicoPage";
+import ProfilePage from "./app/prestadorservico/ProfilePage";
+import DashboardPrestadorServicoPage from "./app/dashboard/DashboardPrestadorServicoPage";
+import QuartosPage from "./app/dashboard/QuartosPage";
+import ViewHotelsPage from "./app/hotels/ViewHotelsPage";
+import CadastrarHotelPage from "./app/hotels/CadastrarHotelPage";
+import DashboardGerenteContent from "./app/dashboard/DashboardGerenteContent";
+import DashboardGerentePage from "./app/dashboard/DashboardGerentePage";
 
 
 const LoginPage = lazy(() => import("./app/login/LoginPage"));
@@ -68,7 +79,7 @@ function App() {
                 </Route>
               </Route>
 
-              {/* <Route
+              <Route
                 element={<RoleProtectedRoute allowedRoles={["Gerente"]} />}
               >
                 <Route
@@ -80,16 +91,16 @@ function App() {
                   <Route path="view-hotels" element={<ViewHotelsPage />} />
                   <Route path="quartos" element={<QuartosPage />} />
                 </Route>
-              </Route> */}
+              </Route>
 
-              {/* <Route
+              <Route
                 element={
                   <RoleProtectedRoute allowedRoles={["PrestadorServico"]} />
                 }
               >
                 <Route
                   path="/dashboard-prestador"
-                  element={<DashboardPrestadorPage />}
+                  element={<DashboardPrestadorServicoPage />}
                 >
                   <Route index element={<ProfilePage />} />
                   <Route
@@ -100,17 +111,10 @@ function App() {
                   <Route path="agenda" element={<AgendaPrestadorPage />} />
                   <Route path="historico" element={<HistoricoServicosPage />} />
                 </Route>
-              </Route> */}
+              </Route>
 
               {/* Rota de configurações acessível para todos os usuários autenticados */}
               <Route path="/settings" element={<SettingsPage />} />
-
-              {/* <Route path="/purchase" element={<DashboardPage />}>
-                <Route path="history" index element={<PurchaseHistoryPage />} />
-              </Route> */}
-
-              {/* Nova rota para o histórico de compras (REMOVIDA) */}
-              {/* <Route path="/history" element={<HistoryPage />} /> */}
 
             </Route>
 

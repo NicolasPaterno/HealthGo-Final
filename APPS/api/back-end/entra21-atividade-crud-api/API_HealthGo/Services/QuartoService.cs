@@ -113,6 +113,82 @@ namespace API_HealthGo.Services
 
         public async Task<MessageResponse> Update(QuartoEntity quarto)
         {
+            // Log para debug
+            Console.WriteLine($"Tentando atualizar quarto ID: {quarto.Id}, Número: {quarto.Numero}, Preço: {quarto.Preco}");
+            
+            // Validação básica dos dados
+            if (string.IsNullOrWhiteSpace(quarto.Numero))
+            {
+                return new MessageResponse
+                {
+                    Message = "Número do quarto é obrigatório!"
+                };
+            }
+
+            if (quarto.Preco <= 0)
+            {
+                return new MessageResponse
+                {
+                    Message = "Preço deve ser maior que zero!"
+                };
+            }
+
+            if (quarto.LimitePessoa <= 0)
+            {
+                return new MessageResponse
+                {
+                    Message = "Limite de pessoas deve ser maior que zero!"
+                };
+            }
+
+            if (quarto.Hotel_Id <= 0)
+            {
+                return new MessageResponse
+                {
+                    Message = "ID do hotel é obrigatório!"
+                };
+            }
+
+            // Verificar se o quarto existe
+            try
+            {
+                var existingQuarto = await _repository.GetById(quarto.Id);
+                if (existingQuarto == null)
+                {
+                    return new MessageResponse
+                    {
+                        Message = "Quarto não encontrado!"
+                    };
+                }
+            }
+            catch
+            {
+                return new MessageResponse
+                {
+                    Message = "Quarto não encontrado!"
+                };
+            }
+
+            // Verificar se o hotel existe
+            try
+            {
+                var hotel = await _hotelRepository.GetHotelById(quarto.Hotel_Id);
+                if (hotel == null)
+                {
+                    return new MessageResponse
+                    {
+                        Message = "Hotel não encontrado!"
+                    };
+                }
+            }
+            catch
+            {
+                return new MessageResponse
+                {
+                    Message = "Hotel não encontrado!"
+                };
+            }
+
             await _repository.Update(quarto);
             return new MessageResponse
             {

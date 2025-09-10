@@ -1,6 +1,6 @@
 import { Link, useLocation } from "react-router-dom";
 import { Sidebar, SidebarContent, SidebarFooter, SidebarHeader, SidebarMenu, SidebarMenuButton, SidebarMenuItem } from "./ui/sidebar";
-import { Building,  FileText, HelpCircle, History, HousePlus, LayoutDashboard, Settings } from "lucide-react";
+import { Building, HelpCircle, History, HousePlus, LayoutDashboard, Settings } from "lucide-react";
 import { NavMain } from "./nav-main";
 import { NavDocuments } from "./nav-documents";
 import { NavSecondary } from "./nav-secondary";
@@ -32,11 +32,6 @@ export function AppSidebarGerenteHotel({ ...props }: React.ComponentProps<typeof
       url: "/dashboard-gerente/view-hotels",
       icon: Building,
     },
-    {
-      title: "Relatórios",
-      url: "/dashboard-gerente/relatorios",
-      icon: FileText,
-    },
   ];
 
   const gerenteDocuments = [
@@ -44,11 +39,6 @@ export function AppSidebarGerenteHotel({ ...props }: React.ComponentProps<typeof
       name: "Histórico de reservas",
       url: "/dashboard-gerente/reservas/historico",
       icon: History,
-    },
-    {
-      name: "Relatórios",
-      url: "/dashboard-gerente/relatorios",
-      icon: FileText,
     },
   ];
 
