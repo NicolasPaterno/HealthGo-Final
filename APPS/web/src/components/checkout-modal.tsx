@@ -204,7 +204,7 @@ export function CheckoutModal({ isOpen, onClose }: CheckoutModalProps) {
         await createServiceReminder(serviceProvider.name, serviceProvider.dataInicio, serviceProvider.dataFim, pessoaId); // Chamar para criar lembrete
       }
 
-      completePurchase(latestOrdemServicoId); // Passar o ID da ordem de serviço
+      completePurchase(latestOrdemServicoId, pessoaId); // Passar o ID da ordem de serviço e o pessoaId
       onClose();
       
       toast.success("Compra finalizada com sucesso!", {

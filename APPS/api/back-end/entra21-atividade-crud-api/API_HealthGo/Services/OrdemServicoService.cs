@@ -68,5 +68,10 @@ namespace API_HealthGo.Services
 
             return ordemServicoId;
         }
+
+        public async Task<IEnumerable<HistoricoComprasDTO>> GetHistoricoCompras(int pessoaId)
+        {
+            return await _repository.GetHistoricoComprasByPessoaId(pessoaId);
+        }
     }
 }

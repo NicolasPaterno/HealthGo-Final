@@ -18,5 +18,7 @@ namespace API_HealthGo.Contracts.Service
         Task<MessageResponse> Delete(int id);
 
         Task<int> GetLatestOrdemServicoByPessoaId(int pessoaId);
+
+        Task<IEnumerable<HistoricoComprasDTO>> GetHistoricoCompras(int pessoaId);
     }
 }

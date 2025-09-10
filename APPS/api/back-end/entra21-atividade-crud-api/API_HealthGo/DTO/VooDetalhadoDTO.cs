@@ -12,5 +12,7 @@
         public string TipoAssento { get; set; }
         public decimal Preco { get; set; }
         public string Companhia { get; set; }
+        public DateTime DataPartida { get; set; }
+        public DateTime DataChegada { get; set; }
     }
 }

@@ -22,6 +22,12 @@ export interface FlightCartItem extends BaseCartItem {
   class: string; // Classe do voo
   voo_Id?: number; // ID do voo (agora opcional)
   flightNumber: string; // Número do voo original para buscar o Voo_Id
+  dataPartida: string; // Data e hora de partida do voo
+  dataChegada: string; // Data e hora de chegada do voo
+  nomeAeroportoOrigem: string; // Adicionado para o lembrete
+  nomeAeroportoDestino: string; // Adicionado para o lembrete
+  cidadeOrigem: string; // Adicionado para o lembrete
+  cidadeDestino: string; // Adicionado para o lembrete
 }
 
 export interface ServiceProviderCartItem extends BaseCartItem {
@@ -54,7 +60,7 @@ interface ICartContext {
   openCart: () => void;
   closeCart: () => void;
   purchaseHistory: Order[];
-  completePurchase: (ordemServico_Id: number) => void;
+  completePurchase: (ordemServico_Id: number, pessoaId: number) => void;
   isCheckoutOpen: boolean;
   openCheckout: () => void;
   closeCheckout: () => void;
@@ -145,7 +151,7 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
     );
   };
 
-  const completePurchase = async (ordemServico_Id: number) => {
+  const completePurchase = async (ordemServico_Id: number, pessoaId: number) => {
     if (cartItems.length === 0) return;
 
     const newOrder: Order = {
@@ -175,7 +181,17 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
           console.log("Enviando para /Passagem:", passagemData);
           const passagemResponse = await api.post("/Passagem", passagemData);
           console.log("Resposta de /Passagem:", passagemResponse.data);
-          toast.success(`Passagem para o voo ${flightItem.flightNumber} registrada com sucesso!`);
+          // toast.success(`Passagem para o voo ${flightItem.flightNumber} registrada com sucesso!`); // Removido
+
+          // 3. Adicionar Lembrete para a Passagem (REMOVIDO)
+          // const reminderPayload = {
+          //   Titulo: `Voo ${flightItem.flightNumber}: ${flightItem.cidadeOrigem} → ${flightItem.cidadeDestino}`,
+          //   Data: new Date(flightItem.dataPartida).toISOString(),
+          //   Tipo: "Voo",
+          //   Pessoa_Id: pessoaId,
+          // };
+          // await api.post('/Lembrete', reminderPayload);
+          // toast.success("Lembrete do voo adicionado ao calendário!");
         } else {
           toast.error(`Falha ao obter ID do voo ${flightItem.flightNumber}.`);
         }
@@ -189,7 +205,6 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
     setCartItems([]);
     closeCart();
     closeCheckout();
-    toast.success("Compra finalizada com sucesso!");
   };
 
   const value = {

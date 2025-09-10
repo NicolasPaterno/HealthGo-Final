@@ -25,6 +25,9 @@ interface Ticket {
   tipoAssento: "Primeira Classe" | "Executiva" | "Econômica";
   preco: number;
   companhia: string;
+  dataVoo: string; // Adicionado: data e hora do voo
+  dataPartida: string; // Adicionado: data e hora de partida
+  dataChegada: string; // Adicionado: data e hora de chegada
 }
 
 // Os dados mockados 'tickets' serão removidos, pois utilizaremos o endpoint.
@@ -39,6 +42,8 @@ export default function TicketsPage() {
   const [maxValor, setMaxValor] = useState<number | "">(Infinity);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  // const [startDateFilter, setStartDateFilter] = useState<string>(""); // Removido
+  // const [endDateFilter, setEndDateFilter] = useState<string>("");   // Removido
 
   const tiposAssento = ["Primeira Classe", "Executiva", "Econômica"];
 
@@ -60,6 +65,9 @@ export default function TicketsPage() {
             tipoAssento: item.tipoAssento,
             preco: item.preco,
             companhia: item.companhia,
+            dataVoo: item.dataVoo || new Date().toISOString(), // Assumindo que o endpoint retorna dataVoo
+            dataPartida: item.dataPartida, // Usar dataPartida do endpoint
+            dataChegada: item.dataChegada, // Usar dataChegada do endpoint
           })));
         } else {
           setAllTickets([]);
@@ -105,6 +113,17 @@ export default function TicketsPage() {
       filtered = filtered.filter(ticket => ticket.preco <= maxValor);
     }
 
+    // if (startDateFilter !== "") {
+    //   const start = new Date(startDateFilter);
+    //   filtered = filtered.filter(ticket => new Date(ticket.dataPartida) >= start);
+    // }
+
+    // if (endDateFilter !== "") {
+    //   const end = new Date(endDateFilter);
+    //   end.setHours(23, 59, 59, 999);
+    //   filtered = filtered.filter(ticket => new Date(ticket.dataPartida) <= end);
+    // }
+
     setFilteredTickets(filtered);
   };
 
@@ -120,6 +139,12 @@ export default function TicketsPage() {
       type: "flight",
       class: ticket.tipoAssento,
       flightNumber: ticket.numeroVoo, // Adicionar o número do voo original
+      dataPartida: ticket.dataPartida, // Passar dataPartida para o carrinho
+      dataChegada: ticket.dataChegada, // Passar dataChegada para o carrinho
+      nomeAeroportoOrigem: ticket.nomeAeroportoOrigem, // Passar nomeAeroportoOrigem para o carrinho
+      nomeAeroportoDestino: ticket.nomeAeroportoDestino, // Passar nomeAeroportoDestino para o carrinho
+      cidadeOrigem: ticket.cidadeOrigem,   // Passar cidadeOrigem para o carrinho
+      cidadeDestino: ticket.cidadeDestino, // Passar cidadeDestino para o carrinho
     });
   };
 
@@ -133,6 +158,8 @@ export default function TicketsPage() {
     setSelectedDestino("");
     setSelectedTipoAssento("todos");
     setMaxValor(Infinity);
+    // setStartDateFilter(""); // Limpar filtro de data de início (removido)
+    // setEndDateFilter("");   // Limpar filtro de data de fim (removido)
   };
 
   return (
@@ -198,6 +225,26 @@ export default function TicketsPage() {
                   className="w-[120px]"
                 />
               </div>
+
+              {/* <div className="flex items-center space-x-2">
+                <span className="text-sm font-medium">Data Início:</span>
+                <Input
+                  type="date"
+                  value={startDateFilter}
+                  onChange={(e) => setStartDateFilter(e.target.value)}
+                  className="w-[140px]"
+                />
+              </div>
+
+              <div className="flex items-center space-x-2">
+                <span className="text-sm font-medium">Data Fim:</span>
+                <Input
+                  type="date"
+                  value={endDateFilter}
+                  onChange={(e) => setEndDateFilter(e.target.value)}
+                  className="w-[140px]"
+                />
+              </div> */}
             </div>
 
             {(selectedOrigem.trim() !== "" || selectedDestino.trim() !== "" || selectedTipoAssento !== "todos" || (maxValor !== Infinity && maxValor !== "")) && (
@@ -249,6 +296,10 @@ export default function TicketsPage() {
                     <MapPin className="mr-1 h-4 w-4" />
                     <span>{ticket.cidadeOrigem}, {ticket.nomeAeroportoOrigem}</span>
                     {/* Removido Star e Rating pois não estão no endpoint */}
+                  </div>
+                  <div className="text-sm text-muted-foreground mt-1">
+                    <p>Partida: {new Date(ticket.dataPartida).toLocaleString()}</p>
+                    <p>Chegada: {new Date(ticket.dataChegada).toLocaleString()}</p>
                   </div>
                 </div>
 

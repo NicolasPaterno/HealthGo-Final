@@ -103,7 +103,9 @@ namespace API_HealthGo.Repository
                         Voo.Numero AS NumeroVoo,
                         Voo.Assento_Tipo AS TipoAssento,
                         Voo.Preco AS Preco,
-                        Voo.Companhia AS Companhia
+                        Voo.Companhia AS Companhia,
+                        Voo.DataPartida AS DataPartida,
+                        Voo.DataChegada AS DataChegada
                     FROM Voo
                     INNER JOIN Aeroporto AS AEROPORTO_ORIGEM ON AEROPORTO_ORIGEM.Id = Voo.AeroportoOrigem_Id
                     INNER JOIN Aeroporto AS AEROPORTO_DESTINO ON AEROPORTO_DESTINO.Id = Voo.AeroportoDestino_Id

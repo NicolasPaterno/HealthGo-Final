@@ -127,7 +127,7 @@ const data = {
   documents: [
     {
       name: "Histórico de compras",
-      url: "/purchase/history",
+      url: "/dashboard/history",
       icon: History,
     },
   ],
