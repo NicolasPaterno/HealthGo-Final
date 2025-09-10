@@ -674,6 +674,101 @@ INSERT INTO CamaQuarto (Id, Tipo, Quantidade, Quarto_Id) VALUES
 (2, 'Solteiro', 2, (SELECT Id FROM Quarto WHERE Numero = '201' AND Hotel_Id = (SELECT Id FROM Hotel WHERE Nome = 'Hotel Central Blumenau'))),
 (3, 'Casal', 1, (SELECT Id FROM Quarto WHERE Numero = '1' AND Hotel_Id = (SELECT Id FROM Hotel WHERE Nome = 'Pousada Itoupava')));
 
+
+
+-- Inserts para a Tabela Pessoa (PrestadorServico)
+INSERT INTO `Pessoa` (`Nome`, `DataNascimento`, `CPF`, `Telefone`, `Email`, `Senha`, `CEP`, `Bairro`, `Rua`, `NumeroEndereco`, `ROLE`, `Cidade_Id`) VALUES
+('Dr. Roberto Martins', '1970-02-15', '113222222-11', '11987650001', 'roberto.martins@exemplo.com', 'senha123', '01001-001', 'Consolação', 'Rua Augusta', '100', 'PrestadorServico', 24),
+('Dra. Patrícia Gomes', '1981-05-22', '222.222.222-22', '21991230002', 'patricia.gomes@exemplo.com', 'senha456', '20002-002', 'Flamengo', 'Praia do Flamengo', '200', 'PrestadorServico', 19),
+('Dr. Henrique Souza', '1975-08-10', '333.333.333-33', '61981230003', 'henrique.souza@exemplo.com', 'senha789', '70003-003', 'Lago Sul', 'Quadra 123', '300', 'PrestadorServico', 25),
+('Dra. Fernanda Ramos', '1989-11-20', '444.444.444-44', '48991230004', 'fernanda.ramos@exemplo.com', 'senha012', '88004-004', 'Trindade', 'Rua Lauro Linhares', '400', 'PrestadorServico', 61),
+('Dr. Gustavo Lima', '1993-04-18', '555.555.555-55', '11998760005', 'gustavo.lima@exemplo.com', 'senhaabc', '04505-005', 'Moema', 'Av. Ibirapuera', '500', 'PrestadorServico', 24),
+('Dra. Camila Ferreira', '1982-07-07', '666.666.666-66', '21999880006', 'camila.ferreira@exemplo.com', 'senhaxyz', '22406-006', 'Ipanema', 'Rua Visconde de Pirajá', '600', 'PrestadorServico', 19),
+('Dr. André Barbosa', '1979-09-25', '777.777.777-77', '61985670007', 'andre.barbosa@exemplo.com', 'senha111', '71007-007', 'Asa Norte', 'SQN 207', '700', 'PrestadorServico', 25),
+('Dra. Mariana Costa', '1991-03-03', '888.888.888-88', '48988550008', 'mariana.costa@exemplo.com', 'senha222', '88018-018', 'Centro', 'Rua dos Ilhéus', '800', 'PrestadorServico', 61),
+('Dr. Fábio Guedes', '1984-06-15', '999.999.999-99', '11987650009', 'fabio.guedes@exemplo.com', 'senha333', '01009-009', 'Pinheiros', 'Rua Teodoro Sampaio', '900', 'PrestadorServico', 24),
+('Dra. Lúcia Mendes', '1976-10-28', '111.222.333-45', '21991230010', 'lucia.mendes@exemplo.com', 'senha444', '20010-010', 'Tijuca', 'Rua Conde de Bonfim', '101', 'PrestadorServico', 19),
+('Dr. Sérgio Almeida', '1990-01-01', '222.333.444-56', '61981230011', 'sergio.almeida@exemplo.com', 'senha555', '70011-011', 'Asa Sul', 'SCS Quadra 9', '202', 'PrestadorServico', 25),
+('Dra. Renata Toledo', '1983-04-19', '333.444.555-67', '48991230012', 'renata.toledo@exemplo.com', 'senha666', '88012-012', 'Estreito', 'Rua Fulvio Aducci', '303', 'PrestadorServico', 61),
+('Dr. João Pedro Santos', '1996-08-08', '444.555.666-78', '11998760013', 'joao.santos@exemplo.com', 'senha777', '04513-013', 'Vila Olímpia', 'Rua Fidêncio Ramos', '404', 'PrestadorServico', 24),
+('Dra. Clara Oliveira', '1972-12-30', '555.666.777-89', '21999880014', 'clara.oliveira@exemplo.com', 'senha888', '22414-014', 'Copacabana', 'Av. Nossa Senhora de Copacabana', '505', 'PrestadorServico', 19),
+('Dr. Marcelo Cardoso', '1987-03-24', '666.777.888-90', '61985670015', 'marcelo.cardoso@exemplo.com', 'senha999', '71015-015', 'Plano Piloto', 'SCLRN 713', '606', 'PrestadorServico', 25),
+('Dra. Gisele Pires', '1994-06-01', '777.888.999-01', '48988550016', 'gisele.pires@exemplo.com', 'senha101', '88016-016', 'Coqueiros', 'Rua Desembargador Pedro Silva', '707', 'PrestadorServico', 61),
+('Dr. Bruno Rocha', '1986-09-09', '888.999.000-11', '11987650017', 'bruno.rocha@exemplo.com', 'senha112', '01017-017', 'Cerqueira César', 'Rua Oscar Freire', '808', 'PrestadorServico', 24),
+('Dra. Marina Santos', '1974-12-14', '999.000.111-22', '21991230018', 'marina.santos@exemplo.com', 'senha223', '20018-018', 'Centro', 'Rua do Ouvidor', '909', 'PrestadorServico', 19),
+('Dr. Paulo Vaz', '1995-02-28', '000.111.222-33', '61981230019', 'paulo.vaz@exemplo.com', 'senha334', '70019-019', 'Taguatinga', 'QND 23', '101', 'PrestadorServico', 25),
+('Dra. Flávia Nogueira', '1980-05-09', '111.222.333-44', '48991230020', 'flavia.nogueira@exemplo.com', 'senha445', '88020-020', 'Agronômica', 'Rua João Pio Duarte Silva', '202', 'PrestadorServico', 61),
+('Dr. Ricardo Soares', '1992-08-11', '222.333.444-55', '11998760021', 'ricardo.soares@exemplo.com', 'senha556', '04521-021', 'Jardins', 'Rua da Consolação', '303', 'PrestadorServico', 24),
+('Dra. Aline Castro', '1987-10-17', '333.444.555-66', '21999880022', 'aline.castro@exemplo.com', 'senha667', '22422-022', 'Laranjeiras', 'Rua General Glicério', '404', 'PrestadorServico', 19),
+('Dr. Daniel Oliveira', '1978-01-21', '444.555.666-77', '61985670023', 'daniel.oliveira@exemplo.com', 'senha778', '71023-023', 'Guará', 'QE 17', '505', 'PrestadorServico', 25),
+('Dra. Carla Pinheiro', '1990-04-04', '555.666.777-88', '48988550024', 'carla.pinheiro@exemplo.com', 'senha889', '88024-024', 'Córrego Grande', 'Rua Paschoal Apóstolo Pitsica', '606', 'PrestadorServico', 61),
+('Dr. Eduardo Costa', '1983-07-07', '666.777.888-99', '11987650025', 'eduardo.costa@exemplo.com', 'senha990', '01025-025', 'Jardim Paulista', 'Av. Paulista', '707', 'PrestadorServico', 24);
+
+-- -----------------------------------------------------
+-- Inserindo os Prestadores de Serviço
+-- Vinculando aos IDs de Pessoa recém-criados.
+-- -----------------------------------------------------
+
+INSERT INTO `PrestadorServico` (`Observacao`, `CNPJ`, `Pessoa_Id`) VALUES
+('Especialista em cirurgia cardíaca.', '11.111.111/0001-11', (SELECT Id FROM Pessoa WHERE Email = 'roberto.martins@exemplo.com')),
+('Foco em doenças neuromusculares.', '22.222.222/0001-22', (SELECT Id FROM Pessoa WHERE Email = 'patricia.gomes@exemplo.com')),
+('Atende fraturas e lesões esportivas.', '33.333.333/0001-33', (SELECT Id FROM Pessoa WHERE Email = 'henrique.souza@exemplo.com')),
+('Experiência em pediatria geral.', '44.444.444/0001-44', (SELECT Id FROM Pessoa WHERE Email = 'fernanda.ramos@exemplo.com')),
+('Especialista em obstetrícia.', '55.555.555/0001-55', (SELECT Id FROM Pessoa WHERE Email = 'gustavo.lima@exemplo.com')),
+('Tratamentos estéticos e clínicos.', '66.666.666/0001-66', (SELECT Id FROM Pessoa WHERE Email = 'camila.ferreira@exemplo.com')),
+('Atua com Terapia Cognitivo-Comportamental.', '77.777.777/0001-77', (SELECT Id FROM Pessoa WHERE Email = 'andre.barbosa@exemplo.com')),
+('Reabilitação de lesões.', '88.888.888/0001-88', (SELECT Id FROM Pessoa WHERE Email = 'mariana.costa@exemplo.com')),
+('Especialista em cardiopediatria.', '99.999.999/0001-99', (SELECT Id FROM Pessoa WHERE Email = 'fabio.guedes@exemplo.com')),
+('Foco em esclerose múltipla.', '11.122.333/0001-45', (SELECT Id FROM Pessoa WHERE Email = 'lucia.mendes@exemplo.com')),
+('Cirurgias de coluna.', '22.333.444/0001-56', (SELECT Id FROM Pessoa WHERE Email = 'sergio.almeida@exemplo.com')),
+('Pediatria do desenvolvimento.', '33.444.555/0001-67', (SELECT Id FROM Pessoa WHERE Email = 'renata.toledo@exemplo.com')),
+('Cirurgias ginecológicas.', '44.555.666/0001-78', (SELECT Id FROM Pessoa WHERE Email = 'joao.santos@exemplo.com')),
+('Especialista em câncer de pele.', '55.666.777/0001-89', (SELECT Id FROM Pessoa WHERE Email = 'clara.oliveira@exemplo.com')),
+('Trabalha com terapia de casal.', '66.777.888/0001-90', (SELECT Id FROM Pessoa WHERE Email = 'marcelo.cardoso@exemplo.com')),
+('Especialista em reabilitação de idosos.', '77.888.999/0001-01', (SELECT Id FROM Pessoa WHERE Email = 'gisele.pires@exemplo.com')),
+('Especialista em arritmias.', '88.999.000/0001-11', (SELECT Id FROM Pessoa WHERE Email = 'bruno.rocha@exemplo.com')),
+('Foco em doenças autoimunes.', '99.000.111/0001-22', (SELECT Id FROM Pessoa WHERE Email = 'marina.santos@exemplo.com')),
+('Atende lesões esportivas.', '00.111.222/0001-33', (SELECT Id FROM Pessoa WHERE Email = 'paulo.vaz@exemplo.com')),
+('Especialista em dermatologia pediátrica.', '11.222.333/0001-44', (SELECT Id FROM Pessoa WHERE Email = 'flavia.nogueira@exemplo.com')),
+('Cirurgias ortopédicas.', '22.333.444/0001-55', (SELECT Id FROM Pessoa WHERE Email = 'ricardo.soares@exemplo.com')),
+('Especialista em saúde mental da mulher.', '33.444.555/0001-66', (SELECT Id FROM Pessoa WHERE Email = 'aline.castro@exemplo.com')),
+('Fisioterapia neurológica.', '44.555.666/0001-77', (SELECT Id FROM Pessoa WHERE Email = 'daniel.oliveira@exemplo.com')),
+('Cardiologia clínica.', '55.666.777/0001-88', (SELECT Id FROM Pessoa WHERE Email = 'carla.pinheiro@exemplo.com')),
+('Dermatologia estética.', '66.777.888/0001-99', (SELECT Id FROM Pessoa WHERE Email = 'eduardo.costa@exemplo.com'));
+
+-- -----------------------------------------------------
+-- Inserindo Especialidades e Preços por Hora
+-- Vinculando Prestadores de Serviço às Especialidades.
+-- -----------------------------------------------------
+
+INSERT INTO `PrestadorServico_Especialidade` (`PrecoHora`, `PrestadorServico_Id`, `Especialidade_Id`) VALUES
+(250.00, (SELECT Id FROM PrestadorServico WHERE CNPJ = '11.111.111/0001-11'), 1),
+(280.00, (SELECT Id FROM PrestadorServico WHERE CNPJ = '22.222.222/0001-22'), 2),
+(220.00, (SELECT Id FROM PrestadorServico WHERE CNPJ = '33.333.333/0001-33'), 3),
+(180.00, (SELECT Id FROM PrestadorServico WHERE CNPJ = '44.444.444/0001-44'), 4),
+(260.00, (SELECT Id FROM PrestadorServico WHERE CNPJ = '55.555.555/0001-55'), 5),
+(210.00, (SELECT Id FROM PrestadorServico WHERE CNPJ = '66.666.666/0001-66'), 6),
+(150.00, (SELECT Id FROM PrestadorServico WHERE CNPJ = '77.777.777/0001-77'), 7),
+(120.00, (SELECT Id FROM PrestadorServico WHERE CNPJ = '88.888.888/0001-88'), 8),
+(255.00, (SELECT Id FROM PrestadorServico WHERE CNPJ = '99.999.999/0001-99'), 1),
+(295.00, (SELECT Id FROM PrestadorServico WHERE CNPJ = '11.122.333/0001-45'), 2),
+(235.00, (SELECT Id FROM PrestadorServico WHERE CNPJ = '22.333.444/0001-56'), 3),
+(195.00, (SELECT Id FROM PrestadorServico WHERE CNPJ = '33.444.555/0001-67'), 4),
+(275.00, (SELECT Id FROM PrestadorServico WHERE CNPJ = '44.555.666/0001-78'), 5),
+(225.00, (SELECT Id FROM PrestadorServico WHERE CNPJ = '55.666.777/0001-89'), 6),
+(165.00, (SELECT Id FROM PrestadorServico WHERE CNPJ = '66.777.888/0001-90'), 7),
+(135.00, (SELECT Id FROM PrestadorServico WHERE CNPJ = '77.888.999/0001-01'), 8),
+(270.00, (SELECT Id FROM PrestadorServico WHERE CNPJ = '88.999.000/0001-11'), 1),
+(290.00, (SELECT Id FROM PrestadorServico WHERE CNPJ = '99.000.111/0001-22'), 2),
+(215.00, (SELECT Id FROM PrestadorServico WHERE CNPJ = '00.111.222/0001-33'), 3),
+(205.00, (SELECT Id FROM PrestadorServico WHERE CNPJ = '11.222.333/0001-44'), 4),
+(230.00, (SELECT Id FROM PrestadorServico WHERE CNPJ = '22.333.444/0001-55'), 3),
+(285.00, (SELECT Id FROM PrestadorServico WHERE CNPJ = '33.444.555/0001-66'), 5),
+(145.00, (SELECT Id FROM PrestadorServico WHERE CNPJ = '44.555.666/0001-77'), 8),
+(240.00, (SELECT Id FROM PrestadorServico WHERE CNPJ = '55.666.777/0001-88'), 1),
+(200.00, (SELECT Id FROM PrestadorServico WHERE CNPJ = '66.777.888/0001-99'), 6);
+
+
 -- =====================================================
 -- 8. VERIFICAÇÃO DOS DADOS INSERIDOS
 -- =====================================================

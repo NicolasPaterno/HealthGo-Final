@@ -27,16 +27,21 @@ export function CartSidebar() {
               <div className="flex flex-col gap-4 py-4">
                 {cartItems.map(item => (
                   <div key={item.id} className="flex items-center gap-4">
-                    <img src={item.image || `https://via.placeholder.com/64?text=${item.name.charAt(0)}`} alt={item.name} className="h-16 w-16 rounded-md object-cover" />
-                    <div className="flex-grow">
+                    {/* Imagem do item removida */}
+                    <div className="flex-grow pl-2">
                       <p className="font-semibold">{item.name}</p>
                       <p className="text-sm text-muted-foreground">R$ {item.price.toFixed(2)}</p>
                       <div className="flex items-center gap-2 mt-2">
-                        {item.prestadorId ? (
+                        {item.type === "serviceProvider" ? (
                           <span className="text-xs text-muted-foreground">
                             Data: {new Date(item.dataInicio).toLocaleDateString("pt-BR")} 
                             Horário: {new Date(item.dataInicio).toLocaleTimeString("pt-BR", { hour: "2-digit", minute: "2-digit" })} 
                             - {new Date(item.dataFim).toLocaleTimeString("pt-BR", { hour: "2-digit", minute: "2-digit" })}
+                          </span>
+                        ) : item.type === "flight" ? (
+                          <span className="text-xs text-muted-foreground">
+                            Voo: {new Date(item.dataPartida).toLocaleDateString("pt-BR")} 
+                            - {new Date(item.dataChegada).toLocaleDateString("pt-BR")}
                           </span>
                         ) : (
                           <>
